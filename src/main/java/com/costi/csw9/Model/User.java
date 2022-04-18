@@ -1,86 +1,90 @@
 package com.costi.csw9.Model;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.Period;
+import java.util.Collection;
+import java.util.Collections;
 
+@Getter
+@Setter
+@EqualsAndHashCode
+@NoArgsConstructor
 @Entity
-@Table
-public class User {
+public class User implements UserDetails {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
-    @Transient
-    private Integer age;
-    private LocalDate birthday;
-    private String email;
+    @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "user_sequence")
+   private Long id;
+   String firstName;
+   String lastName;
+   String email;
+   String password;
+   @Enumerated(EnumType.STRING)
+   private UserRole userRole;
+   private Boolean isLocked = false;
+   private Boolean enabled =  false;
 
-    public User(Long id, String name, LocalDate birthday, String email) {
-        this.id = id;
-        this.name = name;
-        this.birthday = birthday;
+    public User(String firstName, String lastName, String email, String password, UserRole userRole) {
+        this.firstName = firstName;
         this.email = email;
+        this.password = password;
+        this.userRole = userRole;
+        this.lastName = lastName;
     }
 
-    public User() {
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        SimpleGrantedAuthority authority= new SimpleGrantedAuthority(userRole.name());
+        return Collections.singletonList(authority);
     }
 
-    public User(String name, LocalDate birthday, String email) {
-        this.name = name;
-        this.age = age;
-        this.birthday = birthday;
-        this.email = email;
+    @Override
+    public String getPassword() {
+        return password;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getAge() {
-        return Period.between(this.birthday, LocalDate.now()).getYears();
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public LocalDate getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(LocalDate birthday) {
-        this.birthday = birthday;
+    @Override
+    public String getUsername() {
+        return email;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true; //not keeping track
     }
 
     @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                ", birthday=" + birthday +
-                ", email='" + email + '\'' +
-                '}';
+    public boolean isAccountNonLocked() {
+        return !isLocked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 }

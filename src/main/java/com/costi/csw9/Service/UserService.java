@@ -2,63 +2,41 @@ package com.costi.csw9.Service;
 
 import com.costi.csw9.Model.User;
 import com.costi.csw9.Repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
 @Service
-public class UserService {
-    private final UserRepository userRepository;
+@AllArgsConstructor
+public class UserService implements UserDetailsService {
+    private final static String USER_NOT_FOUND_MESSAGE = "Oh RATS! %s not found";
+    UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MESSAGE, username)));
     }
 
-
-    public List<User> getUsers(){
-        return userRepository.findAll();
-    }
-
-    public void addNewUser(User user) {
-        Optional<User> match = userRepository.findUserByEmail(user.getEmail());
-
-        if(match.isPresent()){
-            throw new IllegalStateException("email taken");
+    public String signUpUser(User user){
+        //Check if exists
+        boolean userExists = userRepository.findByEmail(user.getEmail()).isPresent();
+        if(userExists){
+            throw new IllegalStateException("username already taken");
         }else{
+            //Encode Password
+            String encodedPass = bCryptPasswordEncoder.encode(user.getPassword());
+            user.setPassword(encodedPass);
+
+            //Save User
             userRepository.save(user);
-        }
-    }
 
-    public void deleteUser(Long userId) {
-        if(userRepository.existsById(userId)){
-            userRepository.deleteById(userId);
-        }else{
-            throw new IllegalStateException("User with " + userId + " does not exist");
-        }
+            //TODO: send confirmation token
 
-    }
-
-    @Transactional
-    public void modifyUser(Long userId, String name, String email) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("User with " + userId + " does not exist"));
-
-        if(name != null && name.length() > 0 && !Objects.equals(user.getName(), name)){
-            user.setName(name);
-        }
-
-        if(email != null && email.length() > 0 && !Objects.equals(user.getEmail(), email)){
-            Optional<User> match = userRepository.findUserByEmail(email);
-
-            if(match.isPresent()){
-                throw new IllegalStateException("email taken");
-            }else{
-                user.setEmail(email);
-            }
+            return "done.";
         }
     }
 }
