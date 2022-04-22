@@ -16,11 +16,11 @@
 <body>
 
 <div th:fragment="nav" class="navbar-fixed">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" style="opacity: 95%;">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
                 <img src="/docs/5.1/assets/brand/bootstrap-logo.svg" alt="" width="30" height="24" class="d-inline-block align-text-top">
-                Bootstrap
+                Costi Survival World 9
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -31,10 +31,13 @@
                         <a class="nav-link active" aria-current="page" href="#">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Features</a>
+                        <a class="nav-link" href="#">World Map</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Pricing</a>
+                        <a class="nav-link" href="#">Your Government</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Voting Center</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link disabled">Disabled</a>
@@ -46,21 +49,20 @@
 </div>
 
 <div th:fragment="scripts">
-    <script th:src="@{/vendor/jquery/jquery-1.11.3.js}"></script>
-    <script th:src="@{/vendor/materialize/js/materialize.js}"></script>
-    <script th:src="@{/vendor/codrops/js/classie.js}"></script>
-    <script th:src="@{/vendor/codrops/js/selectFx.js}"></script>
-    <script th:src="@{/app.js}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <!--<script th:src="@{/app.js}"></script>-->
 </div>
 
-<div th:fragment="footer" class="bg-light fixed-bottom">
-    <div class="container">
-        <footer class="row row-cols-5 my-5 py-2">
+<div th:fragment="footer" class="bg-light">
+    <div class="container py-5">
+        <footer class="row row-cols-5">
             <div class="col">
                 <a href="/" class="d-flex align-items-center mb-3 link-dark text-decoration-none">
+                    <img th:src="@{/icons/Constantine Logo v5.png}" class="bi me-2"  style="width:40px">
                     <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
                 </a>
-                <p class="text-muted">© 2021</p>
+                <p class="text-muted">Registered as a class B interdimensional project</p>
             </div>
 
             <div class="col">
@@ -68,35 +70,32 @@
             </div>
 
             <div class="col">
-                <h5>Section</h5>
+                <h5>About</h5>
                 <ul class="nav flex-column">
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
+                    <li class="nav-item mb-2"><a href="/" class="nav-link p-0 text-muted">Home</a></li>
                     <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
                     <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
                     <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
                 </ul>
             </div>
 
             <div class="col">
-                <h5>Section</h5>
+                <h5>Community</h5>
                 <ul class="nav flex-column">
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Discord</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">News</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Election Rules</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Media</a></li>
                 </ul>
             </div>
 
             <div class="col">
-                <h5>Section</h5>
+                <h5>Government</h5>
                 <ul class="nav flex-column">
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Download Costitution</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Your Government</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Vote</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Polls</a></li>
                 </ul>
             </div>
         </footer>

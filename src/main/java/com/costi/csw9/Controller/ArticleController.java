@@ -39,7 +39,8 @@ public class ArticleController {
 
     @GetMapping
     public String getArticles(Model model){
-        model.addAttribute("test", "this is a test");
+        List<Article> list = articleService.getArticles();
+        model.addAttribute("articles", list);
         return "home";
     }
 }

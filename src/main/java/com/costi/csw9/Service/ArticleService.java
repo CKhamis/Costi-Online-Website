@@ -47,8 +47,8 @@ public class ArticleService {
     public void modifyArticle(Long articleId, String name, String email) {
         Article article = articleRepository.findById(articleId).orElseThrow(() -> new IllegalStateException("Article with " + articleId + " does not exist"));
 
-        if(name != null && name.length() > 0 && !Objects.equals(article.getName(), name)){
-            article.setName(name);
+        if(name != null && name.length() > 0 && !Objects.equals(article.getTitle(), name)){
+            article.setTitle(name);
         }
 
         if(email != null && email.length() > 0 && !Objects.equals(article.getEmail(), email)){

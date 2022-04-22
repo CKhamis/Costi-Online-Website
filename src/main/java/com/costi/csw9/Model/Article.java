@@ -2,7 +2,6 @@ package com.costi.csw9.Model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.Period;
 
 @Entity
 @Table
@@ -10,27 +9,40 @@ public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    @Transient
-    private Integer age;
-    private LocalDate birthday;
+    private String bannerImage;
+    private String title;
+    private LocalDate publishDate;
     private String email;
 
-    public Article(Long id, String name, LocalDate birthday, String email) {
+    public Article(Long id, String bannerImage, String title, LocalDate publishDate, String email) {
         this.id = id;
-        this.name = name;
-        this.birthday = birthday;
+        this.bannerImage = bannerImage;
+        this.title = title;
+        this.publishDate = publishDate;
         this.email = email;
     }
 
     public Article() {
     }
 
-    public Article(String name, LocalDate birthday, String email) {
-        this.name = name;
-        this.age = age;
-        this.birthday = birthday;
+    public Article(String bannerImage, String title, LocalDate publishDate, String email) {
+        this.bannerImage = bannerImage;
+        this.title = title;
+        this.publishDate = publishDate;
         this.email = email;
+    }
+
+    @Transient
+    public String getPhotosImagePath() {
+        if (bannerImage == null || id == null) return null;
+        String path = "/images/articleBanners/" + bannerImage; //+ id + "/"
+        return path;
+    }
+
+    @Transient
+    public String getArticleLink() {
+        String path = "/Articles" + id + "/";
+        return path;
     }
 
     public Long getId() {
@@ -41,28 +53,20 @@ public class Article {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public Integer getAge() {
-        return Period.between(this.birthday, LocalDate.now()).getYears();
+    public LocalDate getPublishDate() {
+        return publishDate;
     }
 
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public LocalDate getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(LocalDate birthday) {
-        this.birthday = birthday;
+    public void setPublishDate(LocalDate publishDate) {
+        this.publishDate = publishDate;
     }
 
     public String getEmail() {
@@ -77,9 +81,8 @@ public class Article {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                ", birthday=" + birthday +
+                ", name='" + title + '\'' +
+                ", birthday=" + publishDate +
                 ", email='" + email + '\'' +
                 '}';
     }

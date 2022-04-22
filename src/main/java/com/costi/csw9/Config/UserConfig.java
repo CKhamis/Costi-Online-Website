@@ -16,8 +16,8 @@ public class UserConfig {
     @Bean
     CommandLineRunner commandLineRunner(ArticleRepository repository){
         return args -> {
-            Article rat = new Article("rat", LocalDate.of(2000, Month.JULY, 13), "shitasdf");
-            Article rat2 = new Article("rtertert", LocalDate.of(2344, Month.JULY, 13), "shitasdf");
+            Article rat = new Article("img.png", "rat", LocalDate.of(2000, Month.JULY, 13), "shitasdf");
+            Article rat2 = new Article("img.png", "rtertert", LocalDate.of(2344, Month.JULY, 13), "shitasdf");
 
             repository.saveAll(List.of(rat, rat2));
         };
