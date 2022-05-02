@@ -2,10 +2,14 @@ package com.costi.csw9.Service;
 
 import com.costi.csw9.Model.Article;
 import com.costi.csw9.Repository.ArticleRepository;
+import com.costi.csw9.Util.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -24,7 +28,7 @@ public class ArticleService {
         return articleRepository.findAll();
     }
 
-    public void addNewArticle(Article article) {
+    /*public void addNewArticle(Article article) {
         Optional<Article> match = articleRepository.findArticleByEmail(article.getEmail());
 
         if(match.isPresent()){
@@ -32,7 +36,7 @@ public class ArticleService {
         }else{
             articleRepository.save(article);
         }
-    }
+    }*/
 
     public void deleteArticle(Long articleId) {
         if(articleRepository.existsById(articleId)){
@@ -41,6 +45,14 @@ public class ArticleService {
             throw new IllegalStateException("Article with " + articleId + " does not exist");
         }
 
+    }
+    public void saveNew(Article article, MultipartFile file) throws IOException {
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        article.setBannerImage(fileName);
+        articleRepository.save(article);
+
+        String uploadDir = "src/main/resources/static/images/articleBannersFileUploadUtil/" + article.getId();
+        FileUploadUtil.saveFile(uploadDir, fileName, file);
     }
 
     @Transactional

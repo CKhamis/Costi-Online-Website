@@ -10,26 +10,23 @@ public class Article {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String bannerImage;
-    private String title;
+    private String title, description, content;
     private LocalDate publishDate;
     private String email;
+    private boolean enabled;
 
-    public Article(Long id, String bannerImage, String title, LocalDate publishDate, String email) {
-        this.id = id;
+    public Article(String bannerImage, String title, String description, String content, LocalDate publishDate, String email) {
         this.bannerImage = bannerImage;
         this.title = title;
+        this.description = description;
+        this.content = content;
         this.publishDate = publishDate;
         this.email = email;
+        this.enabled = true;
     }
 
     public Article() {
-    }
-
-    public Article(String bannerImage, String title, LocalDate publishDate, String email) {
-        this.bannerImage = bannerImage;
-        this.title = title;
-        this.publishDate = publishDate;
-        this.email = email;
+        this.enabled = true;
     }
 
     @Transient
@@ -85,5 +82,33 @@ public class Article {
                 ", birthday=" + publishDate +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setBannerImage(String fileName) {
+        bannerImage = fileName;
     }
 }

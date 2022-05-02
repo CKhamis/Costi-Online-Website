@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xml:th="https://www.thymeleaf.org">
+<head th:replace="components :: head('Home')"></head>
+<body>
+<div th:replace="components :: nav"></div>
+
+<!-- Carousel -->
+<div class="carousel slide" data-bs-ride="carousel">
+
+    <!-- Indicators/dots -->
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#demo" data-bs-slide-to="0" class="active"></button>
+        <button type="button" data-bs-target="#demo" data-bs-slide-to="1"></button>
+        <button type="button" data-bs-target="#demo" data-bs-slide-to="2"></button>
+    </div>
+
+    <!-- The slideshow/carousel -->
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img th:src="@{/images/img.png}" alt="Los Angeles" class="d-block" style="width:100%; z-index:0">
+            <div class="carousel-caption">
+                <h3>Los Angeles</h3>
+                <p>We had such a great time in LA!</p>
+            </div>
+        </div>
+        <div class="carousel-item" th:each="article : ${articles}">
+            <img th:src="@{${article.photosImagePath}}" alt="Los Angeles" class="d-block" style="width:100%; z-index:0">
+            <div class="carousel-caption">
+                <h3 th:text="*{article.title}">title</h3>
+                <p>We had such a great time in LA!</p>
+                <p th:text="*{article.email}"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Left and right controls/icons -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </button>
+</div>
+<h1>rarar</h1>
+
+<div th:replace="components :: footer"></div>
+<div th:replace="components :: scripts"></div>
+</body>
+</html>

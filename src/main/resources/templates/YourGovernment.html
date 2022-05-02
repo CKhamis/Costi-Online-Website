@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xml:th="https://www.thymeleaf.org">
+<head th:replace="components :: head('Gov')"></head>
+<body>
+<div th:replace="components :: nav"></div>
+<div class="container mt-5 pt-5">
+    <div class="p-5 mb-4 bg-light rounded-3">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">Your Government</h1>
+            <p class="col-md-8 fs-4">Curious to find out more about your dyst- I mean democratic government? You have come to the right place. This page contains information regarding the rich history of previous survival worlds and their governments. This page also contains information regarding the current leadership positions of survival world 9.</p>
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <button type="button" class="btn btn-primary">Current Leadership</button>
+                <button type="button" class="btn btn-primary">History</button>
+                <button type="button" class="btn btn-primary">Resources</button>
+            </div>
+        </div>
+    </div>
+
+    <h1 id="leadership" class="mt-5">Current Leadership</h1>
+    <div class="row">
+        <div class="col col-md-3">
+            <div class="card mb-3">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Costi</h5>
+                    <p class="card-text"><small class="text-muted">World Owner</small></p>
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col col-md-3">
+            <div class="card mb-3">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Alex</h5>
+                    <p class="card-text"><small class="text-muted">Mayor of blah</small></p>
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                </div>
+            </div>
+        </div>
+        <!--<div class="col col-md-3">
+            <div class="card mb-3">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Alex</h5>
+                    <p class="card-text"><small class="text-muted">Mayor of blah</small></p>
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col col-md-3">
+            <div class="card mb-3">
+                <img th:src="@{/images/img.png}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Alex</h5>
+                    <p class="card-text"><small class="text-muted">Mayor of blah</small></p>
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                </div>
+            </div>
+        </div>-->
+
+    </div>
+    <h1 id="history" class="mt-5">World History</h1>
+    <div class="container px-0">
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="w1t3-tab" data-bs-toggle="pill" data-bs-target="#w1t3" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Worlds 1-3</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="w4-tab" data-bs-toggle="pill" data-bs-target="#w4" type="button" role="tab" aria-controls="pills-home" aria-selected="true">World 4</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="w5-tab" data-bs-toggle="pill" data-bs-target="#w5" type="button" role="tab" aria-controls="pills-home" aria-selected="true">World 5</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="w55-tab" data-bs-toggle="pill" data-bs-target="#w55" type="button" role="tab" aria-controls="pills-home" aria-selected="true">World 5.5</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="w6-tab" data-bs-toggle="pill" data-bs-target="#w6" type="button" role="tab" aria-controls="pills-home" aria-selected="true">World 6</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="w7-tab" data-bs-toggle="pill" data-bs-target="#w7" type="button" role="tab" aria-controls="pills-home" aria-selected="true">World 7</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="w8-tab" data-bs-toggle="pill" data-bs-target="#w8" type="button" role="tab" aria-controls="pills-home" aria-selected="true">World 8</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="w85-tab" data-bs-toggle="pill" data-bs-target="#w85" type="button" role="tab" aria-controls="pills-home" aria-selected="true">World 8.5</button>
+            </li>
+
+
+        </ul>
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="w1t3" role="tabpanel" aria-labelledby="w1t3-tab">
+                <div class="mb-4 bg-light rounded-3">
+                    <div class="container-fluid p-4">
+                        <h3 class="fw-bold">Costi Survival Worlds 1-3</h3>
+                        <p class="text-secondary fw-light">Lost worlds</p>
+                        <br>
+                        <h4 class="fw-bold">Costi Survival World 1 (2013)<span class="badge rounded-pill bg-danger">Lost</span></h4>
+                        <p class="fs-4">Costi Survival world 1 was the first mainline world in the series. It had many buildings and government ideas that persisted to its successors. The world was created in Minecraft Pocket Edition by Costi and had an "Old" world type, which meant very limited space was available. Some very notable landmarks in this world were the twin towers, vector's lair, the lab, nether reactor area, and advanced irrigation system. The twin towers were a set of two fairly large stone-brick buildings that were both owned by Costi. These toweres had many bridges between them and connected to the advanced irrigation network to have waterfalls on some of the stories. Vector's lair was originally the world's first cave house. Built into a mountain, all players used it for shelter against nocternal enemies. Later on, everyone moved away to create their own houses. Near the end of the world's lifespan, Costi renovated the interior with white and orange wool and quartz stairs to give a 'modern' appearance. The lab was an underground facility located near the community mines and quarry. It featured a floor that was made of glass to show water and lava flowing underneath from the irrigation system. Finally, the irrigation system was a network of aquaducts all flowing from a single waterfall. This was necessary because at the time, there were no buckets implemented into the game. The water flowed from the waterfall to the community farm, twin towers, and the underground lab.</p>
+                        <br>
+                        <h4 class="fw-bold">Costi Survival World 2 (unknown)<span class="badge rounded-pill bg-danger">Lost</span></h4>
+                        <p class="fs-4">Costi Survival world 1 was the first mainline world in the series. </p>
+                        <br>
+                        <h4 class="fw-bold">Costi Survival World 3 (2016)<span class="badge rounded-pill bg-danger">Lost</span></h4>
+                        <p class="fs-4">Costi Survival world 1 was the first mainline world in the series. </p>
+                    </div>
+            </div>
+            <div class="tab-pane fade" id="w4" role="tabpanel" aria-labelledby="w4-tab">4</div>
+            <div class="tab-pane fade" id="w5" role="tabpanel" aria-labelledby="w5-tab">5</div>
+            <div class="tab-pane fade" id="w55" role="tabpanel" aria-labelledby="w55-tab">5.5</div>
+            <div class="tab-pane fade" id="w6" role="tabpanel" aria-labelledby="w6-tab">6</div>
+            <div class="tab-pane fade" id="w7" role="tabpanel" aria-labelledby="w7-tab">7</div>
+            <div class="tab-pane fade" id="w8" role="tabpanel" aria-labelledby="w8-tab">8</div>
+            <div class="tab-pane fade" id="w85" role="tabpanel" aria-labelledby="w85-tab">8.5</div>
+        </div>
+
+    </div>
+    <h1 id="FAQ" class="mt-5">FAQ</h1>
+    <div class="accordion" id="accordionExample">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Accordion Item #1
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Accordion Item #2
+                </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    Accordion Item #3
+                </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="components :: footer"></div>
+<div th:replace="components :: scripts"></div>
+</body>
+</html>
