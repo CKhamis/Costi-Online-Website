@@ -64,7 +64,13 @@
     <div class="container px-0">
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
             <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="w1t3-tab" data-bs-toggle="pill" data-bs-target="#w1t3" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Worlds 1-3</button>
+                <button class="nav-link active" id="w1-tab" data-bs-toggle="pill" data-bs-target="#w1" type="button" role="tab" aria-controls="pills-home" aria-selected="true">World 1</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="w2-tab" data-bs-toggle="pill" data-bs-target="#w2" type="button" role="tab" aria-controls="pills-home" aria-selected="true">World 2</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="w3-tab" data-bs-toggle="pill" data-bs-target="#w3" type="button" role="tab" aria-controls="pills-home" aria-selected="true">World 3</button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="w4-tab" data-bs-toggle="pill" data-bs-target="#w4" type="button" role="tab" aria-controls="pills-home" aria-selected="true">World 4</button>
@@ -91,44 +97,82 @@
 
         </ul>
         <div class="tab-content" id="pills-tabContent">
-            <div class="tab-pane fade show active" id="w1t3" role="tabpanel" aria-labelledby="w1t3-tab">
+            <div class="tab-pane fade show active" id="w1" role="tabpanel" aria-labelledby="w1-tab">
                 <div class="mb-4 rounded-3 bg-light text-dark">
-                    <div class="container-fluid p-4">
-                        <h3 class="fw-bold">Costi Survival Worlds 1-3</h3>
-                        <p class="fw-light">Lost worlds</p>
-                        <br>
-                        <h4 class="fw-bold">Costi Survival World 1 (2013)</h4>
-                        <p class="fs-4 px-3">    Costi Survival world 1 was the first mainline world in the series. It had many buildings and government ideas that persisted to its successors. The world was created in Minecraft Pocket Edition by Costi and had an "Old" world type, which meant very limited space was available. Some very notable landmarks in this world were the twin towers, vector's lair, the lab, nether reactor area, and advanced irrigation system. <br />    The twin towers were a set of two fairly large stone-brick buildings that were both owned by Costi. These toweres had many bridges between them and connected to the advanced irrigation network to have waterfalls on some of the stories. Vector's lair was originally the world's first cave house. Built into a mountain, all players used it for shelter against nocternal enemies. Later on, everyone moved away to create their own houses. Near the end of the world's lifespan, Costi renovated the interior with white and orange wool and quartz stairs to give a 'modern' appearance. The lab was an underground facility located near the community mines and quarry. It featured a floor that was made of glass to show water and lava flowing underneath from the irrigation system. Finally, the irrigation system was a network of aquaducts all flowing from a single waterfall. This was necessary because at the time, there were no buckets implemented into the game. The water flowed from the waterfall to the community farm, twin towers, and the underground lab.</p>
+                    <div class="container-fluid p-5">
+                        <h3 class="fw-bold">Costi Survival World 1 (2013)</h3>
+                        <p class="fs-4">Costi Survival world 1 was the first mainline world in the series. It had many buildings and government ideas that persisted to its successors. The world was created in Minecraft Pocket Edition by Costi and had an "Old" world type, which meant very limited space was available. Some very notable landmarks in this world were the twin towers, vector's lair, the lab, nether reactor area, and advanced irrigation system.
+                            <br />The twin towers were a set of two fairly large stone-brick buildings that were both owned by Costi. These toweres had many bridges between them and connected to the advanced irrigation network to have waterfalls on some of the stories. Vector's lair was originally the world's first cave house. Built into a mountain, all players used it for shelter against nocturnal enemies. Later on, everyone moved away to create their own houses. Near the end of the world's lifespan, Costi renovated the interior with white and orange wool and quartz stairs to give a 'modern' appearance. The lab was an underground facility located near the community mines and quarry. It featured a floor that was made of glass to show water and lava flowing underneath from the irrigation system. Finally, the irrigation system was a network of aquaducts all flowing from a single waterfall. This was necessary because at the time, there were no buckets implemented into the game. The water flowed from the waterfall to the community farm, twin towers, and the underground lab.
+                            <br />This world lasted quite a long time. Being active for approximatley 20 weeks, it is currently the second longest Costi survival world. There were many ideas from this world that was passed along to the next worlds. For example, the first versions of Costi building architecture was invented in this world. Buildings with this architecture are mostly built from stone bricks and glass.
+                        </p>
                         <div th:replace="components :: worldInfo('The version used for this world was mainly Minecraft Pocket Edition etc', 'This world lasted for approximately 20 weeks', 'The government in this server was mainly libertarian; there was no formal government but Costi was able to approve or deny new buildings', 'There were 4 users on this server: Costi, Alex, Georges, and Marc. There was little to no interaction from single-session users.', 'This world is missing. It used to be on an old Android tablet, but it was reset about 2 years later by Costi')"></div>
-                        <br>
-                        <h4>Costi Survival World 2 (unknown)<span class="badge rounded-pill bg-danger">Lost</span></h4>
-                        <p class="fs-4">Costi Survival world 1 was the first mainline world in the series. </p>
-                        <div th:replace="components :: worldInfo('The version of Minecraft used for this world was Minecraft Xbox 360 Edition', 'Ask ALex idk lol', 'This server was mainly a commune; there was no formal government and all players acted as one group', 'There were 4 users on this server: Costi, Alex, Georges, and Marc. There was little to no interaction from single-session users.', 'This world is missing. It was on an Xbox 360 system that was forcefully given to Chris and Salem, who then sold it')"></div>
-                        <br>
-                        <h4>Costi Survival World 3 (2016)<span class="badge rounded-pill bg-danger">Lost</span></h4>
-                        <p class="fs-4">Costi Survival world 1 was the first mainline world in the series. </p>
-                        <div th:replace="components :: worldInfo('The version used for this world was mainly Minecraft Wii U Edition', 'This world lasted for approximately 8 weeks', 'There was two separate countries. One managed by Costi, and one by Alex. The Costi government was quite restrictive, as buildings could only be built by Costi', 'There were 4 users on this server: Costi, Alex, Georges, and Marc. There was little to no interaction from single-session users.', 'This world is missing. It used to be on Costi's first Wii U, but it was unfortunately bricked from a failed Homebrew attempt)"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="w2" role="tabpanel" aria-labelledby="w2-tab">
+                <div class="tab-pane fade show active" id="w1" role="tabpanel" aria-labelledby="w1-tab">
+                    <div class="mb-4 rounded-3 bg-light text-dark">
+                        <div class="container-fluid p-5">
+                            <h3 class="fw-bold">Costi Survival World 2 (2014)</h3>
+                            <p class="fs-4">Costi Survival world 2 was a relatively short world compared to the first world. It was hosted on Costi's Xbox 360 system which used Minecraft Xbox 360 Edition (obviously). This brought on many new features, dimensions, and blocks to the world. Costi, Alex, Georges, and Marc all lived in a swamp biome house surrounded by tamed dogs. There is not much information known about this world, as it was not as influential as the others.</p>
+                            <div th:replace="components :: worldInfo('The version of Minecraft used for this world was Minecraft Xbox 360 Edition', 'Ask ALex idk lol', 'This server was mainly a commune; there was no formal government and all players acted as one group', 'There were 4 users on this server: Costi, Alex, Georges, and Marc. There was little to no interaction from single-session users.', 'This world is missing. It was on an Xbox 360 system that was forcefully given to Chris and Salem, who then sold it')"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="w3" role="tabpanel" aria-labelledby="w3-tab">
+                <div class="tab-pane fade show active" id="w1" role="tabpanel" aria-labelledby="w1-tab">
+                    <div class="mb-4 rounded-3 bg-light text-dark">
+                        <div class="container-fluid p-5">
+                            <h3 class="fw-bold">Costi Survival World 3 (2016)</h3>
+                            <p class="fs-4">Costi Survival world 3 started as a private world for Alex that he created for himself
+                                unbeknownst to anyone else taking interest. Alex was wandering and fell into a ravine. He didn’t know how to get out because he had no wood or tools on him, so he set up base in the ravine. He then started to explore the rest of the world and set up outposts in certain places, like the desert and the plains. Shortly after, Costi wanted to play, and he ended up buying the plains outpost for some dirt and seeds. He would cultivate the land to become a large farm plain and then build more buildings on it. Amal and Christina also joined in building their own homes there as well. The desert outpost became Egypt and Costi’s domain became Constantinople. Constantinople had a large wheat field and a city hall built into a mountain nearby that was never finished or used. Alex still decided to mostly move into the town and set up a store that sold food. Besides that, the town was very small and had little to see or offer.
+                                <br />Later in the life of the World, Alex started to have tension with the rest of the group and declared a nation out of all parts of the world but a small part in the very center of the world that was Constantinople. After some arguments about borders, Alex and Costi agreed on having a sizable circular-ish shaped border of Constantinople that contained only one biome and no open waters. Alex took the entire rest of the world, calling it and its main town Alexandria. He started building near the old ravine a very large and elevated house and a walk-up spiral tower that went almost to the world height limit. In contention, Costi built a large tower that contained a restaurant at the very top to the world limit. The world died when there was a failed attempt to mod the WII U that ended up bricking the system.</p>
+                            <div th:replace="components :: worldInfo('The version used for this world was mainly Minecraft Wii U Edition', 'This world lasted for approximately 8 weeks', 'There was two separate countries. One managed by Costi, and one by Alex. The Costi government was quite restrictive, as buildings could only be built by Costi', 'There were 2 users on this server: Costi & Alex only. There was little to no interaction from single-session users.', 'This world is missing. It used to be on Costi\'s first Wii U, but it was unfortunately bricked from a failed Homebrew attempt')"></div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="tab-pane fade" id="w4" role="tabpanel" aria-labelledby="w4-tab">
                 <div class="mb-4 bg-light rounded-3">
-                    <div class="container-fluid p-4">
-                        <h3 class="fw-bold">Costi Survival World 4</h3>
-                        <p class="text-secondary fw-light">Lost worlds</p>
+                    <div class="container-fluid p-5">
+                        <h3 class="fw-bold">Costi Survival World 4 (2017)</h3>
+                        <p class="fs-4">the world where I made everyone hold off on making their own houses until I finished making a planned city that never ended up happening</p>
                         <br>
-                        <h4 class="fw-bold">Costi Survival World 1 (2013)<span class="badge rounded-pill bg-danger">Lost</span></h4>
-                        <p class="fs-4">Costi Survival world 1 was the first mainline world in the series. It had many buildings and government ideas that persisted to its successors. The world was created in Minecraft Pocket Edition by Costi and had an "Old" world type, which meant very limited space was available. Some very notable landmarks in this world were the twin towers, vector's lair, the lab, nether reactor area, and advanced irrigation system. The twin towers were a set of two fairly large stone-brick buildings that were both owned by Costi. These toweres had many bridges between them and connected to the advanced irrigation network to have waterfalls on some of the stories. Vector's lair was originally the world's first cave house. Built into a mountain, all players used it for shelter against nocternal enemies. Later on, everyone moved away to create their own houses. Near the end of the world's lifespan, Costi renovated the interior with white and orange wool and quartz stairs to give a 'modern' appearance. The lab was an underground facility located near the community mines and quarry. It featured a floor that was made of glass to show water and lava flowing underneath from the irrigation system. Finally, the irrigation system was a network of aquaducts all flowing from a single waterfall. This was necessary because at the time, there were no buckets implemented into the game. The water flowed from the waterfall to the community farm, twin towers, and the underground lab.</p>
-                        <br>
-                        <h4 class="fw-bold">Costi Survival World 2 (unknown)<span class="badge rounded-pill bg-danger">Lost</span></h4>
-                        <p class="fs-4">Costi Survival world 1 was the first mainline world in the series. </p>
-                        <br>
-                        <h4 class="fw-bold">Costi Survival World 3 (2016)<span class="badge rounded-pill bg-danger">Lost</span></h4>
-                        <p class="fs-4">Costi Survival world 1 was the first mainline world in the series. </p>
+                        <div th:replace="components :: worldInfo('The version of Minecraft used for this world was Minecraft Wii U Edition', 'This server had the shortest duration by far. It lasted approximately 1-2 weeks', 'The governemnt in this world was the most authoritarian of all other worlds. Everyone was forced to live in the same compound until a central city was built', 'There were 4 users on this server: Costi, Alex, Georges, and Marc. There was little to no interaction from single-session users.', 'This world currently is on Costi\'s second Wii U and is not able to be transferred to a different device.')"></div>
                     </div>
                 </div>
             </div>
-            <div class="tab-pane fade" id="w5" role="tabpanel" aria-labelledby="w5-tab">5</div>
+            <div class="tab-pane fade" id="w5" role="tabpanel" aria-labelledby="w5-tab">
+                <div class="mb-4 bg-light rounded-3">
+                    <div class="container-fluid p-5">
+                        <h3 class="fw-bold">Costi Survival World 5 (2017)</h3>
+                        <p class="fs-4">Survival World 5 was the longest by far. It started out very humbly in 2017 with a 4-story wooden tower that everyone was forced to live in. Moving out was strictly prohibited. With limited technology, players managed to get a farm with livestock on the upper levels of the structure. At one point, Costi decided that they were rich enough to start expanding outwards into what would eventually become Constantinople. </p>
+                        <h4 class="fw-bold">Government Structure</h4>
+                        <p class="fs-4">Constantinople was the first city in history to have a formal democratic republic governmental structure. There were two levels of government: the federal government and city government. The federal government was only managed by Costi which granted the power to deny buildings and structures. There were 3 cities, each with their own mayor. Mayors had the power to change anything they wanted about their cities, their potential power only stopped at sizing property. Mayors were elected every 3 months </p>
+                        <h4 class="fw-bold">The City of Constantinople</h4>
+                        <p class="fs-4">Constantinople's permanent mayor, Costi, implemented many restrictions including: all citizens must have property in the city, every residence needs to have a mailbox and a clear display of their color of wool (uniquely assigned to every citizen), as well as a sign with their name. Costi also introduced "builder permits", which restricted building projects to selected people and only for approved projects. At this time, Costi architecture remained the same as world 4. All buildings were made out of stone bricks primarily, with large glass windows and a lava column on each corner of every floor for lighting. </p>
+                        <p class="fs-4">Despite the numerous restrictions the city flourished and lasted incredibly long. Everyone moved out of the tower into their own homes pretty quickly and people were content enough with their homes to not move. Notable buildings included: LLAMA, a costco like structure that used to have a llama shop that closed down and then was taken over by Alex’s goods monopoly; City hall, which had over 15 stories with an office for everyone who has ever played on the world, a city council room, and a minecart elevator. It was built over what used to be the small residential tower; A farm tower with floors sold to people for their agricultural value; a pool; two watchtowers; a decorative lava fountain; an emerald bank + vault; central recycling system; pier; event center; Massive Aquarium; and industrial smelter, among many more</p>
+                        <p class="fs-4">Overtime, the addition of new cities (will be discussed soon) meant that Costi had to compete with desert and beach towns. He ended up making 5 districts that massively expanded the area of the city.</p>
+                        <ul>
+                            <li class="fs-4">Urban District: The original area around the original tower</li>
+                            <li class="fs-4">Agricultural district: featuring a large glass barn and sizeable field</li>
+                            <li class="fs-4">Underwater district: a series of glass hemispheres submerged underwater and connected to a central hub</li>
+                            <li class="fs-4">Modern House district: featuring modern-style homes</li>
+                            <li class="fs-4">Libertarian district: A unique part of Constantinople where citizens buy plots of land where they can build whatever they wanted</li>
+                            <li class="fs-4">Villager district: a small area that contained a synthetic villager village, used for trading</li>
+                        </ul>
+                        <p class="fs-4">Later in the lifespan of the server, residents in the urban district of Constantinople asked for their buildings to be updated to have a more modern look and feel. Costi's response to this was creating an entirely new architectural style and applying it to all public and private buildings. This new stlye featured white concrete and jungle wood planks as a replacement to stone bricks. It also got rid of the lava columns and replaced it with glowstone or glowstone lamps.</p>
+                        <p class="fs-4">Additionally, Constantinople featured an underground subway hub that could transport you to any relevant destination in the world including other districts, cities, and even the end portal (which had a ride time of about 5 minutes one way). The central hub used redstone to allow citizens to choose their destination with a click of a button and was developed by Ethan.</p>
+                        <h4 class="fw-bold">The City of Egypt</h4>
+                        <p class="fs-4">When Costi first released some restrictions with regard to building outwards, he permitted a city to be built in the desert southwest of town. This would be called Egypt and was governed by Alex by default. He built several small structures but was voted out by Amal when elections happened. He got salty and left to create another permitted city on the coast called Sirena Beach. Amal started to build new homes in the area with Costi’s help but was soon burnt out and Ethan took power. Ethan made a variety of very visually appealing homes on a flattened mountain overlooking the western coast. He was very popular for this but became burnt out when the workload was too intense. Alex took power afterwards but did not do anything with it as no one lived there and he was focused on Sirena Beach which he thought had more potential.</p>
+                        <h4 class="fw-bold">The City of Serena Beach</h4>
+                        <p class="fs-4">Serena  beach started as a small beach town that flourished over time. Alex started it and built structures and then was voted out in favor of Amal. Amal built modern houses inland and built a lighthouse on a small island off the coast. In the next election, the town’s development soon came to a halt, as the new mayor Christina built ugly construction zones left unfinished. This was a problem because they were deemed very ugly. She was pulled out of office and wanted to sell the ugly land for a premium to piggyback off of it. Costi took eminent domain powers and seized the land and gave it to Alex, the then incumbent mayor. The town’s development steadily inclined with Alex but no one really moved in. He was able to make a farm of a variety of goods that were not commonly farmed (little bit of everything) and sold it to Ethan. There were also more houses built and the beach was redesigned for beauty.</p>
+                        <br>
+                        <div th:replace="components :: worldInfo('The version of Minecraft used for this world was Minecraft Nintendo Switch Edition, but then was transferred to the bedrock edition later', 'This server had the longest lifespan of any other world by far, totaling to about 60 weeks', 'The government of this server leaned slightly authoritarian, but allowed for elections and Mayors who could remove many restrictions if desired', 'There were approximately 8 frequent players on this world, with about 10 single-session players', 'This world currently lives on Costi\'s Nintendo Switch, and has many backups to showcase its long history')"></div>
+                    </div>
+                </div>
+            </div>
             <div class="tab-pane fade" id="w55" role="tabpanel" aria-labelledby="w55-tab">5.5</div>
             <div class="tab-pane fade" id="w6" role="tabpanel" aria-labelledby="w6-tab">6</div>
             <div class="tab-pane fade" id="w7" role="tabpanel" aria-labelledby="w7-tab">7</div>
