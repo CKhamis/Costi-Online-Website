@@ -4,15 +4,21 @@
 <body>
 <div th:replace="components :: nav"></div>
 <div class="container mt-5 pt-5">
-    <div class="p-5 mb-4 bg-light rounded-3">
-        <div class="container-fluid py-5">
-            <h1 class="display-5 fw-bold">Your Government</h1>
-            <p class="col-md-8 fs-4">Curious to find out more about your dyst- I mean democratic government? You have come to the right place. This page contains information regarding the rich history of previous survival worlds and their governments. This page also contains information regarding the current leadership positions of survival world 9.</p>
-            <div class="btn-group" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-primary">Current Leadership</button>
-                <button type="button" class="btn btn-primary">History</button>
-                <button type="button" class="btn btn-primary">Resources</button>
+    <div class="p-0 mb-4 bg-light rounded-3">
+        <div class="container-fluid p-0 video-bg-container rounded-3">
+            <div class="position-absolute p-5">
+                <h1 class="display-5 fw-bold">Your Government</h1>
+                <p class="col-md-8 fs-4">Curious to find out more about your dyst- I mean democratic government? You have come to the right place. This page contains information regarding the rich history of previous survival worlds and their governments. This page also contains information regarding the current leadership positions of survival world 9.</p>
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <a href="#leadership" class="btn btn-primary" aria-current="page">Current Leadership</a>
+                    <a href="#history" class="btn btn-primary">History</a>
+                    <a href="#" class="btn btn-primary">FAQ</a>
+                </div>
             </div>
+            <video class="video-bg" autoplay preload="true" loop="loop" muted>
+                <source th:src="@{/videos/banners/CSWV.m4v}" type="video/mp4">
+                video not supported
+            </video>
         </div>
     </div>
 
@@ -102,8 +108,8 @@
                     <div class="container-fluid p-5">
                         <h3 class="fw-bold">Costi Survival World 1 (2013)</h3>
                         <p class="fs-4">Costi Survival world 1 was the first mainline world in the series. It had many buildings and government ideas that persisted to its successors. The world was created in Minecraft Pocket Edition by Costi and had an "Old" world type, which meant very limited space was available. Some very notable landmarks in this world were the twin towers, vector's lair, the lab, nether reactor area, and advanced irrigation system.
-                            <br />The twin towers were a set of two fairly large stone-brick buildings that were both owned by Costi. These toweres had many bridges between them and connected to the advanced irrigation network to have waterfalls on some of the stories. Vector's lair was originally the world's first cave house. Built into a mountain, all players used it for shelter against nocturnal enemies. Later on, everyone moved away to create their own houses. Near the end of the world's lifespan, Costi renovated the interior with white and orange wool and quartz stairs to give a 'modern' appearance. The lab was an underground facility located near the community mines and quarry. It featured a floor that was made of glass to show water and lava flowing underneath from the irrigation system. Finally, the irrigation system was a network of aquaducts all flowing from a single waterfall. This was necessary because at the time, there were no buckets implemented into the game. The water flowed from the waterfall to the community farm, twin towers, and the underground lab.
-                            <br />This world lasted quite a long time. Being active for approximatley 20 weeks, it is currently the second longest Costi survival world. There were many ideas from this world that was passed along to the next worlds. For example, the first versions of Costi building architecture was invented in this world. Buildings with this architecture are mostly built from stone bricks and glass.
+                            <br />The twin towers were a set of two fairly large stone-brick buildings that were both owned by Costi. These towers had many bridges between them and connected to the advanced irrigation network to have waterfalls on some of the stories. Vector's lair was originally the world's first cave house. Built into a mountain, all players used it for shelter against nocturnal enemies. Later on, everyone moved away to create their own houses. Near the end of the world's lifespan, Costi renovated the interior with white and orange wool and quartz stairs to give a 'modern' appearance. The lab was an underground facility located near the community mines and quarry. It featured a floor that was made of glass to show water and lava flowing underneath from the irrigation system. Finally, the irrigation system was a network of aquaducts all flowing from a single waterfall. This was necessary because at the time, there were no buckets implemented into the game. The water flowed from the waterfall to the community farm, twin towers, and the underground lab.
+                            <br />This world lasted quite a long time. Being active for approximately 20 weeks, it is currently the second longest Costi survival world. There were many ideas from this world that was passed along to the next worlds. For example, the first versions of Costi building architecture was invented in this world. Buildings with this architecture are mostly built from stone bricks and glass.
                         </p>
                         <div th:replace="components :: worldInfo('The version used for this world was mainly Minecraft Pocket Edition etc', 'This world lasted for approximately 20 weeks', 'The government in this server was mainly libertarian; there was no formal government but Costi was able to approve or deny new buildings', 'There were 4 users on this server: Costi, Alex, Georges, and Marc. There was little to no interaction from single-session users.', 'This world is missing. It used to be on an old Android tablet, but it was reset about 2 years later by Costi')"></div>
                     </div>

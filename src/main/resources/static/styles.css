@@ -3,3 +3,13 @@
      background-repeat: repeat;
      background-size: 5%;
 }
+
+.video-bg-container{
+    height:400px;
+    overflow:hidden;
+}
+
+.video-bg{
+    width: 100%;
+    z-index: -1;
+}
