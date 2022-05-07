@@ -8,8 +8,13 @@
     height:400px;
     overflow:hidden;
 }
-
+.video-foreground-container{
+    background-color: RGBA(255, 255, 255, .5);
+    z-index: 1;
+}
 .video-bg{
     width: 100%;
-    z-index: -1;
+    z-index: 0;
+    position: relative;
+    top: -200px;
 }
