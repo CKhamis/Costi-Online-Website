@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xml:th="https://www.thymeleaf.org">
-<head th:replace="components :: head('Home')"></head>
+<head th:replace="components :: head('New Candidate')"></head>
 <body>
 <div th:replace="components :: nav"></div>
 
@@ -8,12 +8,12 @@
     <p class="fs-5"><a href="/vote">Return to previous screen ></a></p>
     <div class="p-5 mb-4 bg-light rounded-3">
         <div class="container-fluid py-5">
-            <h1 class="display-5 fw-bold">Voting Booth</h1>
-            <p class="col-md-8 fs-4">Participate in voting for office here!</p>
+            <h1 class="display-5 fw-bold">Register to Run for Office</h1>
+            <p class="col-md-8 fs-4">Add yourself to the ballot here!</p>
         </div>
     </div>
-    <div class="alert alert-success" role="alert">
-        <p class="fs-4 mb-0">✅Current Status: There are no items to vote on</p>
+    <div class="alert alert-info" role="alert">
+        <p class="fs-4 mb-0">ℹ️Current Status: No available positions to run. Please check back later</p>
     </div>
     <div class="d-flex justify-content-center">
     </div>

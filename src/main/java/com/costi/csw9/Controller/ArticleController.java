@@ -72,6 +72,18 @@ public class ArticleController {
     public String getRegister(Model model){
         return "register";
     }
+    @GetMapping("/vote/runForOffice")
+    public String getAddCandidate(Model model){
+        return "addCandidate";
+    }
+    @GetMapping("/vote/Polls")
+    public String getPolls(Model model){
+        return "polls";
+    }
+    @GetMapping("/vote/BallotInfo")
+    public String getBallotInfo(Model model){
+        return "ballotInfo";
+    }
 
     //Adding New Articles
     @RequestMapping("Articles/Add")
