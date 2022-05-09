@@ -55,10 +55,22 @@ public class ArticleController {
         return "yourGovernment";
     }
 
-    // Votiing Center
+    // Voting Center
     @GetMapping("/vote")
     public String getVoting(Model model){
         return "votingCenter";
+    }
+    @GetMapping("/vote/VotingBooth")
+    public String getVotingBooth(Model model){
+        return "votingBooth";
+    }
+    @GetMapping("/vote/allCitizens")
+    public String getAllCitizens(Model model){
+        return "allCitizens";
+    }
+    @GetMapping("/vote/register")
+    public String getRegister(Model model){
+        return "register";
     }
 
     //Adding New Articles

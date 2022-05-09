@@ -5,25 +5,60 @@
 <div th:replace="components :: nav"></div>
 
 <div class="container mt-5 pt-5">
-    <div class="alert alert-success" role="alert">
-        <p class="fs-4">✅Current Status: There are no items to vote on</p>
-    </div>
-
     <div class="p-5 mb-4 bg-light rounded-3">
         <div class="container-fluid py-5">
             <h1 class="display-5 fw-bold">Voting Center</h1>
             <p class="col-md-8 fs-4">You are in control of your local elections! Participate in online polling, elections, and referendums here</p>
         </div>
     </div>
-
-    <h1 class="fw-bold">Voting Center</h1>
-    <p class="fs-4 mb-0">This page has the information you need to run for office as well as ballots and other important information.</p>
-    <div class="row">
-        <div class="col">
-            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfK5pj9OZoW_TC9RjsJD6U4CxDt0YcUFaVcL9bjqposJr60Yg/viewform?embedded=true" width="640" height="1658" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
-        </div>
-        <div class="col">
-            <h3>rat </h3>
+    <div class="alert alert-success" role="alert">
+        <p class="fs-4 mb-0">✅Current Status: There are no items to vote on</p>
+    </div>
+    <div class="container mb-5">
+        <h2 class="fw-bold mb-3">Popular Services</h2>
+        <div class="row g-4 row-cols-1 row-cols-lg-4">
+            <div class="feature col">
+                <div class="feature-icon">
+                    <h1>🔍</h1>
+                </div>
+                <a href="/vote/allCitizens"><h4>Look up Citizens ></h4></a>
+            </div>
+            <div class="feature col">
+                <div class="feature-icon">
+                    <h1>📝</h1>
+                </div>
+                <a href="/vote/register"><h4>Get Citizenship ></h4></a>
+            </div>
+            <div class="feature col">
+                <div class="feature-icon">
+                    <h1>❓</h1>
+                </div>
+                <a href="/vote/allCitizens"><h4>What's on the Ballot ></h4></a>
+            </div>
+            <div class="feature col">
+                <div class="feature-icon">
+                    <h1>📈</h1>
+                </div>
+                <a href="/vote/results"><h4>Election Results ></h4></a>
+            </div>
+            <div class="feature col">
+                <div class="feature-icon">
+                    <h1>🖥️</h1>
+                </div>
+                <a href="/vote/VotingBooth"><h4>Vote for Office ></h4></a>
+            </div>
+            <div class="feature col">
+                <div class="feature-icon">
+                    <h1>📊</h1>
+                </div>
+                <a href="/vote/allCitizens"><h4>Participate in Polls ></h4></a>
+            </div>
+            <div class="feature col">
+                <div class="feature-icon">
+                    <h1>🏁</h1>
+                </div>
+                <a href="/vote/addCandidate"><h4>Run for Office ></h4></a>
+            </div>
         </div>
     </div>
 </div>
