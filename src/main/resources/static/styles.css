@@ -2,6 +2,7 @@
      background-image: url(images/webpageImages/block.jpg);
      background-repeat: repeat;
      background-size: 5%;
+
 }
 
 .video-bg-container{
@@ -9,7 +10,6 @@
     overflow:hidden;
 }
 .video-foreground-container{
-    background-color: RGBA(255, 255, 255, .5);
     z-index: 1;
 }
 .video-bg{
@@ -17,4 +17,17 @@
     z-index: 0;
     position: relative;
     top: -200px;
+    opacity: 0.3;
+}
+
+.worldImage{
+    height: 300px;
+}
+
+.center {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  text-align: center;
+  font-size: 18px;
 }

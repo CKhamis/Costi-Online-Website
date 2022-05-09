@@ -55,6 +55,12 @@ public class ArticleController {
         return "yourGovernment";
     }
 
+    // Votiing Center
+    @GetMapping("/vote")
+    public String getVoting(Model model){
+        return "votingCenter";
+    }
+
     //Adding New Articles
     @RequestMapping("Articles/Add")
     public String formNewMember(Model model) {
