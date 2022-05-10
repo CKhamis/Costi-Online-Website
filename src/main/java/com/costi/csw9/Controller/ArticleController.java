@@ -84,6 +84,10 @@ public class ArticleController {
     public String getBallotInfo(Model model){
         return "ballotInfo";
     }
+    @GetMapping("/vote/results")
+    public String getResults(Model model){
+        return "electionResults";
+    }
 
     //Adding New Articles
     @RequestMapping("Articles/Add")
