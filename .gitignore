@@ -37,3 +37,4 @@ out/
 .vscode/
 
 !**/Data/
+/src/main/resources/Keystore.p12
