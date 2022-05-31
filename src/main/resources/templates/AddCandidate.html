@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html xml:th="https://www.thymeleaf.org">
-<head th:replace="components :: head('New Candidate')"></head>
-<body>
-<div th:replace="components :: nav"></div>
+<head th:replace="MinecraftComponents :: head('New Candidate')"></head>
+<body  class="bg-dark text-light">
+<div th:replace="MinecraftComponents :: nav"></div>
 
 <div class="container mt-5 pt-5">
     <p class="fs-5"><a href="/vote">Return to previous screen ></a></p>
-    <div class="p-5 mb-4 bg-light rounded-3">
+    <div class="p-5 mb-4 bg-dark rounded-3 border border-white">
         <div class="container-fluid py-5">
             <h1 class="display-5 fw-bold">Register to Run for Office</h1>
             <p class="col-md-8 fs-4">Add yourself to the ballot here!</p>
@@ -19,7 +19,7 @@
     </div>
 </div>
 
-<div th:replace="components :: footer"></div>
-<div th:replace="components :: scripts"></div>
+<div th:replace="MinecraftComponents :: footer"></div>
+<div th:replace="MinecraftComponents :: scripts"></div>
 </body>
 </html>

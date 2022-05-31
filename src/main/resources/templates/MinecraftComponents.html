@@ -6,20 +6,40 @@
     <meta description="viewport" content="width=device-width, initial-scale=1"/>
 
     <link rel="icon" th:href="@{/icons/Logo.jpg}" />
-    <link rel="stylesheet" th:href="@{/styles.css}" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <link rel="stylesheet" th:href="@{/MCstyles.css}" />
 
     <title th:text="'CSW9 | ' + ${page_title}">CSW9</title>
 </head>
 
 <body>
 
-<div th:fragment="nav" class="navbar-fixed">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" style="opacity: 95%;">
+<div th:fragment="nav" class="navbar-fixed position-fixed" style="z-index:99; width:100%;top:0;">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">
                 <img th:src="@{/icons/Logo.jpg}" alt="" width="30" height="30" class="d-inline-block align-text-top">
+                <strong>Costi Online</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link px-3 active" aria-current="page" href="/">Home</a>
+                    <a class="nav-link px-3" href="#">Projects</a>
+                    <a class="nav-link px-3" href="#">Services</a>
+                    <a class="nav-link px-3" href="#">Media</a>
+                    <a class="nav-link px-3" href="#">Wiki</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-brown-dirt p-0" style="opacity: 95%;">
+        <div class="container-fluid">
+            <a class="navbar-brand color-light" href="/">
+                <!--<img th:src="@{/icons/Logo.jpg}" alt="" width="30" height="30" class="d-inline-block align-text-top">-->
                 Costi Survival World 9
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +71,7 @@
     <!--<script th:src="@{/app.js}"></script>-->
 </div>
 
-<div th:fragment="footer" class="bg-light">
+<div th:fragment="footer" class="bg-brown-dirt color-light">
     <div class="container py-5">
         <footer class="row row-cols-5">
             <div class="col">
@@ -59,7 +79,7 @@
                     <img th:src="@{/icons/Constantine Logo v5.png}" class="bi me-2"  style="width:40px">
                     <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
                 </a>
-                <p class="text-muted">Costi Online is a class B cDIP project</p>
+                <p class="color-light">Costi Online is a class B cDIP project</p>
             </div>
 
             <div class="col">
@@ -69,34 +89,34 @@
             <div class="col">
                 <h5>About</h5>
                 <ul class="nav flex-column">
-                    <li class="nav-item mb-2"><a href="/" class="nav-link p-0 text-muted">Home</a></li>
-                    <li class="nav-item mb-2"><a href="/#features" class="nav-link p-0 text-muted">Features</a></li>
-                    <li class="nav-item mb-2"><a href="/gov#FAQ" class="nav-link p-0 text-muted">FAQs</a></li>
-                    <li class="nav-item mb-2"><a href="/#about" class="nav-link p-0 text-muted">About</a></li>
+                    <li class="nav-item mb-2"><a href="/" class="nav-link p-0 color-light">Home</a></li>
+                    <li class="nav-item mb-2"><a href="/#features" class="nav-link p-0 color-light">Features</a></li>
+                    <li class="nav-item mb-2"><a href="/gov#FAQ" class="nav-link p-0 color-light">FAQs</a></li>
+                    <li class="nav-item mb-2"><a href="/#about" class="nav-link p-0 color-light">About</a></li>
                 </ul>
             </div>
 
             <div class="col">
                 <h5>Community</h5>
                 <ul class="nav flex-column">
-                    <li class="nav-item mb-2"><a href="vote/BallotInfo#general" class="nav-link p-0 text-muted">Election Rules</a></li>
+                    <li class="nav-item mb-2"><a href="vote/BallotInfo#general" class="nav-link p-0 color-light">Election Rules</a></li>
                 </ul>
             </div>
 
             <div class="col">
                 <h5>Government</h5>
                 <ul class="nav flex-column">
-                    <li class="nav-item mb-2"><a th:href="@{/downloads/The Costitution.docx}" download="Costitution.docx" class="nav-link p-0 text-muted">Download Costitution</a></li>
-                    <li class="nav-item mb-2"><a href="/gov" class="nav-link p-0 text-muted">Your Government</a></li>
-                    <li class="nav-item mb-2"><a href="/vote" class="nav-link p-0 text-muted">Vote</a></li>
-                    <li class="nav-item mb-2"><a href="/vote/Polls" class="nav-link p-0 text-muted">Polls</a></li>
+                    <li class="nav-item mb-2"><a th:href="@{/downloads/The Costitution.docx}" download="Costitution.docx" class="nav-link p-0 color-light">Download Costitution</a></li>
+                    <li class="nav-item mb-2"><a href="/gov" class="nav-link p-0 color-light">Your Government</a></li>
+                    <li class="nav-item mb-2"><a href="/vote" class="nav-link p-0 color-light">Vote</a></li>
+                    <li class="nav-item mb-2"><a href="/vote/Polls" class="nav-link p-0 color-light">Polls</a></li>
                 </ul>
             </div>
         </footer>
     </div>
 </div>
 
-<div th:fragment="worldInfo(version, duration, type, population, status)" class="container">
+<div th:fragment="worldInfo(version, duration, type, population, status)" class="container p-0">
     <h4 class="border-bottom fw-bold py-4">General Information</h4>
     <div class="row g-4 row-cols-1 row-cols-lg-5">
         <div class="feature col">

@@ -1,0 +1,92 @@
+.testbg{
+     background-image: url(images/webpageImages/voting.jpg);
+     background-size: 100%;
+}
+
+.color-light, footer a{
+    color: #F7EDE2;
+}
+
+.bg-brown-dirt{
+     background-image: url('images/webpageImages/Dirt BG.jpg');
+     background-repeat: repeat;
+     background-color: #773D04;
+     background-size: 5%;
+}
+
+.video-bg-container{
+    height:400px;
+    overflow:hidden;
+}
+.video-foreground-container{
+    z-index: 1;
+}
+.video-bg{
+    width: 100%;
+    z-index: 0;
+    position: relative;
+    top: -200px;
+    opacity: 0.3;
+}
+
+.worldImage{
+    height: 300px;
+}
+
+.center {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  text-align: center;
+  font-size: 18px;
+}
+
+body{
+    padding-top: 50px;
+}
+
+// Bootstrap Customization
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link{
+    background-color: #442a06;
+}
+.nav-pills > .nav-link:focus, .nav-pills > .nav-link:hover{
+    background-color: #442a06;
+}
+
+.nav-pills .nav-link{
+    color: #7FB800;
+}
+
+.nav-pills > .nav-link:focus, .nav-link:hover{
+    color: #F7EDE2;
+}
+
+a{
+    color: #7FB800;
+}
+a:hover{
+    color: #F7EDE2;
+}
+
+.accordion-item{
+    background:none;
+}
+
+.accordion-button{
+    background:none;
+    color:white;
+}
+
+.accordion-item{
+    border-color:white;
+}
+
+.accordion-button:focus{
+    background:#442a06;
+    color: #F7EDE2;
+}
+
+.accordion-button:not(.collapsed){
+    background:#442a06;
+    color: #F7EDE2;
+}

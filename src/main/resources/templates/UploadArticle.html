@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xml:th="https://www.thymeleaf.org">
-<head th:replace="components :: head('Home')"></head>
-<body>
-<div th:replace="components :: nav"></div>
+<head th:replace="MinecraftComponents :: head('Home')"></head>
+<body class="bg-dark text-light">
+<div th:replace="MinecraftComponents :: nav"></div>
 
 <!-- Carousel -->
 <div class="carousel slide" data-bs-ride="carousel">
@@ -43,7 +43,7 @@
 </div>
 <h1>rarar</h1>
 
-<div th:replace="components :: footer"></div>
-<div th:replace="components :: scripts"></div>
+<div th:replace="MinecraftComponents :: footer"></div>
+<div th:replace="MinecraftComponents :: scripts"></div>
 </body>
 </html>
