@@ -42,65 +42,71 @@ public class ArticleController {
     public void modifyArticle(@PathVariable("articleId") Long articleId, @RequestParam(required = false) String name, @RequestParam(required = false) String email){
         articleService.modifyArticle(articleId, name, email);
     }*/
-
+    //Main
     @GetMapping("/")
-    public String getArticles(Model model){
-        List<Article> list = articleService.getArticles();
-        model.addAttribute("articles", list);
-        return "home";
+    public String getHome(Model model){
+        return "main/Home";
+    }
+
+
+    @GetMapping("/Minecraft")
+    public String getMCHome(Model model){
+        //List<Article> list = articleService.getArticles();
+        //model.addAttribute("articles", list);
+        return "minecraft/MCHome";
     }
     // Your Government
-    @GetMapping("/gov")
+    @GetMapping("/Minecraft/gov")
     public String getGovernmentInfo(Model model){
-        return "yourGovernment";
+        return "minecraft/yourGovernment";
     }
 
     // Voting Center
-    @GetMapping("/vote")
+    @GetMapping("/Minecraft/vote")
     public String getVoting(Model model){
-        return "votingCenter";
+        return "minecraft/votingCenter";
     }
-    @GetMapping("/vote/VotingBooth")
+    @GetMapping("/Minecraft/vote/VotingBooth")
     public String getVotingBooth(Model model){
-        return "votingBooth";
+        return "minecraft/votingBooth";
     }
-    @GetMapping("/vote/allCitizens")
+    @GetMapping("/Minecraft/vote/allCitizens")
     public String getAllCitizens(Model model){
-        return "allCitizens";
+        return "minecraft/allCitizens";
     }
-    @GetMapping("/vote/register")
+    @GetMapping("/Minecraft/vote/register")
     public String getRegister(Model model){
-        return "register";
+        return "minecraft/register";
     }
-    @GetMapping("/vote/runForOffice")
+    @GetMapping("/Minecraft/vote/runForOffice")
     public String getAddCandidate(Model model){
-        return "addCandidate";
+        return "minecraft/addCandidate";
     }
-    @GetMapping("/vote/Polls")
+    @GetMapping("/Minecraft/vote/Polls")
     public String getPolls(Model model){
-        return "polls";
+        return "minecraft/polls";
     }
-    @GetMapping("/vote/BallotInfo")
+    @GetMapping("/Minecraft/vote/BallotInfo")
     public String getBallotInfo(Model model){
-        return "ballotInfo";
+        return "minecraft/ballotInfo";
     }
-    @GetMapping("/vote/results")
+    @GetMapping("/Minecraft/vote/results")
     public String getResults(Model model){
-        return "electionResults";
+        return "minecraft/electionResults";
     }
 
     //Adding New Articles
-    @RequestMapping("Articles/Add")
+    @RequestMapping("/Minecraft/Articles/Add")
     public String formNewMember(Model model) {
         if(!model.containsAttribute("article")) {
             model.addAttribute("article",new Article());
         }
         model.addAttribute("action","/Articles/Upload");
         model.addAttribute("submit","Add");
-        return "uploadArticle";
+        return "minecraft/uploadArticle";
     }
 
-    @PostMapping("Articles/Upload")
+    @PostMapping("/Minecraft/Articles/Upload")
     public RedirectView saveMember(Article article, @RequestParam("image") MultipartFile file, BindingResult result, RedirectAttributes redirectAttributes) throws IOException {
         if(result.hasErrors()) {
             // Include validation errors upon redirect

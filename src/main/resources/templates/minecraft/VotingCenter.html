@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xml:th="https://www.thymeleaf.org">
+<head th:replace="minecraft/MinecraftComponents :: head('Home')"></head>
+<body class="bg-dark text-light">
+<div th:replace="minecraft/MinecraftComponents :: nav"></div>
+
+<div class="container mt-5 pt-5">
+    <div class="p-5 mb-4 bg-light rounded-3 testbg">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">Voting Center</h1>
+            <p class="col-md-8 fs-4">You are in control of your local elections! Participate in online polling, elections, and referendums here</p>
+        </div>
+    </div>
+    <div class="alert alert-success" role="alert">
+        <p class="fs-4 mb-0">✅Current Status: There are no items to vote on</p>
+    </div>
+    <div class="container mb-5">
+        <h2 class="fw-bold mb-3">Popular Services</h2>
+        <div class="row g-4 row-cols-1 row-cols-lg-4">
+            <div class="feature col">
+                <div class="feature-icon">
+                    <h1>🔍</h1>
+                </div>
+                <a href="/Minecraft/vote/allCitizens"><h4>Look up Citizens ></h4></a>
+            </div>
+            <div class="feature col">
+                <div class="feature-icon">
+                    <h1>📝</h1>
+                </div>
+                <a href="/Minecraft/vote/register"><h4>Get Citizenship ></h4></a>
+            </div>
+            <div class="feature col">
+                <div class="feature-icon">
+                    <h1>❓</h1>
+                </div>
+                <a href="/Minecraft/vote/BallotInfo"><h4>What's on the Ballot ></h4></a>
+            </div>
+            <div class="feature col">
+                <div class="feature-icon">
+                    <h1>📈</h1>
+                </div>
+                <a href="/Minecraft/vote/results"><h4>Election Results ></h4></a>
+            </div>
+            <div class="feature col">
+                <div class="feature-icon">
+                    <h1>🖥️</h1>
+                </div>
+                <a href="/Minecraft/vote/VotingBooth"><h4>Vote for Office ></h4></a>
+            </div>
+            <div class="feature col">
+                <div class="feature-icon">
+                    <h1>📊</h1>
+                </div>
+                <a href="/Minecraft/vote/Polls"><h4>Participate in Polls ></h4></a>
+            </div>
+            <div class="feature col">
+                <div class="feature-icon">
+                    <h1>🏁</h1>
+                </div>
+                <a href="/Minecraft/vote/runForOffice"><h4>Run for Office ></h4></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="Components :: footer"></div>
+<div th:replace="minecraft/MinecraftComponents :: scripts"></div>
+</body>
+</html>

@@ -1,0 +1,32 @@
+.testbg{
+     background-image: url(images/webpageImages/voting.jpg);
+     background-size: 100%;
+
+}
+
+.video-bg-container{
+    height:400px;
+    overflow:hidden;
+}
+.video-foreground-container{
+    z-index: 1;
+}
+.video-bg{
+    width: 100%;
+    z-index: 0;
+    position: relative;
+    top: -200px;
+    opacity: 0.3;
+}
+
+.worldImage{
+    height: 300px;
+}
+
+.center {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  text-align: center;
+  font-size: 18px;
+}

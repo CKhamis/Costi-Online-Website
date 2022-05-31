@@ -46,19 +46,14 @@ body{
 }
 
 // Bootstrap Customization
+.nav-pills > .nav-link:focus, .nav-link:hover{
+    color: #F7EDE2;
+}
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link{
     background-color: #442a06;
 }
 .nav-pills > .nav-link:focus, .nav-pills > .nav-link:hover{
     background-color: #442a06;
-}
-
-.nav-pills .nav-link{
-    color: #7FB800;
-}
-
-.nav-pills > .nav-link:focus, .nav-link:hover{
-    color: #F7EDE2;
 }
 
 a{
