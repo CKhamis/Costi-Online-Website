@@ -3,8 +3,12 @@
      background-size: 100%;
 }
 
-.color-light{
+.color-light, footer a{
     color: #F7EDE2;
+}
+
+footer h5{
+    color: #7FB800;
 }
 
 .bg-brown-dirt{
@@ -39,4 +43,46 @@
   width: 100%;
   text-align: center;
   font-size: 18px;
+}
+
+a{
+    color: #7FB800;
+}
+
+.accordion-item{
+    background:none;
+}
+
+.accordion-button{
+    background:none;
+    color:white;
+}
+
+.accordion-item{
+    border-color:white;
+}
+
+.accordion-button:focus{
+    background:#442a06;
+    color: #F7EDE2;
+}
+
+.accordion-button:not(.collapsed){
+    background:#442a06;
+    color: #F7EDE2;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link{
+    background-color: #442a06;
+}
+.nav-pills > .nav-link:focus, .nav-pills > .nav-link:hover{
+    background-color: #442a06;
+}
+
+.nav-pills .nav-link{
+    color: #7FB800;
+}
+
+.nav-pills > .nav-link:focus, .nav-link:hover{
+    color: #F7EDE2;
 }
