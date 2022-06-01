@@ -7,13 +7,10 @@
 <div class="container-fluid row px-0 mx-0 d-none d-lg-block">
     <div class="col-lg-3 bg-dark px-5 position-fixed" style="height:100vh;padding-top:70px">
         <h1 class="fs-1">Development Eras</h1>
-        <a href="#IDE" class="fs-4">Interdimensional Era (current)</a>
-        <br />
-        <a href="#PSE" class="fs-4">Pseudo-Industrial Era (17-19)</a>
-        <br />
-        <a href="#HSE" class="fs-4">Highschool Era (14-17)</a>
-        <br />
-        <a href="#CHA" class="fs-4">Childhood Era (14-)</a>
+        <h3 class="my-3"><a href="#IDE" class="fs-4">Interdimensional Era (current)</a></h3>
+        <h3 class="my-3"><a href="#PSE" class="fs-4">Pseudo-Industrial Era (17-19)</a></h3>
+        <h3 class="my-3"><a href="#HSE" class="fs-4">Highschool Era (14-17)</a></h3>
+        <h3 class="my-3"><a href="#CHA" class="fs-4">Childhood Era (14-)</a></h3>
     </div>
 </div>
 <div class="container-fluid row px-0 mx-0">
@@ -24,12 +21,32 @@
         <div class="container-fluid px-5">
             <h1 class="fs-1 mb-3">All Projects</h1>
             <h3 id="IDE" class="fs-3 text-center fw-bold">Interdimentional Era (19+)</h3>
-            <div class="card border border-white bg-black">
-                <img src="..." class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title fw-bold mx-4 fs-4">Costi Online</h5>
-                    <p class="card-text fs-5 mx-4">Costi Online is a website that is designed to show off various projects, services, </p>
-                    <a href="https://github.com/CKhamis/Costi-Online-Website" class="btn btn-primary mx-4 mb-3">See GitHub Page</a>
+
+            <div class="card border border-white bg-black my-5">
+                <img th:src="@{/images/webpageImages/CostiOnline.jpg}" class="card-img-top" alt="Costi Online">
+                <div class="card-body px-5">
+                    <h5 class="card-title fw-bold fs-4">Costi Online</h5>
+                    <p class="text-secondary">2022</p>
+                    <p class="card-text fs-5">Costi Online is a website that is designed to show off various projects, services, and media I made. This project initially began as a website that covers my 9th Minecraft survival world. It had links to participate in elections, polls, and the history of the previous worlds. After it was published on costionline.com, I decided to make it more general. The aforementioned feature has been moved to the <a href="/Minecraft">Minecraft</a> section.</p>
+                    <a href="https://github.com/CKhamis/Costi-Online-Website" class="btn btn-primary mb-3">See GitHub Page</a>
+                </div>
+            </div>
+            <div class="card border border-white bg-black my-5">
+                <img th:src="@{/images/webpageImages/Polarium.png}" class="card-img-top" alt="Constantine [IN]GRID Polarium">
+                <div class="card-body px-5">
+                    <h5 class="card-title fw-bold fs-4">Constantine [IN]GRID Polarium<span class="badge rounded-pill bg-danger">Discontinued</span></h5>
+                    <p class="text-secondary">2021</p>
+                    <p class="card-text fs-5">This is a personal project I made that keeps track of various relationships I have made similar to a journal. This project was discontinued because of complications with making a secure account system (which is very important for a personal journaling program). This program was able to add, edit, and remove people. Each person had their own database for tracking events.</p>
+                    <a href="https://github.com/CKhamis/Constantine-INGRID-Polarium" class="btn btn-primary mb-3">See GitHub Page</a>
+                </div>
+            </div>
+            <div class="card border border-white bg-black my-5">
+                <img th:src="@{/images/webpageImages/NextGrid.jpg}" class="card-img-top" alt="Co">
+                <div class="card-body px-5">
+                    <h5 class="card-title fw-bold fs-4">Constantine [NEXT]GRID<span class="badge rounded-pill bg-danger">Discontinued</span></h5>
+                    <p class="text-secondary">Private Repository | 2021</p>
+                    <p class="card-text fs-5">This project was quite similar to [IN]GRID Polarium in terms of purpose. They both were designed to be a personal diary. However, this project used Java Swing as its interface and used CSV files for data persistence. There were no third party libraries used in this program, so I made my own CSV reader and writer classes myself. The project was discontinued due to frustrations with Java Swing and persistent bugs and limitations with displaying information. The GitHub repository is private because it contains a CSV file with personal information.</p>
+                    <button type="button" class="btn btn-primary mb-3" disabled>See GitHub Page</button>
                 </div>
             </div>
 
