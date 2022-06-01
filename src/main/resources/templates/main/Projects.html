@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xml:th="https://www.thymeleaf.org">
+<head th:replace="Components :: head('Home')"></head>
+<body class="bg-black text-light">
+<div th:replace="Components :: nav"></div>
+
+<div class="container-fluid row px-0 mx-0 d-none d-lg-block">
+    <div class="col-lg-3 bg-dark px-5 position-fixed" style="height:100vh;padding-top:70px">
+        <h1 class="fs-1">Development Eras</h1>
+        <a href="#IDE" class="fs-4">Interdimensional Era (current)</a>
+        <br />
+        <a href="#PSE" class="fs-4">Pseudo-Industrial Era (17-19)</a>
+        <br />
+        <a href="#HSE" class="fs-4">Highschool Era (14-17)</a>
+        <br />
+        <a href="#CHA" class="fs-4">Childhood Era (14-)</a>
+    </div>
+</div>
+<div class="container-fluid row px-0 mx-0">
+    <div class="col-lg-3 d-none d-lg-block">
+        behind
+    </div>
+    <div class="col-xs-12 col-lg-9 px-0" style="height:100vh;padding-top:70px">
+        <div class="container-fluid px-5">
+            <h1 class="fs-1 mb-3">All Projects</h1>
+            <h3 id="IDE" class="fs-3 text-center fw-bold">Interdimentional Era (19+)</h3>
+            <div class="card border border-white bg-black">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold mx-4 fs-4">Costi Online</h5>
+                    <p class="card-text fs-5 mx-4">Costi Online is a website that is designed to show off various projects, services, </p>
+                    <a href="https://github.com/CKhamis/Costi-Online-Website" class="btn btn-primary mx-4 mb-3">See GitHub Page</a>
+                </div>
+            </div>
+
+            <h3 id="PSE" class="fs-3 text-center fw-bold">Pseudo-Industrial Era (17-19)</h3>
+            <h3 id="HSE" class="fs-3 text-center fw-bold">Highschool Era (14-17)</h3>
+            <h3 id="CHA" class="fs-3 text-center fw-bold">Childhood Era (14-)</h3>
+        </div>
+        <div th:replace="Components :: footer"></div>
+    </div>
+</div>
+<div th:replace="Components :: scripts"></div>
+</body>
+</html>

@@ -47,6 +47,10 @@ public class ArticleController {
     public String getHome(Model model){
         return "main/Home";
     }
+    @GetMapping("/Projects")
+    public String getProjects(Model model){
+        return "main/Projects";
+    }
 
 
     @GetMapping("/Minecraft")
