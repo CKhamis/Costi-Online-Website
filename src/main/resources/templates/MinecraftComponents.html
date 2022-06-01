@@ -16,14 +16,31 @@
 <body>
 
 <div th:fragment="nav" class="navbar-fixed position-fixed" style="z-index:99; width:100%;top:0;">
-    <div class="text-center bg-dark">
-        <a class="color-light" href="/"><strong>Costi Online</strong></a>
-    </div>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-brown-dirt" style="opacity: 95%;">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">
                 <img th:src="@{/icons/Logo.jpg}" alt="" width="30" height="30" class="d-inline-block align-text-top">
-                <strong class="color-light">Costi Survival World 9</strong>
+                <strong>Costi Online</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link px-3 active" aria-current="page" href="/">Home</a>
+                    <a class="nav-link px-3" href="#">Projects</a>
+                    <a class="nav-link px-3" href="#">Services</a>
+                    <a class="nav-link px-3" href="#">Media</a>
+                    <a class="nav-link px-3" href="#">Wiki</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-brown-dirt p-0" style="opacity: 95%;">
+        <div class="container-fluid">
+            <a class="navbar-brand color-light" href="/">
+                <!--<img th:src="@{/icons/Logo.jpg}" alt="" width="30" height="30" class="d-inline-block align-text-top">-->
+                Costi Survival World 9
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>

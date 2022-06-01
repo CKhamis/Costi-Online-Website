@@ -7,10 +7,6 @@
     color: #F7EDE2;
 }
 
-footer h5{
-    color: #7FB800;
-}
-
 .bg-brown-dirt{
      background-image: url('images/webpageImages/Dirt BG.jpg');
      background-repeat: repeat;
@@ -45,8 +41,31 @@ footer h5{
   font-size: 18px;
 }
 
+body{
+    padding-top: 50px;
+}
+
+// Bootstrap Customization
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link{
+    background-color: #442a06;
+}
+.nav-pills > .nav-link:focus, .nav-pills > .nav-link:hover{
+    background-color: #442a06;
+}
+
+.nav-pills .nav-link{
+    color: #7FB800;
+}
+
+.nav-pills > .nav-link:focus, .nav-link:hover{
+    color: #F7EDE2;
+}
+
 a{
     color: #7FB800;
+}
+a:hover{
+    color: #F7EDE2;
 }
 
 .accordion-item{
@@ -69,20 +88,5 @@ a{
 
 .accordion-button:not(.collapsed){
     background:#442a06;
-    color: #F7EDE2;
-}
-
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link{
-    background-color: #442a06;
-}
-.nav-pills > .nav-link:focus, .nav-pills > .nav-link:hover{
-    background-color: #442a06;
-}
-
-.nav-pills .nav-link{
-    color: #7FB800;
-}
-
-.nav-pills > .nav-link:focus, .nav-link:hover{
     color: #F7EDE2;
 }
