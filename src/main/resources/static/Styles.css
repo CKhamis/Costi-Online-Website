@@ -2,3 +2,7 @@ h3{
     margin-top: 20px;
     margin-bottom:30px;
 }
+
+.blue-v-gradient{
+    background-image: linear-gradient(black, #00006f);
+}
