@@ -7,10 +7,20 @@
 <div class="container-fluid row px-0 mx-0 d-none d-lg-block">
     <div class="col-lg-3 bg-dark px-5 position-fixed" style="height:100vh;padding-top:70px">
         <h1 class="fs-1">Development Eras</h1>
-        <h3 class="my-3"><a href="#IDE" class="fs-4">Interdimensional Era (current)</a></h3>
-        <h3 class="my-3"><a href="#PSE" class="fs-4">Pseudo-Industrial Era (17-19)</a></h3>
-        <h3 class="my-3"><a href="#HSE" class="fs-4">Highschool Era (14-17)</a></h3>
-        <h3 class="my-3"><a href="#CHA" class="fs-4">Childhood Era (14-)</a></h3>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <h4 class="fs-4"><a class="nav-link" href="#IDE">Interdimensional Era (current)</a></h4>
+            </li>
+            <li class="nav-item">
+                <h4 class="fs-4"><a class="nav-link" href="#PSE">Pseudo-Industrial Era (17-19)</a></h4>
+            </li>
+            <li class="nav-item">
+                <h4 class="fs-4"><a class="nav-link" href="#HSE">High School Era (14-17)</a></h4>
+            </li>
+            <li class="nav-item">
+                <h4 class="fs-4"><a class="nav-link" href="#CHE">Childhood Era (14-)</a></h4>
+            </li>
+        </ul>
     </div>
 </div>
 <div class="container-fluid row px-0 mx-0">
@@ -19,7 +29,7 @@
     </div>
     <div class="col-xs-12 col-lg-9 px-0" style="height:100vh;padding-top:70px">
         <div class="container-fluid px-5">
-            <h1 class="fs-1 mb-3">All Projects</h1>
+            <img th:src="@{/images/webpageImages/History.png}" class="img-fluid w-100" >
             <h3 id="IDE" class="fs-3 text-center fw-bold">Interdimentional Era (19+)</h3>
 
             <div class="card border border-white bg-black my-5">
@@ -173,7 +183,7 @@
                 </div>
             </div>
 
-            <h3 id="CHA" class="fs-3 text-center fw-bold">Childhood Era (14-)</h3>
+            <h3 id="CHE" class="fs-3 text-center fw-bold">Childhood Era (14-)</h3>
 
             <div class="card border border-white bg-black my-5">
                 <img th:src="@{/images/webpageImages/Birds.jpg}" class="card-img-top" alt="Original Angry Birds Wiki">
