@@ -9,6 +9,9 @@ import lombok.ToString;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
+/**
+ * Gets the necessary params to create a User object for account creation
+ */
 public class RegistrationRequest {
     private final String firstName;
     private final String lastName;
