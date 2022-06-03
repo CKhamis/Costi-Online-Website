@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CostiSurvivalWorld9WebsiteApplication {
+public class CostiOnlineStarter {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CostiSurvivalWorld9WebsiteApplication.class, args);
+		SpringApplication.run(CostiOnlineStarter.class, args);
 	}
 }
