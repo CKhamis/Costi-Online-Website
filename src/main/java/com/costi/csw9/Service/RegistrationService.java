@@ -24,7 +24,7 @@ public class RegistrationService {
             throw new IllegalStateException("email not valid");
         }
 
-        String token = userService.signUpUser(
+        String token = userService.signUpAdmin(
                 new User(
                         request.getFirstName(),
                         request.getLastName(),
@@ -41,6 +41,33 @@ public class RegistrationService {
         return token;
     }
 
+    /**
+     * Creation of a regular user, which does not need verification link
+     * @param request the incoming request for user
+     * @return status message
+     */
+    public String registerUser(RegistrationRequest request) {
+        boolean isValidEmail = emailValidator.test(request.getEmail());
+
+        if (!isValidEmail) {
+            throw new IllegalStateException("email not valid");
+        }
+
+        userService.signUpUser(
+                new User(
+                        request.getFirstName(),
+                        request.getLastName(),
+                        request.getEmail(),
+                        request.getPassword(),
+                        UserRole.USER
+
+                )
+        );
+
+        userService.enableUser(request.getEmail());
+        System.out.println("User " + request.getFirstName() + " " + request.getLastName() + " was created and enabled!");
+        return "User was added";
+    }
 
     @Transactional
     public void confirmToken(String token) {

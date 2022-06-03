@@ -9,19 +9,21 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
-@RequestMapping(path = "api/v1/registration")
 @AllArgsConstructor
 public class RegistrationController {
 
     private RegistrationService registrationService;
 
-    @PostMapping
+    @PostMapping(path = "api/v1/registration/new")
     public String register(@RequestBody RegistrationRequest request){
-        return registrationService.registerAdmin(request);
+        if(request.getRole().equals("ADMIN")){
+            return registrationService.registerAdmin(request);
+        }
+        return registrationService.registerUser(request);
     }
 
-    @GetMapping(path = "confirm")
-    public RedirectView confirm(@RequestParam("token") String token, RedirectAttributes redirectAttributes){
+    @GetMapping(path = "api/v1/registration/confirm")
+    public RedirectView confirmAdmin(@RequestParam("token") String token, RedirectAttributes redirectAttributes){
         registrationService.confirmToken(token);
         redirectAttributes.addFlashAttribute("flash",new FlashMessage("Success", "Your account was activated!", FlashMessage.Status.SUCCESS));
         return new RedirectView("/", true);
