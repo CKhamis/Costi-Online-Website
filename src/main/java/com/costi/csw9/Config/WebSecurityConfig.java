@@ -28,7 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/Minecraft/vote/**").hasAuthority(UserRole.ADMIN.toString())
+                .antMatchers("/Minecraft/vote/**", "/username").hasAuthority(UserRole.ADMIN.toString())
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()

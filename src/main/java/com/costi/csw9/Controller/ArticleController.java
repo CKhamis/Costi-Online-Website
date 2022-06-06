@@ -1,7 +1,9 @@
 package com.costi.csw9.Controller;
 import com.costi.csw9.Model.Article;
 import com.costi.csw9.Model.FlashMessage;
+import com.costi.csw9.Model.User;
 import com.costi.csw9.Service.ArticleService;
+import com.costi.csw9.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,15 +14,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
-import java.util.List;
+import java.security.Principal;
 
 @Controller
 public class ArticleController {
     private final ArticleService articleService;
+    private final UserService userService;
 
     @Autowired
-    public ArticleController(ArticleService articleService) {
+    public ArticleController(ArticleService articleService, UserService userService) {
         this.articleService = articleService;
+        this.userService = userService;
     }
     /*
     @GetMapping
@@ -42,6 +46,14 @@ public class ArticleController {
     public void modifyArticle(@PathVariable("articleId") Long articleId, @RequestParam(required = false) String name, @RequestParam(required = false) String email){
         articleService.modifyArticle(articleId, name, email);
     }*/
+    //Account
+    private User getCurrentUser(Principal principal) {
+        // TODO: null recovery
+        String username = principal.getName();
+        User u = userService.loadUserObjectByUsername(username);
+        return u;
+    }
+
     //Main
     @GetMapping("/")
     public String getHome(Model model){
@@ -52,7 +64,8 @@ public class ArticleController {
         return "main/logout";
     }
     @GetMapping("/Projects")
-    public String getProjects(Model model){
+    public String getProjects(Model model, Principal principal){
+        model.addAttribute("user", getCurrentUser(principal));
         return "main/Projects";
     }
     @GetMapping("/login")

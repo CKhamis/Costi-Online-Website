@@ -26,6 +26,11 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MESSAGE, username)));
     }
 
+    public User loadUserObjectByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MESSAGE, username)));
+    }
+
+
     public String signUpAdmin(User user){
         //Check if exists
         boolean userExists = userRepository.findByEmail(user.getEmail()).isPresent();
