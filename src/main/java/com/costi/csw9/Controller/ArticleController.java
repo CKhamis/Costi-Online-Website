@@ -47,9 +47,17 @@ public class ArticleController {
     public String getHome(Model model){
         return "main/Home";
     }
+    @GetMapping("/Test")
+    public String getTest(Model model){
+        return "main/logout";
+    }
     @GetMapping("/Projects")
     public String getProjects(Model model){
         return "main/Projects";
+    }
+    @GetMapping("/login")
+    public String getLogin(Model model){
+        return "main/login";
     }
 
 
