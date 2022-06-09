@@ -69,6 +69,36 @@ public class RegistrationService {
         return "User was added";
     }
 
+    //GUI based creation
+    public void registerUser(User user) {
+        boolean isValidEmail = emailValidator.test(user.getEmail());
+
+        if (!isValidEmail) {
+            throw new IllegalStateException("email not valid");
+        }
+
+        //Additional security measure
+        user.setRole(UserRole.USER);
+
+        userService.signUpUser(user);
+
+        userService.enableUser(user.getEmail());
+        System.out.println("User " + user.getFirstName() + " " + user.getLastName() + " was created and enabled!");
+    }
+
+    public void registerAdmin(User user) {
+        boolean isValidEmail = emailValidator.test(user.getEmail());
+
+        if (!isValidEmail) {
+            throw new IllegalStateException("email not valid");
+        }
+
+        String token = userService.signUpAdmin(user);
+
+        String link = "http://localhost/api/v1/registration/confirm?token=" + token;
+        System.out.println("Verification link for " + user.getFirstName() + " " + user.getLastName() + ":\t" + link);
+    }
+
     @Transactional
     public void confirmToken(String token) {
         ConfirmationToken confirmationToken = confirmationTokenService

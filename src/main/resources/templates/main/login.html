@@ -3,18 +3,142 @@
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <title>Spring Security Example </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </head>
-<body>
-<div th:if="${param.error}">
-    Invalid username and password.
+<body class="bg-dark tiledLogoBackground">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6 col-xs-12 p-0 bg-light">
+            <div class="navbar-fixed">
+                <nav>
+                    <div class="container-fluid row m-0 p-0">
+                        <div class="col bg-light p-0">
+                            <div class="m-2 text-center text-white text-uppercase bg-dark">
+                                <h1>Log In</h1>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <div class="col-lg-6 p-0 d-none d-lg-block">
+            <div class="navbar-fixed">
+                <nav>
+                    <div class="container-fluid row m-0 p-0">
+                        <div class="d-none d-lg-block col p-0">
+                            <div class="d-lg-block container-fluid bg-light" style="height:1rem;">
+                                <a href="/" style="float:right; color:black; font-size: 10px;">EXIT</a>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
 </div>
-<div th:if="${param.logout}">
-    You have been logged out.
+
+<div class="container text-white" id="logInContainer">
+    <div th:if="${param.error}">
+        Invalid username and password.
+    </div>
+    <div th:if="${param.logout}">
+        You have been logged out.
+    </div>
+    <form th:action="@{/login}" method="post">
+        <div><label> User Name : <input type="text" name="username"/> </label></div>
+        <div><label> Password: <input type="password" name="password"/> </label></div>
+        <div><input type="submit" value="Sign In"/></div>
+    </form>
 </div>
-<form th:action="@{/login}" method="post">
-    <div><label> User Name : <input type="text" name="username"/> </label></div>
-    <div><label> Password: <input type="password" name="password"/> </label></div>
-    <div><input type="submit" value="Sign In"/></div>
-</form>
+<style>
+    *{
+  font-family: Times New Roman;
+  border-radius: 0;
+}
+
+h1{
+  font-size:24px;
+  margin-bottom:0;
+  line-height: 40px;
+}
+h2{
+  margin: 10px 0px 2px 0px;
+}
+
+hr{
+  border: 2px solid black;
+  margin: 0 0 10px 0;
+  opacity: 1;
+}
+
+.gradientBackground{
+  background: rgb(2,0,36);
+}
+
+.logoBackground{
+  background-image: url();
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: 87% center;
+  background-size: 30%;
+}
+
+.tiledLogoBackground{
+  background-image: url(images/bg.png);
+  background-repeat: repeat;
+  background-attachment: fixed;
+  background-size: 5%;
+}
+
+.nav-tabs .nav-link{
+  border: 1px solid #909090;
+  border-top-left-radius: 0rem;
+  border-top-right-radius: 0rem;
+  color: white;
+  font-weight: bold;
+}
+
+.form-control {
+  border-radius:0rem;
+}
+
+div.scrollmenu {
+  background-color: #333;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+div.scrollmenu a {
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 14px;
+  text-decoration: none;
+  color:#909090;
+}
+
+div.scrollmenu a:hover {
+  background-color: #575757;
+}
+
+/* Scroll Bars */
+::-webkit-scrollbar {
+  width: 2px;
+  height:2px;
+}
+
+::-webkit-scrollbar-track {
+  background: #D6D6D6;
+}
+
+::-webkit-scrollbar-thumb {
+  background: black;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+</style>
 </body>
 </html>

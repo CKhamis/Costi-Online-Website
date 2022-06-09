@@ -5,7 +5,10 @@
     <title>Hello World!</title>
 </head>
 <body>
-<h1 th:text ="${#authentication.getPrincipal().getUser().getFirstName()}">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
+<h1 th:text="${user.firstName}">Hello</h1>
+<p th:text="${user.lastName}"></p>
+<p th:text="${user.email}"></p>
+<p th:text="${user.role}"></p>
 <form th:action="@{/logout}" method="post">
     <input type="submit" value="Sign Out"/>
 </form>

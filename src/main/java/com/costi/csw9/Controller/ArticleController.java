@@ -2,7 +2,10 @@ package com.costi.csw9.Controller;
 import com.costi.csw9.Model.Article;
 import com.costi.csw9.Model.FlashMessage;
 import com.costi.csw9.Model.User;
+import com.costi.csw9.Model.UserRole;
 import com.costi.csw9.Service.ArticleService;
+import com.costi.csw9.Service.RegistrationRequest;
+import com.costi.csw9.Service.RegistrationService;
 import com.costi.csw9.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,11 +23,13 @@ import java.security.Principal;
 public class ArticleController {
     private final ArticleService articleService;
     private final UserService userService;
+    private RegistrationService registrationService;
 
     @Autowired
-    public ArticleController(ArticleService articleService, UserService userService) {
+    public ArticleController(ArticleService articleService, UserService userService, RegistrationService registrationService) {
         this.articleService = articleService;
         this.userService = userService;
+        this.registrationService = registrationService;
     }
     /*
     @GetMapping
@@ -48,10 +53,41 @@ public class ArticleController {
     }*/
     //Account
     private User getCurrentUser(Principal principal) {
-        // TODO: null recovery
+        if(principal == null){
+            return new User("NULL","NULL","Not Signed In","error", UserRole.USER);
+        }
         String username = principal.getName();
         User u = userService.loadUserObjectByUsername(username);
         return u;
+    }
+
+    @GetMapping("/Account/signup")
+    public String getNewAccount(Model model, RedirectAttributes redirectAttributes) {
+        if(!model.containsAttribute("user")) {
+            model.addAttribute("user",new User());
+        }
+        model.addAttribute("action","/Account");
+        return "main/NewAccount";
+    }
+
+    @RequestMapping(value = "/Account", method = RequestMethod.POST)
+    public String addNewUser(User user, BindingResult result, RedirectAttributes redirectAttributes){
+        if(result.hasErrors()) {
+            // Include validation errors upon redirect
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category",result);
+
+            // Re populate credentials in form
+            redirectAttributes.addFlashAttribute("user", user);
+
+            // Redirect back to the form
+            return "redirect:/Account/signup";
+        }
+        if(user.getRole().name().equals("ADMIN")){
+            registrationService.registerAdmin(user);
+            return "main/Home";
+        }
+        registrationService.registerUser(user);
+        return "main/Home";
     }
 
     //Main
@@ -60,12 +96,12 @@ public class ArticleController {
         return "main/Home";
     }
     @GetMapping("/Test")
-    public String getTest(Model model){
+    public String getTest(Model model, Principal principal){
+        model.addAttribute("user", getCurrentUser(principal));
         return "main/logout";
     }
     @GetMapping("/Projects")
-    public String getProjects(Model model, Principal principal){
-        model.addAttribute("user", getCurrentUser(principal));
+    public String getProjects(Model model){
         return "main/Projects";
     }
     @GetMapping("/login")
@@ -76,8 +112,6 @@ public class ArticleController {
 
     @GetMapping("/Minecraft")
     public String getMCHome(Model model){
-        //List<Article> list = articleService.getArticles();
-        //model.addAttribute("articles", list);
         return "minecraft/MCHome";
     }
     // Your Government

@@ -1,21 +1,19 @@
 package com.costi.csw9.Service;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode
 @ToString
 /**
  * Gets the necessary params to create a User object for account creation
  */
 public class RegistrationRequest {
-    private final String firstName;
-    private final String lastName;
-    private final String email;
-    private final String password;
-    private final String role;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String password;
+    private String role;
 }

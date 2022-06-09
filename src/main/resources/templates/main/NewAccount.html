@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xml:th="https://www.thymeleaf.org">
+<head th:replace="Components :: head('Home')"></head>
+<body class="bg-black text-light mt-5">
+<div th:replace="Components :: nav"></div>
+
+<div class="container-fluid row px-4 py-5" id="about">
+    <div class="container-fluid">
+        <h1 class="pb-2 border-bottom mb-4 fw-bold text-center">Create A Costi Account</h1>
+    </div>
+    <div class="col-lg-3 col-md-5 col-xs-12">
+        <div class="p-3 mb-4 bg-dark rounded-3 border border-white">
+            <div class="container-fluid">
+                <h3 class="fw-bold">⚠️Important Information</h3>
+                <p class="fs-4">Please make sure you read the information below</p>
+            </div>
+        </div>
+        <div class="container-fluid mb-5">
+            <p class="fs-4">Please note that the account system is in its alpha phase. Your information is subject to deletion at any point due to a mistake or error. <strong>Please make sure to use a unique password for your account.</strong></p>
+        </div>
+    </div>
+    <div class="col-lg-9 col-md-7 col-xs-12">
+        <div class="p-5 mb-4 bg-dark rounded-3 border border-white">
+            <form th:action="@{${action}}" method="post" th:object="${user}">
+                <h2>General Information</h2>
+                <hr/>
+                <div class="form-row row">
+                    <div class="col-md-4 mb-3">
+                        <label for="fnf">First name</label>
+                        <input type="text" class="form-control" id="fnf" th:field="*{firstName}"
+                               placeholder="First name" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="lnf">Last name</label>
+                        <input type="text" class="form-control" id="lnf" th:field="*{lastName}"
+                               placeholder="Last name" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="mnf">Email</label>
+                        <input type="text" class="form-control" id="mnf"
+                               th:field="*{email}" placeholder="email">
+                    </div>
+                </div>
+                <div class="form-row row">
+                    <div class="col-md-6 mb-3">
+                        <label for="fnf">Password</label>
+                        <input type="text" class="form-control" id="pass" th:field="*{password}"
+                               placeholder="Password" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <select th:field="*{role}" class="cs-select cs-skin-border">
+                            <option value="" disabled="disabled">Select a role</option>
+                            <option value = "ADMIN">ADMIN</option>
+                            <option value = "USER">USER</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div th:replace="Components :: footer"></div>
+<div th:replace="Components :: scripts"></div>
+</body>
+</html>
