@@ -53,18 +53,19 @@ public class RegistrationService {
             throw new IllegalStateException("email not valid");
         }
 
-        userService.signUpUser(
-                new User(
-                        request.getFirstName(),
-                        request.getLastName(),
-                        request.getEmail(),
-                        request.getPassword(),
-                        UserRole.USER
-
-                )
+        //Create user
+        User user = new User(
+                request.getFirstName(),
+                request.getLastName(),
+                request.getEmail(),
+                request.getPassword(),
+                UserRole.USER
         );
+        user.setEnabled(true);
 
-        userService.enableUser(request.getEmail());
+        //Save user
+        userService.signUpUser(user);
+
         System.out.println("User " + request.getFirstName() + " " + request.getLastName() + " was created and enabled!");
         return "User was added";
     }
@@ -81,8 +82,6 @@ public class RegistrationService {
         user.setRole(UserRole.USER);
 
         userService.signUpUser(user);
-
-        userService.enableUser(user.getEmail());
         System.out.println("User " + user.getFirstName() + " " + user.getLastName() + " was created and enabled!");
     }
 
@@ -117,6 +116,6 @@ public class RegistrationService {
         }
 
         confirmationTokenService.setConfirmedAt(token);
-        userService.enableUser(confirmationToken.getUser().getEmail());
+        userService.enableUser(confirmationToken.getUser().getId());
     }
 }

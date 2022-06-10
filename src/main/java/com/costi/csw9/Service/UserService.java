@@ -62,12 +62,19 @@ public class UserService implements UserDetailsService {
             String encodedPass = bCryptPasswordEncoder.encode(user.getPassword());
             user.setPassword(encodedPass);
 
+            //Enable user
+            user.setEnabled(true);
+
             //Save User
             userRepository.save(user);
         }
     }
 
-    public int enableUser(String email) {
-        return userRepository.enableUser(email);
+    public void enableUser(Long id) {
+        userRepository.enableUser(id);
+    }
+
+    public void updateUser(User user){
+        userRepository.save(user);
     }
 }

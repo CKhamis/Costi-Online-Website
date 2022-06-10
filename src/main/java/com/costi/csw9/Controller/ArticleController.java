@@ -61,6 +61,25 @@ public class ArticleController {
         return u;
     }
 
+    @RequestMapping("/Account/user/{userId}")
+    public String editUser(@PathVariable Long userId, Model model, Principal principal){
+        model.addAttribute("user", getCurrentUser(principal));
+        model.addAttribute("action", "/Account/user/" + userId + "/edit");
+        return "main/ViewAccount";
+    }
+
+    @PostMapping("/Account/user/{userId}/edit")
+    public String updateUser(User user, BindingResult result, RedirectAttributes redirectAttributes){
+        if(result.hasErrors()) {
+            // Include validation errors upon redirect
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.Person",result);
+            // Add  member if invalid was received
+            redirectAttributes.addFlashAttribute("user",user);
+        }
+        userService.updateUser(user);
+        return "/Account/user/" + user.getId();
+    }
+
     @GetMapping("/Account/signup")
     public String getNewAccount(Model model, RedirectAttributes redirectAttributes) {
         if(!model.containsAttribute("user")) {
