@@ -36,10 +36,11 @@
                 </div>
             </div>
             <div th:class="'' + (*{loggedIn}? 'd-none' : 'd-flex')">
-                <a href="/Account"><button>Sign In</button></a>
+                <a href="/SignUp" class="link-secondary px-3">Sign up</a>
+                <a href="/Account" class="btn btn-primary">Sign In</a>
             </div>
             <div th:class="'' + (*{loggedIn}? 'd-flex' : 'd-none')">
-                <a class="nav-link px-3" href="/Account" th:text="${user.firstName} + ' ' + ${user.lastName}">Home</a>
+                <a class="nav-link px-3 text-white fw-bold" href="/Account" th:text="${user.firstName} + ' ' + ${user.lastName}">Account</a>
                 <form th:action="@{/logout}" method="post">
                     <button type="submit" value="Sign Out" class="btn btn-primary">Sign Out</button>
                 </form>

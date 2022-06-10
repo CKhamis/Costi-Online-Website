@@ -89,16 +89,16 @@ public class ArticleController {
         return "main/ViewAccount";
     }
 
-    @GetMapping("/Account/signup")
+    @GetMapping("/SignUp")
     public String getNewAccount(Model model, RedirectAttributes redirectAttributes) {
         if(!model.containsAttribute("user")) {
             model.addAttribute("user",new User());
         }
-        model.addAttribute("action","/Account");
+        model.addAttribute("action","/SignUp/post");
         return "main/NewAccount";
     }
 
-    @RequestMapping(value = "/Account", method = RequestMethod.POST)
+    @RequestMapping(value = "/SignUp/post", method = RequestMethod.POST)
     public String addNewUser(User user, BindingResult result, RedirectAttributes redirectAttributes){
         if(result.hasErrors()) {
             // Include validation errors upon redirect
@@ -108,7 +108,7 @@ public class ArticleController {
             redirectAttributes.addFlashAttribute("user", user);
 
             // Redirect back to the form
-            return "redirect:/Account/signup";
+            return "redirect:/SignUp";
         }
         if(user.getRole().name().equals("ADMIN")){
             registrationService.registerAdmin(user);
