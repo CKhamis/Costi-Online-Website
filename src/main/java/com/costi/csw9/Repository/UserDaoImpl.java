@@ -64,6 +64,7 @@ public class UserDaoImpl implements UserRepository{
         session.close();
     }
 
+    //TODO: test this
     @Override
     public List<User> findAll() {
         Session session = sessionFactory.openSession();
@@ -106,6 +107,7 @@ public class UserDaoImpl implements UserRepository{
         session.close();
     }
 
+    //TODO: test this
     @Override
     public void delete(User user) {
         // Open a session

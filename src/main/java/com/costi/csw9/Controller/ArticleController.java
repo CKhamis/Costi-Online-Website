@@ -61,23 +61,32 @@ public class ArticleController {
         return u;
     }
 
-    @RequestMapping("/Account/user/{userId}")
+    @RequestMapping("/Account/{userId}")
     public String editUser(@PathVariable Long userId, Model model, Principal principal){
         model.addAttribute("user", getCurrentUser(principal));
-        model.addAttribute("action", "/Account/user/" + userId + "/edit");
+        model.addAttribute("action", "/Account/" + userId + "/edit");
         return "main/ViewAccount";
     }
 
-    @PostMapping("/Account/user/{userId}/edit")
-    public String updateUser(User user, BindingResult result, RedirectAttributes redirectAttributes){
+    @PostMapping("/Account/{userId}/edit")
+    public String updateUser(User user, BindingResult result, RedirectAttributes redirectAttributes, Principal principal){
         if(result.hasErrors()) {
             // Include validation errors upon redirect
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.Person",result);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.User",result);
             // Add  member if invalid was received
             redirectAttributes.addFlashAttribute("user",user);
         }
+
+        //Transfer id so it gets overwritten in data
+        User currentUser = getCurrentUser(principal);
+        user.setId(currentUser.getId());
+
+        //Enable user if enabled
+        user.setEnabled(currentUser.getEnabled());
+
+        //Save new user
         userService.updateUser(user);
-        return "/Account/user/" + user.getId();
+        return "main/ViewAccount";
     }
 
     @GetMapping("/Account/signup")
