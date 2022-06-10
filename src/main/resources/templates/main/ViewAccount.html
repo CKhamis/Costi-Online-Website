@@ -59,27 +59,26 @@
                     <div class="col-md-4 mb-3">
                         <label for="fnf">First name</label>
                         <input type="text" class="form-control" id="fnf" th:field="*{firstName}"
-                               placeholder="First name" required>
+                               placeholder="First name">
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="lnf">Last name</label>
                         <input type="text" class="form-control" id="lnf" th:field="*{lastName}"
-                               placeholder="Last name" required>
+                               placeholder="Last name">
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="mnf">Email</label>
-                        <input type="text" class="form-control" id="mnf"
-                               th:field="*{email}" placeholder="email">
+                        <input type="text" class="form-control" id="mnf" th:field="*{email}" placeholder="email">
                     </div>
                 </div>
                 <div class="form-row row">
                     <div class="col-md-6 mb-3">
                         <label for="fnf">Password</label>
-                        <input type="password" class="form-control" id="pass" th:field="*{password}" placeholder="Password" required>
+                        <input type="password" class="form-control" id="pass" th:field="*{password}" placeholder="Password">
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="rol">Website Role</label>
-                        <select th:field="*{role}" class="form-control" id="rol">
+                        <select th:field="*{role}" class="form-control" id="rol" disabled>
                             <option value="" disabled="disabled">Select a role</option>
                             <option value = "ADMIN">ADMIN</option>
                             <option value = "USER">USER</option>

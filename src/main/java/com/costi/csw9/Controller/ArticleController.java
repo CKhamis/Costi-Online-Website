@@ -120,7 +120,9 @@ public class ArticleController {
 
     //Main
     @GetMapping("/")
-    public String getHome(Model model){
+    public String getHome(Model model, Principal principal){
+        model.addAttribute("user", getCurrentUser(principal));
+        model.addAttribute("loggedIn", principal != null);
         return "main/Home";
     }
     @GetMapping("/Test")

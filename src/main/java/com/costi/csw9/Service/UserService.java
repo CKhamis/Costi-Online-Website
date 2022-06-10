@@ -75,10 +75,16 @@ public class UserService implements UserDetailsService {
     }
 
     public void updateUser(User user){
-        //Encode Password
-        String encodedPass = bCryptPasswordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPass);
-
+        System.out.println(user.getPassword());
+        if(user.getPassword().equals("")){
+            //Reuse old password
+            User old = userRepository.findById(user.getId());
+            user.setPassword(old.getPassword());
+        }else{
+            //Encode Password
+            String encodedPass = bCryptPasswordEncoder.encode(user.getPassword());
+            user.setPassword(encodedPass);
+        }
         userRepository.save(user);
     }
 }

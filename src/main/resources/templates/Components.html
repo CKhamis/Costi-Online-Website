@@ -35,6 +35,15 @@
                     <a class="nav-link px-3" href="/Minecraft">Minecraft</a>
                 </div>
             </div>
+            <div th:class="'' + (*{loggedIn}? 'd-none' : 'd-flex')">
+                <a href="/Account"><button>Sign In</button></a>
+            </div>
+            <div th:class="'' + (*{loggedIn}? 'd-flex' : 'd-none')">
+                <a class="nav-link px-3" href="/Account" th:text="${user.firstName} + ' ' + ${user.lastName}">Home</a>
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit" value="Sign Out" class="btn btn-primary">Sign Out</button>
+                </form>
+            </div>
         </div>
     </nav>
 </div>
