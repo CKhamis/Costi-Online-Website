@@ -61,14 +61,14 @@ public class ArticleController {
         return u;
     }
 
-    @RequestMapping("/Account/{userId}")
-    public String editUser(@PathVariable Long userId, Model model, Principal principal){
+    @RequestMapping("/Account")
+    public String editUser(Model model, Principal principal){
         model.addAttribute("user", getCurrentUser(principal));
-        model.addAttribute("action", "/Account/" + userId + "/edit");
+        model.addAttribute("action", "/Account/edit");
         return "main/ViewAccount";
     }
 
-    @PostMapping("/Account/{userId}/edit")
+    @PostMapping("/Account/edit")
     public String updateUser(User user, BindingResult result, RedirectAttributes redirectAttributes, Principal principal){
         if(result.hasErrors()) {
             // Include validation errors upon redirect
