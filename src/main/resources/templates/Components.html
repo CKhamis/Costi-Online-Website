@@ -57,44 +57,46 @@
 
 <div th:fragment="footer" class="bg-dark text-light">
     <div class="container py-5">
-        <footer class="row row-cols-5">
-            <div class="col">
-                <a href="/" class="d-flex align-items-center mb-3 link-dark text-decoration-none">
-                    <img th:src="@{/icons/Constantine Logo v5.png}" class="bi me-2"  style="width:40px">
-                    <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-                </a>
-                <p class="color-light">Costi Online is developed and hosted by Costi</p>
-            </div>
+        <footer>
+            <div class="row g-4 row-cols-1 row-cols-lg-5">
+                <div class="col">
+                    <a href="/" class="d-flex align-items-center mb-3 link-dark text-decoration-none">
+                        <img th:src="@{/icons/Constantine Logo v5.png}" class="bi me-2"  style="width:40px">
+                        <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                    </a>
+                    <p class="color-light">Costi Online is developed and hosted by Costi</p>
+                </div>
 
-            <div class="col">
+                <div class="col d-lg-block d-xs-none">
 
-            </div>
+                </div>
 
-            <div class="col">
-                <h5 class="text-primary">About</h5>
-                <ul class="nav flex-column">
-                    <li class="nav-item mb-2"><a href="/" class="nav-link p-0 text-light">Home</a></li>
-                    <li class="nav-item mb-2"><a href="/#features" class="nav-link p-0 text-light">Features</a></li>
-                    <li class="nav-item mb-2"><a href="/gov#FAQ" class="nav-link p-0 text-light">FAQs</a></li>
-                    <li class="nav-item mb-2"><a href="/#about" class="nav-link p-0 text-light">About</a></li>
-                </ul>
-            </div>
+                <div class="col">
+                    <h5 class="text-primary">About</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item mb-2"><a href="/" class="nav-link p-0 text-light">Home</a></li>
+                        <li class="nav-item mb-2"><a href="/#features" class="nav-link p-0 text-light">Features</a></li>
+                        <li class="nav-item mb-2"><a href="/gov#FAQ" class="nav-link p-0 text-light">FAQs</a></li>
+                        <li class="nav-item mb-2"><a href="/#about" class="nav-link p-0 text-light">About</a></li>
+                    </ul>
+                </div>
 
-            <div class="col">
-                <h5 class="text-primary">Community</h5>
-                <ul class="nav flex-column">
-                    <li class="nav-item mb-2"><a href="vote/BallotInfo#general" class="nav-link p-0 text-light">Election Rules</a></li>
-                </ul>
-            </div>
+                <div class="col">
+                    <h5 class="text-primary">Community</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item mb-2"><a href="vote/BallotInfo#general" class="nav-link p-0 text-light">Election Rules</a></li>
+                    </ul>
+                </div>
 
-            <div class="col">
-                <h5 class="text-primary">Government</h5>
-                <ul class="nav flex-column">
-                    <li class="nav-item mb-2"><a th:href="@{/downloads/The Costitution.docx}" download="Costitution.docx" class="nav-link p-0 text-light">Download Costitution</a></li>
-                    <li class="nav-item mb-2"><a href="/gov" class="nav-link p-0 text-light">Your Government</a></li>
-                    <li class="nav-item mb-2"><a href="/vote" class="nav-link p-0 text-light">Vote</a></li>
-                    <li class="nav-item mb-2"><a href="/vote/Polls" class="nav-link p-0 text-light">Polls</a></li>
-                </ul>
+                <div class="col">
+                    <h5 class="text-primary">Government</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item mb-2"><a th:href="@{/downloads/The Costitution.docx}" download="Costitution.docx" class="nav-link p-0 text-light">Download Costitution</a></li>
+                        <li class="nav-item mb-2"><a href="/gov" class="nav-link p-0 text-light">Your Government</a></li>
+                        <li class="nav-item mb-2"><a href="/vote" class="nav-link p-0 text-light">Vote</a></li>
+                        <li class="nav-item mb-2"><a href="/vote/Polls" class="nav-link p-0 text-light">Polls</a></li>
+                    </ul>
+                </div>
             </div>
         </footer>
     </div>
