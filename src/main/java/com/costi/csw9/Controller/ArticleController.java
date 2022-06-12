@@ -65,6 +65,7 @@ public class ArticleController {
     public String editUser(Model model, Principal principal){
         model.addAttribute("user", getCurrentUser(principal));
         model.addAttribute("action", "/Account/edit");
+        model.addAttribute("loggedIn", principal != null);
         return "main/ViewAccount";
     }
 
@@ -83,6 +84,9 @@ public class ArticleController {
 
         //Enable user if enabled
         user.setEnabled(currentUser.getEnabled());
+
+        //Transfer role
+        user.setRole(currentUser.getRole());
 
         //Save new user
         userService.updateUser(user);
@@ -131,7 +135,9 @@ public class ArticleController {
         return "main/logout";
     }
     @GetMapping("/Projects")
-    public String getProjects(Model model){
+    public String getProjects(Model model, Principal principal){
+        model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("user", getCurrentUser(principal));
         return "main/Projects";
     }
     @GetMapping("/login")
@@ -141,55 +147,76 @@ public class ArticleController {
 
 
     @GetMapping("/Minecraft")
-    public String getMCHome(Model model){
+    public String getMCHome(Model model, Principal principal){
+        model.addAttribute("user", getCurrentUser(principal));
+        model.addAttribute("loggedIn", principal != null);
         return "minecraft/MCHome";
     }
     // Your Government
     @GetMapping("/Minecraft/gov")
-    public String getGovernmentInfo(Model model){
+    public String getGovernmentInfo(Model model, Principal principal){
+        model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("user", getCurrentUser(principal));
         return "minecraft/yourGovernment";
     }
 
     // Voting Center
     @GetMapping("/Minecraft/vote")
-    public String getVoting(Model model){
+    public String getVoting(Model model, Principal principal){
+        model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("user", getCurrentUser(principal));
         return "minecraft/votingCenter";
     }
     @GetMapping("/Minecraft/vote/VotingBooth")
-    public String getVotingBooth(Model model){
+    public String getVotingBooth(Model model, Principal principal){
+        model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("user", getCurrentUser(principal));
         return "minecraft/votingBooth";
     }
     @GetMapping("/Minecraft/vote/allCitizens")
-    public String getAllCitizens(Model model){
+    public String getAllCitizens(Model model, Principal principal){
+        model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("user", getCurrentUser(principal));
         return "minecraft/allCitizens";
     }
     @GetMapping("/Minecraft/vote/register")
-    public String getRegister(Model model){
+    public String getRegister(Model model, Principal principal){
+        model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("user", getCurrentUser(principal));
         return "minecraft/register";
     }
     @GetMapping("/Minecraft/vote/runForOffice")
-    public String getAddCandidate(Model model){
+    public String getAddCandidate(Model model, Principal principal){
+        model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("user", getCurrentUser(principal));
         return "minecraft/addCandidate";
     }
     @GetMapping("/Minecraft/vote/Polls")
-    public String getPolls(Model model){
+    public String getPolls(Model model, Principal principal){
+        model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("user", getCurrentUser(principal));
         return "minecraft/polls";
     }
     @GetMapping("/Minecraft/vote/BallotInfo")
-    public String getBallotInfo(Model model){
+    public String getBallotInfo(Model model, Principal principal){
+        model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("user", getCurrentUser(principal));
         return "minecraft/ballotInfo";
     }
     @GetMapping("/Minecraft/vote/results")
-    public String getResults(Model model){
+    public String getResults(Model model, Principal principal){
+        model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("user", getCurrentUser(principal));
         return "minecraft/electionResults";
     }
 
     //Adding New Articles
     @RequestMapping("/Minecraft/Articles/Add")
-    public String formNewMember(Model model) {
+    public String formNewMember(Model model, Principal principal) {
         if(!model.containsAttribute("article")) {
             model.addAttribute("article",new Article());
         }
+        model.addAttribute("loggedIn", principal != null);
         model.addAttribute("action","/Articles/Upload");
         model.addAttribute("submit","Add");
         return "minecraft/uploadArticle";
