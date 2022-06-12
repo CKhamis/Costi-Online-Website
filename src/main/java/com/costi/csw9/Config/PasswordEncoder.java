@@ -1,4 +1,4 @@
-package com.costi.csw9.Security;
+package com.costi.csw9.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

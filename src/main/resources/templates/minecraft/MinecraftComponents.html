@@ -35,6 +35,16 @@
                     <a class="nav-link px-3 active" href="/Minecraft">Minecraft</a>
                 </div>
             </div>
+            <div th:class="'' + (*{loggedIn}? 'd-none' : 'd-flex')">
+                <a href="/SignUp" class="link-secondary px-3" style="padding-top:5px;">Sign up</a>
+                <a href="/Account" class="btn btn-primary">Sign In</a>
+            </div>
+            <div th:class="'' + (*{loggedIn}? 'd-flex' : 'd-none')">
+                <a class="nav-link px-3 text-white fw-bold" href="/Account" th:text="${user.firstName} + ' ' + ${user.lastName}">Account</a>
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit" value="Sign Out" class="btn btn-primary">Sign Out</button>
+                </form>
+            </div>
         </div>
     </nav>
     <nav class="navbar navbar-expand-lg navbar-dark bg-brown-dirt p-0" style="opacity: 95%;">
