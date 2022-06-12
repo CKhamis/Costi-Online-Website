@@ -129,11 +129,6 @@ public class ArticleController {
         model.addAttribute("loggedIn", principal != null);
         return "main/Home";
     }
-    @GetMapping("/Test")
-    public String getTest(Model model, Principal principal){
-        model.addAttribute("user", getCurrentUser(principal));
-        return "main/logout";
-    }
     @GetMapping("/Projects")
     public String getProjects(Model model, Principal principal){
         model.addAttribute("loggedIn", principal != null);
