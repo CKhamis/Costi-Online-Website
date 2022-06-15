@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'com.costi'
-version = '1.5.2'
+version = '1.5.5'
 sourceCompatibility = '11'
 
 repositories {

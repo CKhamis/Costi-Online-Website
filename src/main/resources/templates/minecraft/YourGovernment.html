@@ -128,6 +128,9 @@
                 <button class="nav-link" id="w55-tab" data-bs-toggle="pill" data-bs-target="#w55" type="button" role="tab" aria-controls="pills-home" aria-selected="true">World 5.5</button>
             </li>
             <li class="nav-item" role="presentation">
+                <button class="nav-link" id="rdw-tab" data-bs-toggle="pill" data-bs-target="#rdw" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Ross' Dystopia</button>
+            </li>
+            <li class="nav-item" role="presentation">
                 <button class="nav-link" id="w6-tab" data-bs-toggle="pill" data-bs-target="#w6" type="button" role="tab" aria-controls="pills-home" aria-selected="true">World 6</button>
             </li>
             <li class="nav-item" role="presentation">
@@ -160,7 +163,7 @@
                         <div class="container-fluid p-5">
                             <h3 class="fw-bold">Costi Survival World 2 (2014)</h3>
                             <p class="fs-4">Costi Survival world 2 was a relatively short world compared to the first world. It was hosted on Costi's Xbox 360 system which used Minecraft Xbox 360 Edition (obviously). This brought on many new features, dimensions, and blocks to the world. Costi, Alex, Georges, and Marc all lived in a swamp biome house surrounded by tamed dogs. There is not much information known about this world, as it was not as influential as the others.</p>
-                            <div th:replace="minecraft/MinecraftComponents :: worldInfo('The version of Minecraft used for this world was Minecraft Xbox 360 Edition', 'Ask ALex idk lol', 'This server was mainly a commune; there was no formal government and all players acted as one group', 'There were 4 users on this server: Costi, Alex, Georges, and Marc. There was little to no interaction from single-session users.', 'This world is missing. It was on an Xbox 360 system that was forcefully given to Chris and Salem, who then sold it')"></div>
+                            <div th:replace="minecraft/MinecraftComponents :: worldInfo('The version of Minecraft used for this world was Minecraft Xbox 360 Edition', 'Estimated duration of about 1 month', 'This server was mainly a commune; there was no formal government and all players acted as one group', 'There were 4 users on this server: Costi, Alex, Georges, and Marc. There was little to no interaction from single-session users.', 'This world is missing. It was on an Xbox 360 system that was forcefully given to Chris and Salem, who then sold it')"></div>
                         </div>
                     </div>
                 </div>
@@ -226,12 +229,21 @@
                 <div class="mb-4 bg-dark rounded-3 border border-white">
                     <div class="container-fluid p-5">
                         <img th:src="@{/images/worldPreview/CSW5.5.jpg}" class="img-fluid rounded-3 w-100 mb-4" alt="Costi Survival World 5.5">
-                        <h3 class="fw-bold">Costi Survival World 5.5 (201?)</h3>
+                        <h3 class="fw-bold">Costi Survival World 5.5 (2018)</h3>
                         <p class="fs-4">Out of the frustration of the poor performance and glitchy gameplay for Minecraft on Nintendo Switch, Costi created a new world on Minecraft Bedrock edition on PC. This world was different from the worlds that came after it because it did not use any server software. This is because Costi wanted to keep the world accessible from console and other devices (although the Nintendo Switch didn't work with it anyway). There were many glaring flaws with this approach. 1) it alienated the frequent players of the 5th world such as Christina, Amal, and Georges, as they did not have a PC of their own to play. 2) Local split screen multiplayer was and still is not a feature of the game, which used to provide a lot of motivation to play on the 5th world in the first place. These factors led to the early discontinuation of this world. The world's existence was so small, it wouldn't have been considered to count as a Costi Survival world if it wasn't for the transitioning from console to PC gameplay it has begun. Worlds after this one only use PC and are unfortunately not accessible from console (due to needless restrictions on custom servers).</p>
                         <p class="fs-4">This world had a very short history. It originally started just like other worlds. There was a starting building that eventually expanded into a small village. However, later into the life of the server, Costi decided to go somewhere else to create a new planned city. This new planned city is pictured above. It had a series of roads with a warehouse. One new idea of this server is that the streets were all named. This idea carried on to the next world CSW6. Costi planned for the citizens of the starting village to move into the new city once it had all the necessary infrastructure.</p>
                         <p class="fs-4"><a th:href="@{/downloads/Costi Survival World 5.5.mcworld}" download="CSW5.5.mcworld">Download World ></a></p>
                         <br>
-                        <div th:replace="minecraft/MinecraftComponents :: worldInfo('The version of Minecraft used for this world was Minecraft Bedrock Edition (client)', 'This server had a very short duration. It lasted approximately 1-2 weeks', 'The government in this world was not formed yet due to its lack of development. It was a commune', 'Not sure. There was little to no interaction from single-session users.', 'This world is safley backed up in storage and is ready for download')"></div>
+                        <div th:replace="minecraft/MinecraftComponents :: worldInfo('The version of Minecraft used for this world was Minecraft Bedrock Edition (client)', 'This server had a very short duration. It lasted approximately 1-2 weeks', 'The government in this world was not formed yet due to its lack of development. It was a commune', 'The server had approximately 4 main players. There was little to no interaction from single-session users.', 'This world is safely backed up in storage and is ready for download')"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade show active" id="rdw" role="tabpanel" aria-labelledby="rdw-tab">
+                <div class="mb-4 rounded-3 bg-dark text-light border border-white">
+                    <div class="container-fluid p-5">
+                        <h3 class="fw-bold">Ross' Dystopia ()</h3>
+                        <p class="fs-4"></p>
+                        <div th:replace="minecraft/MinecraftComponents :: worldInfo('The version used for this world was mainly Minecraft for Nintendo Switch', 'This world lasted for approximately 6 weeks', 'There were three countries, each having its own rules.', 'There were 3 users on this server: Costi, Alex, and Haydon. There no interaction from single-session users.', 'This world currently lives on Costi\'s Nintendo Switch')"></div>
                     </div>
                 </div>
             </div>
@@ -315,7 +327,7 @@
                         <p class="fs-4"></p>
                         <p class="fs-4"><a th:href="@{/downloads/Costi Survival World 8.5 vF.mcworld}" download="CSW8.5.mcworld">Download World ></a></p>
                         <br>
-                        <div th:replace="minecraft/MinecraftComponents :: worldInfo('The version of Minecraft used for this world was Minecraft Bedrock server', 'This server lasted x weeks', 'The government in this world was anarchy, citizens lived in two distinct communes', 'The main players in this world were Costi, Alex, Brandon, Cole, and Nathan. Sean would occasionally join', 'This world is safely backed up in storage and is available for download now')"></div>
+                        <div th:replace="minecraft/MinecraftComponents :: worldInfo('The version of Minecraft used for this world was Minecraft Bedrock server', 'This server lasted 5 weeks', 'The government in this world was anarchy, citizens lived in two distinct communes', 'The main players in this world were Costi, Alex, Brandon, Cole, and Nathan. Sean would occasionally join', 'This world is safely backed up in storage and is available for download now')"></div>
                     </div>
                 </div>
             </div>
