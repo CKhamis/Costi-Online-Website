@@ -4,7 +4,8 @@
 <body class="bg-dark text-light">
 <div th:replace="minecraft/MinecraftComponents :: nav"></div>
 <div class="container mt-5 pt-5">
-    <div class="p-0 mb-4 bg-dark rounded-3">
+    <!-- Desktop -->
+    <div class="p-0 mb-4 bg-dark rounded-3 d-none d-md-block">
         <div class="container-fluid p-0 video-bg-container rounded-3">
             <div class="position-absolute p-5 video-foreground-container">
                 <h1 class="display-5 fw-bold">Your Government</h1>
@@ -16,6 +17,25 @@
                 </div>
             </div>
             <video class="video-bg" autoplay preload="true" loop="loop" muted>
+                <source th:src="@{/videos/banners/CSWV.m4v}" type="video/mp4">
+                video not supported
+            </video>
+        </div>
+    </div>
+
+    <!-- Mobile -->
+    <div class="p-0 mb-4 bg-dark rounded-3 d-xs-block d-md-none">
+        <div class="container-fluid p-0 video-bg-container rounded-3" style="height:600px;">
+            <div class="position-absolute p-5 video-foreground-container">
+                <h1 class="display-5 fw-bold">Your Government</h1>
+                <p class="col-md-8 fs-4">Curious to find out more about your dyst- I mean democratic government? You have come to the right place. This page contains information regarding the rich history of previous survival worlds and their governments. This page also contains information regarding the current leadership positions of survival world 9.</p>
+                <div class="btn-group pb-4" role="group" aria-label="Basic example">
+                    <a href="#leadership" class="btn btn-primary" aria-current="page">Leadership</a>
+                    <a href="#history" class="btn btn-primary">History</a>
+                    <a href="#FAQ" class="btn btn-primary">FAQ</a>
+                </div>
+            </div>
+            <video class="video-bg" style="width:310%; left:-100%; top:0px;" autoplay preload="true" loop="loop" muted>
                 <source th:src="@{/videos/banners/CSWV.m4v}" type="video/mp4">
                 video not supported
             </video>
