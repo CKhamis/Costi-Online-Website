@@ -136,7 +136,9 @@ public class ArticleController {
         return "main/Projects";
     }
     @GetMapping("/login")
-    public String getLogin(Model model){
+    public String getLogin(Model model, Principal principal){
+        model.addAttribute("user", getCurrentUser(principal));
+        model.addAttribute("loggedIn", principal != null);
         return "main/login";
     }
 
