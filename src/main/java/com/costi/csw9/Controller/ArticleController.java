@@ -142,22 +142,27 @@ public class ArticleController {
         return "main/login";
     }
 
+    //Wiki
+    @GetMapping("/Wiki")
+    public String getWikiHome(Model model, Principal principal){
+        model.addAttribute("user", getCurrentUser(principal));
+        model.addAttribute("loggedIn", principal != null);
+        return "wiki/WikiHome";
+    }
 
+    //Minecraft
     @GetMapping("/Minecraft")
     public String getMCHome(Model model, Principal principal){
         model.addAttribute("user", getCurrentUser(principal));
         model.addAttribute("loggedIn", principal != null);
         return "minecraft/MCHome";
     }
-    // Your Government
     @GetMapping("/Minecraft/gov")
     public String getGovernmentInfo(Model model, Principal principal){
         model.addAttribute("loggedIn", principal != null);
         model.addAttribute("user", getCurrentUser(principal));
         return "minecraft/yourGovernment";
     }
-
-    // Voting Center
     @GetMapping("/Minecraft/vote")
     public String getVoting(Model model, Principal principal){
         model.addAttribute("loggedIn", principal != null);

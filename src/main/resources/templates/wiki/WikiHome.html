@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xml:th="https://www.thymeleaf.org">
+<head th:replace="Components :: head('Wiki')"></head>
+<body class="bg-dark text-light pt-5">
+<div th:replace="Components :: nav"></div>
+
+<main class="container mt-5">
+    <div class="p-5 mb-4 bg-dark rounded-3 border border-white">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">Costi Online Wiki</h1>
+            <p class="col-md-8 fs-4">A repository for inside jokes, history, and other very important information.</p>
+        </div>
+    </div>
+    <h2 class="fs-2 mb-3">Inside Jokes</h2>
+    <div class="row g-4 row-cols-1 row-cols-lg-3">
+        <div class="col">
+            <h4 class="mb-0">🎮Notable Games</h4>
+            <hr />
+            <ul>
+                <li><a href="">Pac Man Party</a></li>
+                <li><a href="">Nicktoons: Attack of the Toybots</a></li>
+                <li><a href="">Mario Party 9</a></li>
+                <li><a href="">Minecraft</a></li>
+            </ul>
+        </div>
+        <div class="col">
+            <h4 class="mb-0">🔥Georges Things</h4>
+            <hr />
+            <ul>
+            </ul>
+        </div>
+        <div class="col">
+            <h4 class="mb-0">🏁Other</h4>
+            <hr />
+            <ul>
+            </ul>
+        </div>
+    </div>
+</main>
+
+<div th:replace="Components :: footer"></div>
+<div th:replace="Components :: scripts"></div>
+</body>
+</html>
