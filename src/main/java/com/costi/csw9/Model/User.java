@@ -9,8 +9,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Getter
 @Setter
@@ -31,6 +33,9 @@ public class User implements UserDetails {
    private UserRole role;
    private Boolean isLocked = false;
    private Boolean enabled =  false;
+
+   @OneToMany
+   private List<WikiPage> authoredPages = new ArrayList<>();
 
     public User(String firstName, String lastName, String email, String password, UserRole role) {
         this.firstName = firstName;
