@@ -34,7 +34,7 @@ public class User implements UserDetails {
    private Boolean isLocked = false;
    private Boolean enabled =  false;
 
-   @OneToMany
+   @OneToMany(fetch = FetchType.LAZY, mappedBy = "author")
    private List<WikiPage> authoredPages = new ArrayList<>();
 
     public User(String firstName, String lastName, String email, String password, UserRole role) {

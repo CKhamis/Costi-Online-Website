@@ -24,11 +24,14 @@ public class WikiPage {
     private LocalDateTime lastEdited;
     @Column(nullable = false)
     private String subtitle;
-    @OneToOne
-    private User author;
+
     private boolean enabled = false;
     private WikiCategory category;
     private String body;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User author;
 
     public WikiPage(String title, String subtitle, User author, WikiCategory category, String body) {
         this.title = title;
