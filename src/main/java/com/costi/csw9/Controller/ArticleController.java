@@ -1,12 +1,6 @@
 package com.costi.csw9.Controller;
-import com.costi.csw9.Model.Article;
-import com.costi.csw9.Model.FlashMessage;
-import com.costi.csw9.Model.User;
-import com.costi.csw9.Model.UserRole;
-import com.costi.csw9.Service.ArticleService;
-import com.costi.csw9.Service.RegistrationRequest;
-import com.costi.csw9.Service.RegistrationService;
-import com.costi.csw9.Service.UserService;
+import com.costi.csw9.Model.*;
+import com.costi.csw9.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,12 +18,14 @@ public class ArticleController {
     private final ArticleService articleService;
     private final UserService userService;
     private RegistrationService registrationService;
+    private WikiService wikiService;
 
     @Autowired
-    public ArticleController(ArticleService articleService, UserService userService, RegistrationService registrationService) {
+    public ArticleController(ArticleService articleService, UserService userService, RegistrationService registrationService, WikiService wikiService) {
         this.articleService = articleService;
         this.userService = userService;
         this.registrationService = registrationService;
+        this.wikiService = wikiService;
     }
     /*
     @GetMapping
@@ -149,6 +145,36 @@ public class ArticleController {
         model.addAttribute("loggedIn", principal != null);
         return "wiki/WikiHome";
     }
+    @GetMapping("/Wiki/Create")
+    public String getCreateWiki(Model model, Principal principal, RedirectAttributes redirectAttributes){
+        if(!model.containsAttribute("page")) {
+            model.addAttribute("page",new WikiPage(getCurrentUser(principal)));
+        }
+        model.addAttribute("action","/Wiki/Create/post");
+        model.addAttribute("categories", WikiCategory.values());
+
+
+        model.addAttribute("user", getCurrentUser(principal));
+        model.addAttribute("loggedIn", principal != null);
+        return "wiki/NewWiki";
+    }
+    @RequestMapping(value = "/Wiki/Create/post", method = RequestMethod.POST)
+    public String addNewPage(WikiPage wikiPage, Principal principal, BindingResult result, RedirectAttributes redirectAttributes){
+        if(result.hasErrors()) {
+            // Include validation errors upon redirect
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category",result);
+
+            // Re populate credentials in form
+            redirectAttributes.addFlashAttribute("page", wikiPage);
+
+            // Redirect back to the form
+            return "redirect:/Wiki/Create";
+        }
+        wikiPage.setAuthor(getCurrentUser(principal));
+        wikiService.save(wikiPage);
+        return "wiki/WikiHome";
+    }
+
 
     //Minecraft
     @GetMapping("/Minecraft")

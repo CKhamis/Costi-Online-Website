@@ -8,6 +8,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +16,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -34,22 +36,17 @@ public class WikiDaoImpl implements WikiRepository{
     public List<WikiPage> findByCategory(WikiCategory category) {
         Session session = sessionFactory.openSession();
 
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<WikiPage> query = builder.createQuery(WikiPage.class);
-        Root<WikiPage> rootEntry = query.from(WikiPage.class);
-        CriteriaQuery<WikiPage> all = query.select(rootEntry);
-        TypedQuery<WikiPage> allQuery = session.createQuery(all);
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<WikiPage> cr = cb.createQuery(WikiPage.class);
+        Root<WikiPage> root = cr.from(WikiPage.class);
+        cr.select(root);
 
-        session.close();
-        List<WikiPage> pages = allQuery.getResultList();
+        cr.select(root).where(cb.like(root.get("category"), category.name()));
 
-        //TODO: this might not work!
-        for(WikiPage page : pages){
-            if(!page.getCategory().equals(category)){
-                pages.remove(page);
-            }
-        }
-        return pages;
+        Query<WikiPage> query = session.createQuery(cr);
+        List<WikiPage> results = query.getResultList();
+        
+        return results;
     }
 
     @Override
@@ -68,6 +65,9 @@ public class WikiDaoImpl implements WikiRepository{
 
     @Override
     public void save(WikiPage wikiPage) {
+        //Add in last edited
+        wikiPage.setLastEdited(LocalDateTime.now());
+
         // Open a session
         Session session = sessionFactory.openSession();
 
