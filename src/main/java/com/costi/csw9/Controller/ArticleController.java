@@ -141,8 +141,10 @@ public class ArticleController {
     //Wiki
     @GetMapping("/Wiki")
     public String getWikiHome(Model model, Principal principal){
+
         model.addAttribute("user", getCurrentUser(principal));
         model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("all", wikiService.getAll());
         return "wiki/WikiHome";
     }
     @GetMapping("/Wiki/Create")
@@ -171,10 +173,21 @@ public class ArticleController {
             return "redirect:/Wiki/Create";
         }
         wikiPage.setAuthor(getCurrentUser(principal));
-        wikiService.save(wikiPage);
-        return "wiki/WikiHome";
-    }
 
+        //TODO: remove this later
+        wikiPage.setEnabled(true);
+
+        wikiService.save(wikiPage);
+        return "redirect:/Wiki";
+    }
+    @RequestMapping("/Wiki/{PageId}/view")
+    public String viewPage(Model model, Principal principal, RedirectAttributes redirectAttributes, @PathVariable Long PageId){
+        model.addAttribute("user", getCurrentUser(principal));
+        model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("wiki", wikiService.loadById(PageId));
+
+        return "wiki/viewWiki";
+    }
 
     //Minecraft
     @GetMapping("/Minecraft")

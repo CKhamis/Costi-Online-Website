@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xml:th="https://www.thymeleaf.org">
+<head th:replace="Components :: head('Wiki')"></head>
+<body class="bg-dark text-light pt-5">
+<div th:replace="Components :: nav"></div>
+
+<main class="container mt-5" th:object="${wiki}">
+    <p class="fs-5"><a href="/Wiki">Return to previous screen ></a></p>
+    <h1 th:text="*{title}"></h1>
+    <p th:text="'By ' + *{author.firstName} + ' ' + *{author.lastName}"></p>
+    <h6 th:text="*{subtitle}"></h6>
+    <h7 th:text="'Last Edited: ' + *{lastEdited}"></h7>
+    <p th:text="*{body}"></p>
+    <h6 th:text="'Category ' + *{category}"></h6>
+</main>
+
+<div th:replace="Components :: footer"></div>
+<div th:replace="Components :: scripts"></div>
+</body>
+</html>

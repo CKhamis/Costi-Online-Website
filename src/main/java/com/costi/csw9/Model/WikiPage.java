@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
@@ -22,11 +23,12 @@ public class WikiPage {
     private String title;
     @Column(nullable = false)
     private LocalDateTime lastEdited;
-    //@Column(nullable = false)
+    @Column(nullable = false)
     private String subtitle;
 
     private boolean enabled = false;
     private String category;
+    @Column(columnDefinition="text")
     private String body;
 
     @OneToOne
@@ -44,4 +46,5 @@ public class WikiPage {
     public WikiPage(User author){
         this.author = author;
     }
+
 }

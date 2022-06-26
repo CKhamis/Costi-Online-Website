@@ -51,16 +51,16 @@ public class WikiDaoImpl implements WikiRepository{
 
     @Override
     public List<WikiPage> findAll() {
+        // Open a session
         Session session = sessionFactory.openSession();
 
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<WikiPage> query = builder.createQuery(WikiPage.class);
-        Root<WikiPage> rootEntry = query.from(WikiPage.class);
-        CriteriaQuery<WikiPage> all = query.select(rootEntry);
-        TypedQuery<WikiPage> allQuery = session.createQuery(all);
+        // Get all people with a Hibernate criteria
+        List<WikiPage> all = session.createCriteria(WikiPage.class).list();
 
+        // Close session
         session.close();
-        return allQuery.getResultList();
+
+        return all;
     }
 
     @Override
