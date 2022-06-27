@@ -118,6 +118,17 @@ public class ArticleController {
         return "main/Home";
     }
 
+    //Moderator
+    @GetMapping("/COMT")
+    public String getCostiOnlineModeratorTools(Model model, Principal principal){
+
+        model.addAttribute("user", getCurrentUser(principal));
+        model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("disabled", wikiService.getByApproval(false));
+        model.addAttribute("enabled", wikiService.getByApproval(true));
+        return "moderator/ModeratorTools";
+    }
+
     //Main
     @GetMapping("/")
     public String getHome(Model model, Principal principal){
@@ -144,7 +155,7 @@ public class ArticleController {
 
         model.addAttribute("user", getCurrentUser(principal));
         model.addAttribute("loggedIn", principal != null);
-        model.addAttribute("all", wikiService.getAll());
+        model.addAttribute("all", wikiService.getByApproval(true));
         return "wiki/WikiHome";
     }
     @GetMapping("/Wiki/Create")
@@ -174,9 +185,6 @@ public class ArticleController {
         }
         wikiPage.setAuthor(getCurrentUser(principal));
 
-        //TODO: remove this later
-        wikiPage.setEnabled(true);
-
         wikiService.save(wikiPage);
         return "redirect:/Wiki";
     }
@@ -187,6 +195,43 @@ public class ArticleController {
         model.addAttribute("wiki", wikiService.loadById(PageId));
 
         return "wiki/viewWiki";
+    }
+    @RequestMapping(value = "/Wiki/{PageId}/delete", method = RequestMethod.POST)
+    public String deleteWikiPage(@PathVariable Long PageId, Principal principal, RedirectAttributes redirectAttributes) {
+        WikiPage page = wikiService.loadById(PageId);
+        if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
+            wikiService.delete(page);
+        }else{
+            System.out.println("Invalid Permissions");
+        }
+
+        //redirectAttributes.addFlashAttribute("flash",new FlashMessage("Wiki Page deleted!", FlashMessage.Status.SUCCESS));
+        return "redirect:/COMT";
+    }
+    @RequestMapping(value = "/Wiki/{PageId}/enable", method = RequestMethod.POST)
+    public String enableWikiPage(@PathVariable Long PageId, Principal principal, RedirectAttributes redirectAttributes) {
+        WikiPage page = wikiService.loadById(PageId);
+        if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
+            wikiService.enable(page, true);
+        }else{
+            System.out.println("Invalid Permissions");
+        }
+
+        //redirectAttributes.addFlashAttribute("flash",new FlashMessage("Wiki Page deleted!", FlashMessage.Status.SUCCESS));
+        return "redirect:/COMT";
+    }
+
+    @RequestMapping(value = "/Wiki/{PageId}/disable", method = RequestMethod.POST)
+    public String disableWikiPage(@PathVariable Long PageId, Principal principal, RedirectAttributes redirectAttributes) {
+        WikiPage page = wikiService.loadById(PageId);
+        if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
+            wikiService.enable(page, false);
+        }else{
+            System.out.println("Invalid Permissions");
+        }
+
+        //redirectAttributes.addFlashAttribute("flash",new FlashMessage("Wiki Page deleted!", FlashMessage.Status.SUCCESS));
+        return "redirect:/COMT";
     }
 
     //Minecraft

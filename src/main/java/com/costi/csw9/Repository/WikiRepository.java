@@ -12,6 +12,7 @@ import java.util.Optional;
 public interface WikiRepository {
     WikiPage findById(Long id);
     List<WikiPage> findByCategory(WikiCategory category);
+    List<WikiPage> getByApproval(boolean enabled);
     List<WikiPage> findAll();
     void save(WikiPage wikiPage);
     void delete(WikiPage wikiPage);

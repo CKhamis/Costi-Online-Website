@@ -50,6 +50,27 @@ public class WikiDaoImpl implements WikiRepository{
     }
 
     @Override
+    public List<WikiPage> getByApproval(boolean enabled) {
+        Session session = sessionFactory.openSession();
+
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<WikiPage> cr = cb.createQuery(WikiPage.class);
+        Root<WikiPage> root = cr.from(WikiPage.class);
+        cr.select(root);
+
+        if(enabled){
+            cr.select(root).where(cb.isTrue(root.get("enabled")));
+        }else{
+            cr.select(root).where(cb.isFalse(root.get("enabled")));
+        }
+
+        Query<WikiPage> query = session.createQuery(cr);
+        List<WikiPage> results = query.getResultList();
+
+        return results;
+    }
+
+    @Override
     public List<WikiPage> findAll() {
         // Open a session
         Session session = sessionFactory.openSession();

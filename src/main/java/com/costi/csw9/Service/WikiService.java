@@ -31,6 +31,10 @@ public class WikiService {
         return wikiRepository.findAll();
     }
 
+    public List<WikiPage> getByApproval(boolean enabled){
+        return wikiRepository.getByApproval(enabled);
+    }
+
     public void delete(WikiPage wikiPage){
         wikiRepository.delete(wikiPage);
     }
@@ -39,4 +43,8 @@ public class WikiService {
         wikiRepository.save(wikiPage);
     }
 
+    public void enable(WikiPage page, boolean enable) {
+        page.setEnabled(enable);
+        wikiRepository.save(page);
+    }
 }
