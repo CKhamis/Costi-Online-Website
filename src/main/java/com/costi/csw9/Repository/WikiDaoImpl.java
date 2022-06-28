@@ -107,21 +107,22 @@ public class WikiDaoImpl implements WikiRepository{
 
     @Override
     public void delete(WikiPage wikiPage) {
-        // Open a session
+        // Open the session
         Session session = sessionFactory.openSession();
 
-        // Begin a transaction
+        // Not sure why I have to do this, but I need to find the person via id in this function
+        WikiPage page = session.get(WikiPage.class, wikiPage.getId());
+
+        // Begin translation
         session.beginTransaction();
 
-        // Save the person
-        session.delete(wikiPage);
+        // Delete Page
+        session.delete(page);
 
         // Commit the transaction
         session.getTransaction().commit();
 
         // Close the session
         session.close();
-
-        System.out.println("Wiki Page was deleted!");
     }
 }

@@ -10,7 +10,7 @@
             <p class="col-md-8 fs-4">A repository for inside jokes, history, and other very important information.</p>
         </div>
     </div>
-    <h2>Disabled, Needs Approval</h2>
+    <h2 class="fs-2 mb-3">Disabled, Needs Approval</h2>
     <div class="row g-4 row-cols-1 row-cols-md-3 row-cols-lg-5">
         <div class="col" th:each="page : ${disabled}">
             <div th:switch="${page.category}" class="card text-white bg-dark border-white">
@@ -23,6 +23,7 @@
                     <h5 class="card-title" th:text="*{page.title}">Title</h5>
                     <h6 class="card-subtitle mb-2 text-muted" th:text="*{page.subtitle}">Card subtitle</h6>
                     <p class="card-text text-truncate" th:text="*{page.body}">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <a th:href="'/Wiki/' + *{page.Id} + '/view'" class="card-link">View Page ></a>
                     <form th:action="@{|/Wiki/${page.id}/delete|}" method="post">
                         <button type="submit" class="button">Delete</button>
                     </form>
@@ -32,7 +33,8 @@
                 </div>
             </div>
         </div>
-    </div><h2>Emailed, Active</h2>
+    </div>
+    <h2 class="fs-2 mb-3">Publicly Available Pages</h2>
     <div class="row g-4 row-cols-1 row-cols-md-3 row-cols-lg-5">
         <div class="col" th:each="page : ${enabled}">
             <div th:switch="${page.category}" class="card text-white bg-dark border-white">
@@ -45,6 +47,7 @@
                     <h5 class="card-title" th:text="*{page.title}">Title</h5>
                     <h6 class="card-subtitle mb-2 text-muted" th:text="*{page.subtitle}">Card subtitle</h6>
                     <p class="card-text text-truncate" th:text="*{page.body}">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <a th:href="'/Wiki/' + *{page.Id} + '/view'" class="card-link">View Page ></a>
                     <form th:action="@{|/Wiki/${page.id}/delete|}" method="post">
                         <button type="submit" class="button">Delete</button>
                     </form>
