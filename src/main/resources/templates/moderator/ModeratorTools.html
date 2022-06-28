@@ -6,58 +6,89 @@
 <main class="container mt-5">
     <div class="p-5 mb-4 bg-dark rounded-3 border border-white">
         <div class="container-fluid py-5">
-            <h1 class="display-5 fw-bold">Costi Online Wiki</h1>
-            <p class="col-md-8 fs-4">A repository for inside jokes, history, and other very important information.</p>
+            <h1 class="display-5 fw-bold">Costi Online Management Terminal</h1>
+            <p class="col-md-8 fs-4">Edit Wiki</p>
         </div>
     </div>
     <h2 class="fs-2 mb-3">Disabled, Needs Approval</h2>
-    <div class="row g-4 row-cols-1 row-cols-md-3 row-cols-lg-5">
-        <div class="col" th:each="page : ${disabled}">
-            <div th:switch="${page.category}" class="card text-white bg-dark border-white">
-                <div th:case="INSIDE_JOKE"   class="card-header fw-bold" th:text="|&#128518; Inside Joke|">Card title</div>
-                <div th:case="HISTORICAL"    class="card-header fw-bold" th:text="|&#128715; Historical|">Card title</div>
-                <div th:case="PEOPLE"        class="card-header fw-bold" th:text="|&#128697; People|">Card title</div>
-                <div th:case="PROFESSIONAL"  class="card-header fw-bold" th:text="|&#128084; Professional|">Card title</div>
-                <div th:case="*"             class="card-header fw-bold" th:text="|&#10067; Other|">Card title</div>
-                <div class="card-body">
-                    <h5 class="card-title" th:text="*{page.title}">Title</h5>
-                    <h6 class="card-subtitle mb-2 text-muted" th:text="*{page.subtitle}">Card subtitle</h6>
-                    <p class="card-text text-truncate" th:text="*{page.body}">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    <table class="table table-bordered table-sm align-middle table-hover table-dark">
+        <thead>
+            <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Subtitle</th>
+                <th scope="col">Category</th>
+                <th scope="col">Author</th>
+                <th scope="col">Role</th>
+                <th scope="col">Last Edited</th>
+                <th scope="col">View</th>
+                <th scope="col">Enable</th>
+                <th scope="col">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="page : ${disabled}">
+                <td scope="row" th:text="*{page.title}">Title</td>
+                <td th:text="*{page.subtitle}">Subtitle</td>
+                <td th:text="*{page.category}">Category</td>
+                <td th:text="*{page.author.firstName} + ' ' + *{page.author.lastName}">Author</td>
+                <td th:text="*{page.author.role}">Role</td>
+                <td th:text="*{page.lastEdited}">Last Edited</td>
+                <td>
                     <a th:href="'/Wiki/' + *{page.Id} + '/view'" class="card-link">View Page ></a>
-                    <form th:action="@{|/Wiki/${page.id}/delete|}" method="post">
-                        <button type="submit" class="button">Delete</button>
-                    </form>
+                </td>
+                <td>
                     <form th:action="@{|/Wiki/${page.id}/enable|}" method="post">
-                        <button type="submit" class="button">Enable</button>
+                        <button type="submit" class="btn btn-success btn-sm">Enable</button>
                     </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <h2 class="fs-2 mb-3">Publicly Available Pages</h2>
-    <div class="row g-4 row-cols-1 row-cols-md-3 row-cols-lg-5">
-        <div class="col" th:each="page : ${enabled}">
-            <div th:switch="${page.category}" class="card text-white bg-dark border-white">
-                <div th:case="INSIDE_JOKE"   class="card-header fw-bold" th:text="|&#128518; Inside Joke|">Card title</div>
-                <div th:case="HISTORICAL"    class="card-header fw-bold" th:text="|&#128715; Historical|">Card title</div>
-                <div th:case="PEOPLE"        class="card-header fw-bold" th:text="|&#128697; People|">Card title</div>
-                <div th:case="PROFESSIONAL"  class="card-header fw-bold" th:text="|&#128084; Professional|">Card title</div>
-                <div th:case="*"             class="card-header fw-bold" th:text="|&#10067; Other|">Card title</div>
-                <div class="card-body">
-                    <h5 class="card-title" th:text="*{page.title}">Title</h5>
-                    <h6 class="card-subtitle mb-2 text-muted" th:text="*{page.subtitle}">Card subtitle</h6>
-                    <p class="card-text text-truncate" th:text="*{page.body}">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a th:href="'/Wiki/' + *{page.Id} + '/view'" class="card-link">View Page ></a>
+                </td>
+                <td>
                     <form th:action="@{|/Wiki/${page.id}/delete|}" method="post">
-                        <button type="submit" class="button">Delete</button>
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                     </form>
-                    <form th:action="@{|/Wiki/${page.id}/disable|}" method="post">
-                        <button type="submit" class="button">Disable</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 class="fs-2 mb-3">Visible Pages</h2>
+    <table class="table table-bordered table-sm align-middle table-hover table-dark">
+        <thead>
+        <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Subtitle</th>
+            <th scope="col">Category</th>
+            <th scope="col">Author</th>
+            <th scope="col">Role</th>
+            <th scope="col">Last Edited</th>
+            <th scope="col">View</th>
+            <th scope="col">Enable</th>
+            <th scope="col">Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="page : ${enabled}">
+            <td scope="row" th:text="*{page.title}">Title</td>
+            <td th:text="*{page.subtitle}">Subtitle</td>
+            <td th:text="*{page.category}">Category</td>
+            <td th:text="*{page.author.firstName} + ' ' + *{page.author.lastName}">Author</td>
+            <td th:text="*{page.author.role}">Role</td>
+            <td th:text="*{page.lastEdited}">Last Edited</td>
+            <td>
+                <a th:href="'/Wiki/' + *{page.Id} + '/view'" class="card-link">View Page ></a>
+            </td>
+            <td>
+                <form th:action="@{|/Wiki/${page.id}/disable|}" method="post">
+                    <button type="submit" class="btn btn-warning btn-sm">Disable</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{|/Wiki/${page.id}/delete|}" method="post">
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </main>
 <div th:replace="Components :: footer"></div>
 <div th:replace="Components :: scripts"></div>

@@ -47,8 +47,8 @@
                 <div th:case="PROFESSIONAL"  class="card-header fw-bold" th:text="|&#128084; Professional|">Card title</div>
                 <div th:case="*"             class="card-header fw-bold" th:text="|&#10067; Other|">Card title</div>
                 <div class="card-body">
-                    <h5 class="card-title" th:text="*{page.title}">Title</h5>
-                    <h6 class="card-subtitle mb-2 text-muted" th:text="*{page.subtitle}">Card subtitle</h6>
+                    <h5 class="card-title text-truncate" th:text="*{page.title}">Title</h5>
+                    <h6 class="card-subtitle mb-2 text-muted text-truncate" th:text="*{page.subtitle}">Card subtitle</h6>
                     <p class="card-text text-truncate" th:text="*{page.body}">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                     <a th:href="'/Wiki/' + *{page.Id} + '/view'" class="card-link">View Page ></a>
                 </div>
