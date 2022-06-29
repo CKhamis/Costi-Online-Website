@@ -156,6 +156,7 @@ public class ArticleController {
         model.addAttribute("user", getCurrentUser(principal));
         model.addAttribute("loggedIn", principal != null);
         model.addAttribute("all", wikiService.getByApproval(true));
+        model.addAttribute("categories",WikiCategory.values());
         return "wiki/WikiHome";
     }
     @GetMapping("/Wiki/Create")
