@@ -13,7 +13,7 @@
     </div>
     <h2 class="fs-2 mb-3" id="cat">View By Category</h2>
     <div class="row g-4 row-cols-1 row-cols-lg-3">
-        <div class="col" th:each="category : ${categories}" th:switch="*{category}">
+        <div class="col" th:each="category : ${categories}" th:switch="*{category.name}">
             <h4 th:case="INSIDE_JOKE"   class="fs-4" th:text="|&#128518; Inside Joke|">title</h4>
             <h4 th:case="HISTORICAL"    class="fs-4" th:text="|&#128715; Historical|">title</h4>
             <h4 th:case="PEOPLE"        class="fs-4" th:text="|&#128697; People|">title</h4>
@@ -21,7 +21,7 @@
             <h4 th:case="*"             class="fs-4" th:text="*{category}">title</h4> <!--th:text="|&#10067; Other|" -->
             <hr />
             <ul th:each="page : ${all}">
-                <li class="my-0"><a th:href="'/Wiki/' + *{page.Id} + '/view'"  th:text="*{page.title}" class="py-1 text-light">title</a></li>
+                <li th:if="${category.name == page.category}" class="my-0"><a th:href="'/Wiki/' + *{page.Id} + '/view'"  th:text="*{page.title}" class="py-1 text-light">title</a></li>
             </ul>
         </div>
     </div>

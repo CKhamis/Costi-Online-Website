@@ -110,7 +110,7 @@ public class WikiDaoImpl implements WikiRepository{
         // Open the session
         Session session = sessionFactory.openSession();
 
-        // Not sure why I have to do this, but I need to find the person via id in this function
+        // Not completley sure why I have to do this, but I need to find the page via id in this function
         WikiPage page = session.get(WikiPage.class, wikiPage.getId());
 
         // Begin translation
