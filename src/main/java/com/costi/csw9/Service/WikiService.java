@@ -6,6 +6,7 @@ import com.costi.csw9.Repository.WikiRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -35,15 +36,15 @@ public class WikiService {
     }
 
     public void delete(WikiPage wikiPage){
-        wikiRepository.delete(wikiPage);
+        wikiRepository.delete(wikiPage.getId());
     }
 
     public void save(WikiPage wikiPage){
+        wikiPage.setLastEdited(LocalDateTime.now());
         wikiRepository.save(wikiPage);
     }
 
     public void enable(WikiPage page, boolean enable) {
-        page.setEnabled(enable);
-        wikiRepository.save(page);
+        wikiRepository.enable(page.getId(), enable);
     }
 }
