@@ -24,6 +24,10 @@ public class WikiService {
     }
 
     public List<WikiPage> getWikiPagesByCat(WikiCategory category){
+        return wikiRepository.findByCategory(category.name());
+    }
+
+    public List<WikiPage> getWikiPagesByCat(String category){
         return wikiRepository.findByCategory(category);
     }
 

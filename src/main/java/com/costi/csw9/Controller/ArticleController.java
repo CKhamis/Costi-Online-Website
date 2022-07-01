@@ -193,7 +193,9 @@ public class ArticleController {
     public String viewPage(Model model, Principal principal, RedirectAttributes redirectAttributes, @PathVariable Long PageId){
         model.addAttribute("user", getCurrentUser(principal));
         model.addAttribute("loggedIn", principal != null);
-        model.addAttribute("wiki", wikiService.loadById(PageId));
+        WikiPage wiki = wikiService.loadById(PageId);
+        model.addAttribute("wiki", wiki);
+        model.addAttribute("categoryPages", wikiService.getWikiPagesByCat(wiki.getCategory()));
 
         return "wiki/viewWiki";
     }

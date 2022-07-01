@@ -16,7 +16,7 @@
 <body>
 
 <div th:fragment="nav" class="navbar-fixed position-fixed" style="z-index:99; width:100%;top:0;opacity:95%">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav th:fragment="topNav" class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="/Minecraft">
                 <img th:src="@{/icons/Logo.png}" alt="" width="30" height="30" class="d-inline-block align-text-top">

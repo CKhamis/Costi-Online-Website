@@ -25,12 +25,12 @@ public class WikiDaoImpl implements WikiRepository{
     }
 
     @Override
-    public List<WikiPage> findByCategory(WikiCategory category) {
+    public List<WikiPage> findByCategory(String category) {
         // Open session
         Session session = sessionFactory.openSession();
 
         // Get Results
-        Query query = session.createQuery("SELECT e FROM WikiPage e WHERE category = '" + category.name() + '\'');
+        Query query = session.createQuery("SELECT e FROM WikiPage e WHERE category = '" + category + '\'');
         List<WikiPage> res = query.getResultList();
 
         // Close session
