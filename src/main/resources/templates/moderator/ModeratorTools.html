@@ -3,7 +3,7 @@
 <head th:replace="Components :: head('Home')"></head>
 <body class="bg-dark text-light">
 <div th:replace="Components :: nav"></div>
-<main class="container mt-5">
+<main class="container mt-5 pt-5">
     <div class="p-5 mb-4 bg-dark rounded-3 border border-white">
         <div class="container-fluid py-5">
             <h1 class="display-5 fw-bold">Costi Online Management Terminal</h1>
@@ -21,6 +21,7 @@
                 <th scope="col">Role</th>
                 <th scope="col">Last Edited</th>
                 <th scope="col">View</th>
+                <th scope="col">Edit</th>
                 <th scope="col">Enable</th>
                 <th scope="col">Delete</th>
             </tr>
@@ -32,9 +33,12 @@
                 <td th:text="*{page.category}">Category</td>
                 <td th:text="*{page.author.firstName} + ' ' + *{page.author.lastName}">Author</td>
                 <td th:text="*{page.author.role}">Role</td>
-                <td th:text="*{page.lastEdited}">Last Edited</td>
+                <td th:text="*{page.dateEdited}">Last Edited</td>
                 <td>
                     <a th:href="'/Wiki/' + *{page.Id} + '/view'" class="card-link">View Page ></a>
+                </td>
+                <td>
+                    <a th:href="@{|/Wiki/${page.id}/edit|}" class="btn btn-secondary btn-sm" role="button" aria-pressed="true">Edit</a>
                 </td>
                 <td>
                     <form th:action="@{|/Wiki/${page.id}/enable|}" method="post">
@@ -61,6 +65,7 @@
             <th scope="col">Role</th>
             <th scope="col">Last Edited</th>
             <th scope="col">View</th>
+            <th scope="col">Edit</th>
             <th scope="col">Enable</th>
             <th scope="col">Delete</th>
         </tr>
@@ -72,9 +77,12 @@
             <td th:text="*{page.category}">Category</td>
             <td th:text="*{page.author.firstName} + ' ' + *{page.author.lastName}">Author</td>
             <td th:text="*{page.author.role}">Role</td>
-            <td th:text="*{page.lastEdited}">Last Edited</td>
+            <td th:text="*{page.dateEdited}">Last Edited</td>
             <td>
                 <a th:href="'/Wiki/' + *{page.Id} + '/view'" class="card-link">View Page ></a>
+            </td>
+            <td>
+                <a th:href="@{|/Wiki/${page.id}/edit|}" class="btn btn-secondary btn-sm" role="button" aria-pressed="true">Edit</a>
             </td>
             <td>
                 <form th:action="@{|/Wiki/${page.id}/disable|}" method="post">

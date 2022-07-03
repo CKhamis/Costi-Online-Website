@@ -32,7 +32,7 @@
 
             <div class="row">
                 <div class="col">
-                    <p th:text="'Last Edited: ' + *{lastEdited}"></p>
+                    <p th:text="'Last Edited: ' + *{dateEdited}"></p>
                 </div>
                 <div class="col" th:switch="${wiki.category}">
                     <span th:case="INSIDE_JOKE"   class="badge badge-pill bg-primary">Inside Joke</span>

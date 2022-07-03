@@ -166,6 +166,7 @@ public class ArticleController {
         }
         model.addAttribute("action","/Wiki/Create/post");
         model.addAttribute("categories", WikiCategory.values());
+        model.addAttribute("title", "Create New Wiki Page");
 
 
         model.addAttribute("user", getCurrentUser(principal));
@@ -234,6 +235,35 @@ public class ArticleController {
         }
 
         //redirectAttributes.addFlashAttribute("flash",new FlashMessage("Wiki Page deleted!", FlashMessage.Status.SUCCESS));
+        return "redirect:/COMT";
+    }
+    @RequestMapping("/Wiki/{PageId}/edit")
+    public String getEditWiki(@PathVariable Long PageId, Model model, Principal principal, RedirectAttributes redirectAttributes){
+        model.addAttribute("page", wikiService.loadById(PageId));
+
+        model.addAttribute("action","/Wiki/" + PageId + "/edit");
+        model.addAttribute("categories", WikiCategory.values());
+        model.addAttribute("title", "Edit Wiki Page");
+
+        model.addAttribute("user", getCurrentUser(principal));
+        model.addAttribute("loggedIn", principal != null);
+        return "wiki/NewWiki";
+    }
+    @RequestMapping(value = "/Wiki/{PageId}/edit", method = RequestMethod.POST)
+    public String addNewPage(@PathVariable Long PageId, WikiPage wikiPage, Principal principal, BindingResult result, RedirectAttributes redirectAttributes){
+        if(result.hasErrors()) {
+            // Include validation errors upon redirect
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.User",result);
+            // Add  member if invalid was received
+            redirectAttributes.addFlashAttribute("page",wikiPage);
+        }
+
+        // TODO: Keep the enable the same. When edited, it gets disabled
+        wikiPage.setId(PageId);
+        wikiPage.setAuthor(getCurrentUser(principal));
+
+        //Save new user
+        wikiService.save(wikiPage);
         return "redirect:/COMT";
     }
 

@@ -2,14 +2,14 @@
 <html xml:th="https://www.thymeleaf.org">
 <head th:replace="wiki/WikiComponents :: head('Wiki')"></head>
 <body class="bg-dark text-light pt-5">
-<div th:replace="wiki/WikiComponents :: nav"></div>
+<div th:replace="Components :: nav"></div>
 
 <main class="container mt-5 pt-5">
     <div class="p-5 mb-4 bg-dark rounded-3 border border-white wikiBannerBg">
         <div class="container-fluid py-5">
             <h1 class="display-5 fw-bold">Costipedia</h1>
             <p class="col-md-8 fs-4">A community wiki for Costi Online that centralizes important information related to Costi, friends, inside jokes, and more!</p>
-            <a href="/Wiki/Create" class="btn btn-primary" role="button" aria-pressed="true">Contribute ></a>
+            <a href="/Wiki/Create" th:class="'btn btn-primary '  + (*{loggedIn}? 'd-block' : 'd-none')" role="button" aria-pressed="true">Create new Page ></a>
         </div>
     </div>
     <h2 class="fs-2 mt-5 mb-4" id="cat">View By Category</h2>

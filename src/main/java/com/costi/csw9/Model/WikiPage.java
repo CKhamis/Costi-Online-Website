@@ -30,7 +30,7 @@ public class WikiPage {
     @Column(columnDefinition="text")
     private String body;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User author;
 
@@ -44,6 +44,10 @@ public class WikiPage {
 
     public WikiPage(User author){
         this.author = author;
+    }
+
+    public String getDateEdited(){
+        return lastEdited.getMonthValue() + "/" + lastEdited.getDayOfMonth() + "/" + lastEdited.getYear();
     }
 
 }
