@@ -2,16 +2,16 @@
 <html xml:th="https://www.thymeleaf.org">
 <head th:replace="Components :: head('Wiki')"></head>
 <body class="bg-dark text-light pt-5">
-<div th:replace="Components :: nav"></div>
+<div th:replace="wiki/WikiComponents :: nav"></div>
 
-<main class="container mt-5">
+<main class="container mt-5 pt-5">
     <div class="p-5 mb-4 bg-dark rounded-3 border border-white">
         <div class="container-fluid py-5">
             <h1 class="display-5 fw-bold">Costi Online Wiki</h1>
             <p class="col-md-8 fs-4">A repository for inside jokes, history, and other very important information.</p>
         </div>
     </div>
-    <h2 class="fs-2 mt-5 mb-2" id="cat">View By Category</h2>
+    <h2 class="fs-2 mt-5 mb-4" id="cat">View By Category</h2>
     <div class="row g-4 row-cols-1 row-cols-lg-3">
         <div class="col" th:each="category : ${categories}" th:switch="*{category.name}">
             <h4 th:case="INSIDE_JOKE"   class="fs-4" th:text="|&#128518; Inside Jokes|">title</h4>
@@ -25,7 +25,7 @@
             </ul>
         </div>
     </div>
-    <h2 class="fs-2 mt-5 mb-2">All Wiki Content</h2>
+    <h2 class="fs-2 mt-5 mb-4">All Wiki Content</h2>
     <div class="row g-4 row-cols-1 row-cols-md-3 row-cols-lg-5">
         <div class="col" th:each="page : ${all}">
             <div th:switch="${page.category}" class="card text-white bg-dark border-white">
