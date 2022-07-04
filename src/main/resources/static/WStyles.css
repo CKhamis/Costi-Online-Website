@@ -2,3 +2,7 @@
      background-image: url(images/webpageImages/WikiBg.jpg);
      background-size: 100%;
 }
+#contentBody{
+    line-height: 2rem;
+    font-family:Georgia,Times,Times New Roman,serif;
+}

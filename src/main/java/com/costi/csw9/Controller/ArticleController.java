@@ -260,7 +260,9 @@ public class ArticleController {
 
         // TODO: Keep the enable the same. When edited, it gets disabled
         wikiPage.setId(PageId);
-        wikiPage.setAuthor(getCurrentUser(principal));
+
+        // Keep author the same
+        wikiPage.setAuthor(wikiService.loadById(PageId).getAuthor());
 
         //Save new user
         wikiService.save(wikiPage);

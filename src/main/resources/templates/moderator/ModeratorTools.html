@@ -32,7 +32,15 @@
                 <td th:text="*{page.subtitle}">Subtitle</td>
                 <td th:text="*{page.category}">Category</td>
                 <td th:text="*{page.author.firstName} + ' ' + *{page.author.lastName}">Author</td>
-                <td th:text="*{page.author.role}">Role</td>
+                <td>
+                    <div th:switch="${page.category}">
+                        <span th:case="INSIDE_JOKE"   class="badge badge-pill bg-primary">Inside Joke</span>
+                        <span th:case="HISTORICAL"    class="badge badge-pill bg-info">Historical</span>
+                        <span th:case="PEOPLE"        class="badge badge-pill bg-success">People</span>
+                        <span th:case="PROFESSIONAL"  class="badge badge-pill bg-secondary">Professional</span>
+                        <span th:case="*"             class="badge badge-pill bg-dark">Other</span>
+                    </div>
+                </td>
                 <td th:text="*{page.dateEdited}">Last Edited</td>
                 <td>
                     <a th:href="'/Wiki/' + *{page.Id} + '/view'" class="card-link">View Page ></a>
@@ -74,7 +82,15 @@
         <tr th:each="page : ${enabled}">
             <td scope="row" th:text="*{page.title}">Title</td>
             <td th:text="*{page.subtitle}">Subtitle</td>
-            <td th:text="*{page.category}">Category</td>
+            <td>
+                <div th:switch="${page.category}">
+                    <span th:case="INSIDE_JOKE"   class="badge badge-pill bg-primary">Inside Joke</span>
+                    <span th:case="HISTORICAL"    class="badge badge-pill bg-info">Historical</span>
+                    <span th:case="PEOPLE"        class="badge badge-pill bg-success">People</span>
+                    <span th:case="PROFESSIONAL"  class="badge badge-pill bg-secondary">Professional</span>
+                    <span th:case="*"             class="badge badge-pill bg-dark">Other</span>
+                </div>
+            </td>
             <td th:text="*{page.author.firstName} + ' ' + *{page.author.lastName}">Author</td>
             <td th:text="*{page.author.role}">Role</td>
             <td th:text="*{page.dateEdited}">Last Edited</td>

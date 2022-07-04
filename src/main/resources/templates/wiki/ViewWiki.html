@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html xml:th="https://www.thymeleaf.org">
-<head th:replace="Components :: head('Wiki')"></head>
+<head th:replace="wiki/WikiComponents :: head('Wiki')"></head>
 <body class="bg-dark text-light pt-5">
-<div th:replace="wiki/WikiComponents :: nav"></div>
+<div th:replace="Components :: nav"></div>
 
-<main class="container mt-5 pt-5">
-    <p class="fs-5"><a href="/Wiki">Return to wiki home ></a></p>
-
+<main class="container mt-5">
     <div class="row">
         <div class="col-lg-3 col-md-5 col-xs-12" th:switch="${wiki.category}">
             <div th:case="INSIDE_JOKE"   class="fs-3 mb-2 mt-0" th:text="|&#128518; Inside Jokes|">title</div>
@@ -25,26 +23,28 @@
             </div>
         </div>
         <div class="col-lg-9 col-md-7 col-xs-12 px-lg-5" th:object="${wiki}">
-            <h1 th:text="*{title}"></h1>
-            <h5 class="text-muted" th:text="*{subtitle}"></h5>
-            <p th:text="'By ' + *{author.firstName} + ' ' + *{author.lastName}"></p>
-            <p class="fs-4" th:utext="*{body}"></p>
-
             <div class="row">
-                <div class="col">
-                    <p th:text="'Last Edited: ' + *{dateEdited}"></p>
+                <div class="col col-md-8 d-none d-md-block">
+                    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/">Costi Online</a></li>
+                            <li class="breadcrumb-item"><a href="/Wiki">Wiki Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page" th:text="*{title}"></li>
+                        </ol>
+                    </nav>
                 </div>
-                <div class="col" th:switch="${wiki.category}">
-                    <span th:case="INSIDE_JOKE"   class="badge badge-pill bg-primary">Inside Joke</span>
-                    <span th:case="HISTORICAL"    class="badge badge-pill bg-info">Historical</span>
-                    <span th:case="PEOPLE"        class="badge badge-pill bg-success">People</span>
-                    <span th:case="PROFESSIONAL"  class="badge badge-pill bg-secondary">Professional</span>
-                    <span th:case="*"             class="badge badge-pill bg-dark">Other</span>
-                </div>
-                <div class="col">
-                    <p th:text="'By ' + *{author.firstName} + ' ' + *{author.lastName}"></p>
+                <div class="col col-md-4 d-none d-md-block">
+                    <p th:text="'Last Edited: ' + *{dateEdited}" class="text-end"></p>
                 </div>
             </div>
+            <h1 class="fw-bold" th:text="*{title}"></h1>
+            <p class="text-muted fw-bold" th:text="*{subtitle}"></p>
+            <p th:text="'By ' + *{author.firstName} + ' ' + *{author.lastName}"></p>
+
+            <div class="px-md-4" id="contentBody">
+                <p class="fs-5" th:utext="*{body}"></p>
+            </div>
+
         </div>
     </div>
 </main>
