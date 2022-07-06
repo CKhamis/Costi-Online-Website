@@ -30,7 +30,7 @@ public class WikiDaoImpl implements WikiRepository{
         Session session = sessionFactory.openSession();
 
         // Get Results
-        Query query = session.createQuery("SELECT e FROM WikiPage e WHERE category = '" + category + '\'');
+        Query query = session.createQuery("SELECT e FROM WikiPage e WHERE category = '" + category + "\' AND enabled = true");
         List<WikiPage> res = query.getResultList();
 
         // Close session

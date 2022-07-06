@@ -2,6 +2,7 @@ package com.costi.csw9.Controller;
 import com.costi.csw9.Model.*;
 import com.costi.csw9.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,6 +13,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 public class ArticleController {
@@ -155,7 +157,8 @@ public class ArticleController {
 
         model.addAttribute("user", getCurrentUser(principal));
         model.addAttribute("loggedIn", principal != null);
-        model.addAttribute("all", wikiService.getByApproval(true));
+        List<WikiPage> allEnabled = wikiService.getByApproval(true);
+        model.addAttribute("all", allEnabled);
         model.addAttribute("categories",WikiCategory.values());
         return "wiki/WikiHome";
     }
