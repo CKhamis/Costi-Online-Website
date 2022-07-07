@@ -10,6 +10,7 @@
             <h1 class="display-5 fw-bold">Costipedia</h1>
             <p class="col-md-8 fs-4">A community wiki for Costi Online that centralizes important information related to Costi, friends, inside jokes, and more!</p>
             <a href="/Wiki/Create" th:class="'btn btn-primary '  + (*{loggedIn}? '' : 'd-none')" role="button" aria-pressed="true">Create New Page ></a>
+            <a href="/Wiki/Create" th:class="'btn btn-primary '  + (*{loggedIn}? 'd-none' : '')" role="button">Sign in to add a new wiki page</a>
         </div>
     </div>
     <h2 class="fs-2 mt-5 mb-4" id="cat">View By Category</h2>

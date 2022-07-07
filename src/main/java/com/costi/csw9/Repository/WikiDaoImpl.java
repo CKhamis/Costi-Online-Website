@@ -24,6 +24,22 @@ public class WikiDaoImpl implements WikiRepository{
         return res;
     }
 
+    //TODO: Check if this works at all
+    @Override
+    public List<WikiPage> findByAuthor(Long id) {
+        // Open session
+        Session session = sessionFactory.openSession();
+
+        // Get Results
+        Query query = session.createQuery("SELECT e FROM WikiPage e WHERE UserId = " + id);
+        List<WikiPage> res = query.getResultList();
+
+        // Close session
+        session.close();
+
+        return res;
+    }
+
     @Override
     public List<WikiPage> findByCategory(String category) {
         // Open session
@@ -125,6 +141,4 @@ public class WikiDaoImpl implements WikiRepository{
         // Close session
         session.close();
     }
-
-
 }

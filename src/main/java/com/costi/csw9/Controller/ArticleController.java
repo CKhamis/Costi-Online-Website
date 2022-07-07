@@ -195,7 +195,9 @@ public class ArticleController {
     }
     @RequestMapping("/Wiki/{PageId}/view")
     public String viewPage(Model model, Principal principal, RedirectAttributes redirectAttributes, @PathVariable Long PageId){
-        model.addAttribute("user", getCurrentUser(principal));
+        User current = getCurrentUser(principal);
+        model.addAttribute("user", current);
+        model.addAttribute("isAdmin", current.getRole().equals(UserRole.ADMIN));
         model.addAttribute("loggedIn", principal != null);
         WikiPage wiki = wikiService.loadById(PageId);
         model.addAttribute("wiki", wiki);

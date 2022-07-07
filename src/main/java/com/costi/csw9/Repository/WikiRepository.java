@@ -14,6 +14,7 @@ import java.util.Optional;
 @Repository
 public interface WikiRepository {
     WikiPage findById(Long id);
+    List<WikiPage> findByAuthor(Long id);
     List<WikiPage> findByCategory(String category);
     List<WikiPage> getByApproval(boolean enabled);
     List<WikiPage> findAll();
