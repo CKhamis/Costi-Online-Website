@@ -244,13 +244,16 @@ public class ArticleController {
     }
     @RequestMapping("/Wiki/{PageId}/edit")
     public String getEditWiki(@PathVariable Long PageId, Model model, Principal principal, RedirectAttributes redirectAttributes){
-        model.addAttribute("page", wikiService.loadById(PageId));
+        User current = getCurrentUser(principal);
+        WikiPage page = wikiService.loadById(PageId);
 
+        model.addAttribute("page", page);
+        model.addAttribute("isAllowed", (getCurrentUser(principal).getRole().equals(UserRole.ADMIN) || page.getAuthor().equals(current)));
         model.addAttribute("action","/Wiki/" + PageId + "/edit");
         model.addAttribute("categories", WikiCategory.values());
         model.addAttribute("title", "Edit Wiki Page");
 
-        model.addAttribute("user", getCurrentUser(principal));
+        model.addAttribute("user", current);
         model.addAttribute("loggedIn", principal != null);
         return "wiki/NewWiki";
     }

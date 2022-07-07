@@ -2,13 +2,13 @@
 <html xml:th="https://www.thymeleaf.org">
 <head th:replace="Components :: head('Make New Wiki')"></head>
 <body class="bg-dark text-light pt-5">
-<div th:replace="wiki/WikiComponents :: nav"></div>
+<div th:replace="Components :: nav"></div>
 
 <main class="container mt-5">
     <div class="container-fluid">
         <h1 class="pb-2 border-bottom mb-4 fw-bold text-center" th:text="${title}">Create a Wiki Page</h1>
     </div>
-    <div class="row">
+    <div th:if="${isAllowed}" class="row">
         <div class="d-none d-md-block col-md-1 col-lg-2 col-xl-3"></div>
         <div class="pt-2 col-xs-12 col-md-10 col-lg-8 col-xl-6">
             <div class="p-5 mb-4 bg-dark rounded-3 border border-white">
@@ -58,6 +58,14 @@
             </div>
         </div>
         <div class="d-none d-md-block col-md-1 col-lg-2 col-xl-3"></div>
+    </div>
+    <div th:unless="${isAllowed}" class="">
+        <div class="p-3 p-lg-5 mb-4 bg-dark rounded-3 border border-white wikiRestrictedBannerBg">
+            <div class="container-fluid py-5">
+                <h1 class="display-5 fw-bold">⚠️You do not have access to this wiki page</h1>
+                <p class="col-md-8 fs-4">Please make sure you are using the same account you used to create the wiki page with or moderator account. Otherwise, kindly fuck off.</p>
+            </div>
+        </div>
     </div>
 </main>
 
