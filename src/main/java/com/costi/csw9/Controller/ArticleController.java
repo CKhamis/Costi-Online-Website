@@ -167,6 +167,7 @@ public class ArticleController {
         if(!model.containsAttribute("page")) {
             model.addAttribute("page",new WikiPage(getCurrentUser(principal)));
         }
+        model.addAttribute("isAllowed", true);
         model.addAttribute("action","/Wiki/Create/post");
         model.addAttribute("categories", WikiCategory.values());
         model.addAttribute("title", "Create New Wiki Page");
@@ -191,15 +192,18 @@ public class ArticleController {
         wikiPage.setAuthor(getCurrentUser(principal));
 
         wikiService.save(wikiPage);
-        return "redirect:/Wiki";
+        return "redirect:/Wiki/" + wikiPage.getId() + "/view";
     }
     @RequestMapping("/Wiki/{PageId}/view")
     public String viewPage(Model model, Principal principal, RedirectAttributes redirectAttributes, @PathVariable Long PageId){
         User current = getCurrentUser(principal);
-        model.addAttribute("user", current);
-        model.addAttribute("isAdmin", current.getRole().equals(UserRole.ADMIN));
-        model.addAttribute("loggedIn", principal != null);
         WikiPage wiki = wikiService.loadById(PageId);
+
+        model.addAttribute("showEdit", (current.getRole().equals(UserRole.ADMIN) || wiki.getAuthor().equals(current)));
+        model.addAttribute("user", current);
+        model.addAttribute("isViewable", current.getRole().equals(UserRole.ADMIN) || wiki.isEnabled());
+        model.addAttribute("loggedIn", principal != null);
+
         model.addAttribute("wiki", wiki);
         model.addAttribute("categoryPages", wikiService.getWikiPagesByCat(wiki.getCategory()));
 
@@ -248,7 +252,7 @@ public class ArticleController {
         WikiPage page = wikiService.loadById(PageId);
 
         model.addAttribute("page", page);
-        model.addAttribute("isAllowed", (getCurrentUser(principal).getRole().equals(UserRole.ADMIN) || page.getAuthor().equals(current)));
+        model.addAttribute("isAllowed", (current.getRole().equals(UserRole.ADMIN) || page.getAuthor().equals(current)));
         model.addAttribute("action","/Wiki/" + PageId + "/edit");
         model.addAttribute("categories", WikiCategory.values());
         model.addAttribute("title", "Edit Wiki Page");
@@ -266,7 +270,6 @@ public class ArticleController {
             redirectAttributes.addFlashAttribute("page",wikiPage);
         }
 
-        // TODO: Keep the enable the same. When edited, it gets disabled
         wikiPage.setId(PageId);
 
         // Keep author the same
@@ -274,7 +277,14 @@ public class ArticleController {
 
         //Save new user
         wikiService.save(wikiPage);
-        return "redirect:/COMT";
+
+        //Redirect depending on type of user
+        if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
+            return "redirect:/COMT";
+        }else{
+            return "redirect:/Wiki/" + wikiPage.getId() + "/view";
+        }
+
     }
 
     //Minecraft

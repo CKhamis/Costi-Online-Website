@@ -50,4 +50,7 @@ public class WikiPage {
         return lastEdited.getMonthValue() + "/" + lastEdited.getDayOfMonth() + "/" + lastEdited.getYear();
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
 }

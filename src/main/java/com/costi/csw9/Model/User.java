@@ -84,4 +84,9 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
+
+    public boolean equals(Object other){
+        User otherUser = (User) other;
+        return this.getId() == otherUser.getId();
+    }
 }

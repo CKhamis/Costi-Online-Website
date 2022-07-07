@@ -5,7 +5,7 @@
 <div th:replace="Components :: nav"></div>
 
 <main class="container mt-5">
-    <div class="row" th:if="${isAdmin}">
+    <div class="row" th:if="${isViewable}">
         <div class="col-lg-3 col-md-5 col-xs-12" th:switch="${wiki.category}">
             <div th:case="INSIDE_JOKE"   class="fs-3 mb-2 mt-0" th:text="|&#128518; Inside Jokes|">title</div>
             <div th:case="HISTORICAL"    class="fs-3 mb-2 mt-0" th:text="|&#127984; Historical|">title</div>
@@ -43,11 +43,11 @@
 
             <div class="px-md-4" id="contentBody">
                 <p class="fs-5" th:utext="*{body}"></p>
+                <a th:href="@{|/Wiki/${wiki.id}/edit|}" th:if="${showEdit}">edit</a>
             </div>
-
         </div>
     </div>
-    <div th:unless="${isAdmin}">
+    <div th:unless="${isViewable}">
         <div class="p-5 mb-4 bg-dark rounded-3 border border-white wikiRestrictedBannerBg">
             <div class="container-fluid py-5">
                 <h1 class="display-5 fw-bold">Wiki Page Currently Under Review</h1>
