@@ -44,8 +44,8 @@
 
             <div class="px-md-4" id="contentBody">
                 <p class="fs-5" th:utext="*{body}"></p>
-                <a th:href="@{|/Wiki/${wiki.id}/edit|}" th:if="${showEdit}">edit</a>
-                <a href="/COMT" th:if="${isAdmin}" class="d-inline">COMT</a>
+                <a class="btn btn-primary btn-sm" th:href="@{|/Wiki/${wiki.id}/edit|}" th:if="${showEdit}">Edit</a>
+                <a class="btn btn-secondary btn-sm d-inline" href="/COMT" th:if="${isAdmin}">COMT</a>
             </div>
         </div>
     </div>
