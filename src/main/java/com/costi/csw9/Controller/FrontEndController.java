@@ -2,29 +2,23 @@ package com.costi.csw9.Controller;
 import com.costi.csw9.Model.*;
 import com.costi.csw9.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 
-import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
 @Controller
-public class ArticleController {
-    private final ArticleService articleService;
+public class FrontEndController {
     private final UserService userService;
     private RegistrationService registrationService;
     private WikiService wikiService;
 
     @Autowired
-    public ArticleController(ArticleService articleService, UserService userService, RegistrationService registrationService, WikiService wikiService) {
-        this.articleService = articleService;
+    public FrontEndController(UserService userService, RegistrationService registrationService, WikiService wikiService) {
         this.userService = userService;
         this.registrationService = registrationService;
         this.wikiService = wikiService;
@@ -347,31 +341,5 @@ public class ArticleController {
         model.addAttribute("loggedIn", principal != null);
         model.addAttribute("user", getCurrentUser(principal));
         return "minecraft/electionResults";
-    }
-
-    //Adding New Articles
-    @RequestMapping("/Minecraft/Articles/Add")
-    public String formNewMember(Model model, Principal principal) {
-        if(!model.containsAttribute("article")) {
-            model.addAttribute("article",new Article());
-        }
-        model.addAttribute("loggedIn", principal != null);
-        model.addAttribute("action","/Articles/Upload");
-        model.addAttribute("submit","Add");
-        return "minecraft/uploadArticle";
-    }
-
-    @PostMapping("/Minecraft/Articles/Upload")
-    public RedirectView saveMember(Article article, @RequestParam("image") MultipartFile file, BindingResult result, RedirectAttributes redirectAttributes) throws IOException {
-        if(result.hasErrors()) {
-            // Include validation errors upon redirect
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.person",result);
-
-            // Add  person if invalid was received
-            redirectAttributes.addFlashAttribute("article",article);
-        }
-        articleService.saveNew(article, file);
-        redirectAttributes.addFlashAttribute("flash",new FlashMessage("Success", "Person successfully added", FlashMessage.Status.SUCCESS));
-        return new RedirectView("/Articles", true);
     }
 }
