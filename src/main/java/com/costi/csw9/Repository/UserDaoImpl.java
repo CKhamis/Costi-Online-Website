@@ -2,10 +2,12 @@ package com.costi.csw9.Repository;
 
 import com.costi.csw9.Model.User;
 import com.costi.csw9.Model.UserRole;
+import com.costi.csw9.Model.WikiPage;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.provider.HibernateUtils;
 import org.springframework.stereotype.Repository;
@@ -64,19 +66,18 @@ public class UserDaoImpl implements UserRepository{
         session.close();
     }
 
-    //TODO: test this
     @Override
     public List<User> findAll() {
+        // Open session
         Session session = sessionFactory.openSession();
 
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<User> query = builder.createQuery(User.class);
-        Root<User> rootEntry = query.from(User.class);
-        CriteriaQuery<User> all = query.select(rootEntry);
-        TypedQuery<User> allQuery = session.createQuery(all);
+        // Get Results
+        List<User> res = session.createQuery("from User", User.class).getResultList();
 
+        // Close session
         session.close();
-        return allQuery.getResultList();
+
+        return res;
     }
 
     @Override

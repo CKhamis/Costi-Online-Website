@@ -16,36 +16,7 @@
 <body>
 
 <div th:fragment="nav" class="navbar-fixed position-fixed" style="z-index:99; width:100%;top:0;">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">
-                <img th:src="@{/icons/Logo.png}" alt="" width="30" height="30" class="d-inline-block align-text-top">
-                <strong>Costi Online</strong>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav">
-                    <a class="nav-link px-3" aria-current="page" href="/">Home</a>
-                    <a class="nav-link px-3" href="/Projects">Projects</a>
-                    <a class="nav-link px-3" href="#">Services</a>
-                    <a class="nav-link px-3" href="#">Media</a>
-                    <a class="nav-link px-3" href="#">Wiki</a>
-                    <a class="nav-link px-3 active" href="/Minecraft">Minecraft</a>
-                </div>
-            </div>
-            <div th:class="'' + (*{loggedIn}? 'd-none' : 'd-flex')">
-                <a href="/SignUp" class="link-secondary px-3" style="padding-top:5px;">Sign up</a>
-                <a href="/Account" class="btn btn-primary">Sign In</a>
-            </div>
-            <div th:class="'' + (*{loggedIn}? 'd-flex' : 'd-none')">
-                <a class="nav-link px-3 text-white fw-bold" href="/Account" th:text="${user.firstName} + ' ' + ${user.lastName}">Account</a>
-                <form th:action="@{/logout}" method="post">
-                    <button type="submit" value="Sign Out" class="btn btn-primary">Sign Out</button>
-                </form>
-            </div>
-        </div>
+    <nav th:replace="Components :: topNav" class="navbar navbar-expand-lg navbar-dark bg-dark">
     </nav>
     <nav class="navbar navbar-expand-lg navbar-dark bg-brown-dirt p-0" style="opacity: 95%;">
         <div class="container-fluid">

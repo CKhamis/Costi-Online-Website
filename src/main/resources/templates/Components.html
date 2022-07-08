@@ -16,7 +16,7 @@
 <body>
 
 <div th:fragment="nav" class="navbar-fixed position-fixed" style="z-index:99; width:100%;top:0;opacity:95%">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav th:fragment="topNav" class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="/Minecraft">
                 <img th:src="@{/icons/Logo.png}" alt="" width="30" height="30" class="d-inline-block align-text-top">
@@ -31,7 +31,7 @@
                     <a class="nav-link px-3" href="/Projects">Projects</a>
                     <a class="nav-link px-3" href="#">Services</a>
                     <a class="nav-link px-3" href="#">Media</a>
-                    <a class="nav-link px-3" href="#">Wiki</a>
+                    <a class="nav-link px-3" href="/Wiki">Wiki</a>
                     <a class="nav-link px-3" href="/Minecraft">Minecraft</a>
                 </div>
             </div>
@@ -96,6 +96,7 @@
                     <h5 class="text-primary">Costi Online</h5>
                     <ul class="nav flex-column">
                         <li class="nav-item mb-2"><a href="/Account" class="nav-link p-0 text-light">Account Settings</a></li>
+                        <li class="nav-item mb-2"><a href="/Wiki/Create" class="nav-link p-0 text-light">Add to Costipedia</a></li>
                     </ul>
                 </div>
             </div>

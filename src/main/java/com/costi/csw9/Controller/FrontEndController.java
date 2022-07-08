@@ -1,35 +1,27 @@
 package com.costi.csw9.Controller;
-import com.costi.csw9.Model.Article;
-import com.costi.csw9.Model.FlashMessage;
-import com.costi.csw9.Model.User;
-import com.costi.csw9.Model.UserRole;
-import com.costi.csw9.Service.ArticleService;
-import com.costi.csw9.Service.RegistrationRequest;
-import com.costi.csw9.Service.RegistrationService;
-import com.costi.csw9.Service.UserService;
+import com.costi.csw9.Model.*;
+import com.costi.csw9.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 
-import java.io.IOException;
 import java.security.Principal;
+import java.util.List;
 
 @Controller
-public class ArticleController {
-    private final ArticleService articleService;
+public class FrontEndController {
     private final UserService userService;
     private RegistrationService registrationService;
+    private WikiService wikiService;
 
     @Autowired
-    public ArticleController(ArticleService articleService, UserService userService, RegistrationService registrationService) {
-        this.articleService = articleService;
+    public FrontEndController(UserService userService, RegistrationService registrationService, WikiService wikiService) {
         this.userService = userService;
         this.registrationService = registrationService;
+        this.wikiService = wikiService;
     }
     /*
     @GetMapping
@@ -122,6 +114,17 @@ public class ArticleController {
         return "main/Home";
     }
 
+    //Moderator
+    @GetMapping("/COMT")
+    public String getCostiOnlineModeratorTools(Model model, Principal principal){
+
+        model.addAttribute("user", getCurrentUser(principal));
+        model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("disabled", wikiService.getByApproval(false));
+        model.addAttribute("enabled", wikiService.getByApproval(true));
+        return "moderator/ModeratorTools";
+    }
+
     //Main
     @GetMapping("/")
     public String getHome(Model model, Principal principal){
@@ -142,22 +145,156 @@ public class ArticleController {
         return "main/login";
     }
 
+    //Wiki
+    @GetMapping("/Wiki")
+    public String getWikiHome(Model model, Principal principal){
 
+        model.addAttribute("user", getCurrentUser(principal));
+        model.addAttribute("loggedIn", principal != null);
+        List<WikiPage> allEnabled = wikiService.getByApproval(true);
+        model.addAttribute("all", allEnabled);
+        model.addAttribute("categories",WikiCategory.values());
+        return "wiki/WikiHome";
+    }
+    @GetMapping("/Wiki/Create")
+    public String getCreateWiki(Model model, Principal principal, RedirectAttributes redirectAttributes){
+        if(!model.containsAttribute("page")) {
+            model.addAttribute("page",new WikiPage(getCurrentUser(principal)));
+        }
+        model.addAttribute("isAllowed", true);
+        model.addAttribute("action","/Wiki/Create/post");
+        model.addAttribute("categories", WikiCategory.values());
+        model.addAttribute("title", "Create New Wiki Page");
+
+
+        model.addAttribute("user", getCurrentUser(principal));
+        model.addAttribute("loggedIn", principal != null);
+        return "wiki/NewWiki";
+    }
+    @RequestMapping(value = "/Wiki/Create/post", method = RequestMethod.POST)
+    public String addNewPage(WikiPage wikiPage, Principal principal, BindingResult result, RedirectAttributes redirectAttributes){
+        if(result.hasErrors()) {
+            // Include validation errors upon redirect
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category",result);
+
+            // Re populate credentials in form
+            redirectAttributes.addFlashAttribute("page", wikiPage);
+
+            // Redirect back to the form
+            return "redirect:/Wiki/Create";
+        }
+        wikiPage.setAuthor(getCurrentUser(principal));
+
+        wikiService.save(wikiPage);
+        return "redirect:/Wiki/" + wikiPage.getId() + "/view";
+    }
+    @RequestMapping("/Wiki/{PageId}/view")
+    public String viewPage(Model model, Principal principal, RedirectAttributes redirectAttributes, @PathVariable Long PageId){
+        User current = getCurrentUser(principal);
+        WikiPage wiki = wikiService.loadById(PageId);
+
+        model.addAttribute("showEdit", (current.getRole().equals(UserRole.ADMIN) || wiki.getAuthor().equals(current)));
+        model.addAttribute("isAdmin", current.getRole().equals(UserRole.ADMIN));
+        model.addAttribute("user", current);
+        model.addAttribute("isViewable", current.getRole().equals(UserRole.ADMIN) || wiki.isEnabled());
+        model.addAttribute("loggedIn", principal != null);
+
+        model.addAttribute("wiki", wiki);
+        model.addAttribute("categoryPages", wikiService.getWikiPagesByCat(wiki.getCategory()));
+
+        return "wiki/viewWiki";
+    }
+    @RequestMapping(value = "/Wiki/{PageId}/delete", method = RequestMethod.POST)
+    public String deleteWikiPage(@PathVariable Long PageId, Principal principal, RedirectAttributes redirectAttributes) {
+        WikiPage page = wikiService.loadById(PageId);
+        if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
+            wikiService.delete(page);
+        }else{
+            System.out.println("Invalid Permissions");
+        }
+
+        //redirectAttributes.addFlashAttribute("flash",new FlashMessage("Wiki Page deleted!", FlashMessage.Status.SUCCESS));
+        return "redirect:/COMT";
+    }
+    @RequestMapping(value = "/Wiki/{PageId}/enable", method = RequestMethod.POST)
+    public String enableWikiPage(@PathVariable Long PageId, Principal principal, RedirectAttributes redirectAttributes) {
+        WikiPage page = wikiService.loadById(PageId);
+        if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
+            wikiService.enable(page, true);
+        }else{
+            System.out.println("Invalid Permissions");
+        }
+
+        //redirectAttributes.addFlashAttribute("flash",new FlashMessage("Wiki Page deleted!", FlashMessage.Status.SUCCESS));
+        return "redirect:/COMT";
+    }
+
+    @RequestMapping(value = "/Wiki/{PageId}/disable", method = RequestMethod.POST)
+    public String disableWikiPage(@PathVariable Long PageId, Principal principal, RedirectAttributes redirectAttributes) {
+        WikiPage page = wikiService.loadById(PageId);
+        if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
+            wikiService.enable(page, false);
+        }else{
+            System.out.println("Invalid Permissions");
+        }
+
+        //redirectAttributes.addFlashAttribute("flash",new FlashMessage("Wiki Page deleted!", FlashMessage.Status.SUCCESS));
+        return "redirect:/COMT";
+    }
+    @RequestMapping("/Wiki/{PageId}/edit")
+    public String getEditWiki(@PathVariable Long PageId, Model model, Principal principal, RedirectAttributes redirectAttributes){
+        User current = getCurrentUser(principal);
+        WikiPage page = wikiService.loadById(PageId);
+
+        model.addAttribute("page", page);
+        model.addAttribute("isAllowed", (current.getRole().equals(UserRole.ADMIN) || page.getAuthor().equals(current)));
+        model.addAttribute("action","/Wiki/" + PageId + "/edit");
+        model.addAttribute("categories", WikiCategory.values());
+        model.addAttribute("title", "Edit Wiki Page");
+
+        model.addAttribute("user", current);
+        model.addAttribute("loggedIn", principal != null);
+        return "wiki/NewWiki";
+    }
+    @RequestMapping(value = "/Wiki/{PageId}/edit", method = RequestMethod.POST)
+    public String addNewPage(@PathVariable Long PageId, WikiPage wikiPage, Principal principal, BindingResult result, RedirectAttributes redirectAttributes){
+        if(result.hasErrors()) {
+            // Include validation errors upon redirect
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.User",result);
+            // Add  member if invalid was received
+            redirectAttributes.addFlashAttribute("page",wikiPage);
+        }
+
+        wikiPage.setId(PageId);
+
+        // Keep author the same
+        wikiPage.setAuthor(wikiService.loadById(PageId).getAuthor());
+
+        //Save new user
+        wikiService.save(wikiPage);
+
+        //Redirect depending on type of user
+        if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
+            return "redirect:/COMT";
+        }else{
+            return "redirect:/Wiki/" + wikiPage.getId() + "/view";
+        }
+
+    }
+
+    //Minecraft
     @GetMapping("/Minecraft")
     public String getMCHome(Model model, Principal principal){
         model.addAttribute("user", getCurrentUser(principal));
         model.addAttribute("loggedIn", principal != null);
         return "minecraft/MCHome";
     }
-    // Your Government
     @GetMapping("/Minecraft/gov")
     public String getGovernmentInfo(Model model, Principal principal){
         model.addAttribute("loggedIn", principal != null);
         model.addAttribute("user", getCurrentUser(principal));
         return "minecraft/yourGovernment";
     }
-
-    // Voting Center
     @GetMapping("/Minecraft/vote")
     public String getVoting(Model model, Principal principal){
         model.addAttribute("loggedIn", principal != null);
@@ -205,31 +342,5 @@ public class ArticleController {
         model.addAttribute("loggedIn", principal != null);
         model.addAttribute("user", getCurrentUser(principal));
         return "minecraft/electionResults";
-    }
-
-    //Adding New Articles
-    @RequestMapping("/Minecraft/Articles/Add")
-    public String formNewMember(Model model, Principal principal) {
-        if(!model.containsAttribute("article")) {
-            model.addAttribute("article",new Article());
-        }
-        model.addAttribute("loggedIn", principal != null);
-        model.addAttribute("action","/Articles/Upload");
-        model.addAttribute("submit","Add");
-        return "minecraft/uploadArticle";
-    }
-
-    @PostMapping("/Minecraft/Articles/Upload")
-    public RedirectView saveMember(Article article, @RequestParam("image") MultipartFile file, BindingResult result, RedirectAttributes redirectAttributes) throws IOException {
-        if(result.hasErrors()) {
-            // Include validation errors upon redirect
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.person",result);
-
-            // Add  person if invalid was received
-            redirectAttributes.addFlashAttribute("article",article);
-        }
-        articleService.saveNew(article, file);
-        redirectAttributes.addFlashAttribute("flash",new FlashMessage("Success", "Person successfully added", FlashMessage.Status.SUCCESS));
-        return new RedirectView("/Articles", true);
     }
 }

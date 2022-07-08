@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xml:th="https://www.thymeleaf.org">
+<head th:replace="Components :: head('Home')"></head>
+<body class="bg-dark text-light">
+<div th:replace="Components :: nav"></div>
+<main class="container mt-5 pt-5">
+    <div class="p-5 mb-4 bg-dark rounded-3 border border-white">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">Costi Online Management Terminal</h1>
+            <p class="col-md-8 fs-4">Edit Wiki</p>
+        </div>
+    </div>
+    <h2 class="fs-2 mb-3">Disabled, Needs Approval</h2>
+    <table class="table table-bordered table-sm align-middle table-hover table-dark">
+        <thead>
+            <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Subtitle</th>
+                <th scope="col">Category</th>
+                <th scope="col">Author</th>
+                <th scope="col">Role</th>
+                <th scope="col">Last Edited</th>
+                <th scope="col">View</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Enable</th>
+                <th scope="col">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="page : ${disabled}">
+                <td scope="row" th:text="*{page.title}">Title</td>
+                <td th:text="*{page.subtitle}">Subtitle</td>
+                <td  class="text-center">
+                    <div th:switch="${page.category}">
+                        <span th:case="INSIDE_JOKE"   class="badge badge-pill bg-primary">Inside Joke</span>
+                        <span th:case="HISTORICAL"    class="badge badge-pill bg-info">Historical</span>
+                        <span th:case="PEOPLE"        class="badge badge-pill bg-success">People</span>
+                        <span th:case="PROFESSIONAL"  class="badge badge-pill bg-secondary">Professional</span>
+                        <span th:case="*"             class="badge badge-pill bg-dark">Other</span>
+                    </div>
+                </td>
+                <td th:text="*{page.author.firstName} + ' ' + *{page.author.lastName}">Author</td>
+                <td class="text-center">
+                    <div th:switch="*{page.author.role}">
+                        <span th:case="ADMIN"   class="badge badge-pill bg-primary">Admin</span>
+                        <span th:case="USER"    class="badge badge-pill bg-info">User</span>
+                        <span th:case="*"       class="badge badge-pill bg-dark" th:text="*{page.author.role}">Other</span>
+                    </div>
+                </td>
+                <td th:text="*{page.dateEdited}">Last Edited</td>
+                <td>
+                    <a th:href="'/Wiki/' + *{page.Id} + '/view'" class="card-link">View Page ></a>
+                </td>
+                <td>
+                    <a th:href="@{|/Wiki/${page.id}/edit|}" class="btn btn-secondary btn-sm" role="button" aria-pressed="true">Edit</a>
+                </td>
+                <td>
+                    <form th:action="@{|/Wiki/${page.id}/enable|}" method="post">
+                        <button type="submit" class="btn btn-success btn-sm">Enable</button>
+                    </form>
+                </td>
+                <td>
+                    <form th:action="@{|/Wiki/${page.id}/delete|}" method="post">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 class="fs-2 mb-3">Visible Pages</h2>
+    <table class="table table-bordered table-sm align-middle table-hover table-dark">
+        <thead>
+        <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Subtitle</th>
+            <th scope="col">Category</th>
+            <th scope="col">Author</th>
+            <th scope="col">Role</th>
+            <th scope="col">Last Edited</th>
+            <th scope="col">View</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Enable</th>
+            <th scope="col">Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="page : ${enabled}">
+            <td scope="row" th:text="*{page.title}">Title</td>
+            <td th:text="*{page.subtitle}">Subtitle</td>
+            <td class="text-center">
+                <div th:switch="${page.category}">
+                    <span th:case="INSIDE_JOKE"   class="badge badge-pill bg-primary">Inside Joke</span>
+                    <span th:case="HISTORICAL"    class="badge badge-pill bg-info">Historical</span>
+                    <span th:case="PEOPLE"        class="badge badge-pill bg-success">People</span>
+                    <span th:case="PROFESSIONAL"  class="badge badge-pill bg-secondary">Professional</span>
+                    <span th:case="*"             class="badge badge-pill bg-dark">Other</span>
+                </div>
+            </td>
+            <td th:text="*{page.author.firstName} + ' ' + *{page.author.lastName}">Author</td>
+            <td class="text-center">
+                <span class="badge badge-pill bg-dark" th:text="*{page.author.role}">Other</span>
+            </td>
+            <td th:text="*{page.dateEdited}">Last Edited</td>
+            <td>
+                <a th:href="'/Wiki/' + *{page.Id} + '/view'" class="card-link">View Page ></a>
+            </td>
+            <td>
+                <a th:href="@{|/Wiki/${page.id}/edit|}" class="btn btn-secondary btn-sm" role="button" aria-pressed="true">Edit</a>
+            </td>
+            <td>
+                <form th:action="@{|/Wiki/${page.id}/disable|}" method="post">
+                    <button type="submit" class="btn btn-warning btn-sm">Disable</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{|/Wiki/${page.id}/delete|}" method="post">
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+<div th:replace="Components :: footer"></div>
+<div th:replace="Components :: scripts"></div>
+</body>
+</html>
