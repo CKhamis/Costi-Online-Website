@@ -194,6 +194,7 @@ public class FrontEndController {
         WikiPage wiki = wikiService.loadById(PageId);
 
         model.addAttribute("showEdit", (current.getRole().equals(UserRole.ADMIN) || wiki.getAuthor().equals(current)));
+        model.addAttribute("isAdmin", current.getRole().equals(UserRole.ADMIN));
         model.addAttribute("user", current);
         model.addAttribute("isViewable", current.getRole().equals(UserRole.ADMIN) || wiki.isEnabled());
         model.addAttribute("loggedIn", principal != null);

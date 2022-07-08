@@ -40,10 +40,12 @@
             <h1 class="fw-bold" th:text="*{title}"></h1>
             <p class="text-muted fw-bold" th:text="*{subtitle}"></p>
             <p th:text="'By ' + *{author.firstName} + ' ' + *{author.lastName}"></p>
+            <span th:unless="*{enabled}" class="badge bg-light text-dark">NOT VISIBLE</span>
 
             <div class="px-md-4" id="contentBody">
                 <p class="fs-5" th:utext="*{body}"></p>
                 <a th:href="@{|/Wiki/${wiki.id}/edit|}" th:if="${showEdit}">edit</a>
+                <a href="/COMT" th:if="${isAdmin}" class="d-inline">COMT</a>
             </div>
         </div>
     </div>
