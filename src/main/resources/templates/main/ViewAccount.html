@@ -23,6 +23,7 @@
         <div class="p-5 mb-2 bg-dark rounded-3 border border-white">
             <h2>Account Status</h2>
             <hr/>
+            <div th:replace="Components :: flash" class="my-2"></div>
             <div class="row" th:object="${user}">
                 <div class="mb-5 col-lg-4 col-md-6 col-xs-12">
                     <div class="card text-white bg-dark border-white">
@@ -59,16 +60,16 @@
                     <div class="col-md-4 mb-3">
                         <label for="fnf">First name</label>
                         <input type="text" class="form-control" id="fnf" th:field="*{firstName}"
-                               placeholder="First name">
+                               placeholder="First name" required>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="lnf">Last name</label>
                         <input type="text" class="form-control" id="lnf" th:field="*{lastName}"
-                               placeholder="Last name">
+                               placeholder="Last name" required>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="mnf">Email</label>
-                        <input type="text" class="form-control" id="mnf" th:field="*{email}" placeholder="email">
+                        <input type="text" class="form-control" id="mnf" th:field="*{email}" placeholder="email" required>
                     </div>
                 </div>
                 <div class="form-row row">
@@ -78,10 +79,10 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="rol">Website Role</label>
-                        <select th:field="*{role}" class="form-control" id="rol" disabled>
+                        <select th:field="*{role}" class="form-control disabledSelect" id="rol" disabled>
                             <option value="" disabled="disabled">Select a role</option>
-                            <option value = "ADMIN">ADMIN</option>
-                            <option value = "USER">USER</option>
+                            <option value = "ADMIN">Administrator</option>
+                            <option value = "USER">User</option>
                         </select>
                     </div>
                 </div>

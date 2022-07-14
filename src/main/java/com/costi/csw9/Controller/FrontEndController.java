@@ -54,7 +54,7 @@ public class FrontEndController {
     }
 
     @RequestMapping("/Account")
-    public String editUser(Model model, Principal principal){
+    public String editUser(Model model, Principal principal, RedirectAttributes redirectAttributes){
         model.addAttribute("user", getCurrentUser(principal));
         model.addAttribute("action", "/Account/edit");
         model.addAttribute("loggedIn", principal != null);
@@ -82,7 +82,8 @@ public class FrontEndController {
 
         //Save new user
         userService.updateUser(user);
-        return "main/ViewAccount";
+        redirectAttributes.addFlashAttribute("flash",new FlashMessage("✅ Account Successfully Edited", "Changes saved to server", FlashMessage.Status.SUCCESS));
+        return "redirect:/Account";
     }
 
     @GetMapping("/SignUp")
@@ -111,7 +112,8 @@ public class FrontEndController {
             return "main/Home";
         }
         registrationService.registerUser(user);
-        return "main/Home";
+        redirectAttributes.addFlashAttribute("flash",new FlashMessage("✅ Costi Account Created!", "Please sign in to continue.", FlashMessage.Status.SUCCESS));
+        return "redirect:/";
     }
 
     //Moderator
@@ -127,7 +129,7 @@ public class FrontEndController {
 
     //Main
     @GetMapping("/")
-    public String getHome(Model model, Principal principal){
+    public String getHome(Model model, Principal principal, RedirectAttributes redirectAttributes){
         model.addAttribute("user", getCurrentUser(principal));
         model.addAttribute("loggedIn", principal != null);
         return "main/Home";

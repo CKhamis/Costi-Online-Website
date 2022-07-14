@@ -55,6 +55,12 @@
     <!--<script th:src="@{/app.js}"></script>-->
 </div>
 
+<div th:fragment="flash" th:if="${flash != null}" th:class="'alert alert-dismissible fade show alert-' + ${#strings.toLowerCase(flash.status)}" role="alert">
+    <div class="fw-bold d-inline" th:text="${flash.title}"></div>
+    <div class="d-inline" th:text="${flash.message}"></div>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
 <div th:fragment="footer" class="text-light" style="background-color: RGBA(0, 0, 0, .2)">
     <div class="container py-5">
         <footer>
