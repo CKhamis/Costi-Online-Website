@@ -12,3 +12,42 @@
     background-color: rgba(255, 255, 255, .1);
     color:white;
 }
+
+.alert-success{
+    background-color:rgba(15, 81, 50, .5);
+    border-color:#d1e7dd;
+    color:#d1e7dd;
+}
+
+ul {
+  list-style-type: none;
+  padding-left:0;
+ }
+
+.alert-danger{
+    background-color:rgba(132, 32, 41, .5);
+    border-color:#f8d7da;
+    color:#f8d7da;
+}
+
+.bg-2{
+    background-color: black;
+}
+
+.bg-1{
+    background-color: #212529;
+}
+
+.text-1{
+    color: #e9ecef;
+}
+
+.border-box{
+    background-color: #212529;
+    border: 1px solid #fff;
+    border-radius: .25rem;
+}
+
+.nav{
+    background-color: #212529;
+}

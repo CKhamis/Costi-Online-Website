@@ -1,0 +1,73 @@
+.blue-v-gradient{
+    background-color: #ffffe1;
+}
+
+ul {
+  list-style-type: none;
+  padding-left:0;
+ }
+
+.list-group-item{
+    color: white;
+    background-color: rgba(0, 0, 0, .5);
+    border: 1px solid rgba(255, 255, 255, 1);
+}
+
+.list-group-item-action:focus, .list-group-item-action:hover{
+    background-color: rgba(255, 255, 255, .1);
+    color:white;
+}
+
+.alert-success, .alert-danger{
+    background-color: #ffffe1;
+    border-color: black;
+    color: black;
+}
+
+.text-muted{
+    color: black;
+}
+
+.bg-2{
+    background-color: #5b7edc;
+}
+
+.bg-1{
+    background-image: linear-gradient(to bottom right, #8faeef, #5b7edc, #5b7edc);
+}
+
+.text-1, a, a:hover, .nav-link:focus, .nav-link:hover, .nav-link{
+    color: #ffffe1;
+}
+
+.wikiBannerBg{
+     background-image: url(images/webpageImages/WikiBg.jpg);
+     background-size: 100%;
+}
+.wikiRestrictedBannerBg{
+     background-image: url(images/webpageImages/WikiRestrictedBg.jpg);
+     background-size: 100%;
+}
+#contentBody{
+    line-height: 2rem;
+}
+
+.border-box{
+    background-color: #ffffe1;
+    border: 2px solid black;
+    border-radius: .25rem;
+    color:black;
+}
+
+.border-box a{
+    color:black;
+}
+
+.btn-primary{
+    color: #ffffe1 !important;
+}
+
+.nav{
+    background-color: #01309c;
+    border-bottom: 2px solid #c89f99;
+}

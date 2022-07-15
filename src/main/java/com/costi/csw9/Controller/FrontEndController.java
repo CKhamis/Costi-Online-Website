@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -43,6 +44,16 @@ public class FrontEndController {
     public void modifyArticle(@PathVariable("articleId") Long articleId, @RequestParam(required = false) String name, @RequestParam(required = false) String email){
         articleService.modifyArticle(articleId, name, email);
     }*/
+    // Theme
+    private String choseTheme(){
+        LocalDate today = LocalDate.now();
+        if(today.getMonth().name().equalsIgnoreCase("July")){
+            return "/XpTheme.css";
+        }else{
+            return "/Styles.css";
+        }
+    }
+
     //Account
     private User getCurrentUser(Principal principal) {
         if(principal == null){
@@ -58,6 +69,7 @@ public class FrontEndController {
         model.addAttribute("user", getCurrentUser(principal));
         model.addAttribute("action", "/Account/edit");
         model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("theme", choseTheme());
         return "main/ViewAccount";
     }
 
@@ -92,6 +104,7 @@ public class FrontEndController {
             model.addAttribute("user",new User());
         }
         model.addAttribute("action","/SignUp/post");
+        model.addAttribute("theme", choseTheme());
         return "main/NewAccount";
     }
 
@@ -124,6 +137,7 @@ public class FrontEndController {
         model.addAttribute("loggedIn", principal != null);
         model.addAttribute("disabled", wikiService.getByApproval(false));
         model.addAttribute("enabled", wikiService.getByApproval(true));
+        model.addAttribute("theme", choseTheme());
         return "moderator/ModeratorTools";
     }
 
@@ -132,18 +146,21 @@ public class FrontEndController {
     public String getHome(Model model, Principal principal, RedirectAttributes redirectAttributes){
         model.addAttribute("user", getCurrentUser(principal));
         model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("theme", choseTheme());
         return "main/Home";
     }
     @GetMapping("/Projects")
     public String getProjects(Model model, Principal principal){
         model.addAttribute("loggedIn", principal != null);
         model.addAttribute("user", getCurrentUser(principal));
+        model.addAttribute("theme", choseTheme());
         return "main/Projects";
     }
     @GetMapping("/login")
     public String getLogin(Model model, Principal principal){
         model.addAttribute("user", getCurrentUser(principal));
         model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("theme", choseTheme());
         return "main/login";
     }
 
@@ -156,6 +173,7 @@ public class FrontEndController {
         List<WikiPage> allEnabled = wikiService.getByApproval(true);
         model.addAttribute("all", allEnabled);
         model.addAttribute("categories",WikiCategory.values());
+        model.addAttribute("theme", choseTheme());
         return "wiki/WikiHome";
     }
     @GetMapping("/Wiki/Create")
@@ -167,6 +185,7 @@ public class FrontEndController {
         model.addAttribute("action","/Wiki/Create/post");
         model.addAttribute("categories", WikiCategory.values());
         model.addAttribute("title", "Create New Wiki Page");
+        model.addAttribute("theme", choseTheme());
 
 
         model.addAttribute("user", getCurrentUser(principal));
@@ -203,6 +222,7 @@ public class FrontEndController {
 
         model.addAttribute("wiki", wiki);
         model.addAttribute("categoryPages", wikiService.getWikiPagesByCat(wiki.getCategory()));
+        model.addAttribute("theme", choseTheme());
 
         return "wiki/viewWiki";
     }
@@ -256,6 +276,7 @@ public class FrontEndController {
 
         model.addAttribute("user", current);
         model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("theme", choseTheme());
         return "wiki/NewWiki";
     }
     @RequestMapping(value = "/Wiki/{PageId}/edit", method = RequestMethod.POST)
