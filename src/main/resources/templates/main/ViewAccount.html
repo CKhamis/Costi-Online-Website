@@ -35,7 +35,7 @@
                     </div>
                 </div>
                 <div class="mb-5 col-lg-4 col-md-6 col-xs-12">
-                    <div th:class="'card text-1 border-white ' + (*{isLocked}? 'bg-danger' : 'bg-dark')">
+                    <div th:class="'card text-1 border-box ' + (*{isLocked}? 'bg-danger' : '')">
                         <div class="card-header fw-bold" th:text="(*{isLocked}? '&#128274;' : '&#128275;') + 'Account Lock '">🔑Account Lock</div>
                         <div class="card-body">
                             <h5 class="card-title" th:text="'Your Account is ' + (*{isLocked}? 'locked!' : 'Unlocked!')">Account lock here</h5>
@@ -44,7 +44,7 @@
                     </div>
                 </div>
                 <div class="mb-5 col-lg-4 col-md-6 col-xs-12">
-                    <div th:class="'card text-1 border-white ' + (*{enabled}? 'bg-dark' : 'bg-danger')">
+                    <div th:class="'card text-1 border-box ' + (*{enabled}? '' : 'bg-danger')">
                         <div class="card-header fw-bold" th:text="(*{enabled}? '&#9989;' : '&#9940;') + 'Account Enable '">⚠️Account Enable</div>
                         <div class="card-body">
                             <h5 class="card-title" th:text="'Your Account is ' + (*{enabled}? 'enabled!' : 'disabled!')">Account enable here</h5>
