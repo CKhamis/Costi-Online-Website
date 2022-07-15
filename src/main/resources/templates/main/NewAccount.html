@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xml:th="https://www.thymeleaf.org">
 <head th:replace="Components :: head('Home')"></head>
-<body class="bg-black text-light mt-5">
+<body class="bg-2 text-1 mt-5">
 <div th:replace="Components :: nav"></div>
 
 <div class="container-fluid row px-4 py-5" id="about">
@@ -9,7 +9,7 @@
         <h1 class="pb-2 border-bottom mb-4 fw-bold text-center">Create a Costi Online Account</h1>
     </div>
     <div class="col-lg-3 col-md-5 col-xs-12">
-        <div class="p-3 mb-4 bg-dark rounded-3 border border-white">
+        <div class="p-3 mb-4 border-box">
             <div class="container-fluid">
                 <h3 class="fw-bold">⚠️Important Information</h3>
                 <p class="fs-4">Please make sure you read the information below</p>
@@ -20,7 +20,7 @@
         </div>
     </div>
     <div class="col-lg-9 col-md-7 col-xs-12">
-        <div class="p-5 mb-4 bg-dark rounded-3 border border-white">
+        <div class="p-5 mb-4 border-box">
             <form th:action="@{${action}}" method="post" th:object="${user}">
                 <h2>General Information</h2>
                 <hr/>

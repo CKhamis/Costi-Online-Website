@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xml:th="https://www.thymeleaf.org">
 <head th:replace="minecraft/MinecraftComponents :: head('Gov')"></head>
-<body class="bg-dark text-light">
+<body class="bg-1 text-1">
 <div th:replace="minecraft/MinecraftComponents :: nav"></div>
 <div class="container mt-5 pt-5">
     <!-- Desktop -->
-    <div class="p-0 mb-4 bg-dark rounded-3 d-none d-md-block">
+    <div class="p-0 mb-4 border-box">
         <div class="container-fluid p-0 video-bg-container rounded-3">
             <div class="position-absolute p-5 video-foreground-container">
                 <h1 class="display-5 fw-bold">Your Government</h1>
@@ -24,7 +24,7 @@
     </div>
 
     <!-- Mobile -->
-    <div class="p-0 mb-4 bg-dark rounded-3 d-xs-block d-md-none">
+    <div class="p-0 mb-4 border-box d-xs-block d-md-none">
         <div class="container-fluid p-0 video-bg-container rounded-3" style="height:600px;">
             <div class="position-absolute p-5 video-foreground-container">
                 <h1 class="display-5 fw-bold">Your Government</h1>
@@ -45,7 +45,7 @@
     <h1 id="leadership" class="mt-5">Current Leadership</h1>
     <div class="row">
         <div class="col col-md-3">
-            <div class="card mb-3 bg-dark border border-white">
+            <div class="card mb-3 border-box">
                 <img th:src="@{/images/People/Costi.png}" class="card-img-top" alt="Costi">
                 <div class="card-body">
                     <h5 class="card-title">Costi</h5>
@@ -86,9 +86,9 @@
         </div>-->
     </div>
     <h1 id="currentGovernment" class="mt-5">Current Government</h1>
-    <div class="mb-4 rounded-3 border border-white card">
+    <div class="mb-4 border-box card">
         <ul class="list-group list-group-flush">
-            <li class="list-group-item bg-dark text-light p-0">
+            <li class="list-group-item bg-1 text-1 p-0">
                 <div class="container-fluid p-5">
                     <h4 class="fw-bold">Overview</h4>
                     <p class="fs-4">This faction's government will most closely resemble the government of Costi Survival World 5. This means that there will be both a federal and local government.</p>
@@ -101,7 +101,7 @@
                 </div>
             </li>
         </ul>
-        <div class="card-footer bg-dark">
+        <div class="card-footer bg-1">
             <p class="fs-4 mx-4"><a th:href="@{/downloads/The Costitution.docx}" download="Costitution.docx">Download Costitution></a></p>
         </div>
     </div>
@@ -147,7 +147,7 @@
         </ul>
         <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="w1" role="tabpanel" aria-labelledby="w1-tab">
-                <div class="mb-4 rounded-3 bg-dark text-light border border-white">
+                <div class="mb-4 border-box">
                     <div class="container-fluid p-5">
                         <h3 class="fw-bold">Costi Survival World 1 (2013)</h3>
                         <p class="fs-4">Costi Survival world 1 was the first mainline world in the series. It had many buildings and government ideas that persisted to its successors. The world was created in Minecraft Pocket Edition by Costi and had an "Old" world type, which meant very limited space was available. Some very notable landmarks in this world were the twin towers, vector's lair, the lab, nether reactor area, and advanced irrigation system.</p>
@@ -159,7 +159,7 @@
             </div>
             <div class="tab-pane fade" id="w2" role="tabpanel" aria-labelledby="w2-tab">
                 <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="w1-tab">
-                    <div class="mb-4 rounded-3  bg-dark text-light border border-white">
+                    <div class="mb-4 border-box">
                         <div class="container-fluid p-5">
                             <h3 class="fw-bold">Costi Survival World 2 (2014)</h3>
                             <p class="fs-4">Costi Survival world 2 was a relatively short world compared to the first world. It was hosted on Costi's Xbox 360 system which used Minecraft Xbox 360 Edition (obviously). This brought on many new features, dimensions, and blocks to the world. Costi, Alex, Georges, and Marc all lived in a swamp biome house surrounded by tamed dogs. There is not much information known about this world, as it was not as influential as the others.</p>
@@ -170,7 +170,7 @@
             </div>
             <div class="tab-pane fade" id="w3" role="tabpanel" aria-labelledby="w3-tab">
                 <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="w1-tab">
-                    <div class="mb-4 rounded-3 bg-dark text-light border border-white">
+                    <div class="mb-4 border-box">
                         <div class="container-fluid p-5">
                             <img th:src="@{/images/worldPreview/CSW3.jpg}" class="img-fluid rounded-3 w-100 mb-4" alt="Costi Survival World 3">
                             <h3 class="fw-bold">Costi Survival World 3 (2016)</h3>
@@ -241,7 +241,7 @@
                 </div>
             </div>
             <div class="tab-pane fade show" id="rdw" role="tabpanel" aria-labelledby="rdw-tab">
-                <div class="mb-4 rounded-3 bg-dark text-light border border-white">
+                <div class="mb-4 border-box">
                     <div class="container-fluid p-5">
                         <img th:src="@{/images/worldPreview/RDW.jpg}" class="img-fluid rounded-3 w-100 mb-4" alt="Ross' Dystopia">
                         <h3 class="fw-bold">Ross' Dystopia (2019)</h3>
@@ -254,7 +254,7 @@
                 </div>
             </div>
             <div class="tab-pane fade" id="w6" role="tabpanel" aria-labelledby="w6-tab">
-                <div class="mb-4 bg-dark rounded-3 border border-white">
+                <div class="mb-4 border-box">
                     <div class="container-fluid p-5">
                         <img th:src="@{/images/worldPreview/CSW6.jpg}" class="img-fluid rounded-3 w-100 mb-4" alt="Costi Survival World 6">
                         <h3 class="fw-bold">Costi Survival World 6 (2019)</h3>
@@ -279,7 +279,7 @@
                 </div>
             </div>
             <div class="tab-pane fade" id="w7" role="tabpanel" aria-labelledby="w7-tab">
-                <div class="mb-4 bg-dark rounded-3 border border-white">
+                <div class="mb-4 border-box">
                     <div class="container-fluid p-5">
                         <img th:src="@{/images/worldPreview/CSW7.jpg}" class="img-fluid rounded-3 w-100 mb-4" alt="Costi Survival World 7">
                         <h3 class="fw-bold">Costi Survival World 7 (2021)</h3>
@@ -300,7 +300,7 @@
                 </div>
             </div>
             <div class="tab-pane fade" id="w8" role="tabpanel" aria-labelledby="w8-tab">
-                <div class="mb-4 rounded-3 bg-dark border border-white">
+                <div class="mb-4 border-box">
                     <div class="container-fluid p-5">
                         <img th:src="@{/images/worldPreview/CSW8.jpg}" class="img-fluid rounded-3 w-100 mb-4" alt="Constantinople, Costi Survival World 8">
                         <h3 class="fw-bold">Costi Survival World 8 (2021)</h3>
@@ -319,7 +319,7 @@
                 </div>
             </div>
             <div class="tab-pane fade" id="w85" role="tabpanel" aria-labelledby="w85-tab">
-                <div class="mb-4 bg-dark rounded-3 border border-white">
+                <div class="mb-4 border-box">
                     <div class="container-fluid p-5">
                         <img th:src="@{/images/worldPreview/CSW8.5.jpg}" class="img-fluid rounded-3 w-100 mb-4" alt="Costi Survival World 8.5">
                         <h3 class="fw-bold">Costi Survival World 8.5 (2022)</h3>

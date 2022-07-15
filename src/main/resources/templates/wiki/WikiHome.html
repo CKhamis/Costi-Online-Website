@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xml:th="https://www.thymeleaf.org">
 <head th:replace="wiki/WikiComponents :: head('Wiki')"></head>
-<body class="bg-dark text-light pt-5">
+<body class="bg-1 text-1 pt-5">
 <div th:replace="Components :: nav"></div>
 
 <main class="container mt-5">
-    <div class="p-5 mb-4 bg-dark rounded-3 border border-white wikiBannerBg">
+    <div class="p-5 mb-4 border-box wikiBannerBg">
         <div class="container-fluid py-5">
             <h1 class="display-5 fw-bold">Costipedia</h1>
             <p class="col-md-8 fs-4">A community wiki for Costi Online that centralizes important information related to Costi, friends, inside jokes, and more!</p>
@@ -30,7 +30,7 @@
     <h2 class="fs-2 mt-5 mb-4">All Wiki Content</h2>
     <div class="row g-4 row-cols-1 row-cols-md-3 row-cols-lg-5">
         <div class="col" th:each="page : ${all}">
-            <div th:switch="${page.category}" class="card text-white bg-dark border-white">
+            <div th:switch="${page.category}" class="card border-box">
                 <div th:case="INSIDE_JOKE"   class="card-header fw-bold" th:text="|&#128518; Inside Jokes|">Card title</div>
                 <div th:case="HISTORICAL"    class="card-header fw-bold" th:text="|&#127984; Historical|">Card title</div>
                 <div th:case="PEOPLE"        class="card-header fw-bold" th:text="|&#128697; People|">Card title</div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xml:th="https://www.thymeleaf.org">
 <head th:replace="Components :: head('Home')"></head>
-<body class="bg-black text-light">
+<body class="bg-2 text-1">
 <div th:replace="Components :: nav"></div>
 <main class="container px-4 py-5">
     <div class="row">
@@ -9,7 +9,7 @@
 
         </div>
         <div class="pt-5 col-xs-12 col-md-10 col-lg-8 col-xl-4">
-            <div class="p-4 rounded-3 bg-dark border border-white">
+            <div class="p-4 border-box">
                 <h2 class="text-center">Costi Online Sign In</h2>
                 <div th:if="${param.error}" class="alert alert-danger" role="alert">
                     Invalid username and password.
