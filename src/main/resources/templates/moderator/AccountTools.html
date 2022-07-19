@@ -42,7 +42,10 @@
                     <p th:unless="*{user.enabled}">❌Account Disabled</p>
                 </td>
                 <td>
-                    <form th:action="@{|/Wiki/${page.id}/lock|}" method="post">
+                    <form th:action="@{|/Accounts/${user.id}/unlock|}" method="post" th:if="*{user.isLocked}">
+                        <button type="submit" class="btn btn-success btn-sm">Unlock</button>
+                    </form>
+                    <form th:action="@{|/Accounts/${user.id}/lock|}" method="post" th:unless="*{user.isLocked}">
                         <button type="submit" class="btn btn-danger btn-sm">Lock</button>
                     </form>
                 </td>

@@ -152,6 +152,31 @@ public class FrontEndController {
         return "moderator/AccountTools";
     }
 
+    @RequestMapping(value = "/Accounts/{accountId}/lock", method = RequestMethod.POST)
+    public String lockAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
+        User user = userService.loadUserObjectById(accountId);
+        if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
+            userService.lock(user, true);
+        }else{
+            System.out.println("Invalid Permissions");
+        }
+
+        //redirectAttributes.addFlashAttribute("flash",new FlashMessage("Wiki Page deleted!", FlashMessage.Status.SUCCESS));
+        return "redirect:/COMT/Accounts";
+    }
+
+    @RequestMapping(value = "/Accounts/{accountId}/unlock", method = RequestMethod.POST)
+    public String unlockAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
+        User user = userService.loadUserObjectById(accountId);
+        if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
+            userService.lock(user, false);
+        }else{
+            System.out.println("Invalid Permissions");
+        }
+
+        //redirectAttributes.addFlashAttribute("flash",new FlashMessage("Wiki Page deleted!", FlashMessage.Status.SUCCESS));
+        return "redirect:/COMT/Accounts";
+    }
     //Main
     @GetMapping("/")
     public String getHome(Model model, Principal principal, RedirectAttributes redirectAttributes){

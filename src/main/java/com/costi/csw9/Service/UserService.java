@@ -36,6 +36,10 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MESSAGE, username)));
     }
 
+    public User loadUserObjectById(Long id) throws UsernameNotFoundException {
+        return userRepository.findById(id);
+    }
+
     public List<User> loadAll(){
         return userRepository.findAll();
     }
