@@ -2,6 +2,7 @@ package com.costi.csw9.Service;
 
 import com.costi.csw9.Model.User;
 import com.costi.csw9.Model.ConfirmationToken;
+import com.costi.csw9.Model.WikiPage;
 import com.costi.csw9.Repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -80,6 +81,14 @@ public class UserService implements UserDetailsService {
 
     public void enableUser(Long id) {
         userRepository.enableUser(id);
+    }
+
+    public void enable(User user, boolean enable) {
+        userRepository.enable(user.getId(), enable);
+    }
+
+    public void lock(User user, boolean lock) {
+        userRepository.lock(user.getId(), lock);
     }
 
     public void updateUser(User user){
