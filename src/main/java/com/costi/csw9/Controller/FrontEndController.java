@@ -118,11 +118,11 @@ public class FrontEndController {
             redirectAttributes.addFlashAttribute("user", user);
 
             // Redirect back to the form
-            return "redirect:/SignUp";
+            return "redirect:/";
         }
         if(user.getRole().name().equals("ADMIN")){
             registrationService.registerAdmin(user);
-            return "main/Home";
+            return "redirect:/";
         }
         registrationService.registerUser(user);
         redirectAttributes.addFlashAttribute("flash",new FlashMessage("✅ Costi Account Created!", "Please sign in to continue.", FlashMessage.Status.SUCCESS));
@@ -130,17 +130,53 @@ public class FrontEndController {
     }
 
     //Moderator
-    @GetMapping("/COMT")
-    public String getCostiOnlineModeratorTools(Model model, Principal principal){
+    @GetMapping("/COMT/Wiki")
+    public String getCostiOnlineWikiTools(Model model, Principal principal){
 
         model.addAttribute("user", getCurrentUser(principal));
         model.addAttribute("loggedIn", principal != null);
         model.addAttribute("disabled", wikiService.getByApproval(false));
         model.addAttribute("enabled", wikiService.getByApproval(true));
         model.addAttribute("theme", choseTheme());
-        return "moderator/ModeratorTools";
+        return "moderator/WikiTools";
     }
 
+    @GetMapping("/COMT/Accounts")
+    public String getCostiOnlineAccountTools(Model model, Principal principal){
+
+        model.addAttribute("user", getCurrentUser(principal));
+        model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("theme", choseTheme());
+
+        model.addAttribute("all", userService.loadAll());
+        return "moderator/AccountTools";
+    }
+
+    @RequestMapping(value = "/Accounts/{accountId}/lock", method = RequestMethod.POST)
+    public String lockAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
+        User user = userService.loadUserObjectById(accountId);
+        if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
+            userService.lock(user, true);
+        }else{
+            System.out.println("Invalid Permissions");
+        }
+
+        //redirectAttributes.addFlashAttribute("flash",new FlashMessage("Wiki Page deleted!", FlashMessage.Status.SUCCESS));
+        return "redirect:/COMT/Accounts";
+    }
+
+    @RequestMapping(value = "/Accounts/{accountId}/unlock", method = RequestMethod.POST)
+    public String unlockAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
+        User user = userService.loadUserObjectById(accountId);
+        if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
+            userService.lock(user, false);
+        }else{
+            System.out.println("Invalid Permissions");
+        }
+
+        //redirectAttributes.addFlashAttribute("flash",new FlashMessage("Wiki Page deleted!", FlashMessage.Status.SUCCESS));
+        return "redirect:/COMT/Accounts";
+    }
     //Main
     @GetMapping("/")
     public String getHome(Model model, Principal principal, RedirectAttributes redirectAttributes){
@@ -236,7 +272,7 @@ public class FrontEndController {
         }
 
         //redirectAttributes.addFlashAttribute("flash",new FlashMessage("Wiki Page deleted!", FlashMessage.Status.SUCCESS));
-        return "redirect:/COMT";
+        return "redirect:/COMT/Wiki";
     }
     @RequestMapping(value = "/Wiki/{PageId}/enable", method = RequestMethod.POST)
     public String enableWikiPage(@PathVariable Long PageId, Principal principal, RedirectAttributes redirectAttributes) {
@@ -248,7 +284,7 @@ public class FrontEndController {
         }
 
         //redirectAttributes.addFlashAttribute("flash",new FlashMessage("Wiki Page deleted!", FlashMessage.Status.SUCCESS));
-        return "redirect:/COMT";
+        return "redirect:/COMT/Wiki";
     }
 
     @RequestMapping(value = "/Wiki/{PageId}/disable", method = RequestMethod.POST)
@@ -261,7 +297,7 @@ public class FrontEndController {
         }
 
         //redirectAttributes.addFlashAttribute("flash",new FlashMessage("Wiki Page deleted!", FlashMessage.Status.SUCCESS));
-        return "redirect:/COMT";
+        return "redirect:/COMT/Wiki";
     }
     @RequestMapping("/Wiki/{PageId}/edit")
     public String getEditWiki(@PathVariable Long PageId, Model model, Principal principal, RedirectAttributes redirectAttributes){
@@ -298,7 +334,7 @@ public class FrontEndController {
 
         //Redirect depending on type of user
         if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
-            return "redirect:/COMT";
+            return "redirect:/COMT/Wiki";
         }else{
             return "redirect:/Wiki/" + wikiPage.getId() + "/view";
         }

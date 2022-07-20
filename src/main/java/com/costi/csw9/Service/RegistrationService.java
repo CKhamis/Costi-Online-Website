@@ -116,6 +116,6 @@ public class RegistrationService {
         }
 
         confirmationTokenService.setConfirmedAt(token);
-        userService.enableUser(confirmationToken.getUser().getId());
+        userService.enable(confirmationToken.getUser(), true);
     }
 }

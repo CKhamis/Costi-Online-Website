@@ -49,24 +49,6 @@ public class UserDaoImpl implements UserRepository{
     }
 
     @Override
-    public void enableUser(Long id) {
-        // Open a session
-        Session session = sessionFactory.openSession();
-
-        // Get user
-        User user = findById(id);
-
-        // Enable
-        user.setEnabled(true);
-
-        //Save
-        save(user);
-
-        // Close the session
-        session.close();
-    }
-
-    @Override
     public List<User> findAll() {
         // Open session
         Session session = sessionFactory.openSession();
@@ -108,7 +90,7 @@ public class UserDaoImpl implements UserRepository{
         session.close();
     }
 
-    //TODO: test this
+    //TODO: this does not work if owns wiki pages!
     @Override
     public void delete(User user) {
         // Open a session
@@ -127,5 +109,41 @@ public class UserDaoImpl implements UserRepository{
         session.close();
 
         System.out.println("User was deleted!");
+    }
+
+    @Override
+    public void enable(Long id, boolean enable) {
+        // Open a session
+        Session session = sessionFactory.openSession();
+
+        // Get user
+        User user = findById(id);
+
+        // Enable
+        user.setEnabled(enable);
+
+        //Save
+        save(user);
+
+        // Close the session
+        session.close();
+    }
+
+    @Override
+    public void lock(Long id, boolean lock) {
+        // Open a session
+        Session session = sessionFactory.openSession();
+
+        // Get user
+        User user = findById(id);
+
+        // Lock
+        user.setIsLocked(lock);
+
+        //Save
+        save(user);
+
+        // Close the session
+        session.close();
     }
 }
