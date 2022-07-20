@@ -131,7 +131,7 @@ public class FrontEndController {
 
     //Moderator
     @GetMapping("/COMT/Wiki")
-    public String getCostiOnlineWikiTools(Model model, Principal principal){
+    public String getCostiOnlineWikiTools(Model model, Principal principal, RedirectAttributes redirectAttributes){
 
         model.addAttribute("user", getCurrentUser(principal));
         model.addAttribute("loggedIn", principal != null);
@@ -295,10 +295,11 @@ public class FrontEndController {
         if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
             wikiService.delete(page);
         }else{
+            redirectAttributes.addFlashAttribute("flash",new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
             System.out.println("Invalid Permissions");
         }
 
-        //redirectAttributes.addFlashAttribute("flash",new FlashMessage("Wiki Page deleted!", FlashMessage.Status.SUCCESS));
+        redirectAttributes.addFlashAttribute("flash",new FlashMessage("Wiki Page deleted!", "Page is no longer accessible nor recoverable.", FlashMessage.Status.SUCCESS));
         return "redirect:/COMT/Wiki";
     }
     @RequestMapping(value = "/Wiki/{PageId}/enable", method = RequestMethod.POST)
@@ -307,10 +308,11 @@ public class FrontEndController {
         if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
             wikiService.enable(page, true);
         }else{
+            redirectAttributes.addFlashAttribute("flash",new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
             System.out.println("Invalid Permissions");
         }
 
-        //redirectAttributes.addFlashAttribute("flash",new FlashMessage("Wiki Page deleted!", FlashMessage.Status.SUCCESS));
+        redirectAttributes.addFlashAttribute("flash",new FlashMessage("Wiki Page Published!", "Page is now accessible by non-administrators on the Costipedia page", FlashMessage.Status.SUCCESS));
         return "redirect:/COMT/Wiki";
     }
 
@@ -320,10 +322,11 @@ public class FrontEndController {
         if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
             wikiService.enable(page, false);
         }else{
+            redirectAttributes.addFlashAttribute("flash",new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
             System.out.println("Invalid Permissions");
         }
 
-        //redirectAttributes.addFlashAttribute("flash",new FlashMessage("Wiki Page deleted!", FlashMessage.Status.SUCCESS));
+        redirectAttributes.addFlashAttribute("flash",new FlashMessage("Wiki Page disabled!", "Page is no longer accessible by public.", FlashMessage.Status.SUCCESS));
         return "redirect:/COMT/Wiki";
     }
     @RequestMapping("/Wiki/{PageId}/edit")
@@ -361,6 +364,7 @@ public class FrontEndController {
 
         //Redirect depending on type of user
         if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
+            redirectAttributes.addFlashAttribute("flash",new FlashMessage("Wiki Page Edited!", "Page has been updated.", FlashMessage.Status.SUCCESS));
             return "redirect:/COMT/Wiki";
         }else{
             return "redirect:/Wiki/" + wikiPage.getId() + "/view";
