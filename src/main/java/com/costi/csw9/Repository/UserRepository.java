@@ -14,11 +14,9 @@ import java.util.Optional;
 public interface UserRepository {
     User findById(Long id);
     Optional<User> findByEmail(String email);
-    void enableUser(Long id);
     List<User> findAll();
     void save(User user);
     void delete(User user);
-
     void enable(Long id, boolean enable);
     void lock(Long id, boolean lock);
 }

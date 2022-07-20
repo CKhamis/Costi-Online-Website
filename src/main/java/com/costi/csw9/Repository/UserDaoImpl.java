@@ -49,24 +49,6 @@ public class UserDaoImpl implements UserRepository{
     }
 
     @Override
-    public void enableUser(Long id) {
-        // Open a session
-        Session session = sessionFactory.openSession();
-
-        // Get user
-        User user = findById(id);
-
-        // Enable
-        user.setEnabled(true);
-
-        //Save
-        save(user);
-
-        // Close the session
-        session.close();
-    }
-
-    @Override
     public List<User> findAll() {
         // Open session
         Session session = sessionFactory.openSession();
@@ -149,7 +131,7 @@ public class UserDaoImpl implements UserRepository{
 
     @Override
     public void lock(Long id, boolean lock) {
-// Open a session
+        // Open a session
         Session session = sessionFactory.openSession();
 
         // Get user

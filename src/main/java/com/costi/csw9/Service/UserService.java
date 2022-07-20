@@ -83,10 +83,6 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public void enableUser(Long id) {
-        userRepository.enableUser(id);
-    }
-
     public void enable(User user, boolean enable) {
         userRepository.enable(user.getId(), enable);
     }
