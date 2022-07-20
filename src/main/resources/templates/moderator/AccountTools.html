@@ -10,6 +10,7 @@
             <p class="col-md-8 fs-4">Manage Users</p>
         </div>
     </div>
+    <div th:replace="Components :: flash" class="mt-2"></div>
     <h2 class="fs-2 mb-3">All Users</h2>
     <table class="table table-bordered table-sm align-middle table-hover table-dark">
         <thead>
@@ -20,6 +21,7 @@
                 <th scope="col">Lock</th>
                 <th scope="col">Enabled</th>
                 <th scope="col">Lock Account</th>
+                <th scope="col">Enable Account</th>
             </tr>
         </thead>
         <tbody>
@@ -34,12 +36,12 @@
                     <span class="badge badge-pill bg-dark" th:text="*{user.role}">Other</span>
                 </td>
                 <td>
-                    <p th:if="*{user.isLocked}">🔒Account Locked</p>
-                    <p th:unless="*{user.isLocked}">🔓Account Unlocked</p>
+                    <p th:if="*{user.isLocked}">🔒 Locked</p>
+                    <p th:unless="*{user.isLocked}">🔓 Unlocked</p>
                 </td>
                 <td>
-                    <p th:if="*{user.enabled}">✅Account Enabled</p>
-                    <p th:unless="*{user.enabled}">❌Account Disabled</p>
+                    <p th:if="*{user.enabled}">✅ Enabled</p>
+                    <p th:unless="*{user.enabled}">❌ Disabled</p>
                 </td>
                 <td>
                     <form th:action="@{|/Accounts/${user.id}/unlock|}" method="post" th:if="*{user.isLocked}">
@@ -47,6 +49,14 @@
                     </form>
                     <form th:action="@{|/Accounts/${user.id}/lock|}" method="post" th:unless="*{user.isLocked}">
                         <button type="submit" class="btn btn-danger btn-sm">Lock</button>
+                    </form>
+                </td>
+                <td>
+                    <form th:action="@{|/Accounts/${user.id}/disable|}" method="post" th:if="*{user.isEnabled}">
+                        <button type="submit" class="btn btn-danger btn-sm">Disable</button>
+                    </form>
+                    <form th:action="@{|/Accounts/${user.id}/enable|}" method="post" th:unless="*{user.isEnabled}">
+                        <button type="submit" class="btn btn-success btn-sm">Enable</button>
                     </form>
                 </td>
             </tr>

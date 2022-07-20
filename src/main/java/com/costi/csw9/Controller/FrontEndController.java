@@ -142,7 +142,7 @@ public class FrontEndController {
     }
 
     @GetMapping("/COMT/Accounts")
-    public String getCostiOnlineAccountTools(Model model, Principal principal){
+    public String getCostiOnlineAccountTools(Model model, Principal principal, RedirectAttributes redirectAttributes){
 
         model.addAttribute("user", getCurrentUser(principal));
         model.addAttribute("loggedIn", principal != null);
@@ -158,10 +158,10 @@ public class FrontEndController {
         if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
             userService.lock(user, true);
         }else{
+            redirectAttributes.addFlashAttribute("flash",new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
             System.out.println("Invalid Permissions");
         }
-
-        //redirectAttributes.addFlashAttribute("flash",new FlashMessage("Wiki Page deleted!", FlashMessage.Status.SUCCESS));
+        redirectAttributes.addFlashAttribute("flash",new FlashMessage("Account Locked", user.getFirstName() + " " + user.getLastName() + " is locked and can no longer log in.", FlashMessage.Status.SUCCESS));
         return "redirect:/COMT/Accounts";
     }
 
@@ -171,10 +171,37 @@ public class FrontEndController {
         if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
             userService.lock(user, false);
         }else{
+            redirectAttributes.addFlashAttribute("flash",new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
             System.out.println("Invalid Permissions");
         }
+        redirectAttributes.addFlashAttribute("flash",new FlashMessage("Account Unlocked!", user.getFirstName() + " " + user.getLastName() + " is now unlocked.", FlashMessage.Status.SUCCESS));
 
-        //redirectAttributes.addFlashAttribute("flash",new FlashMessage("Wiki Page deleted!", FlashMessage.Status.SUCCESS));
+        return "redirect:/COMT/Accounts";
+    }
+
+    @RequestMapping(value = "/Accounts/{accountId}/enable", method = RequestMethod.POST)
+    public String enableAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
+        User user = userService.loadUserObjectById(accountId);
+        if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
+            userService.enable(user, true);
+        }else{
+            redirectAttributes.addFlashAttribute("flash",new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
+            System.out.println("Invalid Permissions");
+        }
+        redirectAttributes.addFlashAttribute("flash",new FlashMessage("Account Enabled!", user.getFirstName() + " " + user.getLastName() + " is now enabled.", FlashMessage.Status.SUCCESS));
+        return "redirect:/COMT/Accounts";
+    }
+
+    @RequestMapping(value = "/Accounts/{accountId}/disable", method = RequestMethod.POST)
+    public String disableAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
+        User user = userService.loadUserObjectById(accountId);
+        if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
+            userService.enable(user, false);
+        }else{
+            redirectAttributes.addFlashAttribute("flash",new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
+            System.out.println("Invalid Permissions");
+        }
+        redirectAttributes.addFlashAttribute("flash",new FlashMessage("Account Disabled!", user.getFirstName() + " " + user.getLastName() + " is disabled.", FlashMessage.Status.SUCCESS));
         return "redirect:/COMT/Accounts";
     }
     //Main
