@@ -49,6 +49,8 @@ public class FrontEndController {
         LocalDate today = LocalDate.now();
         if(today.getMonth().name().equalsIgnoreCase("July")){
             return "/XpTheme.css";
+        }else if(today.getMonthValue() > 7 &&  today.getMonthValue() <= 12){
+            return "/WhiteTheme.css";
         }else{
             return "/Styles.css";
         }
@@ -371,6 +373,15 @@ public class FrontEndController {
         }
 
     }
+    //Media
+    @GetMapping("/Media")
+    public String getMedia(Model model, Principal principal){
+        model.addAttribute("user", getCurrentUser(principal));
+        model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("theme", choseTheme());
+        return "main/Media";
+    }
+
 
     //Minecraft
     @GetMapping("/Minecraft")

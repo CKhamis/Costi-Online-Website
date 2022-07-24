@@ -22,7 +22,7 @@
                 <img th:src="@{/icons/Logo.png}" alt="" width="30" height="30" class="d-inline-block align-text-top">
                 <strong>Costi Online</strong>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="true" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="navbar-collapse collapse" id="navbarToggleExternalContent">
@@ -30,7 +30,7 @@
                     <a class="nav-link px-3" aria-current="page" href="/">Home</a>
                     <a class="nav-link px-3" href="/Projects">Projects</a>
                     <a class="nav-link px-3" href="#">Services</a>
-                    <a class="nav-link px-3" href="#">Media</a>
+                    <a class="nav-link px-3" href="/Media">Media</a>
                     <a class="nav-link px-3" href="/Wiki">Wiki</a>
                     <a class="nav-link px-3" href="/Minecraft">Minecraft</a>
                 </div>
@@ -40,7 +40,7 @@
                 <a href="/Account" class="btn btn-primary">Sign In</a>
             </div>
             <div th:class="'' + (*{loggedIn}? 'd-flex' : 'd-none')">
-                <a class="nav-link px-3 text-white fw-bold" href="/Account" th:text="${user.firstName} + ' ' + ${user.lastName}">Account</a>
+                <a class="nav-link px-3 text-1 fw-bold" href="/Account" th:text="${user.firstName} + ' ' + ${user.lastName}">Account</a>
                 <form th:action="@{/logout}" method="post">
                     <button type="submit" value="Sign Out" class="btn btn-primary">Sign Out</button>
                 </form>
@@ -80,29 +80,29 @@
                 <div class="col">
                     <h5 class="fw-bold">Information</h5>
                     <ul class="flex-column">
-                        <li class="nav-item mb-2"><a href="/" class="nav-link p-0 text-light">Home</a></li>
-                        <li class="nav-item mb-2"><a href="/Projects" class="nav-link p-0 text-light">Project Showcase</a></li>
-                        <li class="nav-item mb-2"><a href="/Services" class="nav-link p-0 text-light">Services</a></li>
-                        <li class="nav-item mb-2"><a href="/Wiki" class="nav-link p-0 text-light">Wiki</a></li>
+                        <li class="nav-item mb-2"><a href="/" class="nav-link p-0 text-1">Home</a></li>
+                        <li class="nav-item mb-2"><a href="/Projects" class="nav-link p-0 text-1">Project Showcase</a></li>
+                        <li class="nav-item mb-2"><a href="/Services" class="nav-link p-0 text-1">Services</a></li>
+                        <li class="nav-item mb-2"><a href="/Wiki" class="nav-link p-0 text-1">Wiki</a></li>
                     </ul>
                 </div>
 
                 <div class="col">
                     <h5 class="fw-bold">Minecraft</h5>
                     <ul class="flex-column">
-                        <li class="nav-item mb-2"><a href="/Minecraft/vote/BallotInfo#general" class="nav-link p-0 text-light">Minecraft Home</a></li>
-                        <li class="nav-item mb-2"><a href="/Minecraft/vote" class="nav-link p-0 text-light">Voting Center</a></li>
-                        <li class="nav-item mb-2"><a href="/Minecraft/vote/BallotInfo#general" class="nav-link p-0 text-light">Election Rules</a></li>
-                        <li class="nav-item mb-2"><a href="/Minecraft/gov" class="nav-link p-0 text-light">Server Government</a></li>
-                        <li class="nav-item mb-2"><a th:href="@{/downloads/The Costitution.docx}" download="Costitution.docx" class="nav-link p-0 text-light">Download Costitution</a></li>
+                        <li class="nav-item mb-2"><a href="/Minecraft/vote/BallotInfo#general" class="nav-link p-0 text-1">Minecraft Home</a></li>
+                        <li class="nav-item mb-2"><a href="/Minecraft/vote" class="nav-link p-0 text-1">Voting Center</a></li>
+                        <li class="nav-item mb-2"><a href="/Minecraft/vote/BallotInfo#general" class="nav-link p-0 text-1">Election Rules</a></li>
+                        <li class="nav-item mb-2"><a href="/Minecraft/gov" class="nav-link p-0 text-1">Server Government</a></li>
+                        <li class="nav-item mb-2"><a th:href="@{/downloads/The Costitution.docx}" download="Costitution.docx" class="nav-link p-0 text-1">Download Costitution</a></li>
                     </ul>
                 </div>
 
                 <div class="col">
                     <h5 class="fw-bold">Costi Online</h5>
                     <ul class="flex-column">
-                        <li class="nav-item mb-2"><a href="/Account" class="nav-link p-0 text-light">Account Settings</a></li>
-                        <li class="nav-item mb-2"><a href="/Wiki/Create" class="nav-link p-0 text-light">Add to Costipedia</a></li>
+                        <li class="nav-item mb-2"><a href="/Account" class="nav-link p-0 text-1">Account Settings</a></li>
+                        <li class="nav-item mb-2"><a href="/Wiki/Create" class="nav-link p-0 text-1">Add to Costipedia</a></li>
                     </ul>
                 </div>
             </div>

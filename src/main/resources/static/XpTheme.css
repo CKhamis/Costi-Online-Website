@@ -75,3 +75,7 @@ ul {
 td p{
     margin:0px;
 }
+
+.navbar-nav .nav-link{
+    color:rgba(255,255,255,.55);
+}

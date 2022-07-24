@@ -55,3 +55,11 @@ ul {
 .nav{
     background-color: #212529;
 }
+
+.navbar-nav .nav-link{
+    color: rgba(255,255,255,.55);
+}
+
+.navbar-nav .nav-link, .navbar-brand{
+    color:white;
+}
