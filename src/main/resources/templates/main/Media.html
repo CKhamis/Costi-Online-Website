@@ -8,9 +8,10 @@
     <div class="container-fluid p-0 overflow-hidden d-none d-lg-block bg-black" style="height:600px">
         <div class="position-absolute p-5" style="z-index:1;height:600px; width:100%">
             <div class="container-fluid" style="padding-top:145px;">
-                <h1 class="display-5 fw-bold">Costi Media - Celebrating over 10 Years of History!</h1>
+                <img th:src="@{/icons/CM White.png}" class="img-fluid mb-2" style="width:25%;"/>
+                <h3 class="fw-bold">10+ Years of Experience</h3>
                 <p class="col-md-8 fs-4">Experience a taste in the evolution of my video production skills and ideas starting from 2011 and continuing to this day.</p>
-                <div class="btn-group pb-4" role="group" aria-label="Basic example">
+                <div class="btn-group pb-4" role="group">
                     <a href="https://www.youtube.com/channel/UCNBpX9wlGcB59vnv1pdogTA" class="btn btn-primary" aria-current="page">View YouTube Channel</a>
                     <a href="#FAQ" class="btn btn-primary">View Timeline</a>
                 </div>
@@ -24,13 +25,14 @@
 </div>
 
 <!-- Mobile -->
-<div class="container pt-5 mt-5">
-    <div class="p-0 mb-4 border-box d-xs-block d-lg-none bg-black">
-        <div class="container-fluid p-0 overflow-hidden rounded-3" style="height:600px;">
+<div class="container pt-5 d-xs-block d-lg-none mt-5">
+    <div class="p-0 mb-4 border-box bg-black">
+        <div class="container-fluid p-0 overflow-hidden" style="height:600px;">
             <div class="position-absolute p-5 text-white" style="z-index:1;">
-                <h1 class="display-5 fw-bold">Your Government</h1>
-                <p class="col-md-8 fs-4">Curious to find out more about your dyst- I mean democratic government? You have come to the right place. This page contains information regarding the rich history of previous survival worlds and their governments. This page also contains information regarding the current leadership positions of survival world 9.</p>
-                <div class="btn-group pb-4" role="group" aria-label="Basic example">
+                <img th:src="@{/icons/CM White.png}" class="img-fluid mb-2" style="width:80%;"/>
+                <h3 class="fw-bold">10+ Years of Experience</h3>
+                <p class="col-md-8 fs-4">Experience a taste in the evolution of my video production skills and ideas starting from 2011 and continuing to this day.</p>
+                <div class="btn-group pb-4" role="group">
                     <a href="https://www.youtube.com/channel/UCNBpX9wlGcB59vnv1pdogTA" class="btn btn-primary" aria-current="page">View YouTube Channel</a>
                     <a href="#FAQ" class="btn btn-primary">View Timeline</a>
                 </div>
@@ -45,13 +47,12 @@
 
 <main>
     <div class="container mt-3">
-        <div th:replace="Components :: flash" class="mt-2"></div>
         <div class="row mt-2">
             <div class="col col-12 col-lg-4">
                 <div class="border-box text-1 p-4 mb-4">
-                    <h4 class="fw-bold">📖View Costipedia</h4>
-                    <p>Costipedia is a wikipedia like feature that is about Costi</p>
-                    <a href="/Wiki" type="button" class="btn btn-primary btn-sm">Explore Costipedia</a>
+                    <h4 class="fw-bold">⌛View Full History</h4>
+                    <p>View the mostly-complete timeline of Costi Media and how it changed over time</p>
+                    <a href="#beginning" type="button" class="btn btn-primary btn-sm">Jump to Beginning</a>
                 </div>
             </div>
             <div class="col col-12 col-lg-4">
@@ -71,13 +72,28 @@
         </div>
     </div>
 
-    <div class="container px-4 py-5" id="about">
-        <h2 class="pb-2 border-bottom">About this Website</h2>
-        <p class="fs-4">Costi Online is a website dedicated to centralizing my projects, services, history, and more. This website is hand coded my me using Java Spring and Java Hibernate. This website is open source, please see this website's associated GitHub page: <a target="_blank" href="https://github.com/CKhamis/Costi-Online-Website">Costi-Online-Website</a>. Content will be continually added to this website over time. Please stay tuned for more.</p>
-        <p class="fs-4">The projects tab will contain links to see the various computer-related projects I have made over the years. These projects mostly cover websites and java based applications. Many of these projects are also available on my GitHub page.</p>
-        <p class="fs-4">The services tab will contain access to the various services I have. These services cover some of my skills such as device repair and server hosting. The Wiki tab has information on friend group inside jokes and other information about me personally. The media tab will have video based projects I have made over time. As listed there, many of these video based projects are uploaded to YouTube as well. </p>
-        <p class="fs-4">Finally, the Minecraft tab will take you to information surrounding my new Minecraft server. It will allow players of this world to participate in polls, elections, and learn more about its rich history.</p>
-        <p class="fs-4">To contact website owner, please use the email <a href="mailto:admin@costionline.com">admin@costionline.com</a></p>
+    <div class="container px-4 py-5" id="disclaimer">
+        <h2 class="pb-2 border-bottom">Video Disclaimer</h2>
+        <p class="fs-4">Because Costi Online is a publicly-available website for anybody to see, select videos will either be unavailable to watch or not fully shown. This is to protect the privacy of the actors in the videos and ensure no personal information is released. This means many of the videos I have made (especially from 2011 to 2016) will not be populated. Thank you for understanding.</p>
+    </div>
+
+    <div class="container-fluid">
+        <div class="container mt-5" id="beginning">
+            <div class="p-0 mb-4 border-box bg-black">
+                <div class="container-fluid p-0 overflow-hidden" style="height:100px;">
+                    <div class="position-absolute p-4 text-white" style="z-index:1;">
+                        <h1 class="fw-bold">1️⃣: Costi Inc. Era</h1>
+                    </div>
+                    <video style="width:310%; opacity:.5; margin-left:-400px" autoplay preload="true" loop="loop" muted>
+                        <source th:src="@{/videos/banners/CM Banner.m4v}" type="video/mp4">
+                        video not supported
+                    </video>
+                </div>
+            </div>
+            <div class="container border-bottom">
+                <p class="fs-4">The Costi Inc. Era was the very first stage in Cost Media. Initially starting in 2011, I used to make simple Flash animations following a digital media class I took in 6th grade. I found myself a portable version of Flash 8 back when it was owned by Macromedia and begun my work. It was during this time when I found a passion for creating media. I also bought myself a simple video editor to tinker with. Along with making my first animated logo (see video background on the title of this section), I had made the Terency show, a flash-based school project, begun working on a Flash game, and made a trailer for it.</p>
+            </div>
+        </div>
     </div>
 </main>
 
