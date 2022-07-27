@@ -374,7 +374,7 @@ public class FrontEndController {
 
     }
     //Media
-    @GetMapping("/Media")
+    @GetMapping("/Media-beta")
     public String getMedia(Model model, Principal principal){
         model.addAttribute("user", getCurrentUser(principal));
         model.addAttribute("loggedIn", principal != null);
