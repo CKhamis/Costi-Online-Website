@@ -49,10 +49,8 @@ public class FrontEndController {
         LocalDate today = LocalDate.now();
         if(today.getMonth().name().equalsIgnoreCase("July")){
             return "/XpTheme.css";
-        }else if(today.getMonthValue() > 7 &&  today.getMonthValue() <= 12){
-            return "/WhiteTheme.css";
         }else{
-            return "/Styles.css";
+            return "/main.css";
         }
     }
 
