@@ -18,11 +18,14 @@ public class FrontEndController {
     private RegistrationService registrationService;
     private WikiService wikiService;
 
+    private AnnouncementService announcementService;
+
     @Autowired
-    public FrontEndController(UserService userService, RegistrationService registrationService, WikiService wikiService) {
+    public FrontEndController(UserService userService, RegistrationService registrationService, WikiService wikiService, AnnouncementService announcementService) {
         this.userService = userService;
         this.registrationService = registrationService;
         this.wikiService = wikiService;
+        this.announcementService = announcementService;
     }
     /*
     @GetMapping
@@ -152,6 +155,16 @@ public class FrontEndController {
 
         model.addAttribute("all", userService.loadAll());
         return "moderator/AccountTools";
+    }
+
+    @GetMapping("/COMT/Announcements")
+    public String getCostiOnlineAnnouncementTools(Model model, Principal principal, RedirectAttributes redirectAttributes){
+
+        model.addAttribute("user", getCurrentUser(principal));
+        model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("enabled", announcementService.getByApproval(true));
+        model.addAttribute("theme", choseTheme());
+        return "moderator/AnnouncementTools";
     }
 
     @RequestMapping(value = "/Accounts/{accountId}/lock", method = RequestMethod.POST)
@@ -373,6 +386,7 @@ public class FrontEndController {
         }
 
     }
+
     //Media
     @GetMapping("/Media")
     public String getMedia(Model model, Principal principal){

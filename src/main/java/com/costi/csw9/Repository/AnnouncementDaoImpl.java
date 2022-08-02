@@ -1,15 +1,15 @@
 package com.costi.csw9.Repository;
 
 import com.costi.csw9.Model.Announcement;
-import com.costi.csw9.Model.WikiPage;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
-public class AnnoucenentDaoImpl implements AnnouncementRepository{
+@Repository
+public class AnnouncementDaoImpl implements AnnouncementRepository{
 
     @Autowired
     private SessionFactory sessionFactory;
@@ -37,7 +37,7 @@ public class AnnoucenentDaoImpl implements AnnouncementRepository{
         Session session = sessionFactory.openSession();
 
         // Get Results
-        Query query = session.createQuery("SELECT e FROM Announcement e WHERE enabled = " + enabled);
+        Query query = session.createQuery("SELECT e FROM Announcement e WHERE enable = " + enabled);
 
         // Execute JPA
         List<Announcement> res = query.getResultList();

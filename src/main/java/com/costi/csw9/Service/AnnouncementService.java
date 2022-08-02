@@ -3,10 +3,11 @@ package com.costi.csw9.Service;
 import com.costi.csw9.Model.Announcement;
 import com.costi.csw9.Repository.AnnouncementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
+@Service
 public class AnnouncementService {
     @Autowired
     private final AnnouncementRepository announcementRepository;
