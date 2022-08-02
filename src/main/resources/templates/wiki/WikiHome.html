@@ -23,7 +23,7 @@
             <h4 th:case="*"             class="fs-4" th:text="*{category}">title</h4> <!--th:text="|&#10067; Other|" -->
             <hr />
             <ul th:each="page : ${all}">
-                <li th:if="${category.name == page.category}" class="my-0"><p class="fs-6"><a th:href="'/Wiki/' + *{page.Id} + '/view'"  th:text="*{page.title}" class="py-1 text-light">title</a></p></li>
+                <li th:if="${category.name == page.category}" class="my-0"><p class="fs-6"><a th:href="'/Wiki/' + *{page.Id} + '/view'"  th:text="*{page.title}" class="py-1 text-1">title</a></p></li>
             </ul>
         </div>
     </div>
