@@ -167,6 +167,22 @@ public class FrontEndController {
         return "moderator/AnnouncementTools";
     }
 
+    // TODO: block access for non admins
+    @GetMapping("/COMT/Announcements/Create")
+    public String getCreateAnnouncement(Model model, Principal principal, RedirectAttributes redirectAttributes){
+        if(!model.containsAttribute("announcement")) {
+            model.addAttribute("announcement",new Announcement());
+        }
+        model.addAttribute("action","/COMT/Announcements/Create");
+        model.addAttribute("title", "Create New Announcement");
+        model.addAttribute("theme", choseTheme());
+
+
+        model.addAttribute("user", getCurrentUser(principal));
+        model.addAttribute("loggedIn", principal != null);
+        return "moderator/AnnouncementMaker";
+    }
+
     @RequestMapping(value = "/Accounts/{accountId}/lock", method = RequestMethod.POST)
     public String lockAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
         User user = userService.loadUserObjectById(accountId);
