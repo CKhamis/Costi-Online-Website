@@ -111,7 +111,7 @@ public class AnnouncementDaoImpl implements AnnouncementRepository{
         session.beginTransaction();
 
         // Execute update
-        Query query = session.createQuery("UPDATE Announcement c SET c.enabled = " + enable + " WHERE c.id = " + id);
+        Query query = session.createQuery("UPDATE Announcement c SET c.enable = " + enable + " WHERE c.id = " + id);
         query.executeUpdate();
 
         // Commit the transaction
