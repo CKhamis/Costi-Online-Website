@@ -92,6 +92,13 @@
 
 <main>
     <div class="container mt-3">
+        <h3 th:if="${isAnnouncement}">📢Announcements</h3>
+        <div th:each="message : ${announcements}">
+            <div th:replace="Components :: message" class="mt-2"></div>
+        </div>
+    </div>
+
+    <div class="container mt-3">
         <div th:replace="Components :: flash" class="mt-2"></div>
         <div class="row mt-2">
             <div class="col col-12 col-lg-4">

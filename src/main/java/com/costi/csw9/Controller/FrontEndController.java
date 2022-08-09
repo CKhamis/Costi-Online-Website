@@ -336,6 +336,10 @@ public class FrontEndController {
         model.addAttribute("user", getCurrentUser(principal));
         model.addAttribute("loggedIn", principal != null);
         model.addAttribute("theme", choseTheme());
+
+        List<Announcement> announcements = announcementService.getByApproval(true);
+        model.addAttribute("announcements", announcements);
+        model.addAttribute("isAnnouncement", announcements.size() > 0);
         return "main/Home";
     }
     @GetMapping("/Projects")
