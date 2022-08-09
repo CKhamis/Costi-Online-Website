@@ -61,6 +61,12 @@
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 
+<div th:fragment="message" th:if="${message != null}" class="alert alert-dismissible fade show" style="background-color:rgba(0,0,0,.1); border: 1px black solid;">
+    <div class="fw-bold d-inline" th:text="${message.title}"></div>
+    <div class="d-inline" th:text="${message.body}"></div>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
 <div th:fragment="footer" class="text-1" id="footer">
     <div class="container py-5">
         <footer>
