@@ -13,3 +13,5 @@ View a mostly complete repository of my previous coding based projects. I have i
 My website is designed to have an automatically changing theme based on the date of the year. For example, during July, my website is themed after Windows XP
 ### Moderator Tools
 I have implemented a moderator terminal in my website that allows me to change specific things. For example, I can enable or disable user accounts. I can also edit/delete/publish wiki articles.
+### Announcements
+Costi Online now features announcements. Announcements can be created, edited, privated, published, and deleted all from the moderator terminal. They will appear on the home page and are dismissable.
