@@ -168,7 +168,6 @@ public class FrontEndController {
         return "moderator/AnnouncementTools";
     }
 
-    // TODO: block access for non admins
     @GetMapping("/COMT/Announcements/Create")
     public String getCreateAnnouncement(Model model, Principal principal, RedirectAttributes redirectAttributes){
         if(!model.containsAttribute("announcement")) {
