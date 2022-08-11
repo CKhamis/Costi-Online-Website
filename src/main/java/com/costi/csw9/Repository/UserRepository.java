@@ -19,4 +19,5 @@ public interface UserRepository {
     void delete(User user);
     void enable(Long id, boolean enable);
     void lock(Long id, boolean lock);
+    void demote(User user);
 }

@@ -146,4 +146,25 @@ public class UserDaoImpl implements UserRepository{
         // Close the session
         session.close();
     }
+
+    @Override
+    public void demote(User user) {
+        // Demote user
+        user.setRole(UserRole.USER);
+
+        // Open a session
+        Session session = sessionFactory.openSession();
+
+        // Begin a transaction
+        session.beginTransaction();
+
+        // Save the person
+        session.saveOrUpdate(user);
+
+        // Commit the transaction
+        session.getTransaction().commit();
+
+        // Close the session
+        session.close();
+    }
 }
