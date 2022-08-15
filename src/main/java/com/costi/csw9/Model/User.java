@@ -91,6 +91,6 @@ public class User implements UserDetails {
     }
 
     public boolean isAdmin(){
-        return this.getRole().equals(UserRole.ADMIN);
+        return this.getRole().equals(UserRole.ADMIN) || this.getRole().equals(UserRole.OWNER);
     }
 }

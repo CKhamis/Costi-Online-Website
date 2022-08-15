@@ -115,4 +115,8 @@ public class UserService implements UserDetailsService {
             return true;
         }
     }
+
+    public boolean isEmpty(){
+        return userRepository.findAll().isEmpty();
+    }
 }
