@@ -204,7 +204,7 @@ public class FrontEndController {
     @RequestMapping(value = "/COMT/Announcements/{id}/enable", method = RequestMethod.POST)
     public String enableAnnouncement(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes) {
         Announcement announcement = announcementService.findById(id);
-        if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
+        if(getCurrentUser(principal).isAdmin()){
             announcementService.enable(announcement, true);
         }else{
             redirectAttributes.addFlashAttribute("flash",new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
@@ -218,7 +218,7 @@ public class FrontEndController {
     @RequestMapping(value = "/COMT/Announcements/{id}/disable", method = RequestMethod.POST)
     public String disableAnnouncement(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes) {
         Announcement announcement = announcementService.findById(id);
-        if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
+        if(getCurrentUser(principal).isAdmin()){
             announcementService.enable(announcement, false);
         }else{
             redirectAttributes.addFlashAttribute("flash",new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
@@ -266,7 +266,7 @@ public class FrontEndController {
     @RequestMapping(value = "/COMT/Announcements/{id}/delete", method = RequestMethod.POST)
     public String deleteAnnouncement(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes) {
         Announcement announcement = announcementService.findById(id);
-        if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
+        if(getCurrentUser(principal).isAdmin()){
             announcementService.delete(announcement);
         }else{
             redirectAttributes.addFlashAttribute("flash",new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
@@ -280,7 +280,7 @@ public class FrontEndController {
     @RequestMapping(value = "/Accounts/{accountId}/lock", method = RequestMethod.POST)
     public String lockAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
         User user = userService.loadUserObjectById(accountId);
-        if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
+        if(getCurrentUser(principal).isAdmin()){
             userService.lock(user, true);
         }else{
             redirectAttributes.addFlashAttribute("flash",new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
@@ -293,7 +293,7 @@ public class FrontEndController {
     @RequestMapping(value = "/Accounts/{accountId}/unlock", method = RequestMethod.POST)
     public String unlockAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
         User user = userService.loadUserObjectById(accountId);
-        if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
+        if(getCurrentUser(principal).isAdmin()){
             userService.lock(user, false);
         }else{
             redirectAttributes.addFlashAttribute("flash",new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
@@ -307,7 +307,7 @@ public class FrontEndController {
     @RequestMapping(value = "/Accounts/{accountId}/enable", method = RequestMethod.POST)
     public String enableAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
         User user = userService.loadUserObjectById(accountId);
-        if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
+        if(getCurrentUser(principal).isAdmin()){
             userService.enable(user, true);
         }else{
             redirectAttributes.addFlashAttribute("flash",new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
@@ -317,10 +317,25 @@ public class FrontEndController {
         return "redirect:/COMT/Accounts";
     }
 
+    @RequestMapping(value = "/Accounts/{accountId}/demote", method = RequestMethod.POST)
+    public String demoteAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
+        User user = userService.loadUserObjectById(accountId);
+        if(getCurrentUser(principal).isAdmin()){
+            if(!userService.demoteUser(user)){
+                redirectAttributes.addFlashAttribute("flash",new FlashMessage("Account not a moderator!", "Please select a different account.", FlashMessage.Status.DANGER));
+            }
+        }else{
+            redirectAttributes.addFlashAttribute("flash",new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
+            System.out.println("Invalid Permissions");
+        }
+        redirectAttributes.addFlashAttribute("flash",new FlashMessage("Account Demoted!", user.getFirstName() + " " + user.getLastName() + " is now enabled.", FlashMessage.Status.SUCCESS));
+        return "redirect:/COMT/Accounts";
+    }
+
     @RequestMapping(value = "/Accounts/{accountId}/disable", method = RequestMethod.POST)
     public String disableAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
         User user = userService.loadUserObjectById(accountId);
-        if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
+        if(getCurrentUser(principal).isAdmin()){
             userService.enable(user, false);
         }else{
             redirectAttributes.addFlashAttribute("flash",new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
@@ -406,10 +421,10 @@ public class FrontEndController {
         User current = getCurrentUser(principal);
         WikiPage wiki = wikiService.loadById(PageId);
 
-        model.addAttribute("showEdit", (current.getRole().equals(UserRole.ADMIN) || wiki.getAuthor().equals(current)));
-        model.addAttribute("isAdmin", current.getRole().equals(UserRole.ADMIN));
+        model.addAttribute("showEdit", (current.isAdmin() || wiki.getAuthor().equals(current)));
+        model.addAttribute("isAdmin", current.isAdmin());
         model.addAttribute("user", current);
-        model.addAttribute("isViewable", current.getRole().equals(UserRole.ADMIN) || wiki.isEnabled());
+        model.addAttribute("isViewable", current.isAdmin() || wiki.isEnabled());
         model.addAttribute("loggedIn", principal != null);
 
         model.addAttribute("wiki", wiki);
@@ -421,7 +436,7 @@ public class FrontEndController {
     @RequestMapping(value = "/Wiki/{PageId}/delete", method = RequestMethod.POST)
     public String deleteWikiPage(@PathVariable Long PageId, Principal principal, RedirectAttributes redirectAttributes) {
         WikiPage page = wikiService.loadById(PageId);
-        if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
+        if(getCurrentUser(principal).isAdmin()){
             wikiService.delete(page);
         }else{
             redirectAttributes.addFlashAttribute("flash",new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
@@ -434,7 +449,7 @@ public class FrontEndController {
     @RequestMapping(value = "/Wiki/{PageId}/enable", method = RequestMethod.POST)
     public String enableWikiPage(@PathVariable Long PageId, Principal principal, RedirectAttributes redirectAttributes) {
         WikiPage page = wikiService.loadById(PageId);
-        if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
+        if(getCurrentUser(principal).isAdmin()){
             wikiService.enable(page, true);
         }else{
             redirectAttributes.addFlashAttribute("flash",new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
@@ -448,7 +463,7 @@ public class FrontEndController {
     @RequestMapping(value = "/Wiki/{PageId}/disable", method = RequestMethod.POST)
     public String disableWikiPage(@PathVariable Long PageId, Principal principal, RedirectAttributes redirectAttributes) {
         WikiPage page = wikiService.loadById(PageId);
-        if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
+        if(getCurrentUser(principal).isAdmin()){
             wikiService.enable(page, false);
         }else{
             redirectAttributes.addFlashAttribute("flash",new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
@@ -464,7 +479,7 @@ public class FrontEndController {
         WikiPage page = wikiService.loadById(PageId);
 
         model.addAttribute("page", page);
-        model.addAttribute("isAllowed", (current.getRole().equals(UserRole.ADMIN) || page.getAuthor().equals(current)));
+        model.addAttribute("isAllowed", (current.isAdmin() || page.getAuthor().equals(current)));
         model.addAttribute("action","/Wiki/" + PageId + "/edit");
         model.addAttribute("categories", WikiCategory.values());
         model.addAttribute("title", "Edit Wiki Page");
@@ -492,7 +507,7 @@ public class FrontEndController {
         wikiService.save(wikiPage);
 
         //Redirect depending on type of user
-        if(getCurrentUser(principal).getRole().equals(UserRole.ADMIN)){
+        if(getCurrentUser(principal).isAdmin()){
             redirectAttributes.addFlashAttribute("flash",new FlashMessage("Wiki Page Edited!", "Page has been updated.", FlashMessage.Status.SUCCESS));
             return "redirect:/COMT/Wiki";
         }else{

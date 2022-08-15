@@ -89,4 +89,8 @@ public class User implements UserDetails {
         User otherUser = (User) other;
         return this.getId() == otherUser.getId();
     }
+
+    public boolean isAdmin(){
+        return this.getRole().equals(UserRole.ADMIN);
+    }
 }

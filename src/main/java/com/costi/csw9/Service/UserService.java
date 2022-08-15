@@ -2,6 +2,7 @@ package com.costi.csw9.Service;
 
 import com.costi.csw9.Model.User;
 import com.costi.csw9.Model.ConfirmationToken;
+import com.costi.csw9.Model.UserRole;
 import com.costi.csw9.Model.WikiPage;
 import com.costi.csw9.Repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -103,5 +104,15 @@ public class UserService implements UserDetailsService {
             user.setPassword(encodedPass);
         }
         userRepository.save(user);
+    }
+
+    public boolean demoteUser(User user){
+        if(!user.getRole().equals(UserRole.ADMIN)){
+            //User is already not an admin
+            return false;
+        }else{
+            userRepository.demote(user);
+            return true;
+        }
     }
 }
