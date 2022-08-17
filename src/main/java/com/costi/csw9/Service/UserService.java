@@ -84,12 +84,22 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public void enable(User user, boolean enable) {
+    public boolean enable(User user, boolean enable) {
+        if(enable == false && user.getRole().equals(UserRole.OWNER)){
+            //Cannot be locked out
+            return false;
+        }
         userRepository.enable(user.getId(), enable);
+        return true;
     }
 
-    public void lock(User user, boolean lock) {
+    public boolean lock(User user, boolean lock) {
+        if(user.getRole().equals(UserRole.OWNER)){
+            //Cannot be locked out
+            return false;
+        }
         userRepository.lock(user.getId(), lock);
+        return true;
     }
 
     public void updateUser(User user){

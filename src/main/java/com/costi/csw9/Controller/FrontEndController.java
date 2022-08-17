@@ -281,12 +281,14 @@ public class FrontEndController {
     public String lockAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
         User user = userService.loadUserObjectById(accountId);
         if(getCurrentUser(principal).isAdmin()){
-            userService.lock(user, true);
+            if(!userService.lock(user, true)){
+                redirectAttributes.addFlashAttribute("flash",new FlashMessage("Invalid Permissions!", "You are unable to modify owner account", FlashMessage.Status.DANGER));
+            }else{
+                redirectAttributes.addFlashAttribute("flash",new FlashMessage("Account Locked", user.getFirstName() + " " + user.getLastName() + " is locked and can no longer log in.", FlashMessage.Status.SUCCESS));
+            }
         }else{
             redirectAttributes.addFlashAttribute("flash",new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
-            System.out.println("Invalid Permissions");
         }
-        redirectAttributes.addFlashAttribute("flash",new FlashMessage("Account Locked", user.getFirstName() + " " + user.getLastName() + " is locked and can no longer log in.", FlashMessage.Status.SUCCESS));
         return "redirect:/COMT/Accounts";
     }
 
@@ -308,12 +310,14 @@ public class FrontEndController {
     public String enableAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
         User user = userService.loadUserObjectById(accountId);
         if(getCurrentUser(principal).isAdmin()){
-            userService.enable(user, true);
+            if(!userService.enable(user, true)){
+                redirectAttributes.addFlashAttribute("flash",new FlashMessage("Invalid Permissions!", "You are unable to modify owner account", FlashMessage.Status.DANGER));
+            }else{
+                redirectAttributes.addFlashAttribute("flash",new FlashMessage("Account Enabled", user.getFirstName() + " " + user.getLastName() + " is now enabled.", FlashMessage.Status.SUCCESS));
+            }
         }else{
             redirectAttributes.addFlashAttribute("flash",new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
-            System.out.println("Invalid Permissions");
         }
-        redirectAttributes.addFlashAttribute("flash",new FlashMessage("Account Enabled!", user.getFirstName() + " " + user.getLastName() + " is now enabled.", FlashMessage.Status.SUCCESS));
         return "redirect:/COMT/Accounts";
     }
 
@@ -321,27 +325,30 @@ public class FrontEndController {
     public String demoteAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
         User user = userService.loadUserObjectById(accountId);
         if(getCurrentUser(principal).isAdmin()){
-            if(!userService.demoteUser(user)){
-                redirectAttributes.addFlashAttribute("flash",new FlashMessage("Account not a moderator!", "Please select a different account.", FlashMessage.Status.DANGER));
+            if(!userService.enable(user, false)){
+                redirectAttributes.addFlashAttribute("flash",new FlashMessage("Invalid Permissions!", "You are unable to modify owner account", FlashMessage.Status.DANGER));
+            }else{
+                redirectAttributes.addFlashAttribute("flash",new FlashMessage("Account Demoted", user.getFirstName() + " " + user.getLastName() + " is now a user.", FlashMessage.Status.SUCCESS));
             }
         }else{
             redirectAttributes.addFlashAttribute("flash",new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
-            System.out.println("Invalid Permissions");
         }
-        redirectAttributes.addFlashAttribute("flash",new FlashMessage("Account Demoted!", user.getFirstName() + " " + user.getLastName() + " is now enabled.", FlashMessage.Status.SUCCESS));
         return "redirect:/COMT/Accounts";
+
     }
 
     @RequestMapping(value = "/Accounts/{accountId}/disable", method = RequestMethod.POST)
     public String disableAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
         User user = userService.loadUserObjectById(accountId);
         if(getCurrentUser(principal).isAdmin()){
-            userService.enable(user, false);
+            if(!userService.enable(user, false)){
+                redirectAttributes.addFlashAttribute("flash",new FlashMessage("Invalid Permissions!", "You are unable to modify owner account", FlashMessage.Status.DANGER));
+            }else{
+                redirectAttributes.addFlashAttribute("flash",new FlashMessage("Account Disabled", user.getFirstName() + " " + user.getLastName() + " is now enabled.", FlashMessage.Status.SUCCESS));
+            }
         }else{
             redirectAttributes.addFlashAttribute("flash",new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
-            System.out.println("Invalid Permissions");
         }
-        redirectAttributes.addFlashAttribute("flash",new FlashMessage("Account Disabled!", user.getFirstName() + " " + user.getLastName() + " is disabled.", FlashMessage.Status.SUCCESS));
         return "redirect:/COMT/Accounts";
     }
     //Main

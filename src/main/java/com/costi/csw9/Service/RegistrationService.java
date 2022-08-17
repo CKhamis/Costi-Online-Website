@@ -34,7 +34,6 @@ public class RegistrationService {
                             request.getEmail(),
                             request.getPassword(),
                             UserRole.OWNER
-
                     )
             );
         }else{
