@@ -22,6 +22,7 @@
                 <th scope="col">Enabled</th>
                 <th scope="col">Lock Account</th>
                 <th scope="col">Enable Account</th>
+                <th scope="col">Perma Demote</th>
             </tr>
         </thead>
         <tbody>
@@ -58,6 +59,12 @@
                     <form th:action="@{|/Accounts/${user.id}/enable|}" method="post" th:unless="*{user.isEnabled}">
                         <button type="submit" class="btn btn-success btn-sm">Enable</button>
                     </form>
+                </td>
+                <td>
+                    <form th:action="@{|/Accounts/${user.id}/demote|}" method="post" th:if="*{user.isAdmin}">
+                        <button type="submit" class="btn btn-success btn-sm">Demote</button>
+                    </form>
+                    <a th:unless="*{user.isAdmin}" class="btn btn-success btn-sm disabled" role="button" aria-disabled="true">Already User</a>
                 </td>
             </tr>
         </tbody>

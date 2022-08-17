@@ -24,16 +24,30 @@ public class RegistrationService {
             throw new IllegalStateException("email not valid");
         }
 
-        String token = userService.signUpAdmin(
-                new User(
-                        request.getFirstName(),
-                        request.getLastName(),
-                        request.getEmail(),
-                        request.getPassword(),
-                        UserRole.ADMIN
+        String token;
+        System.out.println(userService.isEmpty());
+        if(userService.isEmpty()){
+            token = userService.signUpAdmin(
+                    new User(
+                            request.getFirstName(),
+                            request.getLastName(),
+                            request.getEmail(),
+                            request.getPassword(),
+                            UserRole.OWNER
+                    )
+            );
+        }else{
+            token = userService.signUpAdmin(
+                    new User(
+                            request.getFirstName(),
+                            request.getLastName(),
+                            request.getEmail(),
+                            request.getPassword(),
+                            UserRole.ADMIN
 
-                )
-        );
+                    )
+            );
+        }
 
         String link = "http://localhost/api/v1/registration/confirm?token=" + token;
         System.out.println("Verification link for " + request.getFirstName() + " " + request.getLastName() + ":\t" + link);
@@ -86,6 +100,11 @@ public class RegistrationService {
     }
 
     public void registerAdmin(User user) {
+        if(userService.isEmpty()){
+            user.setRole(UserRole.OWNER);
+        }
+
+
         boolean isValidEmail = emailValidator.test(user.getEmail());
 
         if (!isValidEmail) {

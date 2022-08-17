@@ -2,6 +2,7 @@ package com.costi.csw9.Service;
 
 import com.costi.csw9.Model.User;
 import com.costi.csw9.Model.ConfirmationToken;
+import com.costi.csw9.Model.UserRole;
 import com.costi.csw9.Model.WikiPage;
 import com.costi.csw9.Repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -83,12 +84,22 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public void enable(User user, boolean enable) {
+    public boolean enable(User user, boolean enable) {
+        if(enable == false && user.getRole().equals(UserRole.OWNER)){
+            //Cannot be locked out
+            return false;
+        }
         userRepository.enable(user.getId(), enable);
+        return true;
     }
 
-    public void lock(User user, boolean lock) {
+    public boolean lock(User user, boolean lock) {
+        if(user.getRole().equals(UserRole.OWNER)){
+            //Cannot be locked out
+            return false;
+        }
         userRepository.lock(user.getId(), lock);
+        return true;
     }
 
     public void updateUser(User user){
@@ -103,5 +114,19 @@ public class UserService implements UserDetailsService {
             user.setPassword(encodedPass);
         }
         userRepository.save(user);
+    }
+
+    public boolean demoteUser(User user){
+        if(!user.getRole().equals(UserRole.ADMIN)){
+            //User is already not an admin
+            return false;
+        }else{
+            userRepository.demote(user);
+            return true;
+        }
+    }
+
+    public boolean isEmpty(){
+        return userRepository.findAll().isEmpty();
     }
 }
