@@ -15,3 +15,5 @@ My website is designed to have an automatically changing theme based on the date
 I have implemented a moderator terminal in my website that allows me to change specific things. For example, I can enable or disable user accounts. I can also edit/delete/publish wiki articles.
 ### Announcements
 Costi Online now features announcements. Announcements can be created, edited, privated, published, and deleted all from the moderator terminal. They will appear on the home page and are dismissable.
+### User Roles
+There are 3 types of roles on Costi Online. Owner, Admin, and User. The owner user can only be created when you make the first account and select administrator in a hidden drop down menu. The other two roles can be created whenever needed. You activate admin/owner accounts by clicking on a link in the java console after you press create account. Admin and Owner accounts can access the moderator terminal, but the owner is unable to be disabled/locked/demoted. Admin accounts are able to get a permenet demotion.
