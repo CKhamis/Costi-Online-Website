@@ -532,6 +532,15 @@ public class FrontEndController {
         return "main/Media";
     }
 
+    //About
+    @GetMapping("/About")
+    public String getAbout(Model model, Principal principal){
+        model.addAttribute("user", getCurrentUser(principal));
+        model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("theme", choseTheme());
+        return "main/About";
+    }
+
 
     //Minecraft
     @GetMapping("/Minecraft")
