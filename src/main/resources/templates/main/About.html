@@ -3,7 +3,102 @@
 <head th:replace="Components :: head('About')"></head>
 <body class="bg-1 text-1">
 <div th:replace="Components :: nav"></div>
+<!-- Desktop -->
+<div class="p-0 m-0 overflow-hidden">
+    <div class="container-fluid p-0 overflow-hidden d-none d-lg-block bg-black" style="height:600px">
+        <div class="position-absolute p-5" style="z-index:1;height:600px; width:100%">
+            <div class="container-fluid" style="padding-top:145px;">
+                <img th:src="@{/icons/Constantine Logo.png}" class="img-fluid mb-2" style="width:50%;"/>
+                <h3 class="fw-bold text-white">About Me & Costi Online</h3>
+                <p class="col-md-10 fs-4 text-white">In this page, I will showcase various information about myself including my working experience, personal information, skillset, and more. I will also describe the development process of making this website and what libraries I have used to make it.</p>
+                <div class="btn-group pb-4" role="group">
+                    <a href="#" class="btn btn-primary" aria-current="page">Jump to content overview</a>
+                </div>
+            </div>
+        </div>
+        <video class="w-100" autoplay preload="true" loop="loop" style="margin-top:-150px;opacity:.5; " muted>
+            <source th:src="@{/videos/banners/CM Banner.m4v}" type="video/mp4">
+            video not supported
+        </video>
+    </div>
+</div>
+
+<!-- Mobile -->
+<div class="container pt-5 d-xs-block d-lg-none mt-5">
+    <div class="p-0 mb-4 border-box bg-black">
+        <div class="container-fluid p-0 overflow-hidden" style="height:600px;">
+            <div class="position-absolute p-5 text-white" style="z-index:1;">
+                <img th:src="@{/icons/Constantine Logo.png}" class="img-fluid mb-2" style="width:80%;"/>
+                <h3 class="fw-bold text-white">About Me & Costi Online</h3>
+                <p class="col-md-8 fs-4 text-white">In this page, I will showcase various information about myself including my working experience, personal information, skillset, and more. I will also describe the development process of making this website and what libraries I have used to make it.</p>
+                <div class="btn-group pb-4" role="group">
+                    <a href="#" class="btn btn-primary" aria-current="page">Jump to content overview</a>
+                </div>
+            </div>
+            <video style="width:310%; opacity:.5; margin-left:-400px" autoplay preload="true" loop="loop" muted>
+                <source th:src="@{/videos/banners/CM Banner.m4v}" type="video/mp4">
+                video not supported
+            </video>
+        </div>
+    </div>
+</div>
+
 <main>
+    <div class="container py-5" id="contents">
+        <h2 class="text-center fw-bold">Page Contents</h2>
+        <p class="text-center pb-2 border-bottom">Chose a part of this page to jump to, or continue scrolling to see everything</p>
+
+        <div class="row">
+            <div class="col">
+                <a href="#" class="m-0 p-0">
+                    <img th:src="@{/icons/Constantine Logo v5.png}" class="img-fluid logo-list" alt="My logo">
+                    <h5 class="fw-bold text-center text-1">About Me</h5>
+                </a>
+            </div>
+            <div class="col mb-4">
+                <a href="#" class="m-0 p-0">
+                    <img th:src="@{/icons/Work.png}" class="img-fluid logo-list" alt="Work">
+                    <h5 class="fw-bold text-center text-1">Career</h5>
+                </a>
+            </div>
+            <div class="col mb-4">
+                <a href="#" class="m-0 p-0">
+                    <img th:src="@{/icons/Education.png}" class="img-fluid logo-list" alt="Education">
+                    <h5 class="fw-bold text-center text-1">Education</h5>
+                </a>
+            </div>
+            <div class="col mb-4">
+                <a href="#" class="m-0 p-0">
+                    <img th:src="@{/icons/Logo.png}" class="img-fluid logo-list" alt="">
+                    <h5 class="fw-bold text-center text-1">Website</h5>
+                </a>
+            </div>
+            <div class="col mb-4">
+                <a href="#" class="m-0 p-0">
+                    <img th:src="@{/icons/CA Device Restoration.png}" class="img-fluid logo-list" alt="Ebay Page">
+                    <h5 class="fw-bold text-center text-1">Ebay Page</h5>
+                </a>
+            </div>
+            <div class="col mb-4">
+                <a href="#" class="m-0 p-0">
+                    <img th:src="@{/icons/CSWX.png}" class="img-fluid logo-list" alt="">
+                    <h5 class="fw-bold text-center text-1">Minecraft</h5>
+                </a>
+            </div>
+            <div class="col mb-4">
+                <a href="#" class="m-0 p-0">
+                    <img th:src="@{/icons/Arts.png}" class="img-fluid logo-list" alt="Arts">
+                    <h5 class="fw-bold text-center text-1">Digital Arts</h5>
+                </a>
+            </div>
+            <div class="col mb-4">
+                <a href="#" class="m-0 p-0">
+                    <img th:src="@{/icons/Logo.png}" class="img-fluid logo-list" alt="">
+                    <h5 class="fw-bold text-center text-1">FAQ</h5>
+                </a>
+            </div>
+        </div>
+    </div>
 
 </main>
 

@@ -14,6 +14,11 @@ ul {
   color: #d1e7dd;
 }
 
+.logo-list {
+  margin-left: 12%;
+  width: 75%;
+}
+
 ul {
   list-style-type: none;
   padding-left: 0;

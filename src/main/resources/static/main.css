@@ -1,6 +1,6 @@
 @charset "UTF-8";
 .blue-v-gradient {
-  background-image: linear-gradient(#212529, #00006f);
+  background-image: linear-gradient(rgb(255, 255, 255), #f2f1f1);
 }
 
 ul {
@@ -30,33 +30,43 @@ td p {
 }
 
 .bg-2 {
-  background-color: black;
+  background-color: #f2f1f1;
 }
 
 .bg-1 {
-  background-color: #212529;
+  background-color: rgb(255, 255, 255);
 }
 
 .text-1 {
-  color: #e9ecef;
+  color: rgb(0, 0, 0);
 }
 
 .border-box {
-  background-color: #212529;
-  border: 1px solid #fff;
+  background-color: #f2f1f1;
+  border: 1px solid rgb(0, 0, 0);
   border-radius: 0.25rem;
 }
 
 .nav {
-  background-color: #212529;
+  background-color: #f2f1f1;
+  border-bottom: 1px solid rgb(0, 0, 0);
 }
 
 .navbar-nav .nav-link {
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(0, 0, 0, 0.55);
 }
 
 .navbar-nav .nav-link, .navbar-brand {
-  color: white;
+  color: rgb(0, 0, 0);
+}
+
+#footer {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.logo-list {
+  margin-left: 12%;
+  width: 75%;
 }
 
 /*!
@@ -4108,38 +4118,38 @@ textarea.form-control-lg {
 }
 
 .navbar-dark .navbar-brand {
-  color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
 }
 .navbar-dark .navbar-brand:hover, .navbar-dark .navbar-brand:focus {
-  color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
 }
 .navbar-dark .navbar-nav .nav-link {
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(0, 0, 0, 0.55);
 }
 .navbar-dark .navbar-nav .nav-link:hover, .navbar-dark .navbar-nav .nav-link:focus {
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(0, 0, 0, 0.75);
 }
 .navbar-dark .navbar-nav .nav-link.disabled {
-  color: rgba(255, 255, 255, 0.25);
+  color: rgba(0, 0, 0, 0.25);
 }
 .navbar-dark .navbar-nav .show > .nav-link,
 .navbar-dark .navbar-nav .nav-link.active {
-  color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
 }
 .navbar-dark .navbar-toggler {
-  color: rgba(255, 255, 255, 0.55);
-  border-color: rgba(255, 255, 255, 0);
+  color: rgba(0, 0, 0, 0.55);
+  border-color: rgba(0, 0, 0, 0);
 }
 .navbar-dark .navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 .navbar-dark .navbar-text {
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(0, 0, 0, 0.55);
 }
 .navbar-dark .navbar-text a,
 .navbar-dark .navbar-text a:hover,
 .navbar-dark .navbar-text a:focus {
-  color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
 }
 
 .card {
@@ -4148,9 +4158,9 @@ textarea.form-control-lg {
   flex-direction: column;
   min-width: 0;
   word-wrap: break-word;
-  background-color: rgba(255, 255, 255, 0);
+  background-color: rgba(0, 0, 0, 0);
   background-clip: border-box;
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.5);
   border-radius: 0.25rem;
 }
 .card > hr {
@@ -4179,7 +4189,7 @@ textarea.form-control-lg {
 .card-body {
   flex: 1 1 auto;
   padding: 1rem 1rem;
-  color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
 }
 
 .card-title {
@@ -4206,7 +4216,7 @@ textarea.form-control-lg {
   padding: 0.5rem 1rem;
   margin-bottom: 0;
   background-color: rgba(0, 0, 0, 0.03);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
 }
 .card-header:first-child {
   border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
@@ -4215,7 +4225,7 @@ textarea.form-control-lg {
 .card-footer {
   padding: 0.5rem 1rem;
   background-color: rgba(0, 0, 0, 0.03);
-  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  border-top: 1px solid rgba(0, 0, 0, 0.5);
 }
 .card-footer:last-child {
   border-radius: 0 0 calc(0.25rem - 1px) calc(0.25rem - 1px);
@@ -4228,8 +4238,8 @@ textarea.form-control-lg {
   border-bottom: 0;
 }
 .card-header-tabs .nav-link.active {
-  background-color: rgba(255, 255, 255, 0);
-  border-bottom-color: rgba(255, 255, 255, 0);
+  background-color: rgba(0, 0, 0, 0);
+  border-bottom-color: rgba(0, 0, 0, 0);
 }
 
 .card-header-pills {
@@ -4725,7 +4735,7 @@ textarea.form-control-lg {
   z-index: 1;
   color: #495057;
   text-decoration: none;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(0, 0, 0, 0.2);
 }
 .list-group-item-action:active {
   color: #212529;
@@ -4736,10 +4746,10 @@ textarea.form-control-lg {
   position: relative;
   display: block;
   padding: 0.5rem 1rem;
-  color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
   text-decoration: none;
-  background-color: rgba(0, 0, 0, 0.5);
-  border: 1px solid rgb(255, 255, 255);
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 1px solid black;
 }
 .list-group-item:first-child {
   border-top-left-radius: inherit;
@@ -4752,13 +4762,13 @@ textarea.form-control-lg {
 .list-group-item.disabled, .list-group-item:disabled {
   color: #6c757d;
   pointer-events: none;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.1);
 }
 .list-group-item.active {
   z-index: 2;
-  color: rgb(255, 255, 255);
-  background-color: rgba(255, 255, 255, 0.3);
-  border-color: rgba(255, 255, 255, 0.3);
+  color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.3);
+  border-color: rgba(0, 0, 0, 0.3);
 }
 .list-group-item + .list-group-item {
   border-top-width: 0;
@@ -10230,36 +10240,36 @@ textarea.form-control-lg {
 }
 
 .navbar-dark .navbar-brand {
-  color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
 }
 .navbar-dark .navbar-brand:hover, .navbar-dark .navbar-brand:focus {
-  color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
 }
 .navbar-dark .navbar-nav .nav-link {
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(0, 0, 0, 0.55);
 }
 .navbar-dark .navbar-nav .nav-link:hover, .navbar-dark .navbar-nav .nav-link:focus {
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(0, 0, 0, 0.75);
 }
 .navbar-dark .navbar-nav .nav-link.disabled {
-  color: rgba(255, 255, 255, 0.25);
+  color: rgba(0, 0, 0, 0.25);
 }
 .navbar-dark .navbar-nav .show > .nav-link,
 .navbar-dark .navbar-nav .nav-link.active {
-  color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
 }
 .navbar-dark .navbar-toggler {
-  color: rgba(255, 255, 255, 0.55);
-  border-color: rgba(255, 255, 255, 0);
+  color: rgba(0, 0, 0, 0.55);
+  border-color: rgba(0, 0, 0, 0);
 }
 .navbar-dark .navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 .navbar-dark .navbar-text {
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(0, 0, 0, 0.55);
 }
 .navbar-dark .navbar-text a,
 .navbar-dark .navbar-text a:hover,
 .navbar-dark .navbar-text a:focus {
-  color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
 }/*# sourceMappingURL=main.css.map */
