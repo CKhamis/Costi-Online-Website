@@ -49,8 +49,8 @@
                 <img th:src="@{/images/People/Costi.png}" class="card-img-top" alt="Costi">
                 <div class="card-body">
                     <h5 class="card-title">Costi</h5>
-                    <p class="card-text"><small class="text-muted">Faction Operator</small></p>
-                    <p class="card-text">Costi is an administrator of the server and the first mayor of Constantinople</p>
+                    <p class="card-text"><small class="text-muted">Server Operator</small></p>
+                    <p class="card-text">Costi is an administrator of the server and will be the initial mayor of the world's first major city.</p>
                 </div>
             </div>
         </div>
@@ -91,11 +91,11 @@
             <li class="list-group-item bg-1 text-1 p-0">
                 <div class="container-fluid p-5">
                     <h4 class="fw-bold">Overview</h4>
-                    <p class="fs-4">This faction's government will most closely resemble the government of Costi Survival World 5. This means that there will be both a federal and local government.</p>
+                    <p class="fs-4">This server's government will most closely resemble the government of Costi Survival World 5. This means that there will be both a federal and local government.</p>
                     <h4 class="fw-bold">Federal Government</h4>
                     <p class="fs-4">The federal government will only consist of the world leader who will only be Costi. Like previous worlds, this position is not up for election. The federal government's powers includes but is not limited to: banning laws from passing, stopping or creating construction, zoning, and citizenship granting. Historically, this position did not interfere much with local government.</p>
                     <h4 class="fw-bold">Local Government</h4>
-                    <p class="fs-4">The local government consists of a mayoral position. Mayors are elected every 3 months and have unlimited terms. Mayors are not able to manage more than 1 city at a time. Mayors can make meant changes to their cities including: creating/ removing public buildings, creating railways, making ordinances, and even changing the economic system of their cities. They are unable to take away or interfere with purchased property. If you want to be a mayor, it is highly recommended that you have a lot of materials, as unless you create a tax system, all projects will be funded by you!</p>
+                    <p class="fs-4">The local government consists of a mayoral position. Mayors are elected every 3 months and have unlimited terms. Mayors are not able to manage more than 1 city at a time. Mayors can make meant changes to their cities including: creating/ removing public buildings, creating railways, making ordinances, and even changing the economic system of their cities. They are unable to take away or interfere with purchased property unless there is a special exception from the federal government. If you want to be a mayor, it is highly recommended that you have a lot of materials, as unless you create a tax system, all projects will be funded by you!</p>
                     <h4 class="fw-bold">Download Costitution</h4>
                     <p class="fs-4">The Costitution is the constitution of this new government. If you seek additional information, please make sure to download it.</p>
                 </div>
@@ -142,7 +142,9 @@
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="w85-tab" data-bs-toggle="pill" data-bs-target="#w85" type="button" role="tab" aria-controls="pills-home" aria-selected="true">World 8.5</button>
             </li>
-
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="w9-tab" data-bs-toggle="pill" data-bs-target="#w9" type="button" role="tab" aria-controls="pills-home" aria-selected="true">World 9</button>
+            </li>
 
         </ul>
         <div class="tab-content" id="pills-tabContent">
@@ -332,6 +334,25 @@
                         <p class="fs-4">The elietes versus the Ghetto was the largest event held on the server. Lasting about 2 weeks long, it consisted of various pranks and buildings meant to annoy the other party. Costi and Brandon were the main spearheads of the elitest movement, while Alex and Nathan were on the Ghetto side. As time went on, the Ghetto got progressively larger and uglier. Alex dug holes in the ground in many spots, built buildings out of undesirable items, and restricted citizens from making it look better. It was during this time when Sean moved into the Ghetto. As a gesture of good faith, Brandon gifted Alex a "monument" in the Ghetto that would explode TNT if a button was pressed. This monument was eventually blown up and as a result, sparked a war. Alex begun spawning hundreds of chickens in the Ghetto, Costi and Brandon decided to build a wall around the Ghetto, Alex created a far nastier building that connected itself to Nathan and Cole's tower, Costi and Brandon "Guccified" their houses by replacing stone brick exteriors with highly expensive items, and other atrocities. On a more peaceful note, Brandon installed a beacon inside the (now very deep) quarry and Costi used a lot of the stone collected from the quarry to begin making a structure in the surrounding ocean (never finished). Near the end of the server's lifespan Cole came back and built a fort on the surrounding continent. The server stopped because this was when school was starting to get back in person for Costi and most people's ambitions about the world had been fulfilled.</p>
                         <p class="fs-4"></p>
                         <p class="fs-4"><a th:href="@{/downloads/Costi Survival World 8.5.mcworld}" download="CSW8.5.mcworld">Download World ></a></p>
+                        <br />
+                        <div th:replace="minecraft/MinecraftComponents :: worldInfo('The version of Minecraft used for this world was Minecraft Bedrock server', 'This server lasted 5 weeks', 'The government in this world was anarchy, citizens lived in two distinct communes', 'The main players in this world were Costi, Alex, Brandon, Cole, and Nathan. Sean would occasionally join', 'This world is safely backed up in storage and is available for download now')"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="w9" role="tabpanel" aria-labelledby="w9-tab">
+                <div class="mb-4 border-box">
+                    <div class="container-fluid p-5">
+                        <img th:src="@{/images/worldPreview/CSW8.5.jpg}" class="img-fluid rounded-3 w-100 mb-4" alt="Costi Survival World 8.5">
+                        <h3 class="fw-bold">Costi Survival World 9 (2022)</h3>
+                        <p class="fs-4">The 9th world was a highly experimental world that ended up not working out in the end. What sets this apart from the previous worlds is this server was hosted on Minecraft Java edition via Haydon's WOC server. The initial push to switch to Java edition was spearheaded by my because Costi because of its potential for split screen multiplayer. Additionally, Java edition supporters like Nathan and Sean were very vocal about how they prefer Java edition over Bedrock edition. With this in mind, a collaboration was made with Haydon to create a faction within a shared survival world.</p>
+                        <p class="fs-4">The world itself was enclosed in a small area, maybe 5,000 blocks on each side. Costi Survival World 9 players were given a portion of the land, while the World of Cat players (WOC) owned the rest of the world. The main base of WOC was located in a new swamp biome, while our base was on a plains biome. The two factions were separated by an ocean and were connected through a witch's hut that had command blocks that could teleport you to either faction.</p>
+                        <h4 class="fw-bold">Colonial Era</h4>
+                        <p class="fs-4">Survival world 9 began with many new and old players. The city was placed inside a villager village that was eventually overrun by players. Brandon famously did not make an appearance because he was not interested in playing Minecraft at the time. Some of Alex's friends joined and played very actively for the first week or so before completely stopping. This created a strange wealth distribution where a couple of players were far richer than the rest of the players. The first building made was the capitol building which provided housing for players who did nto have a house yet. Alex soon built his house and Sean made a treehouse inside the tree next to it. Alex and Costi then began creating city infrastructure like roads and decorations like the park and dock.</p>
+                        <h4 class="fs-4">City Growth</h4>
+                        <p class="fs-4">After the no-life players completed the game and left the world, Costi Survival World 9 managed to keep a healthy amount of players. Notable people include Alex, Sean, Costi, and Cole. Soon, many decorative buildings were erected. Cole built a giant wooden pig house and a floating boat, Alex made a large castle, and Costi continued building roads and built a warehouse. Costi also began working on a subway system that would connect Constantinople to a far away island that someone from WOC tried to annex. The future of this world was looking bright.</p>
+                        <h4 class="fw-bold">Endgame</h4>
+                        <p class="fs-4">After a long period of time Costi could not play, activity on the world slowed down significantly. Cole and Nathan would play occasionally and work on their large pig house. Once Costi was able to play again, the three worked together to create a new city on a nearby island named Swinetopia. </p>
+                        <p class="fs-4"><a th:href="#">Downloads coming soon!</a></p>
                         <br />
                         <div th:replace="minecraft/MinecraftComponents :: worldInfo('The version of Minecraft used for this world was Minecraft Bedrock server', 'This server lasted 5 weeks', 'The government in this world was anarchy, citizens lived in two distinct communes', 'The main players in this world were Costi, Alex, Brandon, Cole, and Nathan. Sean would occasionally join', 'This world is safely backed up in storage and is available for download now')"></div>
                     </div>
