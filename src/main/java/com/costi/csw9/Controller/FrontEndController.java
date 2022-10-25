@@ -55,7 +55,7 @@ public class FrontEndController {
         }else if(today.getMonthValue() > 7 && today.getMonthValue() <=12){
             return "/White.css";
         }else{
-            return "/main.css";
+            return "/Dark.css";
         }
     }
 

@@ -1,7 +1,22 @@
+/***********************************
+        Universal Stylesheet
+***********************************/
 
-/* About Section */
+/* About */
 #education{
     background-image: url('/images/About/SJSU.jpg');
     background-position: center;
     background-attachment: fixed;
+}
+/* Wiki */
+.wikiBannerBg{
+     background-image: url(images/webpageImages/WikiBg.jpg);
+     background-size: 100%;
+}
+.wikiRestrictedBannerBg{
+     background-image: url(images/webpageImages/WikiRestrictedBg.jpg);
+     background-size: 100%;
+}
+#contentBody{
+    line-height: 2rem;
 }
