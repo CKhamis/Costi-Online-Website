@@ -48,54 +48,32 @@
         <h2 class="text-center fw-bold">Page Contents</h2>
         <p class="text-center pb-2 border-bottom">Chose a part of this page to jump to, or continue scrolling to see everything</p>
 
-        <div class="row">
-            <div class="col-4 col-lg-3 mb-4">
-                <a href="#about-me" class="m-0 p-0">
-                    <img th:src="@{/icons/Constantine Logo v5.png}" class="img-fluid logo-list" alt="My logo">
-                    <h5 class="fw-bold text-center text-1">About Me</h5>
-                </a>
-            </div>
-            <div class="col-4 col-lg-3 mb-4">
-                <a href="#career-history" class="m-0 p-0">
-                    <img th:src="@{/icons/Work.png}" class="img-fluid logo-list" alt="Work">
-                    <h5 class="fw-bold text-center text-1">Career</h5>
-                </a>
-            </div>
-            <div class="col-4 col-lg-3 mb-4">
-                <a href="#education" class="m-0 p-0">
-                    <img th:src="@{/icons/Education.png}" class="img-fluid logo-list" alt="Education">
-                    <h5 class="fw-bold text-center text-1">Education</h5>
-                </a>
-            </div>
-            <div class="col-4 col-lg-3 mb-4">
-                <a href="#website" class="m-0 p-0">
-                    <img th:src="@{/icons/Logo.png}" class="img-fluid logo-list" alt="website">
-                    <h5 class="fw-bold text-center text-1">Website</h5>
-                </a>
-            </div>
-            <div class="col-4 col-lg-3 mb-4">
-                <a href="#" class="m-0 p-0">
-                    <img th:src="@{/icons/CA Device Restoration.png}" class="img-fluid logo-list" alt="Ebay Page">
-                    <h5 class="fw-bold text-center text-1">Ebay Page</h5>
-                </a>
-            </div>
-            <div class="col-4 col-lg-3 mb-4">
-                <a href="#" class="m-0 p-0">
-                    <img th:src="@{/icons/CSWX.png}" class="img-fluid logo-list" alt="">
-                    <h5 class="fw-bold text-center text-1">Minecraft</h5>
-                </a>
-            </div>
-            <div class="col-4 col-lg-3 mb-4">
-                <a href="#" class="m-0 p-0">
-                    <img th:src="@{/icons/Arts.png}" class="img-fluid logo-list" alt="Arts">
-                    <h5 class="fw-bold text-center text-1">Digital Arts</h5>
-                </a>
-            </div>
-            <div class="col-4 col-lg-3 mb-4">
-                <a href="#" class="m-0 p-0">
-                    <img th:src="@{/icons/FAQ.png}" class="img-fluid logo-list" alt="FAQ">
-                    <h5 class="fw-bold text-center text-1">FAQ</h5>
-                </a>
+        <div class="container">
+            <div class="row">
+                <div class="col-4 col-lg-3 mb-4">
+                    <a href="#about-me" class="m-0 p-0">
+                        <img th:src="@{/icons/Constantine Logo v5.png}" class="img-fluid logo-list" alt="My logo">
+                        <h5 class="fw-bold text-center text-1">About Me</h5>
+                    </a>
+                </div>
+                <div class="col-4 col-lg-3 mb-4">
+                    <a href="#career-history" class="m-0 p-0">
+                        <img th:src="@{/icons/Work.png}" class="img-fluid logo-list" alt="Work">
+                        <h5 class="fw-bold text-center text-1">Career</h5>
+                    </a>
+                </div>
+                <div class="col-4 col-lg-3 mb-4">
+                    <a href="#education" class="m-0 p-0">
+                        <img th:src="@{/icons/Education.png}" class="img-fluid logo-list" alt="Education">
+                        <h5 class="fw-bold text-center text-1">Education</h5>
+                    </a>
+                </div>
+                <div class="col-4 col-lg-3 mb-4">
+                    <a href="#website" class="m-0 p-0">
+                        <img th:src="@{/icons/Logo.png}" class="img-fluid logo-list" alt="website">
+                        <h5 class="fw-bold text-center text-1">Website</h5>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -222,6 +200,31 @@
                         <h2 class="fw-bold">Education</h2>
                         <p class="text-secondary">Graduating in Fall 2023</p>
                         <p class="fs-4">When vacancies happen in the Representation from any State, the Executive Authority thereof shall issue Writs of Election to fill such Vacancies</p>
+                        <h5 class="fw-bold">Class Highlights</h5>
+                        <div class="row">
+                            <div class="col-lg-4 col-sm-6 col-xs-6">
+                                <p>Calculus 3</p>
+                            </div>
+                            <div class="col-lg-4 col-sm-6 col-xs-6">
+                                <p>Operating Systems</p>
+                            </div>
+                            <div class="col-lg-4 col-sm-6 col-xs-6">
+                                <p>CPU Architecture</p>
+                            </div>
+                            <div class="col-lg-4 col-sm-6 col-xs-6">
+                                <p>OO Programming</p>
+                            </div>
+                            <div class="col-lg-4 col-sm-6 col-xs-6">
+                                <p>Advanced Python</p>
+                            </div>
+                            <div class="col-lg-4 col-sm-6 col-xs-6">
+                                <p>Programming Paradigms</p>
+                            </div>
+                            <div class="col-lg-4 col-sm-6 col-xs-6">
+                                <p>Data & Algorithms</p>
+                            </div>
+                        </div>
+
                         <a href="https://github.com/CKhamis" class="btn btn-dark" aria-current="page">See Github page</a>
                     </div>
                 </div>
@@ -232,7 +235,7 @@
     <div class="container p-0 mt-5" id="website">
         <h2 class="fw-bold text-center border-bottom mb-4">About Costi Online</h2>
         <div class="row">
-            <div class="feature col">
+            <div class="feature col-sm-12 col-md-6 col-lg-3">
                 <div class="feature-icon">
                     <h1>💻</h1>
                 </div>
@@ -243,7 +246,7 @@
                     <li><p>Bootstrap</p></li>
                 </ul>
             </div>
-            <div class="feature col">
+            <div class="feature col-sm-12 col-md-6 col-lg-3">
                 <div class="feature-icon">
                     <h1>🗃️</h1>
                 </div>
@@ -255,7 +258,7 @@
                     <li><p>H2 Database</p></li>
                 </ul>
             </div>
-            <div class="feature col">
+            <div class="feature col-sm-12 col-md-6 col-lg-3">
                 <div class="feature-icon">
                     <h1>🎨</h1>
                 </div>
@@ -265,7 +268,7 @@
                     <li><p>Adobe Xd</p></li>
                 </ul>
             </div>
-            <div class="feature col">
+            <div class="feature col-sm-12 col-md-6 col-lg-3">
                 <div class="feature-icon">
                     <h1>📽️</h1>
                 </div>
