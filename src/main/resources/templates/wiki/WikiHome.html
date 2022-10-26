@@ -30,12 +30,12 @@
     <h2 class="fs-2 mt-5 mb-4">All Wiki Content</h2>
     <div class="row g-4 row-cols-1 row-cols-md-3 row-cols-lg-5">
         <div class="col" th:each="page : ${all}">
-            <div th:switch="${page.category}" class="card border-box">
-                <div th:case="INSIDE_JOKE"   class="card-header fw-bold" th:text="|&#128518; Inside Jokes|">Card title</div>
-                <div th:case="HISTORICAL"    class="card-header fw-bold" th:text="|&#127984; Historical|">Card title</div>
-                <div th:case="PEOPLE"        class="card-header fw-bold" th:text="|&#128697; People|">Card title</div>
-                <div th:case="PROFESSIONAL"  class="card-header fw-bold" th:text="|&#128084; Professional|">Card title</div>
-                <div th:case="*"             class="card-header fw-bold" th:text="|&#10067; Other|">Card title</div>
+            <div th:switch="${page.category}"   class="card border-box">
+                <div th:case="INSIDE_JOKE"      class="card-header fw-bold" th:text="|&#128518; Inside Jokes|">Card title</div>
+                <div th:case="HISTORICAL"       class="card-header fw-bold" th:text="|&#127984; Historical|">Card title</div>
+                <div th:case="PEOPbbLE"         class="card-header fw-bold" th:text="|&#128697; People|">Card title</div>
+                <div th:case="PROFESSIONAL"     class="card-header fw-bold" th:text="|&#128084; Professional|">Card title</div>
+                <div th:case="*"                class="card-header fw-bold" th:text="|&#10067; Other|">Card title</div>
                 <div class="card-body">
                     <h5 class="card-title text-truncate" th:text="*{page.title}">Title</h5>
                     <h6 class="card-subtitle mb-2 text-muted text-truncate" th:text="*{page.subtitle}">Card subtitle</h6>
