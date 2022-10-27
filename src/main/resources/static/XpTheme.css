@@ -18,6 +18,11 @@ ul {
     color:white;
 }
 
+.logo-list {
+  margin-left: 12%;
+  width: 75%;
+}
+
 .alert-success, .alert-danger{
     background-color: #ffffe1;
     border-color: black;

@@ -55,7 +55,7 @@ public class FrontEndController {
         }else if(today.getMonthValue() > 7 && today.getMonthValue() <=12){
             return "/White.css";
         }else{
-            return "/main.css";
+            return "/Dark.css";
         }
     }
 
@@ -530,6 +530,15 @@ public class FrontEndController {
         model.addAttribute("loggedIn", principal != null);
         model.addAttribute("theme", choseTheme());
         return "main/Media";
+    }
+
+    //About
+    @GetMapping("/About")
+    public String getAbout(Model model, Principal principal){
+        model.addAttribute("user", getCurrentUser(principal));
+        model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("theme", choseTheme());
+        return "main/About";
     }
 
 

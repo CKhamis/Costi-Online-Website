@@ -1,3 +1,14 @@
+/***********************************
+        Universal Stylesheet
+***********************************/
+
+/* About */
+#education{
+    background-image: url('/images/About/SJSU.jpg');
+    background-position: right;
+    background-attachment: fixed;
+}
+/* Wiki */
 .wikiBannerBg{
      background-image: url(images/webpageImages/WikiBg.jpg);
      background-size: 100%;

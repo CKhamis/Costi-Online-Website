@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html xml:th="https://www.thymeleaf.org">
+<head th:replace="Components :: head('About')"></head>
+<body class="bg-1 text-1">
+<div th:replace="Components :: nav"></div>
+<!-- Desktop -->
+<div class="p-0 m-0 overflow-hidden">
+    <div class="container-fluid p-0 overflow-hidden d-none d-lg-block bg-black" style="height:400px">
+        <div class="position-absolute p-5" style="z-index:1;height:400px; width:100%">
+            <div class="container-fluid" style="padding-top:90px;">
+                <img th:src="@{/icons/Constantine Logo.png}" class="img-fluid mb-2" style="width:50%;"/>
+            </div>
+        </div>
+        <video class="w-100" autoplay preload="true" loop="loop" style="margin-top:-150px;opacity:.5; " muted>
+            <source th:src="@{/videos/banners/CM Banner.m4v}" type="video/mp4">
+            video not supported
+        </video>
+    </div>
+</div>
+
+<!-- Mobile -->
+<div class="container pt-5 d-xs-block d-lg-none mt-5">
+    <div class="p-0 mb-4 border-box bg-black">
+        <div class="container-fluid p-0 overflow-hidden" style="height:200px;">
+            <div class="position-absolute p-5 text-white" style="z-index:1;">
+                <img th:src="@{/icons/Constantine Logo.png}" class="img-fluid mb-2" style="width:80%;"/>
+            </div>
+            <video style="width:310%; opacity:.5; margin-left:-400px" autoplay preload="true" loop="loop" muted>
+                <source th:src="@{/videos/banners/CM Banner.m4v}" type="video/mp4">
+                video not supported
+            </video>
+        </div>
+    </div>
+</div>
+
+<main>
+    <div class="container py-5" id="contents">
+        <h2 class="text-center fw-bold">Page Contents</h2>
+        <p class="text-center pb-2 border-bottom">Chose a part of this page to jump to, or continue scrolling to see everything</p>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-3 mb-4">
+                    <a href="#about-me" class="m-0 p-0">
+                        <img th:src="@{/icons/Constantine Logo v5.png}" class="img-fluid logo-list" alt="My logo">
+                        <h5 class="fw-bold text-center text-1">About Me</h5>
+                    </a>
+                </div>
+                <div class="col-3 mb-4">
+                    <a href="#career-history" class="m-0 p-0">
+                        <img th:src="@{/icons/Work.png}" class="img-fluid logo-list" alt="Work">
+                        <h5 class="fw-bold text-center text-1">Career</h5>
+                    </a>
+                </div>
+                <div class="col-3 mb-4">
+                    <a href="#education" class="m-0 p-0">
+                        <img th:src="@{/icons/Education.png}" class="img-fluid logo-list" alt="Education">
+                        <h5 class="fw-bold text-center text-1">Education</h5>
+                    </a>
+                </div>
+                <div class="col-3 mb-4">
+                    <a href="#website" class="m-0 p-0">
+                        <img th:src="@{/icons/Logo.png}" class="img-fluid logo-list" alt="website">
+                        <h5 class="fw-bold text-center text-1">Website</h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid bg-2" id="about-me">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-lg-5 pt-5 px-5 pb-lg-5">
+                    <img class="img-fluid pb-3" th:src="@{/images/About/Costi.jpg}" />
+                    <h1 class="fw-bold text-uppercase">Constantine Khamis</h1>
+                    <p class="fs-4">Student intern</p>
+                    <a href="https://www.linkedin.com/in/constantin-khamis/"><img src="https://play-lh.googleusercontent.com/kMofEFLjobZy_bCuaiDogzBcUT-dz3BBbOrIEjJ-hqOabjK8ieuevGe6wlTD15QzOqw" class="img-fluid" style="width:40px;"/></a>
+                    <a href="https://github.com/CKhamis"><img th:src="@{/icons/Github.png}" class="img-fluid" style="width:40px;" /></a>
+                </div>
+                <div class="col-xs-12 col-lg-7 p-5">
+                    <h3 class="fw-bold">About Me</h3>
+                    <p class="fw-4 fs-4 mt-2">
+                        Hello, I am Costi (pronounced Coasty). I am currently a student in San Jose State University working towards my bachelors degree in computer science since fall 2019. I am very passionate about technology, and I enjoy learning about new developments and releases. In my free time I enjoy spending time with friends, working on coding projects, making videos, and playing video-games. I am working as a cybersecurity intern for the City of San jose with over 2 years of experience.
+                    </p>
+                    <h5 class="fw-bold">Skills</h5>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <p class="mb-0 mb-md-3">HTML & CSS</p>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <p class="mb-0 mb-md-3">JavaScript & D3.js</p>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <p class="mb-0 mb-md-3">Bootstrap 5</p>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <p class="mb-0 mb-md-3">Networking</p>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <p class="mb-0 mb-md-3">Java</p>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <p class="mb-0 mb-md-3">Python</p>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <p class="mb-0 mb-md-3">Java Spring</p>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <p class="mb-0 mb-md-3">Java Hibernate</p>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <p class="mb-0 mb-md-3">Adobe Illustrator</p>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <p class="mb-0 mb-md-3">Adobe Premiere Pro</p>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <p class="mb-0 mb-md-3">Adobe Xd</p>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <p class="mb-0 mb-md-3">Adobe After Effects</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5" id="career-history">
+        <h2 class="fw-bold text-center border-bottom mb-4">Career History</h2>
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-4 mb-5">
+                <div class="card border-box">
+                    <img th:src="@{/images/About/SanJose.jpg}" class="card-img-top" alt="San Jose">
+                    <div class="card-body px-5 blue-v-gradient">
+                        <h5 class="card-title fw-bold fs-4">City of San Jose</h5>
+                        <p class="text-secondary">Cyber-security Intern | Since Jan 2020</p>
+                        <p class="card-text fs-5">
+                            Initially starting as a video producer for San Jose's 311 advertising campaign, I am currently working with the city's internal cyber security team. I handled the rollout of MFA to thousands of employees, completed hundreds of tickets, and work regularly with VIPs such as city councilmembers.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-5">
+                <div class="card border-box">
+                    <img th:src="@{/images/About/HomeDepot.jpg}" class="card-img-top" alt="Home Depot">
+                    <div class="card-body px-5 blue-v-gradient">
+                        <h5 class="card-title fw-bold fs-4">The Home Depot</h5>
+                        <p class="text-secondary">Order Picker | Nov 2020 - May 2021</p>
+                        <p class="card-text fs-5">
+                            As an order picker, I helped hundreds of customers a month with online orders. I also quickly developed a large knowledge base of where our thousands of products are placed within my branch and assisted customers with finding what they need.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-5">
+                <div class="card border-box">
+                    <img th:src="@{/images/About/FiveGuys.jpg}" class="card-img-top" alt="Five Guys">
+                    <div class="card-body px-5 blue-v-gradient">
+                        <h5 class="card-title fw-bold fs-4">Five Guys</h5>
+                        <p class="text-secondary">Senior Crew Member | Mar 2019 - Apr 2021</p>
+                        <p class="card-text fs-5">
+                            Over the course of my 2+ years experience at Five Guys, I have learned every position available and did them well. This includes back prep, grill, register, fries, expo, quality control, restocking, dressing, and many miscellaneous tasks. I have also helped train a large portion of staff at the time.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-5">
+                <div class="card border-box">
+                    <img th:src="@{/images/About/TM.jpg}" class="card-img-top" alt="TM">
+                    <div class="card-body px-5 blue-v-gradient">
+                        <h5 class="card-title fw-bold fs-4">ThreatMetrix</h5>
+                        <p class="text-secondary">Student Intern | 2015</p>
+                        <p class="card-text fs-5">
+                            As an intern at ThreatMetrix, I was exposed to the process of hiring individuals at startups, office work culture, and get a general feel for working downtown. I was tasked with making a coding project that utilized D3.js, a JavaScript framework.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="container-fluid p-0" id="education">
+        <div class="container-fluid">
+            <div class="container py-5">
+                <div class="row">
+                    <div class="col-lg-6 col-md-8 col-xs-12">
+                        <h2 class="fw-bold">Education</h2>
+                        <p class="text-secondary">Graduating in Fall 2024</p>
+                        <p class="fs-4">I am currently an upper division computer science student at San Jose State University. Since the pandemic, I have decided to balance my school schedule with my work schedule by taking 13 units instead of 15.</p>
+                        <h5 class="fw-bold">Class Highlights</h5>
+                        <div class="row">
+                            <div class="col-lg-4 col-sm-6 col-xs-6">
+                                <p>Calculus 3</p>
+                            </div>
+                            <div class="col-lg-4 col-sm-6 col-xs-6">
+                                <p>Operating Systems</p>
+                            </div>
+                            <div class="col-lg-4 col-sm-6 col-xs-6">
+                                <p>CPU Architecture</p>
+                            </div>
+                            <div class="col-lg-4 col-sm-6 col-xs-6">
+                                <p>OO Programming</p>
+                            </div>
+                            <div class="col-lg-4 col-sm-6 col-xs-6">
+                                <p>Advanced Python</p>
+                            </div>
+                            <div class="col-lg-4 col-sm-6 col-xs-6">
+                                <p>Programming Paradigms</p>
+                            </div>
+                            <div class="col-lg-4 col-sm-6 col-xs-6">
+                                <p>Data & Algorithms</p>
+                            </div>
+                        </div>
+
+                        <a href="https://github.com/CKhamis" class="btn btn-dark" aria-current="page">See Github page</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container p-0 mt-5" id="website">
+        <div class="container-fluid">
+            <h2 class="fw-bold text-center border-bottom mb-4">About Costi Online</h2>
+            <p class="fs-4">Costi Online is a personal project I made to showcase my different projects, test my abilities with front end, back end, hosting, and UX design. Costi Online originally began as a companion website for my self-hosted Minecraft server, but was slowly changed into what it is today.
+                The idea of my own personal website is not new. In the past, I have made several predecessors to this website, but none of them were fully developed. The development of the first publicly released version of this website took about a month to create.
+                This website takes inspiration of my previous work, as well as various other personal websites I have come across.
+            </p>
+            <div class="row">
+                <div class="feature col-sm-12 col-md-6 col-lg-3">
+                    <div class="feature-icon">
+                        <h1>💻</h1>
+                    </div>
+                    <h4>Front End</h4>
+                    <ul>
+                        <li><p>HTML</p></li>
+                        <li><p>CSS (using SASS)</p></li>
+                        <li><p>Bootstrap</p></li>
+                    </ul>
+                </div>
+                <div class="feature col-sm-12 col-md-6 col-lg-3">
+                    <div class="feature-icon">
+                        <h1>🗃️</h1>
+                    </div>
+                    <h4>Back End</h4>
+                    <ul>
+                        <li><p>Java Spring</p></li>
+                        <li><p>Java Spring Security</p></li>
+                        <li><p>Java Hibernate</p></li>
+                        <li><p>H2 Database</p></li>
+                    </ul>
+                </div>
+                <div class="feature col-sm-12 col-md-6 col-lg-3">
+                    <div class="feature-icon">
+                        <h1>🎨</h1>
+                    </div>
+                    <h4>Design Work</h4>
+                    <ul>
+                        <li><p>Adobe Illustrator</p></li>
+                        <li><p>Adobe Xd</p></li>
+                    </ul>
+                </div>
+                <div class="feature col-sm-12 col-md-6 col-lg-3">
+                    <div class="feature-icon">
+                        <h1>📽️</h1>
+                    </div>
+                    <h4>Other</h4>
+                    <ul>
+                        <li><p>Adobe Premiere Pro</p></li>
+                        <li><p>Adobe After Effects</p></li>
+                        <li><p>Handbrake (for compression)</p></li>
+                        <li><p>GitHub</p></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:replace="Components :: footer"></div>
+<div th:replace="Components :: scripts"></div>
+</body>
+</html>
