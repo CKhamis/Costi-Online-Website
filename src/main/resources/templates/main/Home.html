@@ -4,214 +4,44 @@
 <body class="bg-1 text-1">
 <div th:replace="Components :: nav"></div>
 
-<!-- Desktop Carousel -->
-<div id="desktop" class="carousel slide d-none d-md-block" data-bs-ride="carousel">
-
-    <!-- Indicators/dots -->
-    <div class="carousel-indicators">
-        <button type="button" data-bs-target="#desktop" data-bs-slide-to="0" class="active"></button>
-        <button type="button" data-bs-target="#desktop" data-bs-slide-to="1"></button>
-        <button type="button" data-bs-target="#desktop" data-bs-slide-to="2"></button>
-        <button type="button" data-bs-target="#desktop" data-bs-slide-to="3"></button>
-        <button type="button" data-bs-target="#desktop" data-bs-slide-to="4"></button>
-        <button type="button" data-bs-target="#desktop" data-bs-slide-to="5"></button>
-        <button type="button" data-bs-target="#desktop" data-bs-slide-to="6"></button>
-        <button type="button" data-bs-target="#desktop" data-bs-slide-to="7"></button>
-        <button type="button" data-bs-target="#desktop" data-bs-slide-to="8"></button>
-        <button type="button" data-bs-target="#desktop" data-bs-slide-to="9"></button>
-        <button type="button" data-bs-target="#desktop" data-bs-slide-to="10"></button>
-        <button type="button" data-bs-target="#desktop" data-bs-slide-to="11"></button>
+<!-- Desktop -->
+<div class="p-0 m-0 overflow-hidden">
+    <div class="container-fluid p-0 overflow-hidden d-none d-lg-block bg-black" style="height:600px">
+        <div class="position-absolute p-5" style="z-index:1;height:600px; width:100%">
+            <div class="container-fluid" style="padding-top:145px;">
+                <img th:src="@{/icons/CM White.png}" class="img-fluid mb-2" style="width:25%;"/>
+                <h3 class="fw-bold text-white changing-text">The best website out there!</h3>
+                <p class="col-md-8 fs-4 text-white">Version 3.0</p>
+                <div class="btn-group pb-4" role="group">
+                    <a href="https://www.youtube.com/channel/UCNBpX9wlGcB59vnv1pdogTA" class="btn btn-primary" aria-current="page">View YouTube Channel</a>
+                </div>
+            </div>
+        </div>
+        <video class="w-100" autoplay preload="true" loop="loop" style="margin-top:-150px;opacity:.5; " muted>
+            <source th:src="@{/videos/banners/CM Banner.m4v}" type="video/mp4">
+            video not supported
+        </video>
     </div>
-
-    <!-- The slideshow/carousel -->
-    <div class="carousel-inner">
-        <div class="carousel-item active">
-            <img th:src="@{/images/Slideshow/East.jpg}" alt="East" class="d-block" style="width:100%">
-            <div class="carousel-caption">
-                <h3>East Coast Trip</h3>
-                <p></p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img th:src="@{/images/Slideshow/City.jpg}" alt="City" class="d-block" style="width:100%">
-            <div class="carousel-caption">
-                <h3></h3>
-                <p></p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img th:src="@{/images/Slideshow/Disney.jpg}" alt="Disney" class="d-block" style="width:100%">
-            <div class="carousel-caption">
-                <h3>Disney Trip</h3>
-                <p></p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img th:src="@{/images/Slideshow/Fair.jpg}" alt="Fair" class="d-block" style="width:100%">
-            <div class="carousel-caption">
-                <h3></h3>
-                <p></p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img th:src="@{/images/Slideshow/FMF.jpg}" alt="FMF" class="d-block" style="width:100%">
-            <div class="carousel-caption">
-                <h3>Flea Market Finds</h3>
-                <p></p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img th:src="@{/images/Slideshow/Ga.jpg}" alt="Great America" class="d-block" style="width:100%">
-            <div class="carousel-caption">
-                <h3>SJSU Great America Trip</h3>
-                <p></p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img th:src="@{/images/Slideshow/Monterey.jpg}" alt="Monterey" class="d-block" style="width:100%">
-            <div class="carousel-caption">
-                <h3></h3>
-                <p></p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img th:src="@{/images/Slideshow/MontereyHangout.jpg}" alt="MontereyHangout" class="d-block" style="width:100%">
-            <div class="carousel-caption">
-                <h3>Monterey Hangout</h3>
-                <p></p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img th:src="@{/images/Slideshow/SurpriseBirthday.jpg}" alt="SurpriseBirthday" class="d-block" style="width:100%">
-            <div class="carousel-caption">
-                <h3>Surprise Birthday</h3>
-                <p></p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img th:src="@{/images/Slideshow/Vegas.jpg}" alt="Vegas" class="d-block" style="width:100%">
-            <div class="carousel-caption">
-                <h3>Vegas Trip</h3>
-                <p></p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img th:src="@{/images/Slideshow/SJSU.jpg}" alt="SJSU" class="d-block" style="width:100%">
-            <div class="carousel-caption">
-                <h3>Summer 2022 Break</h3>
-            </div>
-        </div>
-    </div>
-
-    <!-- Left and right controls/icons -->
-    <button class="carousel-control-prev" type="button" data-bs-target="#desktop" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#desktop" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-    </button>
 </div>
 
-<!-- Mobile Carousel -->
-<div id="mobile" class="carousel slide d-xs-block d-md-none mt-5" data-bs-ride="carousel">
-
-    <!-- Indicators/dots -->
-    <div class="carousel-indicators">
-        <button type="button" data-bs-target="#mobile" data-bs-slide-to="0" class="active"></button>
-        <button type="button" data-bs-target="#mobile" data-bs-slide-to="1"></button>
-        <button type="button" data-bs-target="#mobile" data-bs-slide-to="2"></button>
-        <button type="button" data-bs-target="#mobile" data-bs-slide-to="3"></button>
-        <button type="button" data-bs-target="#mobile" data-bs-slide-to="4"></button>
-        <button type="button" data-bs-target="#mobile" data-bs-slide-to="5"></button>
-        <button type="button" data-bs-target="#mobile" data-bs-slide-to="6"></button>
-        <button type="button" data-bs-target="#mobile" data-bs-slide-to="7"></button>
-        <button type="button" data-bs-target="#mobile" data-bs-slide-to="8"></button>
-        <button type="button" data-bs-target="#mobile" data-bs-slide-to="9"></button>
-        <button type="button" data-bs-target="#mobile" data-bs-slide-to="10"></button>
-        <button type="button" data-bs-target="#mobile" data-bs-slide-to="11"></button>
-    </div>
-
-    <!-- The slideshow/carousel -->
-    <div class="carousel-inner">
-        <div class="carousel-item active">
-            <img th:src="@{/images/MobileSlideshow/Eastm.jpg}" alt="East" class="d-block" style="width:100%">
-            <div class="carousel-caption">
-                <h3>East Coast Trip</h3>
-                <p></p>
+<!-- Mobile -->
+<div class="container pt-5 d-xs-block d-lg-none mt-5">
+    <div class="p-0 mb-4 border-box bg-black">
+        <div class="container-fluid p-0 overflow-hidden" style="height:600px;">
+            <div class="position-absolute p-5 text-white" style="z-index:1;">
+                <img th:src="@{/icons/CM White.png}" class="img-fluid mb-2" style="width:80%;"/>
+                <h3 class="fw-bold text-white">10+ Years of Experience</h3>
+                <p class="col-md-8 fs-4 text-white">Experience a taste in the evolution of my media production skills and ideas starting from 2011 and continuing to this day.</p>
+                <div class="btn-group pb-4" role="group">
+                    <a href="https://www.youtube.com/channel/UCNBpX9wlGcB59vnv1pdogTA" class="btn btn-primary" aria-current="page">View YouTube Channel</a>
+                </div>
             </div>
-        </div>
-        <div class="carousel-item">
-            <img th:src="@{/images/MobileSlideshow/Citym.jpg}" alt="City" class="d-block" style="width:100%">
-            <div class="carousel-caption">
-                <h3></h3>
-                <p></p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img th:src="@{/images/MobileSlideshow/Disneym.jpg}" alt="Disney" class="d-block" style="width:100%">
-            <div class="carousel-caption">
-                <h3>Disney Trip</h3>
-                <p></p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img th:src="@{/images/MobileSlideshow/Fairm.jpg}" alt="Fair" class="d-block" style="width:100%">
-            <div class="carousel-caption">
-                <h3></h3>
-                <p></p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img th:src="@{/images/MobileSlideshow/FMFm.jpg}" alt="FMF" class="d-block" style="width:100%">
-            <div class="carousel-caption">
-                <h3>Flea Market Finds</h3>
-                <p></p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img th:src="@{/images/MobileSlideshow/Gam.jpg}" alt="Great America" class="d-block" style="width:100%">
-            <div class="carousel-caption">
-                <h3>SJSU Great America Trip</h3>
-                <p></p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img th:src="@{/images/MobileSlideshow/Montereym.jpg}" alt="Monterey" class="d-block" style="width:100%">
-            <div class="carousel-caption">
-                <h3></h3>
-                <p></p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img th:src="@{/images/MobileSlideshow/MontereyHangoutm.jpg}" alt="MontereyHangout" class="d-block" style="width:100%">
-            <div class="carousel-caption">
-                <h3>Monterey Hangout</h3>
-                <p></p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img th:src="@{/images/MobileSlideshow/SurpriseBirthdaym.jpg}" alt="SurpriseBirthday" class="d-block" style="width:100%">
-            <div class="carousel-caption">
-                <h3>Surprise Birthday</h3>
-                <p></p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img th:src="@{/images/MobileSlideshow/Vegasm.jpg}" alt="Vegas" class="d-block" style="width:100%">
-            <div class="carousel-caption">
-                <h3>Vegas Trip</h3>
-                <p></p>
-            </div>
+            <video style="width:310%; opacity:.5; margin-left:-400px" autoplay preload="true" loop="loop" muted>
+                <source th:src="@{/videos/banners/CM Banner.m4v}" type="video/mp4">
+                video not supported
+            </video>
         </div>
     </div>
-
-    <!-- Left and right controls/icons -->
-    <button class="carousel-control-prev" type="button" data-bs-target="#mobile" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#mobile" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-    </button>
 </div>
 
 <main>
@@ -261,5 +91,8 @@
 
 <div th:replace="Components :: footer"></div>
 <div th:replace="Components :: scripts"></div>
+<script>
+    $('.changing-text').text('JQuery works!')
+</script>
 </body>
 </html>
