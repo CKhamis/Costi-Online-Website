@@ -9,9 +9,9 @@
     <div class="container-fluid p-0 overflow-hidden d-none d-lg-block bg-black" style="height:600px">
         <div class="position-absolute p-5" style="z-index:1;height:600px; width:100%">
             <div class="container-fluid" style="padding-top:145px;">
-                <img th:src="@{/icons/CM White.png}" class="img-fluid mb-2" style="width:25%;"/>
-                <h3 class="fw-bold text-white changing-text">The best website out there!</h3>
-                <p class="col-md-8 fs-4 text-white">Version 3.0</p>
+                <img th:src="@{/icons/CM White.png}" class="img-fluid mb-2" style="width:40%;margin-left:30%"/>
+                <h3 class="fw-bold text-white changing-text text-center">:(</h3>
+                <p class="col-md-8 fs-4 text-white text-center" style="width:100%">Version 3.0</p>
                 <div class="btn-group pb-4" role="group">
                     <a href="https://www.youtube.com/channel/UCNBpX9wlGcB59vnv1pdogTA" class="btn btn-primary" aria-current="page">View YouTube Channel</a>
                 </div>
@@ -92,7 +92,9 @@
 <div th:replace="Components :: footer"></div>
 <div th:replace="Components :: scripts"></div>
 <script>
-    $('.changing-text').text('JQuery works!')
+    var subtitles = ["Costi's favorite website", "Terence was here", "Chelsea Stacie Ingrid Marla Darla", "MAAAAARRIOOOOO!", "A project by Costi", "An interdimensional project",
+    "'Ello", "📮😳😳😳"]
+    $('.changing-text').text(subtitles[Math.floor(Math.random() * subtitles.length)])
 </script>
 </body>
 </html>
