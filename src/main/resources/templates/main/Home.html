@@ -9,7 +9,7 @@
     <div class="container-fluid p-0 overflow-hidden d-none d-lg-block bg-black" style="height:600px">
         <div class="position-absolute p-5" style="z-index:1;height:600px; width:100%">
             <div class="container-fluid" style="padding-top:160px;">
-                <img th:src="@{/icons/CM White.png}" class="img-fluid mb-2" style="width:40%;margin-left:30%"/>
+                <img th:src="@{/icons/CO White.png}" class="img-fluid mb-2 banner-logo" style="width:0%;margin-left:50%"/>
                 <h3 class="fw-bold text-white changing-text text-center">:(</h3>
                 <p class="col-md-8 fs-5 text-white text-center w-100">Version 3.0</p>
             </div>
@@ -26,7 +26,7 @@
     <div class="p-0 mb-4 border-box bg-black">
         <div class="container-fluid p-0 overflow-hidden" style="height:300px;">
             <div class="position-absolute p-5 text-white" style="z-index:1;">
-                <img th:src="@{/icons/CM White.png}" class="img-fluid mb-2" style="width:80%;margin-left:10%"/>
+                <img th:src="@{/icons/CO White.png}" class="img-fluid mb-2 banner-logo" style="width:80%;margin-left:10%"/>
                 <h3 class="fw-bold text-white changing-text text-center">:(</h3>
                 <p class="col-md-8 fs-4 text-white text-center w-100">Version 3.0</p>
             </div>
@@ -87,8 +87,17 @@
 <div th:replace="Components :: scripts"></div>
 <script>
     var subtitles = ["Costi's favorite website", "Terence was here", "Chelsea Stacie Ingrid Marla Darla", "MAAAAARRIOOOOO!", "A project by Costi", "An interdimensional project",
-    "'Ello", "📮😳😳😳"]
-    $('.changing-text').text(subtitles[Math.floor(Math.random() * subtitles.length)])
+    "'Ello", "📮😳😳😳", "Slay.", "ur mum"]
+
+    $(document).ready(function(){
+        $('.changing-text').text(subtitles[Math.floor(Math.random() * subtitles.length)]);
+        $('.banner-logo').animate({
+            width: '40%',
+            marginLeft: '30%'
+            });
+    });
+
+
 </script>
 </body>
 </html>
