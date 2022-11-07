@@ -45,10 +45,10 @@
             <div th:replace="Components :: message" class="mt-2"></div>
         </div>
     </div>
-
+    <!-- Quick Links-->
     <div class="container mt-3">
         <div th:replace="Components :: flash" class="mt-2"></div>
-        <div class="row mt-2">
+        <div class="row mt-2" id="quick-links">
             <div class="col col-12 col-lg-4">
                 <div class="border-box text-1 p-4 mb-4">
                     <h4 class="fw-bold">📖View Costipedia</h4>
@@ -86,8 +86,8 @@
 <div th:replace="Components :: footer"></div>
 <div th:replace="Components :: scripts"></div>
 <script>
-    var subtitles = ["Costi's favorite website", "Terence was here", "Chelsea Stacie Ingrid Marla Darla", "MAAAAARRIOOOOO!", "A project by Costi", "An interdimensional project",
-    "'Ello", "📮😳😳😳", "Slay.", "ur mum"]
+    var subtitles = ["Costi's favorite website", "Jedi Terence", "Chelsea Stacie Ingrid Marla Darla", "MAAAAARRIOOOOO!", "A project by Costi", "An interdimensional project",
+    "'Ello", "📮😳😳😳", "What's puopping", "Death, Dying, Religion", "ur mum"]
 
     $(document).ready(function(){
         $('.changing-text').text(subtitles[Math.floor(Math.random() * subtitles.length)]);
@@ -95,6 +95,14 @@
             width: '40%',
             marginLeft: '30%'
             });
+
+        var quickLinks = $("#quick-links").children();
+        $("#quick-links").css("background-color", "green");
+
+        for(let i = 0; i < quickLinks.length; i++){
+            console.log(i);
+            quickLinks[i].css("background-color", "yellow");
+        }
     });
 
 
