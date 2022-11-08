@@ -49,21 +49,21 @@
     <div class="container mt-3">
         <div th:replace="Components :: flash" class="mt-2"></div>
         <div class="row mt-2" id="quick-links">
-            <div class="col col-12 col-lg-4">
+            <div class="col col-12 col-lg-4" style="margin-top: 100px; opacity:0;">
                 <div class="border-box text-1 p-4 mb-4">
                     <h4 class="fw-bold">📖View Costipedia</h4>
                     <p>Costipedia is a wikipedia like feature that is about Costi</p>
                     <a href="/Wiki" type="button" class="btn btn-primary btn-sm">Explore Costipedia</a>
                 </div>
             </div>
-            <div class="col col-12 col-lg-4">
+            <div class="col col-12 col-lg-4" style="margin-top: 100px; opacity:0;">
                 <div class="border-box text-1 p-4  mb-4">
                     <h4 class="fw-bold">⚔️View Minecraft History</h4>
                     <p>View the rich history of all my previous Minecraft Worlds</p>
                     <a href="/Minecraft/gov#history" type="button" class="btn btn-primary btn-sm">View History</a>
                 </div>
             </div>
-            <div class="col col-12 col-lg-4">
+            <div class="col col-12 col-lg-4" style="margin-top: 100px; opacity:0;">
                 <div class="border-box text-1 p-4 mb-4">
                     <h4 class="fw-bold">🧪Check Out Previous Projects</h4>
                     <p>View previous coding-based projects I have made from over a decade ago!</p>
@@ -97,12 +97,12 @@
             });
 
         var quickLinks = $("#quick-links").children();
-        $("#quick-links").css("background-color", "green");
-
-        for(let i = 0; i < quickLinks.length; i++){
-            console.log(i);
-            quickLinks[i].css("background-color", "yellow");
-        }
+        $(quickLinks[0]).delay(0).animate({opacity: '1',
+                                            marginTop: '0px'}, {duration:500})
+        $(quickLinks[1]).delay(400).animate({opacity: '1',
+                                            marginTop: '0px'}, {duration:500})
+        $(quickLinks[2]).delay(800).animate({opacity: '1',
+                                            marginTop: '0px'}, {duration:500})
     });
 
 
