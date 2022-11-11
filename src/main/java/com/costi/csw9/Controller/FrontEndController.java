@@ -1,6 +1,7 @@
 package com.costi.csw9.Controller;
 import com.costi.csw9.Model.*;
 import com.costi.csw9.Service.*;
+import com.costi.csw9.Util.Slide;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +11,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -20,33 +22,23 @@ public class FrontEndController {
 
     private AnnouncementService announcementService;
 
+    private ArrayList<Slide> homePageSlides;
+
     @Autowired
     public FrontEndController(UserService userService, RegistrationService registrationService, WikiService wikiService, AnnouncementService announcementService) {
         this.userService = userService;
         this.registrationService = registrationService;
         this.wikiService = wikiService;
         this.announcementService = announcementService;
-    }
-    /*
-    @GetMapping
-    public List<Article> getarticles(){
-        return articleService.getArticles();
-    }
 
-    @PostMapping
-    public void registerNewArticle(@RequestBody Article article){
-        articleService.addNewArticle(article);
-    }
+        homePageSlides = new ArrayList<>();
+        homePageSlides.add(new Slide("/images/MobileSlideshow/21m.jpg", "/images/Slideshow/21.jpg", "title", "text"));
+        homePageSlides.add(new Slide("/images/MobileSlideshow/SJSUm.jpg", "/images/Slideshow/SJSU.jpg", "Fall 2022 Semester", ""));
+        homePageSlides.add(new Slide("/images/MobileSlideshow/Disneym.jpg", "/images/Slideshow/Disney.jpg", "Disney Trip!", ""));
+        homePageSlides.add(new Slide("/images/MobileSlideshow/Eastm.jpg", "/images/Slideshow/East.jpg", "East Coast Trip", ""));
+        homePageSlides.add(new Slide("/images/MobileSlideshow/MontereyHangoutm.jpg", "/images/Slideshow/MontereyHangout.jpg", "Monterey Hangout", "ft. the Gorls"));
 
-    @DeleteMapping(path = "{articleId}")
-    public void deleteArticle(@PathVariable("articleId") Long articleId){
-        articleService.deleteArticle(articleId);
     }
-
-    @PutMapping(path = "{articleId}")
-    public void modifyArticle(@PathVariable("articleId") Long articleId, @RequestParam(required = false) String name, @RequestParam(required = false) String email){
-        articleService.modifyArticle(articleId, name, email);
-    }*/
     // Theme
     private String choseTheme(){
         LocalDate today = LocalDate.now();
@@ -360,6 +352,7 @@ public class FrontEndController {
 
         List<Announcement> announcements = announcementService.getByApproval(true);
         model.addAttribute("announcements", announcements);
+        model.addAttribute("slides", homePageSlides);
         model.addAttribute("isAnnouncement", announcements.size() > 0);
         return "main/Home";
     }

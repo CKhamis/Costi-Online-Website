@@ -26,7 +26,7 @@
     <div class="p-0 mb-4 border-box bg-black">
         <div class="container-fluid p-0 overflow-hidden" style="height:300px;">
             <div class="position-absolute p-5 text-white" style="z-index:1;">
-                <img th:src="@{/icons/CO White.png}" class="img-fluid mb-2 banner-logo" style="width:80%;margin-left:10%"/>
+                <img th:src="@{/icons/CO White.png}" class="img-fluid mb-2" style="width:80%;margin-left:10%"/>
                 <h3 class="fw-bold text-white changing-text text-center">:(</h3>
                 <p class="col-md-8 fs-4 text-white text-center w-100">Version 3.0</p>
             </div>
@@ -76,13 +76,7 @@
     <div class="container-fluid" id="highlights">
         <div class="container">
             <h2 class="pb-2 border-bottom">Recent Highlights</h2>
-            <div id="desktop" class="carousel slide" data-bs-ride="carousel">
-
-                <!-- Indicators/dots -->
-                <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#desktop" data-bs-slide-to="0" class="active"></button>
-                    <button type="button" data-bs-target="#desktop" data-bs-slide-to="1"></button>
-                </div>
+            <div id="slideshow" class="carousel slide" data-bs-ride="carousel">
 
                 <!-- The slideshow/carousel -->
                 <div class="carousel-inner">
@@ -95,22 +89,23 @@
                             <h3>Costi Turns 21</h3>
                         </div>
                     </div>
-                    <div class="carousel-item">
+                    <div class="carousel-item" th:each="slide : ${slides}">
                         <picture>
-                            <source th:srcset="@{/images/Slideshow/Monterey.jpg}" media="(min-width: 768px)">
-                            <img th:src="@{/images/MobileSlideshow/Montereym.jpg}" alt="CSW9" class="d-block" style="width:100%">
+                            <source th:srcset="@{${slide.desktopPath}}" media="(min-width: 768px)">
+                            <img th:src="@{${slide.mobilePath}}" alt="CSW9" class="d-block" style="width:100%">
                         </picture>
                         <div class="carousel-caption d-none d-md-block">
-                            <h3>Monterey Trip</h3>
+                            <h3 th:text="${slide.captionHeader}">Monterey Trip</h3>
+                            <p th:text="${slide.captionDetails}"></p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Left and right controls/icons -->
-                <button class="carousel-control-prev" type="button" data-bs-target="#desktop" data-bs-slide="prev">
+                <button class="carousel-control-prev" type="button" data-bs-target="#slideshow" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon"></span>
                 </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#desktop" data-bs-slide="next">
+                <button class="carousel-control-next" type="button" data-bs-target="#slideshow" data-bs-slide="next">
                     <span class="carousel-control-next-icon"></span>
                 </button>
             </div>
