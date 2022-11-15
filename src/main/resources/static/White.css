@@ -9957,12 +9957,12 @@ td p {
 }
 
 /* About */
-#education .container-fluid, #education .container-sm, #education .container-md, #education .container-lg, #education .container-xl, #education .container-xxl {
+.gradient .container-fluid, .gradient .container-sm, .gradient .container-md, .gradient .container-lg, .gradient .container-xl, .gradient .container-xxl {
   background-image: linear-gradient(to right, #FAFAFA, #FAFAFA, rgba(250, 250, 250, 0));
 }
 
 @media (max-width: 767.98px) {
-  #education .container-fluid, #education .container-sm, #education .container-md, #education .container-lg, #education .container-xl, #education .container-xxl {
+  .gradient .container-fluid, .gradient .container-sm, .gradient .container-md, .gradient .container-lg, .gradient .container-xl, .gradient .container-xxl {
     background-color: rgba(250, 250, 250, 0.8);
   }
   body {

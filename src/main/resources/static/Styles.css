@@ -22,6 +22,22 @@
 }
 
 /* Home */
+#projects{
+    background-image: url('/images/webpageImages/CostiOnline.jpg');
+    background-position: right;
+    background-attachment: fixed;
+}
+#media{
+    background-image: url('/images/webpageImages/Pioneer News Cover.jpg');
+    background-position: center;
+    background-attachment: fixed;
+}
+#media > div{
+    background-color: rgba(0,0,0,.8);
+}
+#media img{
+    width: 25%;
+}
 .slide{
     width:100%;
     aspect-ratio: 3 / 1;
@@ -33,5 +49,9 @@
         width:100%;
         aspect-ratio: 1 / 1;
         object-fit:cover;
+    }
+
+    #media img{
+        width: 50%;
     }
 }
