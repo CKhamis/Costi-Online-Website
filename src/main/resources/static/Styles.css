@@ -66,6 +66,6 @@
 
 /* Media */
 .border-box > img, .border-box > iframe{
-    aspect-ratio: 3 / 1.9;
+    aspect-ratio: 16 / 9;
     object-fit:cover;
 }
