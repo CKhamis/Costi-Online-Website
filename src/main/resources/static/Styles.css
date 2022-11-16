@@ -43,6 +43,14 @@
     aspect-ratio: 3 / 1;
     object-fit:cover;
 }
+#wiki{
+    background-image: url('/images/webpageImages/Pacer.jpg');
+    background-position: center;
+    background-attachment: fixed;
+}
+#wiki > div{
+    background-color: rgba(0,0,0,.8);
+}
 
 @media screen and (max-width: 768px){
     .slide{
@@ -54,4 +62,10 @@
     #media img{
         width: 50%;
     }
+}
+
+/* Media */
+.border-box > img, .border-box > iframe{
+    aspect-ratio: 3 / 1.9;
+    object-fit:cover;
 }
