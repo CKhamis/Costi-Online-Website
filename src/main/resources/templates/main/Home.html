@@ -203,16 +203,34 @@
 
     <div class="container-fluid p-0" id="wiki">
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-12 col-md-4">
+
+            <div class="container py-5">
+                <div class="row">
+                    <div class="d-none d-md-block col-md-7 ">
+                        <div class="row">
+                            <div class="col" th:each="page : ${wiki}">
+                                <div th:switch="${page.category}"   class="card border-box">
+                                    <div th:case="INSIDE_JOKE"      class="card-header fw-bold" th:text="|&#128518; Inside Joke|">Card title</div>
+                                    <div th:case="HISTORICAL"       class="card-header fw-bold" th:text="|&#127984; Historical|">Card title</div>
+                                    <div th:case="PEOPLE"         class="card-header fw-bold" th:text="|&#128697; People|">Card title</div>
+                                    <div th:case="PROFESSIONAL"     class="card-header fw-bold" th:text="|&#128084; Professional|">Card title</div>
+                                    <div th:case="*"                class="card-header fw-bold" th:text="|&#10067; Other|">Card title</div>
+                                    <div class="card-body">
+                                        <h5 class="card-title text-truncate" th:text="*{page.title}">Title</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted text-truncate" th:text="*{page.subtitle}">Card subtitle</h6>
+                                        <a th:href="'/Wiki/' + *{page.Id} + '/view'" class="card-link">View ></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-5">
+                        <h2 class="fw-bold text-white">Costipedia</h2>
+                        <p class="fs-4 text-white">Costipedia is a Wiki that contains pages relevant to myself.</p>
+                        <a href="/Wiki" class="btn btn-primary" aria-current="page">Visit Costipedia</a>
+                    </div>
 
                 </div>
-
-            </div>
-            <div class="container py-5">
-                <h2 class="fw-bold text-white">Costipedia</h2>
-                <p class="fs-4 text-white">Costipedia is a Wiki that contains pages relevant to myself. In order to add to the wiki, you must create a Costi Online Account</p>
-                <a href="/Wiki" class="btn btn-primary" aria-current="page">Visit Costipedia</a>
             </div>
         </div>
     </div>

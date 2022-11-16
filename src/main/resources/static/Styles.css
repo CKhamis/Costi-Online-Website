@@ -44,7 +44,7 @@
     object-fit:cover;
 }
 #wiki{
-    background-image: url('/images/webpageImages/Pacer.jpg');
+    background-image: url('/images/webpageImages/WikiBg.jpg');
     background-position: center;
     background-attachment: fixed;
 }

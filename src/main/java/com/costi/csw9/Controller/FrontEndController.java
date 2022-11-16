@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -354,6 +355,15 @@ public class FrontEndController {
         model.addAttribute("announcements", announcements);
         model.addAttribute("slides", homePageSlides);
         model.addAttribute("isAnnouncement", announcements.size() > 0);
+
+        List<WikiPage> random = wikiService.getByApproval(true);
+        Collections.shuffle(random);
+
+        if(random.size() > 3){
+            random = new ArrayList<>(random.subList(0, 3));
+        }
+
+        model.addAttribute("wiki", random);
         return "main/Home";
     }
     @GetMapping("/Projects")
