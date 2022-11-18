@@ -229,7 +229,7 @@
                 <div class="row">
                     <div class="d-none d-md-block col-md-7 ">
                         <div class="row">
-                            <div class="col" th:each="page : ${wiki}">
+                            <div class="col-4" th:each="page : ${wiki}">
                                 <div th:switch="${page.category}"   class="card border-box">
                                     <div th:case="INSIDE_JOKE"      class="card-header fw-bold" th:text="|&#128518; Inside Joke|">Card title</div>
                                     <div th:case="HISTORICAL"       class="card-header fw-bold" th:text="|&#127984; Historical|">Card title</div>
