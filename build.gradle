@@ -26,9 +26,71 @@ dependencies {
 }
 
 application{
-	mainClass = 'com.costi.co.CostiOnlineStarter'
+	mainClass = 'com.costi.csw9.CostiOnlineStarter'
 }
+
+mainClassName = 'com.costi.csw9.CostiOnlineStarter'
+
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+tasks.withType(Tar){
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+tasks.withType(Zip){
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'com.costi.csw9.CostiOnlineStarter'
+        )
+    }
+	from {
+		configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+	}
+}
+
+task DataReverseServerHost(type: Jar)
+{
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	mainClassName = 'com.costi.csw9.CostiOnlineStarter'
+	manifest
+			{
+				attributes 'Main-Class' : "com.costi.csw9.CostiOnlineStarter"
+			}
+
+	from sourceSets.main.output
+
+	from {
+		configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+	}
+
+	baseName = 'CostiOnlinejar'
+}
+
+task DataReverseServerHostStartScript(type: CreateStartScripts)
+{
+	outputDir = file('build/scripts/')
+	mainClass = 'com.costi.csw9.CostiOnlineStarter'
+	applicationName = 'CostiOnlineStart'
+	classpath = files('libs/' + jar.getArchiveFileName().get())
+//    classpath = files('libs/' + DataReverseServerHost.archiveFileName.get())
+}
+
+distributions
+		{
+			main
+					{
+						contents
+								{
+									duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+									from (DataReverseServerHost) {into 'lib'}
+									from (DataReverseServerHostStartScript) {into 'bin'}
+								}
+					}
+		}
