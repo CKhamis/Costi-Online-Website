@@ -37,6 +37,16 @@ public class User implements UserDetails {
    @OneToMany(fetch = FetchType.LAZY, mappedBy = "author")
    private List<WikiPage> authoredPages = new ArrayList<>();
 
+   @OneToMany(mappedBy = "organizer")
+   private List<FriendEvent> organizedEvents = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+    @JoinTable(name = "user_events",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "friend_event_id")})
+    private List<FriendEvent> eventsInvited = new ArrayList<>();
+
+
     public User(String firstName, String lastName, String email, String password, UserRole role) {
         this.firstName = firstName;
         this.email = email;
