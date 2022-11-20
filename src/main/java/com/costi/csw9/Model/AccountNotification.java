@@ -55,8 +55,8 @@ public class AccountNotification {
         this.body = body;
     }
 
-    public LocalDateTime getDateCreated() {
-        return dateCreated;
+    public String getDateCreated() {
+        return dateCreated.getMonthValue() + "/" + dateCreated.getDayOfMonth() + "/" + dateCreated.getYear();
     }
 
     public void setDateCreated(LocalDateTime dateCreated) {
