@@ -1,9 +1,6 @@
 package com.costi.csw9.Service;
 
-import com.costi.csw9.Model.User;
-import com.costi.csw9.Model.ConfirmationToken;
-import com.costi.csw9.Model.UserRole;
-import com.costi.csw9.Model.WikiPage;
+import com.costi.csw9.Model.*;
 import com.costi.csw9.Repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -78,6 +75,10 @@ public class UserService implements UserDetailsService {
 
             //Enable user
             user.setEnabled(true);
+
+            //Add to log
+            AccountLog log = new AccountLog("Account Created", "Account was created", user);
+            // TODO: finish this!!!!
 
             //Save User
             userRepository.save(user);
