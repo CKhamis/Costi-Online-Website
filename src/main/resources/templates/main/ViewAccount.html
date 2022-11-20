@@ -53,8 +53,25 @@
                     </div>
                 </div>
             </div>
+
+            <h2>Account Event Logs</h2>
+            <hr/>
+
+            <div class="mb-5 container">
+                <div class="row border-box mb-1" th:each="log : ${logs}">
+                    <div class="col-4">
+                        <p th:text="*{log.dateCreated}"></p>
+                    </div>
+                    <div class="col-4">
+                        <p th:text="*{log.title}"></p>
+                    </div>
+                    <div class="col-4">
+                        <p th:text="*{log.body}"></p>
+                    </div>
+                </div>
+            </div>
             <form th:action="@{${action}}" method="post" th:object="${user}">
-                <h2>General Information</h2>
+                <h2>Edit Account Information</h2>
                 <hr/>
                 <div class="form-row row">
                     <div class="col-md-4 mb-3">

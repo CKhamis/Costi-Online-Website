@@ -31,7 +31,7 @@ public class AccountLogDaoImpl implements AccountLogRepository {
         Session session = sessionFactory.openSession();
 
         // Get Results
-        Query query = session.createQuery("SELECT e FROM Account_Logs e WHERE user_Id = " + id);
+        Query query = session.createQuery("SELECT e FROM AccountLog e WHERE user = " + id);
         List<AccountLog> res = query.getResultList();
 
         // Close session

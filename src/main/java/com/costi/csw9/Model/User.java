@@ -37,20 +37,20 @@ public class User implements UserDetails {
    @OneToMany(fetch = FetchType.LAZY, mappedBy = "author")
    private List<WikiPage> authoredPages = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    private List<AccountNotification> notifications = new ArrayList<>();
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+//    private List<AccountNotification> notifications = new ArrayList<>();
 
    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
    private List<AccountLog> logs = new ArrayList<>();
 
-   @OneToMany(mappedBy = "organizer", fetch = FetchType.LAZY)
-   private List<FriendEvent> organizedEvents = new ArrayList<>();
+//   @OneToMany(mappedBy = "organizer", fetch = FetchType.LAZY)
+//   private List<FriendEvent> organizedEvents = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
-    @JoinTable(name = "user_events",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "friend_event_id")})
-    private List<FriendEvent> eventsInvited = new ArrayList<>();
+//    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+//    @JoinTable(name = "user_events",
+//            joinColumns = {@JoinColumn(name = "user_id")},
+//            inverseJoinColumns = {@JoinColumn(name = "friend_event_id")})
+//    private List<FriendEvent> eventsInvited = new ArrayList<>();
 
 
     public User(String firstName, String lastName, String email, String password, UserRole role) {
@@ -114,35 +114,11 @@ public class User implements UserDetails {
         return this.getRole().equals(UserRole.OWNER);
     }
 
-    public List<AccountNotification> getNotifications() {
-        return notifications;
-    }
-
-    public void setNotifications(List<AccountNotification> notifications) {
-        this.notifications = notifications;
-    }
-
     public List<AccountLog> getLogs() {
         return logs;
     }
 
     public void setLogs(List<AccountLog> logs) {
         this.logs = logs;
-    }
-
-    public List<FriendEvent> getOrganizedEvents() {
-        return organizedEvents;
-    }
-
-    public void setOrganizedEvents(List<FriendEvent> organizedEvents) {
-        this.organizedEvents = organizedEvents;
-    }
-
-    public List<FriendEvent> getEventsInvited() {
-        return eventsInvited;
-    }
-
-    public void setEventsInvited(List<FriendEvent> eventsInvited) {
-        this.eventsInvited = eventsInvited;
     }
 }

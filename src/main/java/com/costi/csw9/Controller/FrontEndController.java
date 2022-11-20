@@ -23,21 +23,15 @@ public class FrontEndController {
 
     private AnnouncementService announcementService;
 
-    private ArrayList<Slide> homePageSlides;
+    private AccountLogService accountLogService;
 
     @Autowired
-    public FrontEndController(UserService userService, RegistrationService registrationService, WikiService wikiService, AnnouncementService announcementService) {
+    public FrontEndController(UserService userService, RegistrationService registrationService, WikiService wikiService, AnnouncementService announcementService, AccountLogService accountLogService) {
         this.userService = userService;
         this.registrationService = registrationService;
         this.wikiService = wikiService;
         this.announcementService = announcementService;
-
-        homePageSlides = new ArrayList<>();
-        homePageSlides.add(new Slide("/images/MobileSlideshow/21m.jpg", "/images/Slideshow/21.jpg", "title", "text"));
-        homePageSlides.add(new Slide("/images/MobileSlideshow/SJSUm.jpg", "/images/Slideshow/SJSU.jpg", "Fall 2022 Semester", ""));
-        homePageSlides.add(new Slide("/images/MobileSlideshow/Disneym.jpg", "/images/Slideshow/Disney.jpg", "Disney Trip!", ""));
-        homePageSlides.add(new Slide("/images/MobileSlideshow/Eastm.jpg", "/images/Slideshow/East.jpg", "East Coast Trip", ""));
-        homePageSlides.add(new Slide("/images/MobileSlideshow/MontereyHangoutm.jpg", "/images/Slideshow/MontereyHangout.jpg", "Monterey Hangout", "ft. the Gorls"));
+        this.accountLogService = accountLogService;
 
     }
     // Theme
@@ -64,10 +58,12 @@ public class FrontEndController {
 
     @RequestMapping("/Account")
     public String editUser(Model model, Principal principal, RedirectAttributes redirectAttributes){
-        model.addAttribute("user", getCurrentUser(principal));
+        User user = getCurrentUser(principal);
+        model.addAttribute("user", user);
         model.addAttribute("action", "/Account/edit");
         model.addAttribute("loggedIn", principal != null);
         model.addAttribute("theme", choseTheme());
+        model.addAttribute("logs", accountLogService.findByUser(user.getId()));
         return "main/ViewAccount";
     }
 
@@ -353,7 +349,6 @@ public class FrontEndController {
 
         List<Announcement> announcements = announcementService.getByApproval(true);
         model.addAttribute("announcements", announcements);
-        model.addAttribute("slides", homePageSlides);
         model.addAttribute("isAnnouncement", announcements.size() > 0);
 
         List<WikiPage> random = wikiService.getByApproval(true);
