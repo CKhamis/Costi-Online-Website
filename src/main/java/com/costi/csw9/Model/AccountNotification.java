@@ -17,6 +17,8 @@ public class AccountNotification {
     @Column(nullable = false)
     private String body;
 
+    private String notificationType;
+
     private LocalDateTime dateCreated = LocalDateTime.now();
 
     @ManyToOne
@@ -26,9 +28,26 @@ public class AccountNotification {
     public AccountNotification() {
     }
 
-    public AccountNotification(String title, String body) {
+    public AccountNotification(String title, String body, User user) {
         this.title = title;
         this.body = body;
+        notificationType = "primary";
+        this.user = user;
+    }
+
+    public AccountNotification(String title, String body, String notificationType, User user) {
+        this.title = title;
+        this.body = body;
+        this.notificationType = notificationType;
+        this.user = user;
+    }
+
+    public String getNotificationType() {
+        return notificationType;
+    }
+
+    public void setNotificationType(String notificationType) {
+        this.notificationType = notificationType;
     }
 
     public Long getId() {

@@ -65,7 +65,9 @@ public class FrontEndController {
         model.addAttribute("loggedIn", principal != null);
         model.addAttribute("theme", choseTheme());
         model.addAttribute("logs", accountLogService.findByUser(user.getId()));
-        model.addAttribute("notifications", accountNotificationService.findByUser(user.getId()));
+        List<AccountNotification> notifications = accountNotificationService.findByUser(user.getId());
+        model.addAttribute("notifications", notifications);
+        model.addAttribute("notificationCount", notifications.size());
         return "main/ViewAccount";
     }
 

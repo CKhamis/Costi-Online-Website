@@ -20,6 +20,7 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
+    private final AccountNotificationService accountNotificationService;
 
     private final AccountLogService accountLogService;
 
@@ -88,6 +89,10 @@ public class UserService implements UserDetailsService {
             //Add to log
             AccountLog log = new AccountLog("Account Created", "User was created and activated", user);
             accountLogService.save(log);
+
+            // TODO: remove
+            AccountNotification noti = new AccountNotification("Test", "body", "danger", user);
+            accountNotificationService.save(noti);
         }
     }
 

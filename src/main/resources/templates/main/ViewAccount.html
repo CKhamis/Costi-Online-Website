@@ -11,12 +11,14 @@
             <h4 class="text-center fw-bold" th:text="|*{firstName} *{lastName}|"></h4>
             <p class="text-center pb-0">Costi Network ID</p>
         </div>
-        <div class="p-3 border-box">
-            <h3 class="text-center">Notifications</h3>
-            <div class="container">
-                <div class="border-box mb-2" th:each="notification : ${notifications}">
-                    <p th:text="*{title}"></p>
-                </div>
+        <div class="p-3 border-box mb-2">
+            <h3 class="text-center mb-2">Notifications <span class="badge bg-primary rounded-pill" th:text="${notificationCount}">Primary</span></h3>
+
+            <div th:each="notification : ${notifications}" th:class="|alert alert-${notification.notificationType} alert-dismissible fade show|" role="alert">
+                <p class="fw-bold d-inline" th:text="|${notification.title} • |"></p>
+                <p class="d-inline" th:text="${notification.dateCreated}"></p>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <p class="" th:text="${notification.body}"></p>
             </div>
         </div>
     </div>
@@ -97,13 +99,13 @@
             <div class="px-0 container">
                 <div class="row mb-1" th:each="log : ${logs}">
                     <div class="col-4">
-                        <p th:text="*{dateCreated}"></p>
+                        <p th:text="${log.dateCreated}"></p>
                     </div>
                     <div class="col-4">
-                        <p th:text="*{title}"></p>
+                        <p th:text="${log.title}"></p>
                     </div>
                     <div class="col-4">
-                        <p th:text="*{body}"></p>
+                        <p th:text="${log.body}"></p>
                     </div>
                 </div>
             </div>
