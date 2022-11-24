@@ -17,7 +17,7 @@ public class AccountNotificationDaoImpl implements AccountNotificationRepository
     @Override
     public AccountNotification findById(Long id) {
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT e FROM Account_notifications e WHERE id = " + id);
+        Query query = session.createQuery("SELECT e FROM AccountNotification e WHERE id = " + id);
         AccountNotification res = (AccountNotification) query.getSingleResult();
         // Close session
         session.close();
@@ -31,7 +31,7 @@ public class AccountNotificationDaoImpl implements AccountNotificationRepository
         Session session = sessionFactory.openSession();
 
         // Get Results
-        Query query = session.createQuery("SELECT e FROM Account_notifications e WHERE user_id = " + id);
+        Query query = session.createQuery("SELECT e FROM AccountNotification e WHERE user_id = " + id);
         List<AccountNotification> res = query.getResultList();
 
         // Close session
@@ -49,7 +49,7 @@ public class AccountNotificationDaoImpl implements AccountNotificationRepository
         session.beginTransaction();
 
         // Execute update
-        Query query = session.createQuery("DELETE Account_notifications c WHERE c.id = " + id);
+        Query query = session.createQuery("DELETE AccountNotification c WHERE c.id = " + id);
         query.executeUpdate();
 
         // Commit the transaction

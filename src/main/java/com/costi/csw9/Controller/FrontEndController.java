@@ -1,7 +1,6 @@
 package com.costi.csw9.Controller;
 import com.costi.csw9.Model.*;
 import com.costi.csw9.Service.*;
-import com.costi.csw9.Util.Slide;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,14 +24,16 @@ public class FrontEndController {
 
     private AccountLogService accountLogService;
 
+    private AccountNotificationService accountNotificationService;
+
     @Autowired
-    public FrontEndController(UserService userService, RegistrationService registrationService, WikiService wikiService, AnnouncementService announcementService, AccountLogService accountLogService) {
+    public FrontEndController(UserService userService, RegistrationService registrationService, WikiService wikiService, AnnouncementService announcementService, AccountLogService accountLogService, AccountNotificationService accountNotificationService) {
         this.userService = userService;
         this.registrationService = registrationService;
         this.wikiService = wikiService;
         this.announcementService = announcementService;
         this.accountLogService = accountLogService;
-
+        this.accountNotificationService = accountNotificationService;
     }
     // Theme
     private String choseTheme(){
@@ -64,6 +65,7 @@ public class FrontEndController {
         model.addAttribute("loggedIn", principal != null);
         model.addAttribute("theme", choseTheme());
         model.addAttribute("logs", accountLogService.findByUser(user.getId()));
+        model.addAttribute("notifications", accountNotificationService.findByUser(user.getId()));
         return "main/ViewAccount";
     }
 

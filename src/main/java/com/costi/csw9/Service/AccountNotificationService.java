@@ -17,11 +17,11 @@ public class AccountNotificationService {
         this.accountNotificationRepository = accountNotificationRepository;
     }
 
-    public AccountNotification loadById(Long id){
+    public AccountNotification findById(Long id){
         return accountNotificationRepository.findById(id);
     }
 
-    public List<AccountNotification> loadByUser(Long id){
+    public List<AccountNotification> findByUser(Long id){
         return accountNotificationRepository.findByUser(id);
     }
 
