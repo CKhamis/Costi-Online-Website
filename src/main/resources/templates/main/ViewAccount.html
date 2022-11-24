@@ -17,7 +17,7 @@
             <div th:each="notification : ${notifications}" th:class="|alert alert-${notification.notificationType} alert-dismissible fade show|" role="alert">
                 <p class="fw-bold d-inline" th:text="|${notification.title} • |"></p>
                 <p class="d-inline" th:text="${notification.dateCreated}"></p>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <a class="btn-close" th:href="@{|/Account/Notification/${notification.id}/delete|}"></a>
                 <p class="" th:text="${notification.body}"></p>
             </div>
         </div>

@@ -1,6 +1,7 @@
 package com.costi.csw9.Service;
 
 import com.costi.csw9.Model.AccountNotification;
+import com.costi.csw9.Model.User;
 import com.costi.csw9.Repository.AccountNotificationRepository;
 import com.costi.csw9.Service.WikiService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +28,9 @@ public class AccountNotificationService {
 
     public void save(AccountNotification notification){
         accountNotificationRepository.save(notification);
+    }
+
+    public void delete(Long id){
+        accountNotificationRepository.delete(id);
     }
 }

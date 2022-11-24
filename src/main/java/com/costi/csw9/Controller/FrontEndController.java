@@ -96,6 +96,19 @@ public class FrontEndController {
         return "redirect:/Account";
     }
 
+    @RequestMapping(value = "/Account/Notification/{id}/delete", method = RequestMethod.GET)
+    public String deleteNotification(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes) {
+        AccountNotification notification = accountNotificationService.findById(id);
+        if(getCurrentUser(principal).isAdmin() || notification.getUser().getId() == getCurrentUser(principal).getId()){
+            accountNotificationService.delete(id);
+            redirectAttributes.addFlashAttribute("flash",new FlashMessage("Notification Deleted!", "Notification was permanently removed from your account", FlashMessage.Status.SUCCESS));
+        }else{
+            redirectAttributes.addFlashAttribute("flash",new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
+            System.out.println("Invalid Permissions");
+        }
+        return "redirect:/Account";
+    }
+
     @GetMapping("/SignUp")
     public String getNewAccount(Model model, RedirectAttributes redirectAttributes) {
         if(!model.containsAttribute("user")) {
