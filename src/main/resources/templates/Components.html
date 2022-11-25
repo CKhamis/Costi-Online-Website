@@ -42,7 +42,7 @@
                 <a href="/Account" class="btn btn-primary">Sign In</a>
             </div>
             <div th:class="'' + (*{loggedIn}? 'd-flex' : 'd-none')">
-                <a class="nav-link px-3 text-1 fw-bold" href="/Account" th:text="${user.firstName} + ' ' + ${user.lastName}">Account</a>
+                <a class="nav-link px-3 text-1 fw-bold" href="/Account" th:utext="|${user.firstName} ${user.lastName} [${notificationCount}]|">Account</a>
                 <form th:action="@{/logout}" method="post">
                     <button type="submit" value="Sign Out" class="btn btn-primary">Sign Out</button>
                 </form>
