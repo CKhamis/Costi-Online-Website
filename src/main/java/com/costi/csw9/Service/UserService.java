@@ -90,9 +90,9 @@ public class UserService implements UserDetailsService {
             AccountLog log = new AccountLog("Account Created", "User was created and activated", user);
             accountLogService.save(log);
 
-            // TODO: delete
-            AccountNotification noti = new AccountNotification("rat", "rat", "primary", user);
-            accountNotificationService.save(noti);
+            //Add welcome message
+            AccountNotification welcome = new AccountNotification("Welcome", "<p>Welcome to your Costi Network ID, here you will see various details regarding your account. Try changing your profile picture!</p>", "primary", user);
+            accountNotificationService.save(welcome);
         }
     }
 

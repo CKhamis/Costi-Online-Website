@@ -11,7 +11,7 @@
             <h4 class="text-center fw-bold" th:text="|*{firstName} *{lastName}|"></h4>
             <p class="text-center pb-0">Costi Network ID</p>
         </div>
-        <div class="p-3 border-box mb-2">
+        <div class="p-3 border-box mb-3">
             <h3 class="text-center mb-2">Notifications <span class="badge bg-primary rounded-pill" th:text="${notificationCount}">Primary</span></h3>
             <div th:replace="Components :: notification"></div>
         </div>
@@ -55,7 +55,35 @@
                 <h2>Edit Account Information</h2>
                 <hr/>
                 <div class="form-row row">
-                    <!-- Add image picker here -->
+                    <div class="col-md-6 mb-3">
+                        <label for="pp">Profile Image Select</label>
+                        <select th:field="*{profilePicture}" class="form-control" id="pp">
+                            <option value = "0">Airplane</option>
+                            <option value = "1">Ball</option>
+                            <option value = "2">Beach</option>
+                            <option value = "3">Car</option>
+                            <option value = "4">Cat</option>
+                            <option value = "5">Chess</option>
+                            <option value = "6">Dog</option>
+                            <option value = "7">Drip</option>
+                            <option value = "8">Duck</option>
+                            <option value = "9">Fish</option>
+                            <option value = "10">Guest</option>
+                            <option value = "11">Guitar</option>
+                            <option value = "12">Kick</option>
+                            <option value = "13">Launch</option>
+                            <option value = "14">Flower</option>
+                            <option value = "15">Snowflake</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="rol">Website Role</label>
+                        <select th:field="*{role}" class="form-control disabledSelect" id="rol" disabled>
+                            <option value="" disabled="disabled">Select a role</option>
+                            <option value = "ADMIN">Administrator</option>
+                            <option value = "USER">User</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="form-row row">
                     <div class="col-md-4 mb-3">
@@ -78,14 +106,6 @@
                         <label for="fnf">Password</label>
                         <input type="password" class="form-control" id="pass" th:field="*{password}" placeholder="Password">
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="rol">Website Role</label>
-                        <select th:field="*{role}" class="form-control disabledSelect" id="rol" disabled>
-                            <option value="" disabled="disabled">Select a role</option>
-                            <option value = "ADMIN">Administrator</option>
-                            <option value = "USER">User</option>
-                        </select>
-                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
@@ -107,7 +127,7 @@
                 </div>
             </div>
         </div>
-        <p>*Costi Network IDs are not as secure as accounts of other websites. Make sure to use a unique password for this website. Accounts are subject for deletion at any point, as this is an experimental feature. Accounts are unable to be deleted once created unless an admin performs manual database editing.</p>
+        <p>*Costi Network IDs are not as secure as accounts of other websites. Make sure to use a unique password for this website. Accounts are subject for deletion at any point, as this is an experimental feature. Accounts are unable to be deleted once created unless an admin performs manual database editing. Passwords are encrypted in the server's database and cannot be recovered at this time.</p>
     </div>
 </div>
 

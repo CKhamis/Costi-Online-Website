@@ -143,4 +143,9 @@ public class User implements UserDetails {
     public void setNotifications(List<AccountNotification> notifications) {
         this.notifications = notifications;
     }
+
+    @Override
+    public String toString() {
+        return firstName + " " + lastName + " of ID " + id;
+    }
 }
