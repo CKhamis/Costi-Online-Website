@@ -7,19 +7,13 @@
 <div class="container-fluid row px-4 py-5">
     <div class="col-xs-12 col-md-5 col-lg-3">
         <div class="p-3 mb-3 border-box" th:object="${user}">
-            <img class="mb-2" style="width:100%;aspect-ratio: 1 / 1;object-fit:cover;" th:src="@{/images/Slideshow/IMG_0121.CR2-min.jpg}" />
+            <div th:replace="Components :: profilePhoto"></div>
             <h4 class="text-center fw-bold" th:text="|*{firstName} *{lastName}|"></h4>
             <p class="text-center pb-0">Costi Network ID</p>
         </div>
         <div class="p-3 border-box mb-2">
             <h3 class="text-center mb-2">Notifications <span class="badge bg-primary rounded-pill" th:text="${notificationCount}">Primary</span></h3>
-
-            <div th:each="notification : ${notifications}" th:class="|alert alert-${notification.notificationType} alert-dismissible fade show|" role="alert">
-                <p class="fw-bold d-inline" th:text="|${notification.title} • |"></p>
-                <p class="d-inline" th:text="${notification.dateCreated}"></p>
-                <a class="btn-close" th:href="@{|/Account/Notification/${notification.id}/delete|}"></a>
-                <p class="" th:text="${notification.body}"></p>
-            </div>
+            <div th:replace="Components :: notification"></div>
         </div>
     </div>
     <div class="col-lg-9 col-md-7 col-xs-12">
@@ -60,6 +54,9 @@
             <form class="mb-5" th:action="@{${action}}" method="post" th:object="${user}">
                 <h2>Edit Account Information</h2>
                 <hr/>
+                <div class="form-row row">
+                    <!-- Add image picker here -->
+                </div>
                 <div class="form-row row">
                     <div class="col-md-4 mb-3">
                         <label for="fnf">First name</label>
@@ -110,6 +107,7 @@
                 </div>
             </div>
         </div>
+        <p>*Costi Network IDs are not as secure as accounts of other websites. Make sure to use a unique password for this website. Accounts are subject for deletion at any point, as this is an experimental feature. Accounts are unable to be deleted once created unless an admin performs manual database editing.</p>
     </div>
 </div>
 

@@ -90,8 +90,8 @@ public class UserService implements UserDetailsService {
             AccountLog log = new AccountLog("Account Created", "User was created and activated", user);
             accountLogService.save(log);
 
-            // TODO: remove
-            AccountNotification noti = new AccountNotification("Test", "body", "danger", user);
+            // TODO: delete
+            AccountNotification noti = new AccountNotification("rat", "rat", "primary", user);
             accountNotificationService.save(noti);
         }
     }

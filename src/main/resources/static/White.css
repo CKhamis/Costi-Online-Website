@@ -9895,12 +9895,6 @@ ul {
   padding-left: 0;
 }
 
-.alert-success {
-  background-color: rgba(15, 81, 50, 0.5);
-  border-color: #d1e7dd;
-  color: #d1e7dd;
-}
-
 ul {
   list-style-type: none;
   padding-left: 0;
@@ -9908,12 +9902,6 @@ ul {
 
 td p {
   margin: 0px;
-}
-
-.alert-danger {
-  background-color: rgba(132, 32, 41, 0.5);
-  border-color: #f8d7da;
-  color: #f8d7da;
 }
 
 .bg-2 {

@@ -101,7 +101,7 @@ public class FrontEndController {
         AccountNotification notification = accountNotificationService.findById(id);
         if(getCurrentUser(principal).isAdmin() || notification.getUser().getId() == getCurrentUser(principal).getId()){
             accountNotificationService.delete(id);
-            redirectAttributes.addFlashAttribute("flash",new FlashMessage("Notification Deleted!", "Notification was permanently removed from your account", FlashMessage.Status.SUCCESS));
+            redirectAttributes.addFlashAttribute("flash",new FlashMessage("Notification Dismissed", "Notification was permanently removed from your account", FlashMessage.Status.SUCCESS));
         }else{
             redirectAttributes.addFlashAttribute("flash",new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
             System.out.println("Invalid Permissions");
