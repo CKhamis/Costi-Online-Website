@@ -169,6 +169,33 @@ public class FrontEndController {
         return "moderator/AccountTools";
     }
 
+    @GetMapping("/COMT/Accounts/{id}")
+    public String getCostiOnlineAccountSettings(Model model, Principal principal, RedirectAttributes redirectAttributes, @PathVariable Long id) {
+
+        User user = getCurrentUser(principal);
+        model.addAttribute("user", user);
+        model.addAttribute("loggedIn", true);
+        model.addAttribute("theme", choseTheme());
+        model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
+
+        model.addAttribute("all", userService.loadAll());
+
+        //Selected User
+        User selectedUser = userService.loadUserObjectById(id);
+        List<AccountNotification> notifications = accountNotificationService.findByUser(id);
+        model.addAttribute("SUNotificationCount", notifications.size());
+        model.addAttribute("SUNotifications", notifications);
+        List<AccountLog> logs = accountLogService.findByUser(id);
+        model.addAttribute("SULogCount", logs.size());
+        model.addAttribute("SULogs", logs);
+        model.addAttribute("SUlastInteraction", logs.get(logs.size()-1).getDateCreated());
+//        List<WikiPage> wikiPages = wikiService.getWikiPagesByAuthor(id);
+//        model.addAttribute("SUWikiCount", wikiPages.size());
+//        model.addAttribute("SUWikiPages", wikiPages);
+
+        return "moderator/AdminAccountView";
+    }
+
     @GetMapping("/COMT/Announcements")
     public String getCostiOnlineAnnouncementTools(Model model, Principal principal, RedirectAttributes redirectAttributes) {
 

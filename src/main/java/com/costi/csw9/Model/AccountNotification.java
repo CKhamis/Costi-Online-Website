@@ -2,6 +2,7 @@ package com.costi.csw9.Model;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 @Table(name="Account_notifications")
@@ -75,7 +76,24 @@ public class AccountNotification {
     }
 
     public String getDateCreated() {
-        return dateCreated.getMonthValue() + "/" + dateCreated.getDayOfMonth() + "/" + dateCreated.getYear();
+        //return dateCreated.getMonthValue() + "/" + dateCreated.getDayOfMonth() + "/" + dateCreated.getYear();
+        String unit = "";
+        LocalDateTime now = LocalDateTime.now();
+        long diff;
+        if((diff = ChronoUnit.SECONDS.between(dateCreated,now)) < 60){
+            unit = "s";
+        } else if ((diff = ChronoUnit.MINUTES.between(dateCreated,now)) < 60) {
+            unit = "m";
+        } else if ((diff = ChronoUnit.HOURS.between(dateCreated,now)) < 24) {
+            unit = "h";
+        } else if ((diff = ChronoUnit.DAYS.between(dateCreated,now)) < 30) {
+            unit = "d";
+        } else if ((diff = ChronoUnit.MONTHS.between(dateCreated,now)) < 12) {
+            unit = "mo";
+        } else{
+            diff = ChronoUnit.YEARS.between(dateCreated,now);
+        }
+        return String.format("%d %s",diff,unit);
     }
 
     public void setDateCreated(LocalDateTime dateCreated) {

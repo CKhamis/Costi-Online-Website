@@ -43,8 +43,8 @@
                 <td th:text="*{page.author.firstName} + ' ' + *{page.author.lastName}">Author</td>
                 <td class="text-center">
                     <div th:switch="*{page.author.role}">
-                        <span th:case="ADMIN"   class="badge badge-pill bg-primary">Admin</span>
-                        <span th:case="USER"    class="badge badge-pill bg-info">User</span>
+                        <span th:case="'ADMIN'"   class="badge badge-pill bg-primary">Admin</span>
+                        <span th:case="'USER'"    class="badge badge-pill bg-info">User</span>
                         <span th:case="*"       class="badge badge-pill bg-dark" th:text="*{page.author.role}">Other</span>
                     </div>
                 </td>

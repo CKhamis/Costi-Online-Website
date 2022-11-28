@@ -76,3 +76,17 @@
     aspect-ratio: 16 / 9;
     object-fit:cover;
 }
+
+/* Moderator */
+.account-list-item{
+    display:block;
+    height:30px;
+}
+.account-list-item > div {
+    width:24px;
+    float:left;
+}
+.account-list-item > p{
+    float:left;
+    margin-left:16px;
+}
