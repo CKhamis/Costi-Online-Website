@@ -6,22 +6,33 @@
 
 <div class="container-fluid row px-0 mx-0 d-none d-lg-block">
     <div class="col-lg-3 bg-1 position-fixed" style="height:100vh;padding-top:100px">
-        <h3 class="fw-bold">All Accounts</h3>
+        <h3 class="fw-bold mb-2">All Accounts</h3>
         <th:block th:each="user : ${all}">
             <a th:href="@{|/COMT/Accounts/${user.id}/|}" class="account-list-item mb-3">
                 <div><div th:replace="Components :: profilePhoto" style="width:100px;"></div></div>
-                <p style="fs-6" th:text="|${user.firstName} ${user.lastName}|"></p>
+                <p th:text="|${user.firstName} ${user.lastName}|"></p>
             </a>
         </th:block>
     </div>
 </div>
 <div class="container-fluid row px-0 mx-0">
     <div class="col-lg-3 d-none d-lg-block">
-        behind
+        Secret message 😳
     </div>
-    <div class="col-xs-12 col-lg-9 px-0" style="height:100vh;padding-top:70px">
-        <div class="container-fluid">
+    <div class="col-xs-12 col-lg-9 px-0" style="height:100vh;padding-top:100px">
+        <div class="row" th:object="${selectedUser}">
+            <div class="col-lg-3">
+                <a href="">< Back to COMT</a>
+            </div>
+            <div class="col-lg-3">
+                <h3 class="fw-bold mb-2" th:text="|*{firstName} *{lastName}|">Account</h3>
+                <div class="border-box">
 
+                </div>
+            </div>
+            <div class="col-lg-6">
+                hi
+            </div>
         </div>
     </div>
 </div>

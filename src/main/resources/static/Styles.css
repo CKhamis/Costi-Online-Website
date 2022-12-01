@@ -80,13 +80,14 @@
 /* Moderator */
 .account-list-item{
     display:block;
-    height:30px;
+    height:40px;
 }
 .account-list-item > div {
-    width:24px;
+    width:40px;
     float:left;
 }
 .account-list-item > p{
     float:left;
     margin-left:16px;
+    font-size:23px;
 }

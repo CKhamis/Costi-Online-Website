@@ -182,6 +182,7 @@ public class FrontEndController {
 
         //Selected User
         User selectedUser = userService.loadUserObjectById(id);
+        model.addAttribute("selectedUser", selectedUser);
         List<AccountNotification> notifications = accountNotificationService.findByUser(id);
         model.addAttribute("SUNotificationCount", notifications.size());
         model.addAttribute("SUNotifications", notifications);
