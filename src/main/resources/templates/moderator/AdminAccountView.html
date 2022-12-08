@@ -15,7 +15,11 @@
             </th:block>
         </div>
         <div th:object="${selectedUser}">
-            <a href="">< Back to COMT</a>
+            <a href="" class="mb-4">< Back to COMT</a>
+            <div class="border-box p-3">
+                <h3 class="fw-bold mb-2">Account Navigation</h3>
+                <p id="overview-button">Account Overview</p>
+            </div>
         </div>
         <div th:object="${selectedUser}" class="px-2">
             <div class="border-box p-3">
@@ -31,26 +35,32 @@
             </div>
         </div>
         <div th:object="${selectedUser}" class="px-2">
-            <h3 class="fw-bold mb-4" th:text="|*{lastName}'s Details|">Account Name</h3>
-            <div class="border-box p-3">
-                <h4 class="text-center fw-bold mb-2">Account Status</h4>
-                <div class="as-grid-container">
-                    <div th:class="'rounded text-1 ' + (*{isLocked}? 'bg-danger' : '')">
-                        <h5 class="fw-bold text-center mb-2 mt-2" th:text="(*{isLocked}? '&#128274;' : '&#128275;') + 'Account Lock '">🔑Account Lock</h5>
-                        <p class="text-center" th:text="'Account ' + (*{isLocked}? 'locked!' : 'Unlocked!')">Account lock here</p>
-                    </div>
-                    <div th:class="'rounded text-1 ' + (*{enabled}? '' : 'bg-danger')">
-                        <h5 class="fw-bold text-center mb-2 mt-2" th:text="(*{enabled}? '&#9989;' : '&#9940;') + 'Account Enable '">⚠️Account Enable</h5>
-                        <p class="text-center" th:text="'Account ' + (*{enabled}? 'enabled!' : 'disabled!')">Account enable here</p>
+            <div id="accountOverview">
+                <h3 class="fw-bold mb-4" th:text="|*{firstName}'s Details|">Account Name</h3>
+                <div class="border-box p-3">
+                    <h4 class="text-center fw-bold mb-2">Account Status</h4>
+                    <p class="text-center text-secondary" th:text="${SUCanSignIn} ? 'User can sign in' : '&#9888;User cannot sign in'"></p>
+                    <div class="as-grid-container">
+                        <div th:class="'rounded text-1 ' + (*{isLocked}? 'bg-danger text-white' : '')">
+                            <h5 class="fw-bold text-center mb-2 mt-2" th:text="(*{isLocked}? '&#128274;' : '&#128275;') + 'Account Lock '">🔑Account Lock</h5>
+                            <p class="text-center" th:text="'Account ' + (*{isLocked}? 'locked!' : 'Unlocked!')">Account lock here</p>
+                        </div>
+                        <div th:class="'rounded text-1 ' + (*{enabled}? '' : 'bg-danger text-white')">
+                            <h5 class="fw-bold text-center mb-2 mt-2" th:text="(*{enabled}? '&#9989;' : '&#9940;') + 'Account Enable '">⚠️Account Enable</h5>
+                            <p class="text-center" th:text="'Account ' + (*{enabled}? 'enabled!' : 'disabled!')">Account enable here</p>
+                        </div>
                     </div>
                 </div>
+                <div class="border-box p-3 mt-3">
+                    <h4 class="text-center fw-bold mb-4">General Account Information</h4>
+                    <p th:text="|Username/Email: *{email}|"></p>
+                    <p th:text="|First Name: *{firstName}|"></p>
+                    <p th:text="|Last Name: *{lastName}|"></p>
+                    <p th:text="|Profile Picture: *{profilePicture}|"></p>
+                </div>
             </div>
-            <div class="border-box p-3 mt-3">
-                <h4 class="text-center fw-bold mb-4">General Account Information</h4>
-                <p th:text="|Username/Email: *{email}|"></p>
-                <p th:text="|First Name: *{firstName}|"></p>
-                <p th:text="|Last Name: *{lastName}|"></p>
-                <p th:text="|Profile Picture: *{profilePicture}|"></p>
+            <div id="edit-details">
+
             </div>
         </div>
     </div>

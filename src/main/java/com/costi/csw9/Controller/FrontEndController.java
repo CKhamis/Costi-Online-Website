@@ -190,6 +190,7 @@ public class FrontEndController {
         model.addAttribute("SULogCount", logs.size());
         model.addAttribute("SULogs", logs);
         model.addAttribute("SUlastInteraction", logs.get(logs.size()-1).getDateCreated());
+        model.addAttribute("SUCanSignIn", !selectedUser.getIsLocked() && selectedUser.getEnabled());
 //        List<WikiPage> wikiPages = wikiService.getWikiPagesByAuthor(id);
 //        model.addAttribute("SUWikiCount", wikiPages.size());
 //        model.addAttribute("SUWikiPages", wikiPages);
