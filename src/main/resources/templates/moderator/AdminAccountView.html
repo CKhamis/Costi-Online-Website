@@ -36,7 +36,7 @@
             </div>
         </div>
         <div th:object="${selectedUser}" class="px-2">
-            <div id="accountOverview">
+            <div id="account-overview">
                 <h3 class="fw-bold mb-4" th:text="|*{firstName}'s Details|">Account Name</h3>
                 <div class="border-box p-3">
                     <h4 class="text-center fw-bold mb-2">Account Status</h4>
@@ -70,14 +70,14 @@
 <div th:replace="Components :: scripts"></div>
 <script>
     $(document).ready(function(){
-        console.log("rat");
         $("#overview-button").click(function() {
-            $("#overview").show();
-            $("#edit-details").hide();
+            console.log("rat");
+            $("#account-overview").css("display", "block");
+            $("#edit-details").css("display", "none");
         });
         $("#edit-details-button").click(function(){
-            $("#edit-details").show();
-            $("#overview").hide();
+            $("#edit-details").css("display", "block");
+            $("#account-overview").css("display", "none");
         });
     });
 </script>
