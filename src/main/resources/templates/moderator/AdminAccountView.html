@@ -15,15 +15,14 @@
             </th:block>
         </div>
         <div th:object="${selectedUser}">
-            <a href="" class="mb-4">< Back to COMT</a>
-            <div class="border-box p-3">
+            <div class="border-box p-3" style="height:calc(100vh - 10px)">
                 <h3 class="fw-bold mb-2">Account Navigation</h3>
                 <p id="overview-button">Account Overview</p>
                 <p id="edit-details-button">Edit Details</p>
             </div>
         </div>
         <div th:object="${selectedUser}" class="px-2">
-            <div class="border-box p-3">
+            <div class="border-box p-3" style="height:calc(100vh - 10px)">
                 <div th:replace="Components :: profilePhoto"></div>
                 <h3 class="fw-bold mb-2" th:text="|*{firstName} *{lastName}|">Account Name</h3>
                 <p th:text="|ID: *{id}|"></p>
@@ -35,8 +34,8 @@
 <!--                <p th:text="|Wiki Pages Created: ${SUWikiCount}|"></p>-->
             </div>
         </div>
-        <div th:object="${selectedUser}" class="px-2">
-            <div id="account-overview">
+        <div class="px-2">
+            <div id="account-overview" th:object="${selectedUser}">
                 <h3 class="fw-bold mb-4" th:text="|*{firstName}'s Details|">Account Name</h3>
                 <div class="border-box p-3">
                     <h4 class="text-center fw-bold mb-2">Account Status</h4>
@@ -60,8 +59,66 @@
                     <p th:text="|Profile Picture: *{profilePicture}|"></p>
                 </div>
             </div>
-            <div id="edit-details">
-
+            <div id="edit-details" style="display:none;">
+                <h3 th:object="${selectedUser}" class="fw-bold mb-4" th:text="|Edit *{firstName}'s Details|">Account Details</h3>
+                <div class="border-box p-3">
+                    <form class="mb-5" th:action="@{${action}}" method="post" th:object="${selectedUser}">
+                        <div class="form-row row">
+                            <div class="col-md-6 mb-3">
+                                <label for="pp">Profile Image Select</label>
+                                <select th:field="*{profilePicture}" class="form-control" id="pp">
+                                    <option value = "0">Airplane</option>
+                                    <option value = "1">Ball</option>
+                                    <option value = "2">Beach</option>
+                                    <option value = "3">Car</option>
+                                    <option value = "4">Cat</option>
+                                    <option value = "5">Chess</option>
+                                    <option value = "6">Dog</option>
+                                    <option value = "7">Drip</option>
+                                    <option value = "8">Duck</option>
+                                    <option value = "9">Fish</option>
+                                    <option value = "10">Guest</option>
+                                    <option value = "11">Guitar</option>
+                                    <option value = "12">Kick</option>
+                                    <option value = "13">Launch</option>
+                                    <option value = "14">Flower</option>
+                                    <option value = "15">Snowflake</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="rol">Website Role</label>
+                                <select th:field="*{role}" class="form-control disabledSelect" id="rol" disabled>
+                                    <option value="" disabled="disabled">Select a role</option>
+                                    <option value = "ADMIN">Administrator</option>
+                                    <option value = "USER">User</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row row">
+                            <div class="col-md-4 mb-3">
+                                <label for="fnf">First name</label>
+                                <input type="text" class="form-control" id="fnf" th:field="*{firstName}"
+                                       placeholder="First name" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="lnf">Last name</label>
+                                <input type="text" class="form-control" id="lnf" th:field="*{lastName}"
+                                       placeholder="Last name" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="mnf">Email</label>
+                                <input type="text" class="form-control" id="mnf" th:field="*{email}" placeholder="email" required>
+                            </div>
+                        </div>
+                        <div class="form-row row">
+                            <div class="col-md-12 mb-3">
+                                <label for="fnf">Password</label>
+                                <input type="password" class="form-control" id="pass" th:field="*{password}" placeholder="Password">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
