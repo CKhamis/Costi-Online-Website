@@ -19,6 +19,7 @@
             <div class="border-box p-3">
                 <h3 class="fw-bold mb-2">Account Navigation</h3>
                 <p id="overview-button">Account Overview</p>
+                <p id="edit-details-button">Edit Details</p>
             </div>
         </div>
         <div th:object="${selectedUser}" class="px-2">
@@ -67,5 +68,18 @@
 </main>
 
 <div th:replace="Components :: scripts"></div>
+<script>
+    $(document).ready(function(){
+        console.log("rat");
+        $("#overview-button").click(function() {
+            $("#overview").show();
+            $("#edit-details").hide();
+        });
+        $("#edit-details-button").click(function(){
+            $("#edit-details").show();
+            $("#overview").hide();
+        });
+    });
+</script>
 </body>
 </html>
