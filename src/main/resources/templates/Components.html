@@ -74,7 +74,7 @@
     <p th:utext="${notification.body}"></p>
 </div>
 
-<th:block th:fragment="profilePhoto" th:switch="${user.profilePicture}">
+<th:block th:fragment="profilePhoto" th:switch="*{profilePicture}">
     <img th:case="0" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/airplane.jpg}" />
     <img th:case="1" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/ball.jpg}" />
     <img th:case="2" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/beach.jpg}" />

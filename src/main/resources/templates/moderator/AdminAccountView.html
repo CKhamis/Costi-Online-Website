@@ -8,12 +8,17 @@
     <div class="ac-grid-container">
         <div>
             <h3 class="fw-bold mb-4">All Accounts</h3>
+            <th:block th:each="user : ${all}">
+                <a th:href="@{|/COMT/Accounts/${user.id}/|}" class="account-list-item mb-3">
+                    <p th:text="|${user.firstName} ${user.lastName}|" class="fw-bold fs-5"></p>
+                </a>
+            </th:block>
         </div>
         <div th:object="${selectedUser}">
             <a href="">< Back to COMT</a>
         </div>
-        <div th:object="${selectedUser}" class="p-2">
-            <div class="border-box p-3 mt-3">
+        <div th:object="${selectedUser}" class="px-2">
+            <div class="border-box p-3">
                 <div th:replace="Components :: profilePhoto"></div>
                 <h3 class="fw-bold mb-2" th:text="|*{firstName} *{lastName}|">Account Name</h3>
                 <p th:text="|ID: *{id}|"></p>
@@ -25,17 +30,17 @@
 <!--                <p th:text="|Wiki Pages Created: ${SUWikiCount}|"></p>-->
             </div>
         </div>
-        <div th:object="${selectedUser}" class="p-2">
-            <h3 class="fw-bold mb-4" th:text="|*{firstName} *{lastName}|">Account Name</h3>
+        <div th:object="${selectedUser}" class="px-2">
+            <h3 class="fw-bold mb-4" th:text="|*{lastName}'s Details|">Account Name</h3>
             <div class="border-box p-3">
-                <h4 class="text-center fw-bold mb-4">Account Status</h4>
+                <h4 class="text-center fw-bold mb-2">Account Status</h4>
                 <div class="as-grid-container">
-                    <div th:class="'text-1 ' + (*{isLocked}? 'bg-danger' : '')">
-                        <h5 class="fw-bold text-center mb-2" th:text="(*{isLocked}? '&#128274;' : '&#128275;') + 'Account Lock '">🔑Account Lock</h5>
+                    <div th:class="'rounded text-1 ' + (*{isLocked}? 'bg-danger' : '')">
+                        <h5 class="fw-bold text-center mb-2 mt-2" th:text="(*{isLocked}? '&#128274;' : '&#128275;') + 'Account Lock '">🔑Account Lock</h5>
                         <p class="text-center" th:text="'Account ' + (*{isLocked}? 'locked!' : 'Unlocked!')">Account lock here</p>
                     </div>
-                    <div th:class="'text-1 ' + (*{enabled}? '' : 'bg-danger')">
-                        <h5 class="fw-bold text-center mb-2" th:text="(*{enabled}? '&#9989;' : '&#9940;') + 'Account Enable '">⚠️Account Enable</h5>
+                    <div th:class="'rounded text-1 ' + (*{enabled}? '' : 'bg-danger')">
+                        <h5 class="fw-bold text-center mb-2 mt-2" th:text="(*{enabled}? '&#9989;' : '&#9940;') + 'Account Enable '">⚠️Account Enable</h5>
                         <p class="text-center" th:text="'Account ' + (*{enabled}? 'enabled!' : 'disabled!')">Account enable here</p>
                     </div>
                 </div>
@@ -45,6 +50,7 @@
                 <p th:text="|Username/Email: *{email}|"></p>
                 <p th:text="|First Name: *{firstName}|"></p>
                 <p th:text="|Last Name: *{lastName}|"></p>
+                <p th:text="|Profile Picture: *{profilePicture}|"></p>
             </div>
         </div>
     </div>
