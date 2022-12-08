@@ -9,6 +9,10 @@
     object-fit:cover;
 }
 
+.main-content-2{
+    margin-top: 7rem;
+}
+
 /* About */
 #education{
     background-image: url('/images/About/SJSU.jpg');
@@ -78,16 +82,20 @@
 }
 
 /* Moderator */
-.account-list-item{
-    display:block;
-    height:40px;
+.ac-grid-container {
+  display: grid;
+  grid-template-columns: 25% 20% 20% auto;
+  gap: 10px;
+  height:100%;
 }
-.account-list-item > div {
-    width:40px;
-    float:left;
+
+.fixed-moderator-content{
+    position:fixed;
+    height:calc(100vh - 7rem);
 }
-.account-list-item > p{
-    float:left;
-    margin-left:16px;
-    font-size:23px;
+
+.as-grid-container{
+display: grid;
+  grid-template-columns: auto auto;
+  gap: 10px;
 }

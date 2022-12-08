@@ -4,38 +4,52 @@
 <body class="bg-1 text-1">
 <div th:replace="moderator/ModeratorComponents :: nav"></div>
 
-<div class="container-fluid row px-0 mx-0 d-none d-lg-block">
-    <div class="col-lg-3 bg-1 position-fixed" style="height:100vh;padding-top:100px">
-        <h3 class="fw-bold mb-2">All Accounts</h3>
-        <th:block th:each="user : ${all}">
-            <a th:href="@{|/COMT/Accounts/${user.id}/|}" class="account-list-item mb-3">
-                <div><div th:replace="Components :: profilePhoto" style="width:100px;"></div></div>
-                <p th:text="|${user.firstName} ${user.lastName}|"></p>
-            </a>
-        </th:block>
-    </div>
-</div>
-<div class="container-fluid row px-0 mx-0">
-    <div class="col-lg-3 d-none d-lg-block">
-        Secret message 😳
-    </div>
-    <div class="col-xs-12 col-lg-9 px-0" style="height:100vh;padding-top:100px">
-        <div class="row" th:object="${selectedUser}">
-            <div class="col-lg-3">
-                <a href="">< Back to COMT</a>
+<main class="container-fluid main-content-2 fixed-moderator-content">
+    <div class="ac-grid-container">
+        <div>
+            <h3 class="fw-bold mb-4">All Accounts</h3>
+        </div>
+        <div th:object="${selectedUser}">
+            <a href="">< Back to COMT</a>
+        </div>
+        <div th:object="${selectedUser}" class="p-2">
+            <div class="border-box p-3 mt-3">
+                <div th:replace="Components :: profilePhoto"></div>
+                <h3 class="fw-bold mb-2" th:text="|*{firstName} *{lastName}|">Account Name</h3>
+                <p th:text="|ID: *{id}|"></p>
+                <p th:text="|Role: *{role}|"></p>
+                <p th:text="|Joined: *{dateCreated}|"></p>
+                <p th:text="|Log Count: ${SULogCount}|"></p>
+                <p th:text="|Notification Count: ${SUNotificationCount}|"></p>
+                <p th:text="|Last Activity: ${SUlastInteraction}|"></p>
+<!--                <p th:text="|Wiki Pages Created: ${SUWikiCount}|"></p>-->
             </div>
-            <div class="col-lg-3">
-                <h3 class="fw-bold mb-2" th:text="|*{firstName} *{lastName}|">Account</h3>
-                <div class="border-box">
-
+        </div>
+        <div th:object="${selectedUser}" class="p-2">
+            <h3 class="fw-bold mb-4" th:text="|*{firstName} *{lastName}|">Account Name</h3>
+            <div class="border-box p-3">
+                <h4 class="text-center fw-bold mb-4">Account Status</h4>
+                <div class="as-grid-container">
+                    <div th:class="'text-1 ' + (*{isLocked}? 'bg-danger' : '')">
+                        <h5 class="fw-bold text-center mb-2" th:text="(*{isLocked}? '&#128274;' : '&#128275;') + 'Account Lock '">🔑Account Lock</h5>
+                        <p class="text-center" th:text="'Account ' + (*{isLocked}? 'locked!' : 'Unlocked!')">Account lock here</p>
+                    </div>
+                    <div th:class="'text-1 ' + (*{enabled}? '' : 'bg-danger')">
+                        <h5 class="fw-bold text-center mb-2" th:text="(*{enabled}? '&#9989;' : '&#9940;') + 'Account Enable '">⚠️Account Enable</h5>
+                        <p class="text-center" th:text="'Account ' + (*{enabled}? 'enabled!' : 'disabled!')">Account enable here</p>
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-6">
-                hi
+            <div class="border-box p-3 mt-3">
+                <h4 class="text-center fw-bold mb-4">General Account Information</h4>
+                <p th:text="|Username/Email: *{email}|"></p>
+                <p th:text="|First Name: *{firstName}|"></p>
+                <p th:text="|Last Name: *{lastName}|"></p>
             </div>
         </div>
     </div>
-</div>
+</main>
+
 <div th:replace="Components :: scripts"></div>
 </body>
 </html>
