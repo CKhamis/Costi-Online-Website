@@ -6,7 +6,7 @@
 
 <main class="container-fluid main-content-2 fixed-moderator-content">
     <div class="ac-grid-container">
-        <div>
+        <div class="ac-grid-scroll-pane">
             <h3 class="fw-bold mb-4">All Accounts</h3>
             <th:block th:each="user : ${all}">
                 <a th:href="@{|/COMT/Accounts/${user.id}/|}" class="account-list-item mb-3">
@@ -15,14 +15,14 @@
             </th:block>
         </div>
         <div th:object="${selectedUser}">
-            <div class="border-box p-3" style="height:calc(100vh - 10px)">
+            <div class="border-box p-3 ac-grid-scroll-pane">
                 <h3 class="fw-bold mb-2">Account Navigation</h3>
                 <p id="overview-button">Account Overview</p>
                 <p id="edit-details-button">Edit Details</p>
             </div>
         </div>
         <div th:object="${selectedUser}" class="px-2">
-            <div class="border-box p-3" style="height:calc(100vh - 10px)">
+            <div class="border-box p-3 ac-grid-scroll-pane">
                 <div th:replace="Components :: profilePhoto"></div>
                 <h3 class="fw-bold mb-2" th:text="|*{firstName} *{lastName}|">Account Name</h3>
                 <p th:text="|ID: *{id}|"></p>
@@ -35,8 +35,9 @@
             </div>
         </div>
         <div class="px-2">
-            <div id="account-overview" th:object="${selectedUser}">
+            <div id="account-overview" class="ac-grid-scroll-pane pane-4" th:object="${selectedUser}">
                 <h3 class="fw-bold mb-4" th:text="|*{firstName}'s Details|">Account Name</h3>
+                <div th:replace="Components :: flash" class="my-2"></div>
                 <div class="border-box p-3">
                     <h4 class="text-center fw-bold mb-2">Account Status</h4>
                     <p class="text-center text-secondary" th:text="${SUCanSignIn} ? 'User can sign in' : '&#9888;User cannot sign in'"></p>
@@ -59,10 +60,13 @@
                     <p th:text="|Profile Picture: *{profilePicture}|"></p>
                 </div>
             </div>
-            <div id="edit-details" style="display:none;">
+            <div id="edit-details" class="ac-grid-scroll-pane pane-4" style="display:none;">
                 <h3 th:object="${selectedUser}" class="fw-bold mb-4" th:text="|Edit *{firstName}'s Details|">Account Details</h3>
                 <div class="border-box p-3">
-                    <form class="mb-5" th:action="@{${action}}" method="post" th:object="${selectedUser}">
+                    <form th:action="@{${action}}" method="post" th:object="${selectedUser}">
+                        <input type="hidden" th:field="*{id}"/>
+                        <input type="hidden" th:field="*{role}"/>
+                        <input type="hidden" th:field="*{enabled}"/>
                         <div class="form-row row">
                             <div class="col-md-6 mb-3">
                                 <label for="pp">Profile Image Select</label>
@@ -129,12 +133,12 @@
     $(document).ready(function(){
         $("#overview-button").click(function() {
             console.log("rat");
+            $(".pane-4").css("display", "none");
             $("#account-overview").css("display", "block");
-            $("#edit-details").css("display", "none");
         });
         $("#edit-details-button").click(function(){
+            $(".pane-4").css("display", "none");
             $("#edit-details").css("display", "block");
-            $("#account-overview").css("display", "none");
         });
     });
 </script>

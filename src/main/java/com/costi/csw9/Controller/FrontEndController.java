@@ -179,6 +179,7 @@ public class FrontEndController {
         model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
 
         model.addAttribute("all", userService.loadAll());
+        model.addAttribute("action", "/COMT/Accounts/" + id + "/edit");
 
         //Selected User
         User selectedUser = userService.loadUserObjectById(id);
@@ -196,6 +197,21 @@ public class FrontEndController {
 //        model.addAttribute("SUWikiPages", wikiPages);
 
         return "moderator/AdminAccountView";
+    }
+
+    @PostMapping("/COMT/Accounts/{id}/edit")
+    public String adminUpdateUser(User user, BindingResult result, RedirectAttributes redirectAttributes, Principal principal, @PathVariable Long id) {
+        if (result.hasErrors()) {
+            // Include validation errors upon redirect
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.User", result);
+            // Add  member if invalid was received
+            redirectAttributes.addFlashAttribute("selectedUser", user);
+        }
+
+        //Save new user
+        userService.updateUser(user);
+        redirectAttributes.addFlashAttribute("flash", new FlashMessage("✅ Account Successfully Edited", "Changes saved to server", FlashMessage.Status.SUCCESS));
+        return "redirect:/COMT/Accounts/" + id;
     }
 
     @GetMapping("/COMT/Announcements")

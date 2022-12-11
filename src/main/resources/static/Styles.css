@@ -89,6 +89,11 @@
   height:100%;
 }
 
+.ac-grid-scroll-pane{
+    height:calc(100vh - 7rem - 10px);
+    overflow:scroll;
+}
+
 .fixed-moderator-content{
     position:fixed;
     height:calc(100vh - 7rem);
