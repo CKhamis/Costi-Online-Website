@@ -16,12 +16,12 @@
         </div>
         <div th:object="${selectedUser}">
             <div class="border-box p-3 ac-grid-scroll-pane">
-                <h3 class="fw-bold mb-2">Account Navigation</h3>
-                <p id="overview-button">Account Overview</p>
-                <p id="edit-details-button">Edit Details</p>
-                <p id="view-notifications-button">View Notifications</p>
-                <p id="view-logs-button">View All Logs</p>
-                <p id="permissions-button">Account Permissions</p>
+                <h3 class="fw-bold mb-4">Account Navigation</h3>
+                <p id="overview-button" class="ac-nav-element" style="font-weight:bold;">🛂Account Overview</p>
+                <p id="edit-details-button" class="ac-nav-element">🧩Edit Details</p>
+                <p id="view-notifications-button" class="ac-nav-element">ℹ️View Notifications</p>
+                <p id="view-logs-button" class="ac-nav-element">🎛️View All Logs</p>
+                <p id="permissions-button" class="ac-nav-element">💎Account Permissions</p>
             </div>
         </div>
         <div th:object="${selectedUser}" class="px-2">
@@ -153,10 +153,27 @@
                     </div>
                 </div>
             </div>
-            <div id="permissions" class="ac-grid-scroll-pane pane-4" style="display:none;">
+            <div id="permissions" th:object="${selectedUser}" class="ac-grid-scroll-pane pane-4" style="display:none;">
                 <h3 class="fw-bold mb-4">Account Permissions</h3>
-                <div class="border-box p-3">
-
+                <div class="border-box p-3 mb-3">
+                    <h4 class="fw-bold mb-2">Account Lock</h4>
+                    <p>Account locking is one of the two ways to block someone from logging into their account.</p>
+                    <form th:action="@{|/Accounts/*{id}/unlock|}" method="post" th:if="*{isLocked}">
+                        <button type="submit" class="btn btn-success btn-sm">Unlock</button>
+                    </form>
+                    <form th:action="@{|/Accounts/*{id}/lock|}" method="post" th:unless="*{isLocked}">
+                        <button type="submit" class="btn btn-danger btn-sm">Lock</button>
+                    </form>
+                </div>
+                <div class="border-box p-3 mb-3">
+                    <h4 class="fw-bold mb-2">Account Enable</h4>
+                    <p>Account disabling prohibits logins from the affected account.</p>
+                    <form th:action="@{|/Accounts/*{id}/disable|}" method="post" th:if="*{isEnabled}">
+                        <button type="submit" class="btn btn-danger btn-sm">Disable</button>
+                    </form>
+                    <form th:action="@{|/Accounts/*{id}/enable|}" method="post" th:unless="*{isEnabled}">
+                        <button type="submit" class="btn btn-success btn-sm">Enable</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -167,24 +184,38 @@
 <script>
     $(document).ready(function(){
         $("#overview-button").click(function() {
-            console.log("rat");
             $(".pane-4").css("display", "none");
+            $(".ac-nav-element").css("fontWeight", "normal");
+
+            $("#overview-button").css("fontWeight", "bold");
             $("#account-overview").css("display", "block");
         });
         $("#edit-details-button").click(function(){
             $(".pane-4").css("display", "none");
+            $(".ac-nav-element").css("fontWeight", "normal");
+
+            $("#edit-details-button").css("fontWeight", "bold");
             $("#edit-details").css("display", "block");
         });
         $("#view-notifications-button").click(function(){
             $(".pane-4").css("display", "none");
+            $(".ac-nav-element").css("fontWeight", "normal");
+
+            $("#view-notifications-button").css("fontWeight", "bold");
             $("#account-notifications").css("display", "block");
         });
         $("#view-logs-button").click(function(){
             $(".pane-4").css("display", "none");
+            $(".ac-nav-element").css("fontWeight", "normal");
+
+            $("#view-logs-button").css("fontWeight", "bold");
             $("#account-logs").css("display", "block");
         });
         $("#permissions-button").click(function(){
             $(".pane-4").css("display", "none");
+            $(".ac-nav-element").css("fontWeight", "normal");
+
+            $("#permissions-button").css("fontWeight", "bold");
             $("#permissions").css("display", "block");
         });
     });
