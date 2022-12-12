@@ -21,6 +21,7 @@
                 <p id="edit-details-button">Edit Details</p>
                 <p id="view-notifications-button">View Notifications</p>
                 <p id="view-logs-button">View All Logs</p>
+                <p id="permissions-button">Account Permissions</p>
             </div>
         </div>
         <div th:object="${selectedUser}" class="px-2">
@@ -152,6 +153,12 @@
                     </div>
                 </div>
             </div>
+            <div id="permissions" class="ac-grid-scroll-pane pane-4" style="display:none;">
+                <h3 class="fw-bold mb-4">Account Permissions</h3>
+                <div class="border-box p-3">
+
+                </div>
+            </div>
         </div>
     </div>
 </main>
@@ -175,6 +182,10 @@
         $("#view-logs-button").click(function(){
             $(".pane-4").css("display", "none");
             $("#account-logs").css("display", "block");
+        });
+        $("#permissions-button").click(function(){
+            $(".pane-4").css("display", "none");
+            $("#permissions").css("display", "block");
         });
     });
 </script>
