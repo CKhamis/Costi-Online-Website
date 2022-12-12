@@ -19,6 +19,8 @@
                 <h3 class="fw-bold mb-2">Account Navigation</h3>
                 <p id="overview-button">Account Overview</p>
                 <p id="edit-details-button">Edit Details</p>
+                <p id="view-notifications-button">View Notifications</p>
+                <p id="view-logs-button">View All Logs</p>
             </div>
         </div>
         <div th:object="${selectedUser}" class="px-2">
@@ -124,6 +126,32 @@
                     </form>
                 </div>
             </div>
+            <div id="account-notifications" class="ac-grid-scroll-pane pane-4" style="display:none;">
+                <h3 class="fw-bold mb-4" th:text="|Account Notifications (*{SUNotificationCount})|">Account Notifications</h3>
+                <div th:each="notification : ${SUNotifications}" th:class="|alert alert-${notification.notificationType} alert-dismissible fade show|" role="alert">
+                    <p class="fw-bold d-inline" th:text="|${notification.title} • |"></p>
+                    <p class="d-inline" th:text="${notification.dateCreated}"></p>
+                    <a class="btn-close" th:href="@{|/COMT/Accounts/*{id}/Notification/${notification.id}/delete|}"></a>
+                    <p th:utext="${notification.body}"></p>
+                </div>
+                <a class="" href="COMT/Notifications">Create new notification +</a>
+            </div>
+            <div id="account-logs" class="ac-grid-scroll-pane pane-4" style="display:none;">
+                <h3 class="fw-bold mb-4" th:text="|Account Logs (*{SULogCount})|">Account Logs</h3>
+                <div th:each="log: ${SULogs}" class="border-box mb-3 p-3">
+                    <div class="row">
+                        <div class="col">
+                            <p th:text="${log.dateCreated}"></p>
+                        </div>
+                        <div class="col">
+                            <p th:text="${log.title}"></p>
+                        </div>
+                        <div class="col">
+                            <p th:text="${log.body}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </main>
@@ -139,6 +167,14 @@
         $("#edit-details-button").click(function(){
             $(".pane-4").css("display", "none");
             $("#edit-details").css("display", "block");
+        });
+        $("#view-notifications-button").click(function(){
+            $(".pane-4").css("display", "none");
+            $("#account-notifications").css("display", "block");
+        });
+        $("#view-logs-button").click(function(){
+            $(".pane-4").css("display", "none");
+            $("#account-logs").css("display", "block");
         });
     });
 </script>

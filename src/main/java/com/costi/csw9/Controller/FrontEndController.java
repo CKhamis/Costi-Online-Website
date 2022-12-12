@@ -199,6 +199,19 @@ public class FrontEndController {
         return "moderator/AdminAccountView";
     }
 
+    @RequestMapping(value = "/COMT/Accounts/{userId}/Notification/{id}/delete", method = RequestMethod.GET)
+    public String adminDeleteNotification(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes, @PathVariable Long userId) {
+        AccountNotification notification = accountNotificationService.findById(id);
+        if (getCurrentUser(principal).isAdmin() || notification.getUser().getId() == getCurrentUser(principal).getId()) {
+            accountNotificationService.delete(id);
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Notification Dismissed", "Notification was permanently removed from your account", FlashMessage.Status.SUCCESS));
+        } else {
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
+            System.out.println("Invalid Permissions");
+        }
+        return "redirect:/COMT/Accounts/" + userId;
+    }
+
     @PostMapping("/COMT/Accounts/{id}/edit")
     public String adminUpdateUser(User user, BindingResult result, RedirectAttributes redirectAttributes, Principal principal, @PathVariable Long id) {
         if (result.hasErrors()) {
