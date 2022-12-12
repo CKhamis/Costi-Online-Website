@@ -171,7 +171,7 @@ public class FrontEndController {
 
     @GetMapping("/COMT/Accounts/{id}")
     public String getCostiOnlineAccountSettings(Model model, Principal principal, RedirectAttributes redirectAttributes, @PathVariable Long id) {
-
+        // TODO: add a nicer way to enable/disable, lock/unlock accounts
         User user = getCurrentUser(principal);
         model.addAttribute("user", user);
         model.addAttribute("loggedIn", true);

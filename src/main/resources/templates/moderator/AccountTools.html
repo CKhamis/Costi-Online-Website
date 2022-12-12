@@ -28,7 +28,7 @@
         <tbody>
             <tr th:each="user : ${all}">
                 <td>
-                    <p th:text="*{user.firstName} + ' ' + *{user.lastName}"></p>
+                    <a th:href="|/COMT/Accounts/*{user.id}/|" th:text="*{user.firstName} + ' ' + *{user.lastName}"></a>
                 </td>
                 <td>
                     <p th:text="*{user.email}"></p>
