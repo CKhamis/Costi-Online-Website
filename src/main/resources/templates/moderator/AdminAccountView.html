@@ -39,7 +39,7 @@
         </div>
         <div class="px-2">
             <div id="account-overview" class="ac-grid-scroll-pane pane-4" th:object="${selectedUser}">
-                <h3 class="fw-bold mb-4" th:text="|*{firstName}'s Details|">Account Name</h3>
+                <h3 class="fw-bold mb-4">Account Overview</h3>
                 <div th:replace="Components :: flash" class="my-2"></div>
                 <div class="border-box p-3">
                     <h4 class="text-center fw-bold mb-2">Account Status</h4>
@@ -64,7 +64,7 @@
                 </div>
             </div>
             <div id="edit-details" class="ac-grid-scroll-pane pane-4" style="display:none;">
-                <h3 th:object="${selectedUser}" class="fw-bold mb-4" th:text="|Edit *{firstName}'s Details|">Account Details</h3>
+                <h3 th:object="${selectedUser}" class="fw-bold mb-4">Change Account Details</h3>
                 <div class="border-box p-3">
                     <form th:action="@{${action}}" method="post" th:object="${selectedUser}">
                         <input type="hidden" th:field="*{id}"/>
@@ -135,7 +135,7 @@
                     <a class="btn-close" th:href="@{|/COMT/Accounts/*{id}/Notification/${notification.id}/delete|}"></a>
                     <p th:utext="${notification.body}"></p>
                 </div>
-                <a class="" href="COMT/Notifications">Create new notification +</a>
+                <a class="" href="/COMT/Notifications">Create new notification +</a>
             </div>
             <div id="account-logs" class="ac-grid-scroll-pane pane-4" style="display:none;">
                 <h3 class="fw-bold mb-4" th:text="|Account Logs (*{SULogCount})|">Account Logs</h3>

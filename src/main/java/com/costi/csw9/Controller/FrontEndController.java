@@ -199,6 +199,18 @@ public class FrontEndController {
         return "moderator/AdminAccountView";
     }
 
+    @GetMapping("/COMT/Notifications")
+    public String getCostiOnlineNotificationSettings(Model model, Principal principal, RedirectAttributes redirectAttributes) {
+        // TODO: add a nicer way to enable/disable, lock/unlock accounts
+        User user = getCurrentUser(principal);
+        model.addAttribute("user", user);
+        model.addAttribute("loggedIn", true);
+        model.addAttribute("theme", choseTheme());
+        model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
+
+        return "moderator/NotificationTools";
+    }
+
     @RequestMapping(value = "/COMT/Accounts/{userId}/Notification/{id}/delete", method = RequestMethod.GET)
     public String adminDeleteNotification(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes, @PathVariable Long userId) {
         AccountNotification notification = accountNotificationService.findById(id);
