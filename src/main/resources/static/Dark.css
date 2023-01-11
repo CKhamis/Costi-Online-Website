@@ -4088,9 +4088,9 @@ textarea.form-control-lg {
   flex-direction: column;
   min-width: 0;
   word-wrap: break-word;
-  background-color: rgba(0, 0, 0, 0);
+  background-color: rgba(255, 255, 255, 0);
   background-clip: border-box;
-  border: 1px solid rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 0.25rem;
 }
 .card > hr {
@@ -4119,7 +4119,7 @@ textarea.form-control-lg {
 .card-body {
   flex: 1 1 auto;
   padding: 1rem 1rem;
-  color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
 }
 
 .card-title {
@@ -4146,7 +4146,7 @@ textarea.form-control-lg {
   padding: 0.5rem 1rem;
   margin-bottom: 0;
   background-color: rgba(0, 0, 0, 0.03);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
 }
 .card-header:first-child {
   border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
@@ -4155,7 +4155,7 @@ textarea.form-control-lg {
 .card-footer {
   padding: 0.5rem 1rem;
   background-color: rgba(0, 0, 0, 0.03);
-  border-top: 1px solid rgba(0, 0, 0, 0.5);
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
 }
 .card-footer:last-child {
   border-radius: 0 0 calc(0.25rem - 1px) calc(0.25rem - 1px);
@@ -4168,8 +4168,8 @@ textarea.form-control-lg {
   border-bottom: 0;
 }
 .card-header-tabs .nav-link.active {
-  background-color: rgba(0, 0, 0, 0);
-  border-bottom-color: rgba(0, 0, 0, 0);
+  background-color: rgba(255, 255, 255, 0);
+  border-bottom-color: rgba(255, 255, 255, 0);
 }
 
 .card-header-pills {
@@ -4665,7 +4665,7 @@ textarea.form-control-lg {
   z-index: 1;
   color: #495057;
   text-decoration: none;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(255, 255, 255, 0.2);
 }
 .list-group-item-action:active {
   color: #212529;
@@ -4676,10 +4676,10 @@ textarea.form-control-lg {
   position: relative;
   display: block;
   padding: 0.5rem 1rem;
-  color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
   text-decoration: none;
-  background-color: rgba(0, 0, 0, 0.1);
-  border: 1px solid black;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid white;
 }
 .list-group-item:first-child {
   border-top-left-radius: inherit;
@@ -4692,13 +4692,13 @@ textarea.form-control-lg {
 .list-group-item.disabled, .list-group-item:disabled {
   color: #6c757d;
   pointer-events: none;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 255, 255, 0.1);
 }
 .list-group-item.active {
   z-index: 2;
-  color: rgb(0, 0, 0);
-  background-color: rgba(0, 0, 0, 0.3);
-  border-color: rgba(0, 0, 0, 0.3);
+  color: rgb(255, 255, 255);
+  background-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 .list-group-item + .list-group-item {
   border-top-width: 0;
