@@ -208,7 +208,31 @@ public class FrontEndController {
         model.addAttribute("theme", choseTheme());
         model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
 
+        if (!model.containsAttribute("notification")) {
+            model.addAttribute("notification", new AccountNotification());
+        }
+        model.addAttribute("allUsers", userService.loadAll());
+        model.addAttribute("action", "/COMT/Announcements/Create/post");
+
         return "moderator/NotificationTools";
+    }
+
+    @RequestMapping(value = "/COMT/Announcements/Create/post", method = RequestMethod.POST)
+    public String createNewNotification(AccountNotification notification, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            // Include validation errors upon redirect
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category", result);
+
+            // Re populate credentials in form
+            redirectAttributes.addFlashAttribute("page", notification);
+
+            // Redirect back to the form
+            return "redirect:/COMT/Announcements/Create";
+        }
+
+        accountNotificationService.save(notification);
+
+        return "redirect:/COMT/Announcements/Create";
     }
 
     @RequestMapping(value = "/COMT/Accounts/{userId}/Notification/{id}/delete", method = RequestMethod.GET)

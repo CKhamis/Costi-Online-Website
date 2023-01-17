@@ -26,6 +26,8 @@ public class AccountNotification {
     @JoinColumn(name = "user_id")
     private User user;
 
+
+
     public AccountNotification() {
     }
 

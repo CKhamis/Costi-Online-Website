@@ -100,7 +100,7 @@
 }
 
 .as-grid-container{
-display: grid;
+  display: grid;
   grid-template-columns: auto auto;
   gap: 10px;
 }

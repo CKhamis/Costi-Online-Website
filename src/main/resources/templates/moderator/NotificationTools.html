@@ -4,7 +4,7 @@
 <body class="bg-1 text-1">
 <div th:replace="moderator/ModeratorComponents :: nav"></div>
 
-<main class="container mt-5">
+<main class="container main-content-2">
     <div class="container-fluid">
         <h1 class="pb-2 border-bottom mb-4 fw-bold text-center">Create a Notification</h1>
     </div>
@@ -13,11 +13,19 @@
         <div class="pt-2 col-xs-12 col-md-10 col-lg-8 col-xl-6">
             <div class="p-5 mb-4 border-box">
                 <form th:action="@{${action}}" method="post" th:object="${notification}">
+                    <input type="hidden" th:field="*{id}"/>
                     <div class="form-row row">
                         <div class="col-12 mb-3">
                             <label for="tit">Title</label>
                             <input type="text" class="form-control" id="tit" th:field="*{title}"
                                    placeholder="Title here" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="destination">Recipient</label>
+                            <select id="destination" th:field="*{user}"  class="form-control">
+                                <option value="" disabled="disabled">Select a user</option>
+                                <option th:each="dest : ${allUsers}" th:value="${dest.hexCode}" th:text="${dest.firstName}">Error</option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-row row">
