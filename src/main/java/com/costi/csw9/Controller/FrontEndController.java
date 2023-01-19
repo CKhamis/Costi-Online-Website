@@ -1,6 +1,7 @@
 package com.costi.csw9.Controller;
 
 import com.costi.csw9.Model.*;
+import com.costi.csw9.Model.Temp.AccountNotificationRequest;
 import com.costi.csw9.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -199,7 +200,7 @@ public class FrontEndController {
         return "moderator/AdminAccountView";
     }
 
-    @GetMapping("/COMT/Notifications")
+    @GetMapping("/COMT/Notifications/Create")
     public String getCostiOnlineNotificationSettings(Model model, Principal principal, RedirectAttributes redirectAttributes) {
         // TODO: add a nicer way to enable/disable, lock/unlock accounts
         User user = getCurrentUser(principal);
@@ -209,30 +210,44 @@ public class FrontEndController {
         model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
 
         if (!model.containsAttribute("notification")) {
-            model.addAttribute("notification", new AccountNotification());
+            model.addAttribute("notification", new AccountNotificationRequest());
         }
         model.addAttribute("allUsers", userService.loadAll());
-        model.addAttribute("action", "/COMT/Announcements/Create/post");
+        model.addAttribute("action", "/COMT/Notifications/Create/post");
 
         return "moderator/NotificationTools";
     }
 
-    @RequestMapping(value = "/COMT/Announcements/Create/post", method = RequestMethod.POST)
-    public String createNewNotification(AccountNotification notification, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) {
+    @RequestMapping(value = "/COMT/Notifications/Create/post", method = RequestMethod.POST)
+    public String createNewNotification(AccountNotificationRequest notificationRequest, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             // Include validation errors upon redirect
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category", result);
 
             // Re populate credentials in form
-            redirectAttributes.addFlashAttribute("page", notification);
+            redirectAttributes.addFlashAttribute("notification", notificationRequest);
 
             // Redirect back to the form
-            return "redirect:/COMT/Announcements/Create";
+            return "redirect:/COMT/Notifications/Create";
         }
 
-        accountNotificationService.save(notification);
 
-        return "redirect:/COMT/Announcements/Create";
+        if(notificationRequest.getDestination().equals("All")){
+            AccountNotification notification = null;
+            for(User user : userService.loadAll()){
+                notification = new AccountNotification(notificationRequest);
+                notification.setUser(user);
+                accountNotificationService.save(notification);
+            }
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Notification Batch Sent", "Notification was sent to all accounts on Costi Online", FlashMessage.Status.SUCCESS));
+        }else{
+            AccountNotification notification = new AccountNotification(notificationRequest);
+            notification.setUser(userService.loadUserObjectById(Long.parseLong(notificationRequest.getDestination())));
+            accountNotificationService.save(notification);
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Notification Sent", "Notification was sent to user with ID of " + notificationRequest.getDestination(), FlashMessage.Status.SUCCESS));
+        }
+
+        return "redirect:/COMT/Notifications/Create";
     }
 
     @RequestMapping(value = "/COMT/Accounts/{userId}/Notification/{id}/delete", method = RequestMethod.GET)

@@ -1,56 +1,34 @@
-package com.costi.csw9.Model;
+package com.costi.csw9.Model.Temp;
 
-import com.costi.csw9.Model.Temp.AccountNotificationRequest;
+import com.costi.csw9.Model.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-@Entity
-@Table(name="Account_notifications")
-public class AccountNotification {
-    @Id
+public class AccountNotificationRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
     private String body;
 
     private String notificationType;
 
     private LocalDateTime dateCreated = LocalDateTime.now();
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    private String destination;
 
-    public AccountNotification(AccountNotificationRequest request){
-        // PLEASE NOTE: DOES NOT SET USER
-        this.body = request.getBody();
-        this.notificationType = request.getNotificationType();
-        this.id = request.getId();
-        this.title = request.getTitle();
+    public AccountNotificationRequest() {
     }
 
-    public AccountNotification() {
+    public String getDestination() {
+        return destination;
     }
 
-    public AccountNotification(String title, String body, User user) {
-        this.title = title;
-        this.body = body;
-        notificationType = "primary";
-        this.user = user;
-    }
-
-    public AccountNotification(String title, String body, String notificationType, User user) {
-        this.title = title;
-        this.body = body;
-        this.notificationType = notificationType;
-        this.user = user;
+    public void setDestination(String destination) {
+        this.destination = destination;
     }
 
     public String getNotificationType() {
@@ -108,13 +86,5 @@ public class AccountNotification {
 
     public void setDateCreated(LocalDateTime dateCreated) {
         this.dateCreated = dateCreated;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }
