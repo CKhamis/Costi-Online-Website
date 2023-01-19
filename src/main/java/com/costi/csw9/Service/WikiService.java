@@ -1,5 +1,6 @@
 package com.costi.csw9.Service;
 
+import com.costi.csw9.Model.AccountLog;
 import com.costi.csw9.Model.WikiCategory;
 import com.costi.csw9.Model.WikiPage;
 import com.costi.csw9.Repository.WikiRepository;
@@ -14,8 +15,12 @@ public class WikiService {
     @Autowired
     private final WikiRepository wikiRepository;
 
-    public WikiService(WikiRepository wikiRepository) {
+    @Autowired
+    private final AccountLogService accountLogService;
+
+    public WikiService(WikiRepository wikiRepository, AccountLogService accountLogService) {
         this.wikiRepository = wikiRepository;
+        this.accountLogService = accountLogService;
     }
 
     public WikiPage loadById(Long id){
@@ -48,6 +53,11 @@ public class WikiService {
 
     public void save(WikiPage wikiPage){
         wikiPage.setLastEdited(LocalDateTime.now());
+
+        //Add to log
+        AccountLog log = new AccountLog("Wiki page created/changed", wikiPage.getTitle() + " is saved.", wikiPage.getAuthor());
+        accountLogService.save(log);
+
         wikiRepository.save(wikiPage);
     }
 

@@ -2,6 +2,17 @@
         Universal Stylesheet
 ***********************************/
 
+/* Universal */
+.profile-photo{
+    width:100%;
+    aspect-ratio: 1 / 1 !important;
+    object-fit:cover;
+}
+
+.main-content-2{
+    margin-top: 7rem;
+}
+
 /* About */
 #education{
     background-image: url('/images/About/SJSU.jpg');
@@ -68,4 +79,28 @@
 .border-box > img, .border-box > iframe{
     aspect-ratio: 16 / 9;
     object-fit:cover;
+}
+
+/* Moderator */
+.ac-grid-container {
+  display: grid;
+  grid-template-columns: 25% 20% 20% auto;
+  gap: 10px;
+  height:100%;
+}
+
+.ac-grid-scroll-pane{
+    height:calc(100vh - 7rem - 10px);
+    overflow:scroll;
+}
+
+.fixed-moderator-content{
+    position:fixed;
+    height:calc(100vh - 7rem);
+}
+
+.as-grid-container{
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 10px;
 }

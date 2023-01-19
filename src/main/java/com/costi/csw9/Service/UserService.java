@@ -1,9 +1,6 @@
 package com.costi.csw9.Service;
 
-import com.costi.csw9.Model.User;
-import com.costi.csw9.Model.ConfirmationToken;
-import com.costi.csw9.Model.UserRole;
-import com.costi.csw9.Model.WikiPage;
+import com.costi.csw9.Model.*;
 import com.costi.csw9.Repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +20,9 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
+    private final AccountNotificationService accountNotificationService;
+
+    private final AccountLogService accountLogService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -58,6 +58,10 @@ public class UserService implements UserDetailsService {
             //Save User
             userRepository.save(user);
 
+            //Add to log
+            AccountLog log = new AccountLog("Account Created", "Admin was created and not yet activated", user);
+            accountLogService.save(log);
+
             String token = UUID.randomUUID().toString();
             ConfirmationToken confirmationToken = new ConfirmationToken(token, LocalDateTime.now(), LocalDateTime.now().plusMinutes(15), user);
             confirmationTokenService.saveConfirmationToken(confirmationToken);
@@ -81,6 +85,14 @@ public class UserService implements UserDetailsService {
 
             //Save User
             userRepository.save(user);
+
+            //Add to log
+            AccountLog log = new AccountLog("Account Created", "User was created and activated", user);
+            accountLogService.save(log);
+
+            //Add welcome message
+            AccountNotification welcome = new AccountNotification("Welcome!", "<p>Welcome to your Costi Network ID, here you will see various details regarding your account. Try changing your profile picture!</p>", "primary", user);
+            accountNotificationService.save(welcome);
         }
     }
 
@@ -89,6 +101,11 @@ public class UserService implements UserDetailsService {
             //Cannot be locked out
             return false;
         }
+
+        //Add to log
+        AccountLog log = new AccountLog("Account enabled/disabled", "Account activation set to: " + enable, user);
+        accountLogService.save(log);
+
         userRepository.enable(user.getId(), enable);
         return true;
     }
@@ -98,6 +115,11 @@ public class UserService implements UserDetailsService {
             //Cannot be locked out
             return false;
         }
+
+        //Add to log
+        AccountLog log = new AccountLog("Account locked/unlocked", "Account lock set to: " + lock, user);
+        accountLogService.save(log);
+
         userRepository.lock(user.getId(), lock);
         return true;
     }
@@ -113,6 +135,11 @@ public class UserService implements UserDetailsService {
             String encodedPass = bCryptPasswordEncoder.encode(user.getPassword());
             user.setPassword(encodedPass);
         }
+
+        //Add to log
+        AccountLog log = new AccountLog("Account details updated", user.toString(), user);
+        accountLogService.save(log);
+
         userRepository.save(user);
     }
 
@@ -121,6 +148,10 @@ public class UserService implements UserDetailsService {
             //User is already not an admin
             return false;
         }else{
+            //Add to log
+            AccountLog log = new AccountLog("Account demoted", "Account is now regular user", user);
+            accountLogService.save(log);
+
             userRepository.demote(user);
             return true;
         }

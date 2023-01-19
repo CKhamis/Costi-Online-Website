@@ -42,7 +42,7 @@
                 <a href="/Account" class="btn btn-primary">Sign In</a>
             </div>
             <div th:class="'' + (*{loggedIn}? 'd-flex' : 'd-none')">
-                <a class="nav-link px-3 text-1 fw-bold" href="/Account" th:text="${user.firstName} + ' ' + ${user.lastName}">Account</a>
+                <a class="nav-link px-3 text-1 fw-bold" href="/Account" th:utext="|${user.firstName} ${user.lastName} [${notificationCount}]|">Account</a>
                 <form th:action="@{/logout}" method="post">
                     <button type="submit" value="Sign Out" class="btn btn-primary">Sign Out</button>
                 </form>
@@ -66,6 +66,32 @@
     <div class="d-inline" th:text="${message.body}"></div>
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
+
+<div th:fragment="notification" th:each="notification : ${notifications}" th:class="|alert alert-${notification.notificationType} alert-dismissible fade show|" role="alert">
+    <p class="fw-bold d-inline" th:text="|${notification.title} • |"></p>
+    <p class="d-inline" th:text="${notification.dateCreated}"></p>
+    <a class="btn-close" th:href="@{|/Account/Notification/${notification.id}/delete|}"></a>
+    <p th:utext="${notification.body}"></p>
+</div>
+
+<th:block th:fragment="profilePhoto" th:switch="*{profilePicture}">
+    <img th:case="0" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/airplane.jpg}" />
+    <img th:case="1" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/ball.jpg}" />
+    <img th:case="2" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/beach.jpg}" />
+    <img th:case="3" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/car.jpg}" />
+    <img th:case="4" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/cat.jpg}" />
+    <img th:case="5" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/chess.jpg}" />
+    <img th:case="6" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/dog.jpg}" />
+    <img th:case="7" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/drip.jpg}" />
+    <img th:case="8" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/duck.jpg}" />
+    <img th:case="9" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/fish.jpg}" />
+    <img th:case="10" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/guest.jpg}" />
+    <img th:case="11" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/guitar.jpg}" />
+    <img th:case="12" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/kick.jpg}" />
+    <img th:case="13" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/lift-off.jpg}" />
+    <img th:case="14" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/red flower.JPG}" />
+    <img th:case="15" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/snowflake.jpg}" />
+</th:block>
 
 <div th:fragment="footer" class="text-1" id="footer">
     <div class="container py-5">

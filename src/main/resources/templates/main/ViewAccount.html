@@ -4,19 +4,16 @@
 <body class="bg-2 text-1 mt-5">
 <div th:replace="Components :: nav"></div>
 
-<div class="container-fluid row px-4 py-5" id="about">
-    <div class="container-fluid">
-        <h1 class="pb-2 border-bottom mb-4 fw-bold text-center">Edit Account</h1>
-    </div>
-    <div class="col-lg-3 col-md-5 col-xs-12">
-        <div class="p-3 mb-4 border-box">
-            <div class="container-fluid">
-                <h3 class="fw-bold">⚠️Important Information</h3>
-                <p class="fs-4">Please make sure you read the information below</p>
-            </div>
+<div class="container-fluid row px-4 py-5">
+    <div class="col-xs-12 col-md-5 col-lg-3">
+        <div class="p-3 mb-3 border-box" th:object="${user}">
+            <div th:replace="Components :: profilePhoto"></div>
+            <h4 class="text-center fw-bold" th:text="|*{firstName} *{lastName}|"></h4>
+            <p class="text-center pb-0">Costi Network ID</p>
         </div>
-        <div class="container-fluid mb-5">
-            <p class="fs-4">Please note that the account system is in its alpha phase. Your information is subject to deletion at any point due to a mistake or error. <strong>Please make sure to use a unique password for your account.</strong></p>
+        <div class="p-3 border-box mb-3">
+            <h3 class="text-center mb-2">Notifications <span class="badge bg-primary rounded-pill" th:text="${notificationCount}">Primary</span></h3>
+            <div th:replace="Components :: notification"></div>
         </div>
     </div>
     <div class="col-lg-9 col-md-7 col-xs-12">
@@ -53,9 +50,41 @@
                     </div>
                 </div>
             </div>
-            <form th:action="@{${action}}" method="post" th:object="${user}">
-                <h2>General Information</h2>
+
+            <form class="mb-5" th:action="@{${action}}" method="post" th:object="${user}">
+                <h2>Edit Account Information</h2>
                 <hr/>
+                <div class="form-row row">
+                    <div class="col-md-6 mb-3">
+                        <label for="pp">Profile Image Select</label>
+                        <select th:field="*{profilePicture}" class="form-control" id="pp">
+                            <option value = "0">Airplane</option>
+                            <option value = "1">Ball</option>
+                            <option value = "2">Beach</option>
+                            <option value = "3">Car</option>
+                            <option value = "4">Cat</option>
+                            <option value = "5">Chess</option>
+                            <option value = "6">Dog</option>
+                            <option value = "7">Drip</option>
+                            <option value = "8">Duck</option>
+                            <option value = "9">Fish</option>
+                            <option value = "10">Guest</option>
+                            <option value = "11">Guitar</option>
+                            <option value = "12">Kick</option>
+                            <option value = "13">Launch</option>
+                            <option value = "14">Flower</option>
+                            <option value = "15">Snowflake</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="rol">Website Role</label>
+                        <select th:field="*{role}" class="form-control disabledSelect" id="rol" disabled>
+                            <option value="" disabled="disabled">Select a role</option>
+                            <option value = "ADMIN">Administrator</option>
+                            <option value = "USER">User</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="form-row row">
                     <div class="col-md-4 mb-3">
                         <label for="fnf">First name</label>
@@ -77,18 +106,28 @@
                         <label for="fnf">Password</label>
                         <input type="password" class="form-control" id="pass" th:field="*{password}" placeholder="Password">
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="rol">Website Role</label>
-                        <select th:field="*{role}" class="form-control disabledSelect" id="rol" disabled>
-                            <option value="" disabled="disabled">Select a role</option>
-                            <option value = "ADMIN">Administrator</option>
-                            <option value = "USER">User</option>
-                        </select>
-                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
+
+            <h2>Account Event Logs</h2>
+            <hr/>
+
+            <div class="px-0 container">
+                <div class="row mb-1" th:each="log : ${logs}">
+                    <div class="col-4">
+                        <p th:text="${log.dateCreated}"></p>
+                    </div>
+                    <div class="col-4">
+                        <p th:text="${log.title}"></p>
+                    </div>
+                    <div class="col-4">
+                        <p th:text="${log.body}"></p>
+                    </div>
+                </div>
+            </div>
         </div>
+        <p>*Costi Network IDs are not as secure as accounts of other websites. Make sure to use a unique password for this website. Accounts are subject for deletion at any point, as this is an experimental feature. Accounts are unable to be deleted once created unless an admin performs manual database editing. Passwords are encrypted in the server's database and cannot be recovered at this time.</p>
     </div>
 </div>
 

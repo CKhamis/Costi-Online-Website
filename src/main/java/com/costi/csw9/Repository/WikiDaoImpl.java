@@ -1,5 +1,4 @@
 package com.costi.csw9.Repository;
-import com.costi.csw9.Model.WikiCategory;
 import com.costi.csw9.Model.WikiPage;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

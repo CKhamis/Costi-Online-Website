@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -29,6 +30,11 @@ public class User implements UserDetails {
    String lastName;
    String email;
    String password;
+
+   private LocalDateTime dateCreated = LocalDateTime.now();
+
+   @Column(nullable = false)
+   private int profilePicture = 0;
    @Enumerated(EnumType.STRING)
    private UserRole role;
    private Boolean isLocked = false;
@@ -36,6 +42,11 @@ public class User implements UserDetails {
 
    @OneToMany(fetch = FetchType.LAZY, mappedBy = "author")
    private List<WikiPage> authoredPages = new ArrayList<>();
+   @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+   private List<AccountLog> logs = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<AccountNotification> notifications = new ArrayList<>();
 
     public User(String firstName, String lastName, String email, String password, UserRole role) {
         this.firstName = firstName;
@@ -85,16 +96,56 @@ public class User implements UserDetails {
         return enabled;
     }
 
-    public boolean equals(Object other){
-        User otherUser = (User) other;
-        return this.getId() == otherUser.getId();
-    }
-
     public boolean isAdmin(){
         return this.getRole().equals(UserRole.ADMIN) || this.getRole().equals(UserRole.OWNER);
     }
 
     public boolean isOwner(){
         return this.getRole().equals(UserRole.OWNER);
+    }
+
+    public List<AccountLog> getLogs() {
+        return logs;
+    }
+
+    public void setLogs(List<AccountLog> logs) {
+        this.logs = logs;
+    }
+
+    public LocalDateTime getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(LocalDateTime dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public int getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(int profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
+    public List<WikiPage> getAuthoredPages() {
+        return authoredPages;
+    }
+
+    public void setAuthoredPages(List<WikiPage> authoredPages) {
+        this.authoredPages = authoredPages;
+    }
+
+    public List<AccountNotification> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(List<AccountNotification> notifications) {
+        this.notifications = notifications;
+    }
+
+    @Override
+    public String toString() {
+        return firstName + " " + lastName + " of ID " + id;
     }
 }
