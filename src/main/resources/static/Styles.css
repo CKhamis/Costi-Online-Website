@@ -22,7 +22,8 @@
 /* Wiki */
 .wikiBannerBg{
      background-image: url(images/webpageImages/WikiBg.jpg);
-     background-size: 100%;
+     background-size: cover;
+     background-repeat: no-repeat;
 }
 .wikiRestrictedBannerBg{
      background-image: url(images/webpageImages/WikiRestrictedBg.jpg);
