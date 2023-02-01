@@ -38,3 +38,4 @@ out/
 
 !**/Data/
 /src/main/resources/Keystore.p12
+/db/Database.mv.db
