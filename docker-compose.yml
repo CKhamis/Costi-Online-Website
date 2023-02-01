@@ -1,0 +1,11 @@
+services:
+  web:
+    image: csw
+    ports:
+      - "8333:80"
+  db:
+    image: cswdb
+    ports:
+      - "8082:8082"
+    volumes:
+        - "./db:/root/Downloads/Data"
