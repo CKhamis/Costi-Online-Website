@@ -589,7 +589,7 @@ public class FrontEndController {
         model.addAttribute("theme", choseTheme());
         model.addAttribute("notificationCount", accountNotificationService.findByUser(current.getId()).size());
 
-        return "wiki/viewWiki";
+        return "wiki/ViewWiki";
     }
 
     @RequestMapping(value = "/Wiki/{PageId}/delete", method = RequestMethod.POST)
@@ -716,7 +716,7 @@ public class FrontEndController {
         model.addAttribute("loggedIn", principal != null);
         User user = getCurrentUser(principal);
         model.addAttribute("user", user);
-        return "minecraft/yourGovernment";
+        return "minecraft/YourGovernment";
     }
 
     @GetMapping("/Minecraft/vote")
@@ -724,7 +724,7 @@ public class FrontEndController {
         model.addAttribute("loggedIn", principal != null);
         User user = getCurrentUser(principal);
         model.addAttribute("user", user);
-        return "minecraft/votingCenter";
+        return "minecraft/VotingCenter";
     }
 
     @GetMapping("/Minecraft/vote/VotingBooth")
@@ -732,7 +732,7 @@ public class FrontEndController {
         model.addAttribute("loggedIn", principal != null);
         User user = getCurrentUser(principal);
         model.addAttribute("user", user);
-        return "minecraft/votingBooth";
+        return "minecraft/VotingBooth";
     }
 
     @GetMapping("/Minecraft/vote/allCitizens")
@@ -740,7 +740,7 @@ public class FrontEndController {
         model.addAttribute("loggedIn", principal != null);
         User user = getCurrentUser(principal);
         model.addAttribute("user", user);
-        return "minecraft/allCitizens";
+        return "minecraft/AllCitizens";
     }
 
     @GetMapping("/Minecraft/vote/register")
@@ -748,7 +748,7 @@ public class FrontEndController {
         model.addAttribute("loggedIn", principal != null);
         User user = getCurrentUser(principal);
         model.addAttribute("user", user);
-        return "minecraft/register";
+        return "minecraft/Register";
     }
 
     @GetMapping("/Minecraft/vote/runForOffice")
@@ -756,7 +756,7 @@ public class FrontEndController {
         model.addAttribute("loggedIn", principal != null);
         User user = getCurrentUser(principal);
         model.addAttribute("user", user);
-        return "minecraft/addCandidate";
+        return "minecraft/AddCandidate";
     }
 
     @GetMapping("/Minecraft/vote/Polls")
@@ -764,7 +764,7 @@ public class FrontEndController {
         model.addAttribute("loggedIn", principal != null);
         User user = getCurrentUser(principal);
         model.addAttribute("user", user);
-        return "minecraft/polls";
+        return "minecraft/Polls";
     }
 
     @GetMapping("/Minecraft/vote/BallotInfo")
@@ -772,7 +772,7 @@ public class FrontEndController {
         model.addAttribute("loggedIn", principal != null);
         User user = getCurrentUser(principal);
         model.addAttribute("user", user);
-        return "minecraft/ballotInfo";
+        return "minecraft/BallotInfo";
     }
 
     @GetMapping("/Minecraft/vote/results")
@@ -780,6 +780,6 @@ public class FrontEndController {
         model.addAttribute("loggedIn", principal != null);
         User user = getCurrentUser(principal);
         model.addAttribute("user", user);
-        return "minecraft/electionResults";
+        return "minecraft/ElectionResults";
     }
 }
