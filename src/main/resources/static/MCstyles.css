@@ -1,5 +1,5 @@
 .testbg{
-     background-image: url(images/webpageImages/voting.jpg);
+     background-image: url(images/webpageImages/Voting.jpg);
      background-size: 100%;
 }
 
@@ -50,7 +50,7 @@ body{
     padding-top: 50px;
 }
 
-// Bootstrap Customization
+
 .nav-pills > .nav-link:focus, .nav-link:hover{
     color: #F7EDE2;
 }
