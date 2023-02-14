@@ -189,30 +189,34 @@
             <p class="text-center pb-2 border-bottom">This timeline shows the pieces of media I made separated by year along with a short description.</p>
             <div class="container p-0 mb-3">
                 <h4 class="fw-bold d-inline lh-lg">Jump to Year:
-                    <span class="badge rounded-pill bg-primary" id="jump-1">Costi Inc.</span>
-                    <span class="badge rounded-pill bg-primary" id="jump-2">Costi Productions 2015</span>
-                    <span class="badge rounded-pill bg-primary" id="jump-3">Costi Entertainment 2016</span>
-                    <span class="badge rounded-pill bg-primary" id="jump-4">Costi Entertainment 2017</span>
-                    <span class="badge rounded-pill bg-primary" id="jump-5">Costi Entertainment 2018</span>
-                    <span class="badge rounded-pill bg-primary" id="jump-6">Costi Entertainment 2019</span>
-                    <span class="badge rounded-pill bg-primary" id="jump-7">Costi Entertainment 2020</span>
+                    <a href="#2014"><span class="badge rounded-pill bg-primary" id="jump-1">2014</span></a>
+                    <a href="#2015"><span class="badge rounded-pill bg-primary" id="jump-2">2015</span></a>
+                    <a href="#2016"><span class="badge rounded-pill bg-primary" id="jump-3">2016</span></a>
+                    <a href="#2017"><span class="badge rounded-pill bg-primary" id="jump-4">2017</span></a>
+                    <a href="#2018"><span class="badge rounded-pill bg-primary" id="jump-5">2018</span></a>
+                    <a href="#2019"><span class="badge rounded-pill bg-primary" id="jump-6">2019</span></a>
+                    <a href="#2020"><span class="badge rounded-pill bg-primary" id="jump-7">2020</span></a>
                     <!--<span class="badge rounded-pill bg-primary" id="">Costi Inc.</span>
                     <span class="badge rounded-pill bg-primary" id="">Costi Inc.</span>-->
                 </h4>
-
+            </div>
+            <div class="fw-bold d-inline mb-5">
                 <h4 class="fw-bold d-inline lh-lg">Medium:
-                    <span class="badge rounded-pill bg-info" id="toggle-animation">Animations</span>
-                    <span class="badge rounded-pill bg-info" id="toggle-">Logos</span>
-                    <span class="badge rounded-pill bg-info" id="jump-3">Flyers</span>
-                    <span class="badge rounded-pill bg-info" id="jump-4">Live Action</span>
-                    <span class="badge rounded-pill bg-info" id="jump-5"></span>
+                    <span class="badge rounded-pill bg-info" id="disable-animation">Animations</span>
+                    <span class="badge rounded-pill bg-dark enable-toggle" id="enable-animation">Animations</span>
+                    <span class="badge rounded-pill bg-info" id="disable-logo">Logos</span>
+                    <span class="badge rounded-pill bg-dark enable-toggle" id="enable-logo">Logos</span>
+                    <span class="badge rounded-pill bg-info" id="disable-flyers">Flyers</span>
+                    <span class="badge rounded-pill bg-dark enable-toggle" id="enable-flyers">Flyers</span>
+                    <span class="badge rounded-pill bg-info" id="disable-live-action">Live Action</span>
+                    <span class="badge rounded-pill bg-dark enable-toggle" id="enable-live-action">Live Action</span>
                 </h4>
             </div>
 
             <div class="p-0 mb-4 border-box bg-black">
                 <div class="container-fluid p-0 overflow-hidden" style="height:100px;">
                     <div class="position-absolute p-4 text-white" style="z-index:1;">
-                        <h1 class="fw-bold">7️⃣: Costi Entertainment 2020</h1>
+                        <h1 class="fw-bold" id="2020">7️⃣: Costi Entertainment 2020</h1>
                     </div>
                     <video style="width:175%; opacity:.5; margin-left:-200px; margin-top: -200px" autoplay preload="true" loop="loop" muted>
                         <source th:src="@{/videos/banners/Intro 2020.m4v}" type="video/mp4">
@@ -297,7 +301,7 @@
                     </div>
                 </div>
 
-                <div class="col-12 col-lg-6 mb-5">
+                <div class="col-12 col-lg-6 mb-5 logo-card">
                     <div class="card border-box">
                         <iframe src="https://www.youtube-nocookie.com/embed/phRo1lOsNts" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         <div class="card-body px-5 blue-v-gradient">
@@ -318,7 +322,7 @@
             <div class="p-0 mb-4 border-box bg-black">
                 <div class="container-fluid p-0 overflow-hidden" style="height:100px;">
                     <div class="position-absolute p-4 text-white" style="z-index:1;">
-                        <h1 class="fw-bold">6️⃣: Costi Entertainment 2019</h1>
+                        <h1 class="fw-bold" id="2019">6️⃣: Costi Entertainment 2019</h1>
                     </div>
                     <video style="width:175%; opacity:.5; margin-left:-200px; margin-top: -200px" autoplay preload="true" loop="loop" muted>
                         <source th:src="@{/videos/banners/2019 Drone Footage.m4v}" type="video/mp4">
@@ -521,7 +525,7 @@
             <div class="p-0 mb-4 border-box bg-black">
                 <div class="container-fluid p-0 overflow-hidden" style="height:100px;">
                     <div class="position-absolute p-4 text-white" style="z-index:1;">
-                        <h1 class="fw-bold">5️⃣: Costi Entertainment 2018</h1>
+                        <h1 class="fw-bold" id="2018">5️⃣: Costi Entertainment 2018</h1>
                     </div>
                     <video style="width:175%; opacity:.5; margin-left:-200px; margin-top: -200px" autoplay preload="true" loop="loop" muted>
                         <source th:src="@{/videos/banners/Intro 2018.m4v}" type="video/mp4">
@@ -535,7 +539,7 @@
                 </p>
             </div>
             <div class="row">
-                <div class="col-12 col-lg-6 mb-5">
+                <div class="col-12 col-lg-6 mb-5 logo-card">
                     <div class="card border-box">
                         <img th:src="@{/images/webpageImages/Logo5.jpg}" class="card-img-top" alt="logo 5">
                         <div class="card-body px-5 blue-v-gradient">
@@ -574,7 +578,7 @@
                     </div>
                 </div>
 
-                <div class="col-12 col-lg-6 mb-5">
+                <div class="col-12 col-lg-6 mb-5 animation">
                     <div class="card border-box">
                         <iframe src="https://www.youtube-nocookie.com/embed/rwqnHULVyeE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         <div class="card-body px-5 blue-v-gradient">
@@ -685,7 +689,7 @@
                     </div>
                 </div>
 
-                <div class="col-12 col-lg-6 mb-5">
+                <div class="col-12 col-lg-6 mb-5 animation">
                     <div class="card border-box">
                         <iframe src="https://www.youtube-nocookie.com/embed/D_Fdq-GZJyc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         <div class="card-body px-5 blue-v-gradient">
@@ -705,7 +709,7 @@
             <div class="p-0 mb-4 border-box bg-black">
                 <div class="container-fluid p-0 overflow-hidden" style="height:100px;">
                     <div class="position-absolute p-4 text-white" style="z-index:1;">
-                        <h1 class="fw-bold">4️⃣: Costi Entertainment 2017</h1>
+                        <h1 class="fw-bold" id="2017">4️⃣: Costi Entertainment 2017</h1>
                     </div>
                     <video style="width:175%; opacity:.5; margin-left:-200px; margin-top: -200px" autoplay preload="true" loop="loop" muted>
                         <source th:src="@{/videos/banners/Intro 2017.m4v}" type="video/mp4">
@@ -733,7 +737,7 @@
                     </div>
                 </div>
 
-                <div class="col-12 col-lg-6 mb-5">
+                <div class="col-12 col-lg-6 mb-5 animation">
                     <div class="card border-box">
                         <img th:src="@{/images/webpageImages/ASAS2017.5.jpg}" class="card-img-top" alt="ASAS 2017.5 project">
                         <div class="card-body px-5 blue-v-gradient">
@@ -843,7 +847,7 @@
                     </div>
                 </div>
 
-                <div class="col-12 col-lg-6 mb-5">
+                <div class="col-12 col-lg-6 mb-5 animation">
                     <div class="card border-box">
                         <iframe src="https://www.youtube-nocookie.com/embed/t1rAfLk2ZOM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         <div class="card-body px-5 blue-v-gradient">
@@ -863,7 +867,7 @@
             <div class="p-0 mb-4 border-box bg-black">
                 <div class="container-fluid p-0 overflow-hidden" style="height:100px;">
                     <div class="position-absolute p-4 text-white" style="z-index:1;">
-                        <h1 class="fw-bold">3️⃣: Costi Entertainment 2016</h1>
+                        <h1 class="fw-bold" id="2016">3️⃣: Costi Entertainment 2016</h1>
                     </div>
                     <video style="width:175%; opacity:.5; margin-left:-200px; margin-top: -200px" autoplay preload="true" loop="loop" muted>
                         <source th:src="@{/videos/banners/Intro 2016.m4v}" type="video/mp4">
@@ -970,7 +974,7 @@
                     </div>
                 </div>
 
-                <div class="col-12 col-lg-6 mb-5">
+                <div class="col-12 col-lg-6 mb-5 animation">
                     <div class="card border-box">
                         <iframe src="https://www.youtube-nocookie.com/embed/8I9CEoZc91U" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         <div class="card-body px-5 blue-v-gradient">
@@ -984,7 +988,7 @@
                     </div>
                 </div>
 
-                <div class="col-12 col-lg-6 mb-5">
+                <div class="col-12 col-lg-6 mb-5 logo-card">
                     <div class="card border-box">
                         <img th:src="@{/images/webpageImages/Logo4.jpg}" class="card-img-top" alt="Costi Logo 4">
                         <div class="card-body px-5 blue-v-gradient">
@@ -1003,7 +1007,7 @@
             <div class="p-0 mb-4 border-box bg-black">
                 <div class="container-fluid p-0 overflow-hidden" style="height:100px;">
                     <div class="position-absolute p-4 text-white" style="z-index:1;">
-                        <h1 class="fw-bold">2️⃣: Costi Productions 2015</h1>
+                        <h1 class="fw-bold" id="2015">2️⃣: Costi Productions 2015</h1>
                     </div>
                     <video style="width:175%; opacity:.5; margin-left:-200px; margin-top: -200px" autoplay preload="true" loop="loop" muted>
                         <source th:src="@{/videos/banners/Costi-Logo3.m4v}" type="video/mp4">
@@ -1031,7 +1035,7 @@
                     </div>
                 </div>
 
-                <div class="col-12 col-lg-6 mb-5">
+                <div class="col-12 col-lg-6 mb-5 animation">
                     <div class="card border-box">
                         <iframe src="https://www.youtube-nocookie.com/embed/eoJ9wnEfrRQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         <div class="card-body px-5 blue-v-gradient">
@@ -1113,7 +1117,7 @@
                     </div>
                 </div>
 
-                <div class="col-12 col-lg-6 mb-5">
+                <div class="col-12 col-lg-6 mb-5 animation">
                     <div class="card border-box">
                         <iframe src="https://www.youtube-nocookie.com/embed/BqvVeCGX_7U" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         <div class="card-body px-5 blue-v-gradient">
@@ -1127,7 +1131,7 @@
                     </div>
                 </div>
 
-                <div class="col-12 col-lg-6 mb-5">
+                <div class="col-12 col-lg-6 mb-5 animation">
                     <div class="card border-box">
                         <iframe src="https://www.youtube-nocookie.com/embed/XH2DNsJX8Pk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         <div class="card-body px-5 blue-v-gradient">
@@ -1146,7 +1150,7 @@
                 <div class="p-0 mb-4 border-box bg-black">
                     <div class="container-fluid p-0 overflow-hidden" style="height:100px;">
                         <div class="position-absolute p-4 text-white" style="z-index:1;">
-                            <h1 class="fw-bold">1️⃣: Costi Inc. Era</h1>
+                            <h1 class="fw-bold" id="2014">1️⃣: Costi Inc. Era</h1>
                         </div>
                         <video style="width:175%; opacity:.5; margin-left:-400px" autoplay preload="true" loop="loop" muted>
                             <source th:src="@{/videos/banners/Costi-Logo2.m4v}" type="video/mp4">
@@ -1159,7 +1163,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-12 col-lg-6 mb-5">
+                    <div class="col-12 col-lg-6 mb-5 animation">
                         <div class="card border-box my-5">
                             <iframe src="https://www.youtube-nocookie.com/embed/LAZBf4sPu-s" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                             <div class="card-body px-5 blue-v-gradient">
@@ -1196,7 +1200,7 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-lg-6 mb-5">
+                    <div class="col-12 col-lg-6 mb-5 animation">
                         <div class="card border-box my-5">
                             <iframe src="https://www.youtube-nocookie.com/embed/52VgVxxNM3Y" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                             <div class="card-body px-5 blue-v-gradient">
@@ -1208,7 +1212,7 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-lg-6 mb-5">
+                    <div class="col-12 col-lg-6 mb-5 animation">
                         <div class="card border-box my-5">
                             <iframe src="https://www.youtube.com/embed/VgO6KqaWrWg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                             <div class="card-body px-5 blue-v-gradient">
@@ -1220,7 +1224,7 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-lg-6 mb-5">
+                    <div class="col-12 col-lg-6 mb-5 animation">
                         <div class="card border-box my-5">
                             <iframe src="https://www.youtube-nocookie.com/embed/WAdJoZupYEo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                             <div class="card-body px-5 blue-v-gradient">
@@ -1234,7 +1238,7 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-lg-6 mb-5">
+                    <div class="col-12 col-lg-6 mb-5 logo-card">
                         <div class="card border-box my-5">
                             <img th:src="@{/images/webpageImages/Orb.png}" class="card-img-top" alt="Costi Logo 2">
                             <div class="card-body px-5 blue-v-gradient">
@@ -1245,7 +1249,7 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-lg-6 mb-5">
+                    <div class="col-12 col-lg-6 mb-5 logo-card">
                        <div class="card border-box my-5">
                             <img th:src="@{/images/webpageImages/Original Logo.png}" class="card-img-top" alt="Costi Inc. Logo 1">
                             <div class="card-body px-5 blue-v-gradient">
@@ -1266,5 +1270,60 @@
 
 <div th:replace="Components :: footer"></div>
 <div th:replace="Components :: scripts"></div>
+<script>
+    $(document).ready(function(){
+        $(".enable-toggle").css("display", "none");
+
+
+        $("#disable-animation").click(function(){
+            $("#disable-animation").css("display", "none");
+            $("#enable-animation").css("display", "inline");
+
+            $(".animation").css("display", "none");
+
+        });
+
+        $("#enable-logo").click(function(){
+            $("#enable-logo").css("display", "none");
+            $("#disable-logo").css("display", "inline");
+
+            $(".logo-card").css("display", "block");
+
+        });
+
+        $("#disable-logo").click(function(){
+            $("#disable-logo").css("display", "none");
+            $("#enable-logo").css("display", "inline");
+
+            $(".logo-card").css("display", "none");
+
+        });
+
+        $("#enable-animation").click(function(){
+            $("#enable-animation").css("display", "none");
+            $("#disable-animation").css("display", "inline");
+
+            $(".animation").css("display", "block");
+
+        });
+
+        $("#disable-flyers").click(function(){
+            $("#disable-logo").css("display", "none");
+            $("#enable-logo").css("display", "inline");
+
+            $(".logo-card").css("display", "none");
+
+        });
+
+        $("#enable-animation").click(function(){
+            $("#enable-animation").css("display", "none");
+            $("#disable-animation").css("display", "inline");
+
+            $(".animation").css("display", "block");
+
+        });
+    });
+</script>
+</div>
 </body>
 </html>
