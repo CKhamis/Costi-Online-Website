@@ -84,3 +84,14 @@ td p{
 .navbar-nav .nav-link{
     color:rgba(255,255,255,.55);
 }
+
+/* About */
+.gradient .container-fluid{
+    background-image: linear-gradient(to right, #212529 , #212529, rgba(33, 37, 41,0));
+}
+
+@include media-breakpoint-down(md) {
+    .gradient .container-fluid{
+        background-image: linear-gradient(to right, #212529 , rgba(33, 37, 41,0));
+    }
+}
