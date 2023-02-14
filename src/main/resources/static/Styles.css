@@ -43,6 +43,7 @@
     background-image: url('/images/Slideshow/SJSUm.jpg');
     background-position: center;
     background-attachment: fixed;
+    background-size: cover;
 }
 #media > div{
     background-color: rgba(0,0,0,.8);
