@@ -71,8 +71,12 @@
     </div>
 
     <div class="container px-4 py-5" id="disclaimer">
-        <h2 class="pb-2 border-bottom">Video Disclaimer</h2>
-        <p class="fs-4">Because Costi Online is a publicly-available website for anybody to see, select videos will either be unavailable to watch or not fully shown. This is to protect the privacy of the actors in the videos and ensure no personal information is released. This means many of the videos I have made (especially from 2011 to 2016) will not be populated. Thank you for understanding.</p>
+        <div class="alert alert-primary" role="alert">
+            <div>
+                <strong>Video Disclaimer</strong>
+                <p class="mb-0">Because Costi Online is a publicly-available website for anybody to see, select videos will either be unavailable to watch or not fully shown. This is to protect the privacy of the actors in the videos and ensure no personal information is released. This means many of the videos I have made (especially from 2011 to 2016) will not be populated. Thank you for understanding.</p>
+            </div>
+        </div>
         <h2 class="pb-2 border-bottom">What is Costi Media?</h2>
         <p class="fs-4">Costi Media is an alias I use to label my digital artwork such as videos and vector art. Costi Media went by 2 other names in the past, Costi Inc, and Costi Entertainment. Learn more about the rich history of Costi Media by viewing the timeline.</p>
     </div>
@@ -80,31 +84,19 @@
     <div class="container-fluid" id="series">
         <div class="container">
             <h2 class="text-center fw-bold">Costi Media Series</h2>
-            <p class="text-center pb-2 border-bottom">Since 2011, I have made 4 different video series. View them here</p>
+            <p class="text-center pb-2 border-bottom">Since 2011, I have made several video series. View them here</p>
 
             <div class="row mt-0 mt-lg-5 mb-5">
                 <div class="col col-12 col-md-6 col-lg-3 mt-5 mt-lg-0">
                     <div class="card border-box h-100">
-                        <img th:src="@{/images/webpageImages/Ethan Show Cover.jpg}" class="card-img-top" alt="Ethan Show Cover" style="aspect-ratio: auto;">
-                        <div class="card-body px-5 px-md-3 blue-v-gradient">
-                            <h5 class="card-title fw-bold fs-4">The Ethan Show</h5>
-                            <p class="text-secondary">3 episodes, 1 cancelled</p>
-                            <p class="card-text fs-5">
-                                The Ethan Show is a wacky series of videos that consist of several unrelated segments. In these segments, you can see Ethan either giving you the news, teaching you how to cook, or even survive in the wild. The first Ethan Show episode was made in 2017 and the latest in 2018.
+                        <img th:src="@{/images/webpageImages/FMF Cover.jpg}" class="card-img-top" alt="Pioneer News Cover" style="aspect-ratio: auto;">
+                        <div class="card-body px-md-3 blue-v-gradient">
+                            <h5 class="card-title fw-bold fs-4">Flea Market Finds</h5>
+                            <p class="text-secondary">2 Episodes</p>
+                            <p class="card-text fs-6">
+                                A video series documenting our search for good deals on electronics form flea markets of all kinds! Join me, Haydon, Sean, and sometimes a special guest on our adventure to find the best deals.
                             </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col col-12 col-md-6 col-lg-3 mt-5 mt-lg-0">
-                    <div class="card border-box h-100">
-                        <img th:src="@{/images/webpageImages/Amal+ Cover.jpg}" class="card-img-top" alt="Amal+ Cover" style="aspect-ratio: auto;">
-                        <div class="card-body px-5 px-md-3 blue-v-gradient">
-                            <h5 class="card-title fw-bold fs-4">Amal+</h5>
-                            <p class="text-secondary">2 episodes, 1 cancelled</p>
-                            <p class="card-text fs-5">
-                                Amal+ was where I got the opportunity to expand my skills in video editing and experiment with new ides. Like the Ethan show, there were several segments per episode. Tina and Amal loved making music videos, so that is the most common type.
-                            </p>
+                            <a href="https://youtu.be/5c5guItHIc4" class="btn btn-primary">See on YouTube</a>
                         </div>
                     </div>
                 </div>
@@ -112,10 +104,10 @@
                 <div class="col col-12 col-md-6 col-lg-3 mt-5 mt-lg-0">
                     <div class="card border-box h-100">
                         <img th:src="@{/images/webpageImages/SJ Tips Cover.png}" class="card-img-top" alt="San Jose Tips Cover" style="aspect-ratio: auto;">
-                        <div class="card-body px-5 px-md-3 blue-v-gradient">
+                        <div class="card-body px-md-3 blue-v-gradient">
                             <h5 class="card-title fw-bold fs-4">San Jose Tips</h5>
                             <p class="text-secondary">5 Episodes, 1 cancelled</p>
-                            <p class="card-text fs-5">
+                            <p class="card-text fs-6">
                                 San Jose Tips is a separate channel that assists citizens of San Jose how to use the services available to them. I even got the support of my friends to make videos via my high school club. Videos started being posted in 2017 and ended in 2018.
                             </p>
                             <a href="https://youtube.com/playlist?list=PLvKqVadRNL8n07Pns6PWCvEr5WZ9RvHZg" class="btn btn-primary">See on YouTube</a>
@@ -126,13 +118,39 @@
                 <div class="col col-12 col-md-6 col-lg-3 mt-5 mt-lg-0">
                     <div class="card border-box h-100">
                         <img th:src="@{/images/webpageImages/Pioneer News Cover.jpg}" class="card-img-top" alt="Pioneer News Cover" style="aspect-ratio: auto;">
-                        <div class="card-body px-5 px-md-3 blue-v-gradient">
+                        <div class="card-body px-md-3 blue-v-gradient">
                             <h5 class="card-title fw-bold fs-4">Pioneer News</h5>
                             <p class="text-secondary">9 Episodes</p>
-                            <p class="card-text fs-5">
+                            <p class="card-text fs-6">
                                 Pioneer News was a 15-minute video presentation that would play during class in high school. Near the end of my senior year, I decided to take over its production. I quickly became known for my work, as I used it as an opportunity to try creating special effects and editing styles.
                             </p>
                             <a href="https://youtube.com/playlist?list=PLpLfm428USgyYsJQ8hjz7rzQ4QdfPjs_H" class="btn btn-primary">See on YouTube</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col col-12 col-md-6 col-lg-3 mt-5 mt-lg-0">
+                    <div class="card border-box h-100">
+                        <img th:src="@{/images/webpageImages/Ethan Show Cover.jpg}" class="card-img-top" alt="Ethan Show Cover" style="aspect-ratio: auto;">
+                        <div class="card-body px-md-3 blue-v-gradient">
+                            <h5 class="card-title fw-bold fs-4">The Ethan Show</h5>
+                            <p class="text-secondary">3 episodes, 1 cancelled</p>
+                            <p class="card-text fs-6">
+                                The Ethan Show is a wacky series of videos that consist of several unrelated segments. In these segments, you can see Ethan either giving you the news, teaching you how to cook, or even survive in the wild. The first Ethan Show episode was made in 2017 and the latest in 2018.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col col-12 col-md-6 col-lg-3 pt-5 mt-lg-0">
+                    <div class="card border-box h-100">
+                        <img th:src="@{/images/webpageImages/Amal+ Cover.jpg}" class="card-img-top" alt="Amal+ Cover" style="aspect-ratio: auto;">
+                        <div class="card-body px-md-3 blue-v-gradient">
+                            <h5 class="card-title fw-bold fs-4">Amal+</h5>
+                            <p class="text-secondary">2 episodes, 1 cancelled</p>
+                            <p class="card-text fs-6">
+                                Amal+ was where I got the opportunity to expand my skills in video editing and experiment with new ides. Like the Ethan show, there were several segments per episode. Tina and Amal loved making music videos, so that is the most common type.
+                            </p>
                         </div>
                     </div>
                 </div>
