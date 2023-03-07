@@ -32,5 +32,18 @@ public class Post {
     @Column(columnDefinition="text")
     private String body;
 
+    public Post(String title, String subtitle, String category, String body) {
+        this.title = title;
+        this.subtitle = subtitle;
+        this.category = category;
+        this.body = body;
+    }
 
+    public String getDateEdited(){
+        return lastEdited.getMonthValue() + "/" + lastEdited.getDayOfMonth() + "/" + lastEdited.getYear();
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
 }
