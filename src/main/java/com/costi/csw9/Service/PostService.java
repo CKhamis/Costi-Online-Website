@@ -36,7 +36,6 @@ public class PostService {
 
     public void save(Post post){
         post.setLastEdited(LocalDateTime.now());
-
         postRepository.save(post);
     }
 

@@ -236,16 +236,16 @@ public class FrontEndController {
         if(post.getCategory().equals(PostCategory.EMERGENCY)){
             AccountNotification notification = null;
             for(User user : userService.loadAll()){
-                notification = new AccountNotification(notificationRequest);
+                notification = new AccountNotification();
                 notification.setUser(user);
+                notification.setTitle("EMERGENCY");
+                notification.setBody("An emergency post was made. View it in Newsroom.");
                 accountNotificationService.save(notification);
             }
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Notification Batch Sent", "Notification was sent to all accounts on Costi Online", FlashMessage.Status.SUCCESS));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Emergency Notification Sent", "Notification was sent to all accounts on Costi Online", FlashMessage.Status.SUCCESS));
         }else{
-            AccountNotification notification = new AccountNotification(notificationRequest);
-            notification.setUser(userService.loadUserObjectById(Long.parseLong(notificationRequest.getDestination())));
-            accountNotificationService.save(notification);
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Notification Sent", "Notification was sent to user with ID of " + notificationRequest.getDestination(), FlashMessage.Status.SUCCESS));
+            postService.save(post);
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Draft Created", "Please approve via COMT to publish.", FlashMessage.Status.SUCCESS));
         }
 
         return "redirect:/COMT/Notifications/Create";

@@ -6,14 +6,14 @@
 
 <main class="container main-content-2">
     <div class="container-fluid">
-        <h1 class="pb-2 border-bottom mb-4 fw-bold text-center">Create a Notification</h1>
+        <h1 class="pb-2 border-bottom mb-4 fw-bold text-center">Create a Post</h1>
     </div>
     <div class="row">
         <div class="d-none d-md-block col-md-1 col-lg-2 col-xl-3"></div>
         <div class="pt-2 col-xs-12 col-md-10 col-lg-8 col-xl-6">
             <div th:replace="Components :: flash" class="my-2"></div>
             <div class="p-5 mb-4 border-box">
-                <form th:action="@{${action}}" method="post" th:object="${notification}">
+                <form th:action="@{${action}}" method="post" th:object="${post}">
                     <input type="hidden" th:field="*{id}"/>
                     <div class="form-row row">
                         <div class="col-12 mb-3">
