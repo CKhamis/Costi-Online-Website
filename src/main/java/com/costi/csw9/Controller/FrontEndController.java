@@ -202,6 +202,55 @@ public class FrontEndController {
         return "moderator/AdminAccountView";
     }
 
+    @GetMapping("/COMT/Newsroom/Create")
+    public String getNewsroomPostMaker(Model model, Principal principal, RedirectAttributes redirectAttributes) {
+        User user = getCurrentUser(principal);
+        model.addAttribute("user", user);
+        model.addAttribute("loggedIn", true);
+        model.addAttribute("theme", choseTheme());
+        model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
+
+        if (!model.containsAttribute("post")) {
+            model.addAttribute("post", new Post());
+        }
+        model.addAttribute("action", "/COMT/Newsroom/Create");
+
+        return "moderator/NewPost";
+    }
+
+    @RequestMapping(value = "/COMT/Newsroom/Create", method = RequestMethod.POST)
+    public String createNewPost(Post post, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            // Include validation errors upon redirect
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category", result);
+
+            // Re populate credentials in form
+            redirectAttributes.addFlashAttribute("post", post);
+
+            // Redirect back to the form
+            return "redirect:/COMT/Newsroom/Create";
+        }
+
+
+
+        if(post.getCategory().equals(PostCategory.EMERGENCY)){
+            AccountNotification notification = null;
+            for(User user : userService.loadAll()){
+                notification = new AccountNotification(notificationRequest);
+                notification.setUser(user);
+                accountNotificationService.save(notification);
+            }
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Notification Batch Sent", "Notification was sent to all accounts on Costi Online", FlashMessage.Status.SUCCESS));
+        }else{
+            AccountNotification notification = new AccountNotification(notificationRequest);
+            notification.setUser(userService.loadUserObjectById(Long.parseLong(notificationRequest.getDestination())));
+            accountNotificationService.save(notification);
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Notification Sent", "Notification was sent to user with ID of " + notificationRequest.getDestination(), FlashMessage.Status.SUCCESS));
+        }
+
+        return "redirect:/COMT/Notifications/Create";
+    }
+
     @GetMapping("/COMT/Notifications/Create")
     public String getCostiOnlineNotificationSettings(Model model, Principal principal, RedirectAttributes redirectAttributes) {
         // TODO: add a nicer way to enable/disable, lock/unlock accounts
