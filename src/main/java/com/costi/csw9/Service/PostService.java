@@ -3,10 +3,12 @@ package com.costi.csw9.Service;
 import com.costi.csw9.Model.*;
 import com.costi.csw9.Repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Service
 public class PostService {
     @Autowired
     private final PostRepository postRepository;

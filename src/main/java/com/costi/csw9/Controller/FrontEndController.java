@@ -27,15 +27,17 @@ public class FrontEndController {
     private AccountLogService accountLogService;
 
     private AccountNotificationService accountNotificationService;
+    private PostService postService;
 
     @Autowired
-    public FrontEndController(UserService userService, RegistrationService registrationService, WikiService wikiService, AnnouncementService announcementService, AccountLogService accountLogService, AccountNotificationService accountNotificationService) {
+    public FrontEndController(UserService userService, RegistrationService registrationService, WikiService wikiService, AnnouncementService announcementService, AccountLogService accountLogService, AccountNotificationService accountNotificationService, PostService postService) {
         this.userService = userService;
         this.registrationService = registrationService;
         this.wikiService = wikiService;
         this.announcementService = announcementService;
         this.accountLogService = accountLogService;
         this.accountNotificationService = accountNotificationService;
+        this.postService = postService;
     }
 
     // Theme
@@ -781,5 +783,17 @@ public class FrontEndController {
         User user = getCurrentUser(principal);
         model.addAttribute("user", user);
         return "minecraft/ElectionResults";
+    }
+
+    // Newsroom
+    @GetMapping("/Newsroom")
+    public String getNewsroomHome(Model model, Principal principal) {
+
+        User user = getCurrentUser(principal);
+        model.addAttribute("user", user);
+        model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("theme", choseTheme());
+        model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
+        return "newsroom/NewsroomHome";
     }
 }

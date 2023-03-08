@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xml:th="https://www.thymeleaf.org">
+<head th:replace="Components :: head('Newsroom')"></head>
+<body class="bg-1 text-1 pt-5">
+<div th:replace="Components :: nav"></div>
+
+<main class="container main-content-1">
+    <div class="p-5 mb-4 border-box wikiBannerBg">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">Costipedia</h1>
+            <p class="col-md-8 fs-4">A community wiki for Costi Online that centralizes important information related to Costi, friends, inside jokes, and more!</p>
+            <a href="/Wiki/Create" th:class="'btn btn-primary '  + (*{loggedIn}? '' : 'd-none')" role="button" aria-pressed="true">Create New Page ></a>
+            <a href="/Wiki/Create" th:class="'btn btn-primary '  + (*{loggedIn}? 'd-none' : '')" role="button">Sign in to add a new wiki page</a>
+        </div>
+    </div>
+
+</main>
+
+<div th:replace="Components :: footer"></div>
+<div th:replace="Components :: scripts"></div>
+</body>
+</html>
