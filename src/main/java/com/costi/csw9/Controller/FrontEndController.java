@@ -268,6 +268,48 @@ public class FrontEndController {
         return "redirect:/COMT/Newsroom/Create";
     }
 
+    @RequestMapping(value = "/Newsroom/{PostId}/delete", method = RequestMethod.POST)
+    public String deletePost(@PathVariable Long PostId, Principal principal, RedirectAttributes redirectAttributes) {
+        Post post = postService.loadById(PostId);
+        if (getCurrentUser(principal).isAdmin()) {
+            postService.delete(post);
+        } else {
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
+            System.out.println("Invalid Permissions");
+        }
+
+        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Post deleted!", "Post is no longer accessible nor recoverable.", FlashMessage.Status.SUCCESS));
+        return "redirect:/COMT/Newsroom";
+    }
+
+    @RequestMapping(value = "/Newsroom/{PostId}/enable", method = RequestMethod.POST)
+    public String enablePost(@PathVariable Long PostId, Principal principal, RedirectAttributes redirectAttributes) {
+        Post post = postService.loadById(PostId);
+        if (getCurrentUser(principal).isAdmin()) {
+            postService.enable(post, true);
+        } else {
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
+            System.out.println("Invalid Permissions");
+        }
+
+        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Post Published!", "Post is now accessible by non-administrators on the Newsroom page", FlashMessage.Status.SUCCESS));
+        return "redirect:/COMT/Newsroom";
+    }
+
+    @RequestMapping(value = "/Newsroom/{PostId}/disable", method = RequestMethod.POST)
+    public String disablePost(@PathVariable Long PostId, Principal principal, RedirectAttributes redirectAttributes) {
+        Post post = postService.loadById(PostId);
+        if (getCurrentUser(principal).isAdmin()) {
+            postService.enable(post, false);
+        } else {
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
+            System.out.println("Invalid Permissions");
+        }
+
+        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Post disabled!", "Post is no longer accessible by public.", FlashMessage.Status.SUCCESS));
+        return "redirect:/COMT/Newsroom";
+    }
+
     @GetMapping("/COMT/Notifications/Create")
     public String getCostiOnlineNotificationSettings(Model model, Principal principal, RedirectAttributes redirectAttributes) {
         // TODO: add a nicer way to enable/disable, lock/unlock accounts
