@@ -255,14 +255,14 @@ public class FrontEndController {
                 notification.setNotificationType("danger");
                 notification.setUser(user);
                 notification.setTitle("EMERGENCY");
-                notification.setBody("An emergency post was made. View it in Newsroom.");
+                notification.setBody("An emergency post was made. View it here: costionline.com/Newsroom/"+post.getId()+"/view");
                 accountNotificationService.save(notification);
 
             }
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Emergency Notification Sent", "Notification was sent to all accounts on Costi Online", FlashMessage.Status.SUCCESS));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Emergency Notification Sent", "Notification was sent to all accounts on Costi Online. Please publish draft.", FlashMessage.Status.SUCCESS));
         }else{
             postService.save(post);
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Draft Created", "Please approve via COMT to publish.", FlashMessage.Status.SUCCESS));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Newsroom Draft Created", "Please approve via COMT to publish.", FlashMessage.Status.SUCCESS));
         }
 
         return "redirect:/COMT/Newsroom/Create";
@@ -278,7 +278,7 @@ public class FrontEndController {
             System.out.println("Invalid Permissions");
         }
 
-        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Post deleted!", "Post is no longer accessible nor recoverable.", FlashMessage.Status.SUCCESS));
+        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Newsroom post deleted!", "Post is no longer accessible nor recoverable.", FlashMessage.Status.SUCCESS));
         return "redirect:/COMT/Newsroom";
     }
 
