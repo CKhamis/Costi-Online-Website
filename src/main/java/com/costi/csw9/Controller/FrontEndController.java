@@ -172,6 +172,19 @@ public class FrontEndController {
         return "moderator/AccountTools";
     }
 
+    @GetMapping("/COMT/Newsroom")
+    public String getNewsroomTools(Model model, Principal principal, RedirectAttributes redirectAttributes) {
+
+        User user = getCurrentUser(principal);
+        model.addAttribute("user", user);
+        model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("disabled", postService.getByApproval(false));
+        model.addAttribute("enabled", postService.getByApproval(true));
+        model.addAttribute("theme", choseTheme());
+        model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
+        return "moderator/NewsroomTools";
+    }
+
     @GetMapping("/COMT/Accounts/{id}")
     public String getCostiOnlineAccountSettings(Model model, Principal principal, RedirectAttributes redirectAttributes, @PathVariable Long id) {
         // TODO: add a nicer way to enable/disable, lock/unlock accounts

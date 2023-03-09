@@ -6,7 +6,7 @@
 
 <main class="container main-content-2">
     <div class="container-fluid">
-        <h1 class="pb-2 border-bottom mb-4 fw-bold text-center" th:text="${title}">Create a Wiki Page</h1>
+        <h1 class="pb-2 border-bottom mb-4 fw-bold text-center" th:text="${title}">Create a newsroom post</h1>
     </div>
     <div th:if="${isAllowed}" class="row">
         <div class="d-none d-md-block col-md-1 col-lg-2 col-xl-3"></div>
@@ -27,7 +27,7 @@
                                    placeholder="subtitle" required>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="cat">Wiki Category</label>
+                            <label for="cat">Post Category</label>
                             <select id="cat" th:field="*{category}"  class="form-control">
                                 <option value="" disabled="disabled">Select a category</option>
                                 <option th:each="cat : ${categories}" th:value="${cat.name}" th:text="${cat.name}">Error</option>
@@ -54,10 +54,10 @@
         <div class="d-none d-md-block col-md-1 col-lg-2 col-xl-3"></div>
     </div>
     <div th:unless="${isAllowed}" class="">
-        <div class="p-3 p-lg-5 mb-4 border-box wikiRestrictedBannerBg">
+        <div class="p-3 p-lg-5 mb-4 border-box">
             <div class="container-fluid py-5">
-                <h1 class="display-5 fw-bold">⚠️You do not have access to creating a newsroom post</h1>
-                <p class="col-md-8 fs-4">Newsroom posts are only created, modified, or deleted by the website owner. Perhaps you are looking for the wiki tools tab</p>
+                <h1 class="display-5 fw-bold">⚠️You do not have access to creating a Newsroom post</h1>
+                <p class="col-lg-10 fs-4">Newsroom posts are only created, modified, or deleted by the website owner. Perhaps you are looking for the wiki tools tab</p>
             </div>
         </div>
     </div>
