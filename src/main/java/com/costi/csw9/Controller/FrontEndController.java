@@ -210,6 +210,9 @@ public class FrontEndController {
         model.addAttribute("theme", choseTheme());
         model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
 
+        model.addAttribute("isAllowed", user.getRole() == UserRole.OWNER);
+        model.addAttribute("categories", PostCategory.values());
+        model.addAttribute("title", "Create Newsroom Post");
         if (!model.containsAttribute("post")) {
             model.addAttribute("post", new Post());
         }
@@ -232,15 +235,16 @@ public class FrontEndController {
         }
 
 
-
-        if(post.getCategory().equals(PostCategory.EMERGENCY)){
+        if(post.getCategory().equals(PostCategory.EMERGENCY.name())){
             AccountNotification notification = null;
             for(User user : userService.loadAll()){
                 notification = new AccountNotification();
+                notification.setNotificationType("danger");
                 notification.setUser(user);
                 notification.setTitle("EMERGENCY");
                 notification.setBody("An emergency post was made. View it in Newsroom.");
                 accountNotificationService.save(notification);
+
             }
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Emergency Notification Sent", "Notification was sent to all accounts on Costi Online", FlashMessage.Status.SUCCESS));
         }else{
@@ -248,7 +252,7 @@ public class FrontEndController {
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Draft Created", "Please approve via COMT to publish.", FlashMessage.Status.SUCCESS));
         }
 
-        return "redirect:/COMT/Notifications/Create";
+        return "redirect:/COMT/Newsroom/Create";
     }
 
     @GetMapping("/COMT/Notifications/Create")
