@@ -255,7 +255,7 @@ public class FrontEndController {
                 notification.setNotificationType("danger");
                 notification.setUser(user);
                 notification.setTitle("EMERGENCY");
-                notification.setBody("An emergency post was made. View it here: costionline.com/Newsroom/"+post.getId()+"/view");
+                notification.setBody("An emergency post was made. View it in Newsroom");
                 accountNotificationService.save(notification);
             }
             postService.save(post);
