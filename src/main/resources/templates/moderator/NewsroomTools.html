@@ -19,6 +19,7 @@
                 <th scope="col">Title</th>
                 <th scope="col">Subtitle</th>
                 <th scope="col">Category</th>
+                <th scope="col">Image</th>
                 <th scope="col">Last Edited</th>
                 <th scope="col">Likes</th>
                 <th scope="col">Dislikes</th>
@@ -43,6 +44,9 @@
                         <span th:case="UPDATE"  class="badge badge-pill bg-light">Update</span>
                         <span th:case="*"             class="badge badge-pill bg-dark">Other</span>
                     </div>
+                </td>
+                <td>
+                    <img th:src="@{*{post.getPhotosImagePath()}}" style="height:40px"/>
                 </td>
                 <td th:text="*{post.dateEdited}">Last Edited</td>
                 <td th:text="*{post.likes}">Likes</td>
@@ -74,6 +78,7 @@
             <th scope="col">Title</th>
             <th scope="col">Subtitle</th>
             <th scope="col">Category</th>
+            <th scope="col">Image</th>
             <th scope="col">Last Edited</th>
             <th scope="col">Likes</th>
             <th scope="col">Dislikes</th>
@@ -98,6 +103,9 @@
                     <span th:case="UPDATE"  class="badge badge-pill bg-light">Update</span>
                     <span th:case="*"             class="badge badge-pill bg-dark">Other</span>
                 </div>
+            </td>
+            <td>
+                <img th:src="@{*{post.getPhotosImagePath()}}" style="height:40px"/>
             </td>
             <td th:text="*{post.dateEdited}">Last Edited</td>
             <td th:text="*{post.likes}">Likes</td>

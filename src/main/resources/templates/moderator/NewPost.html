@@ -13,7 +13,16 @@
         <div class="pt-2 col-xs-12 col-md-10 col-lg-8 col-xl-6">
             <div th:replace="Components :: flash" class="my-2"></div>
             <div class="p-5 mb-4 border-box">
-                <form th:action="@{${action}}" method="post" th:object="${post}">
+                <div id="post-menu">
+                    <h2>Select Post Type</h2>
+                    <hr/>
+                    <button type="button" class="btn btn-primary" id="show-post-with-picture">Post with picture</button>
+                    <button type="button" class="btn btn-secondary" id="show-post-without-picture">Post without picture</button>
+                </div>
+                <form id="no-image" th:action="@{${action}} + 'NoImage'" method="post" th:object="${post}">
+                    <h2>Post without Image</h2>
+                    <hr/>
+                    <button type="button" class="btn btn-primary go-back">< Go Back</button>
                     <div class="form-row row">
                         <div class="col-12 mb-3">
                             <label for="tit">Title</label>
@@ -47,7 +56,53 @@
                             There is no personally identifying content in my submission
                         </label>
                     </div>
+                    <input type="hidden" th:field="*{id}"/>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+                <form id="with-image" th:action="@{${action}}" method="post" th:object="${post}" enctype="multipart/form-data">
+                    <h2>Post with Image</h2>
+                    <hr/>
+                    <button type="button" class="btn btn-primary go-back">< Go Back</button>
 
+                    <div class="mb-3">
+                        <label for="file" class="form-label">Upload image</label>
+                        <input class="form-control" type="file" id="file" name="image" accept="image/png, image/jpeg">
+                    </div>
+
+                    <div class="form-row row">
+                        <div class="col-12 mb-3">
+                            <label for="tit">Title</label>
+                            <input type="text" class="form-control" id="tit" th:field="*{title}"
+                                   placeholder="Title here" required>
+                        </div>
+                    </div>
+                    <div class="form-row row">
+                        <div class="col-md-8 mb-3">
+                            <label for="subt">Subtitle</label>
+                            <input type="text" class="form-control" id="subt" th:field="*{subtitle}"
+                                   placeholder="subtitle" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="cat">Post Category</label>
+                            <select id="cat" th:field="*{category}"  class="form-control">
+                                <option value="" disabled="disabled">Select a category</option>
+                                <option th:each="cat : ${categories}" th:value="${cat.name}" th:text="${cat.name}">Error</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row row">
+                        <div class="col-12 mb-3">
+                            <label for="bod">Content Body</label>
+                            <textarea type="text" class="form-control" id="bod" th:field="*{body}" placeholder="body content" required></textarea>
+                        </div>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" value="" id="disclaimerCheck2" required>
+                        <label class="form-check-label" for="disclaimerCheck2">
+                            There is no personally identifying content in my submission
+                        </label>
+                    </div>
+                    <input type="hidden" th:field="*{id}"/>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
             </div>
@@ -65,5 +120,41 @@
 </main>
 
 <div th:replace="Components :: scripts"></div>
+<script>
+    $(document).ready(function(){
+        hideForms();
+
+        $("#show-post-with-picture").click(function(){
+            showFormWithPicture();
+        });
+
+        $("#show-post-without-picture").click(function(){
+            showFormWithoutPicture();
+        });
+
+
+        $(".go-back").click(function(){
+            $("#no-image").css("display", "none");
+            $("#with-image").css("display", "none");
+            $("#post-menu").css("display", "block");
+        });
+
+        function hideForms(){
+            $("#no-image").css("display", "none");
+            $("#with-image").css("display", "none");
+        }
+
+        function showFormWithPicture(){
+            $("#with-image").css("display", "block");
+            $("#post-menu").css("display", "none");
+        }
+
+        function showFormWithoutPicture(){
+            $("#no-image").css("display", "block");
+            $("#post-menu").css("display", "none");
+        }
+
+    });
+</script>
 </body>
 </html>

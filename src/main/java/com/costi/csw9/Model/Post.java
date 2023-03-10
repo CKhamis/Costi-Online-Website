@@ -36,6 +36,8 @@ public class Post {
     @Column(nullable = false)
     private int dislikes;
 
+    private String imageName;
+
     public Post(String title, String subtitle, String category, String body) {
         this.title = title;
         this.subtitle = subtitle;
@@ -56,5 +58,12 @@ public class Post {
 
     public boolean isEnabled() {
         return enabled;
+    }
+
+    @Transient
+    public String getPhotosImagePath() {
+        if (imageName == null || id == null) return null;
+        String path = "/post-images/" + id + "/" + imageName;
+        return path;
     }
 }

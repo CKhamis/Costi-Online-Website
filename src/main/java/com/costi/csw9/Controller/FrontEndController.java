@@ -8,8 +8,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -235,7 +237,7 @@ public class FrontEndController {
     }
 
     @RequestMapping(value = "/COMT/Newsroom/Create", method = RequestMethod.POST)
-    public String createNewPost(Post post, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) {
+    public String createNewPostImage(Post post, @RequestParam("image") MultipartFile file, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) throws IOException {
         if (result.hasErrors()) {
             // Include validation errors upon redirect
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category", result);
@@ -247,6 +249,38 @@ public class FrontEndController {
             return "redirect:/COMT/Newsroom/Create";
         }
 
+        if(post.getCategory().equals(PostCategory.EMERGENCY.name())){
+            AccountNotification notification = null;
+            for(User user : userService.loadAll()){
+                notification = new AccountNotification();
+                notification.setNotificationType("danger");
+                notification.setUser(user);
+                notification.setTitle("EMERGENCY");
+                notification.setBody("An emergency post was made. View it in Newsroom");
+                accountNotificationService.save(notification);
+            }
+            postService.save(post, file);
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Emergency Notification Sent", "Notification was sent to all accounts on Costi Online. Please publish draft.", FlashMessage.Status.SUCCESS));
+        }else{
+            postService.save(post, file);
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Newsroom Draft Created", "Please approve via COMT to publish.", FlashMessage.Status.SUCCESS));
+        }
+
+        return "redirect:/COMT/Newsroom/Create";
+    }
+
+    @RequestMapping(value = "/COMT/Newsroom/CreateNoImage", method = RequestMethod.POST)
+    public String createNewPost(Post post, Principal principal, BindingResult result, RedirectAttributes redirectAttributes){
+        if (result.hasErrors()) {
+            // Include validation errors upon redirect
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category", result);
+
+            // Re populate credentials in form
+            redirectAttributes.addFlashAttribute("post", post);
+
+            // Redirect back to the form
+            return "redirect:/COMT/Newsroom/Create";
+        }
 
         if(post.getCategory().equals(PostCategory.EMERGENCY.name())){
             AccountNotification notification = null;

@@ -10,9 +10,10 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 public class FileUploadUtil {
+  private static final String UPLOAD_DIRECTORY = "src/main/resources/static/post-images/";
 
-  public static void saveFile(String uploadDir, String fileName, MultipartFile multipartFile) throws IOException {
-    Path uploadPath = Paths.get(uploadDir);
+  public static void saveFile(String subDirectory, String fileName, MultipartFile multipartFile) throws IOException {
+    Path uploadPath = Paths.get(UPLOAD_DIRECTORY + subDirectory);
 
     if (!Files.exists(uploadPath)) {
       Files.createDirectories(uploadPath);
