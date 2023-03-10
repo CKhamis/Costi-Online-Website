@@ -20,6 +20,8 @@
                 <th scope="col">Subtitle</th>
                 <th scope="col">Category</th>
                 <th scope="col">Last Edited</th>
+                <th scope="col">Likes</th>
+                <th scope="col">Dislikes</th>
                 <th scope="col">View</th>
                 <th scope="col">Edit</th>
                 <th scope="col">Enable</th>
@@ -43,6 +45,8 @@
                     </div>
                 </td>
                 <td th:text="*{post.dateEdited}">Last Edited</td>
+                <td th:text="*{post.likes}">Likes</td>
+                <td th:text="*{post.dislikes}">Dislikes</td>
                 <td>
                     <a th:href="'/Newsroom/' + *{post.Id} + '/view'" class="card-link">View Post ></a>
                 </td>
@@ -71,6 +75,8 @@
             <th scope="col">Subtitle</th>
             <th scope="col">Category</th>
             <th scope="col">Last Edited</th>
+            <th scope="col">Likes</th>
+            <th scope="col">Dislikes</th>
             <th scope="col">View</th>
             <th scope="col">Edit</th>
             <th scope="col">Enable</th>
@@ -94,6 +100,8 @@
                 </div>
             </td>
             <td th:text="*{post.dateEdited}">Last Edited</td>
+            <td th:text="*{post.likes}">Likes</td>
+            <td th:text="*{post.dislikes}">Dislikes</td>
             <td>
                 <a th:href="'/Newsroom/' + *{post.Id} + '/view'" class="card-link">View Post ></a>
             </td>

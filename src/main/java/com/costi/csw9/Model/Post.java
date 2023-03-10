@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @EqualsAndHashCode
-@NoArgsConstructor
 @Entity
 public class Post {
 
@@ -27,16 +26,28 @@ public class Post {
     @Column(nullable = false)
     private String subtitle;
 
+    @Column(nullable = false)
     private boolean enabled = false;
     private String category;
     @Column(columnDefinition="text")
     private String body;
+    @Column(nullable = false)
+    private int likes;
+    @Column(nullable = false)
+    private int dislikes;
 
     public Post(String title, String subtitle, String category, String body) {
         this.title = title;
         this.subtitle = subtitle;
         this.category = category;
         this.body = body;
+        this.likes = 0;
+        this.dislikes = 0;
+    }
+
+    public Post(){
+        this.likes = 0;
+        this.dislikes = 0;
     }
 
     public String getDateEdited(){

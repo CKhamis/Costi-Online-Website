@@ -257,8 +257,8 @@ public class FrontEndController {
                 notification.setTitle("EMERGENCY");
                 notification.setBody("An emergency post was made. View it here: costionline.com/Newsroom/"+post.getId()+"/view");
                 accountNotificationService.save(notification);
-
             }
+            postService.save(post);
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Emergency Notification Sent", "Notification was sent to all accounts on Costi Online. Please publish draft.", FlashMessage.Status.SUCCESS));
         }else{
             postService.save(post);
