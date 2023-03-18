@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @EqualsAndHashCode
 @Entity
+@NoArgsConstructor
 public class Post {
 
     @Id
@@ -31,10 +32,6 @@ public class Post {
     private String category;
     @Column(columnDefinition="text")
     private String body;
-    @Column(nullable = false)
-    private int likes;
-    @Column(nullable = false)
-    private int dislikes;
 
     private String imageName;
 
@@ -43,13 +40,6 @@ public class Post {
         this.subtitle = subtitle;
         this.category = category;
         this.body = body;
-        this.likes = 0;
-        this.dislikes = 0;
-    }
-
-    public Post(){
-        this.likes = 0;
-        this.dislikes = 0;
     }
 
     public String getDateEdited(){
