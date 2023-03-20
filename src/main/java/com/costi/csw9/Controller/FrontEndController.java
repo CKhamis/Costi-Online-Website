@@ -937,6 +937,10 @@ public class FrontEndController {
         model.addAttribute("theme", choseTheme());
         model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
 
+        // Newsroom posts
+        List<Post> allRecent = postService.getByApproval(true);
+        List<Post> recentNews = postService.getWikiPagesByCategory(PostCategory.NEWS.name());
+
         //model.addAttribute("slide1", )
 
         return "newsroom/NewsroomHome";
