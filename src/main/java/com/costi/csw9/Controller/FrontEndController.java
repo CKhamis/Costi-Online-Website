@@ -936,6 +936,9 @@ public class FrontEndController {
         model.addAttribute("loggedIn", principal != null);
         model.addAttribute("theme", choseTheme());
         model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
+
+        //model.addAttribute("slide1", )
+
         return "newsroom/NewsroomHome";
     }
 }

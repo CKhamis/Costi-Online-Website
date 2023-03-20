@@ -1,7 +1,6 @@
 package com.costi.csw9.Repository;
 
 import com.costi.csw9.Model.Post;
-import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +10,7 @@ public interface PostRepository {
     Post findById(Long id);
     List<Post> findByCategory(String category);
     List<Post> getByApproval(boolean enabled);
+    List<Post> getEnabledOrderedByDate();
     @Modifying
     void save(Post page);
     @Modifying

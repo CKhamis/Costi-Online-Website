@@ -1,6 +1,7 @@
 package com.costi.csw9.Repository;
 
 import com.costi.csw9.Model.Post;
+import com.costi.csw9.Model.PostCategory;
 import com.costi.csw9.Model.WikiPage;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -56,6 +57,20 @@ public class PostDaoImpl implements PostRepository{
         return res;
     }
 
+    @Override
+    public List<Post> getEnabledOrderedByDate() {
+        // Open session
+        Session session = sessionFactory.openSession();
+
+        // Get Results
+        Query query = session.createQuery("SELECT e FROM Post e WHERE enabled = " + true + " ORDER BY lastEdited ASC");
+        List<Post> res = query.getResultList();
+
+        // Close session
+        session.close();
+
+        return res;
+    }
     @Override
     public void save(Post post) {
         // Open a session
