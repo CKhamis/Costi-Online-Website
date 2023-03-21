@@ -3,6 +3,7 @@ package com.costi.csw9.Controller;
 import com.costi.csw9.Model.*;
 import com.costi.csw9.Model.Temp.AccountNotificationRequest;
 import com.costi.csw9.Service.*;
+import com.costi.csw9.Util.LogicTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -941,7 +942,35 @@ public class FrontEndController {
         List<Post> allRecent = postService.getByApproval(true);
         List<Post> recentNews = postService.getWikiPagesByCategory(PostCategory.NEWS.name());
 
-        //model.addAttribute("slide1", )
+        if(recentNews.size() == 0){
+            // if no news posts at all
+            Post blank = new Post("No Posts", "No posts were found in database", PostCategory.NEWS.name(), "");
+            blank.setId(-1L);
+            blank.setImageName("no-image.png");
+            model.addAttribute("slide1", blank);
+            model.addAttribute("slide2", blank);
+            model.addAttribute("slide3", blank);
+            model.addAttribute("slide4", blank);
+            model.addAttribute("slide5", blank);
+            model.addAttribute("slide6", blank);
+            model.addAttribute("slide7", blank);
+            model.addAttribute("slide8", blank);
+            model.addAttribute("slide9", blank);
+            model.addAttribute("slide10", blank);
+        }else{
+            model.addAttribute("slide1", recentNews.get(LogicTools.clamp(0, 0, recentNews.size()-1)));
+            model.addAttribute("slide2", recentNews.get(LogicTools.clamp(1, 0, recentNews.size()-1)));
+            model.addAttribute("slide3", recentNews.get(LogicTools.clamp(2, 0, recentNews.size()-1)));
+            model.addAttribute("slide4", recentNews.get(LogicTools.clamp(3, 0, recentNews.size()-1)));
+            model.addAttribute("slide5", recentNews.get(LogicTools.clamp(4, 0, recentNews.size()-1)));
+            model.addAttribute("slide6", recentNews.get(LogicTools.clamp(5, 0, recentNews.size()-1)));
+            model.addAttribute("slide7", recentNews.get(LogicTools.clamp(6, 0, recentNews.size()-1)));
+            model.addAttribute("slide8", recentNews.get(LogicTools.clamp(7, 0, recentNews.size()-1)));
+            model.addAttribute("slide9", recentNews.get(LogicTools.clamp(8, 0, recentNews.size()-1)));
+            model.addAttribute("slide10", recentNews.get(LogicTools.clamp(9, 0, recentNews.size()-1)));
+        }
+
+
 
         return "newsroom/NewsroomHome";
     }
