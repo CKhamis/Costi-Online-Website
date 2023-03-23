@@ -110,3 +110,23 @@
   grid-template-columns: auto auto;
   gap: 10px;
 }
+
+/* Newsroom */
+.newsroom-slide{
+    width:100%;
+    aspect-ratio: 16 / 9;
+    object-fit:cover;
+}
+.newsroom-slide-caption{
+    background: rgb(0,0,0);
+    background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 10%, rgba(0,0,0,0.5) 90%, rgba(0,0,0,0) 100%);
+    margin-bottom:40px;
+}
+
+@media screen and (max-width: 768px){
+    .newsroom-slides{
+        width:100%;
+        aspect-ratio: 1 / 1;
+        object-fit:cover;
+    }
+}

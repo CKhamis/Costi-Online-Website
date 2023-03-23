@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Getter
 @Setter
@@ -55,5 +56,27 @@ public class Post {
         if (imageName == null || id == null) return null;
         String path = "/post-images/" + id + "/" + imageName;
         return path;
+    }
+
+    @Transient
+    public String getTimeSinceEdited() {
+        //return dateCreated.getMonthValue() + "/" + dateCreated.getDayOfMonth() + "/" + dateCreated.getYear();
+        String unit = "";
+        LocalDateTime now = LocalDateTime.now();
+        long diff;
+        if((diff = ChronoUnit.SECONDS.between(lastEdited,now)) < 60){
+            unit = "seconds ago";
+        } else if ((diff = ChronoUnit.MINUTES.between(lastEdited,now)) < 60) {
+            unit = "minutes ago";
+        } else if ((diff = ChronoUnit.HOURS.between(lastEdited,now)) < 24) {
+            unit = "hour ago";
+        } else if ((diff = ChronoUnit.DAYS.between(lastEdited,now)) < 30) {
+            unit = "days ago";
+        } else if ((diff = ChronoUnit.MONTHS.between(lastEdited,now)) < 12) {
+            unit = "month ago";
+        } else{
+            diff = ChronoUnit.YEARS.between(lastEdited,now);
+        }
+        return String.format("%d %s",diff,unit);
     }
 }
