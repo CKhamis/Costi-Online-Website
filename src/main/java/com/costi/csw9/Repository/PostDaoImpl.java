@@ -33,7 +33,7 @@ public class PostDaoImpl implements PostRepository{
         Session session = sessionFactory.openSession();
 
         // Get Results
-        Query query = session.createQuery("SELECT e FROM Post e WHERE category = '" + category + "\' AND enabled = true ORDER BY lastEdited ASC");
+        Query query = session.createQuery("SELECT e FROM Post e WHERE category = '" + category + "\' AND enabled = true ORDER BY lastEdited DESC");
         List<Post> res = query.getResultList();
 
         // Close session
@@ -48,7 +48,7 @@ public class PostDaoImpl implements PostRepository{
         Session session = sessionFactory.openSession();
 
         // Get Results
-        Query query = session.createQuery("SELECT e FROM Post e WHERE enabled = " + enabled  + " ORDER BY lastEdited ASC");
+        Query query = session.createQuery("SELECT e FROM Post e WHERE enabled = " + enabled  + " ORDER BY lastEdited desc ");
         List<Post> res = query.getResultList();
 
         // Close session

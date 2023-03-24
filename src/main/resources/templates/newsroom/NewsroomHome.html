@@ -5,7 +5,7 @@
 <div th:replace="Components :: nav"></div>
 
 <main class="container main-content-1">
-    <h1 class="text-center fw-bold border-bottom mb-5">Costi Newsroom</h1>
+    <h1 class="text-center fw-bold border-bottom mb-3 pb-2">Costi Newsroom</h1>
     <div class="row">
         <div class="col-md-8">
             <div id="newsroom-slideshow" class="carousel slide mb-4" data-bs-ride="carousel">
@@ -111,7 +111,7 @@
             <h3>Recent Posts</h3>
             <th:block th:each="post : ${recentPosts}">
                 <a class="mb-3">
-                    <p th:text="|${post.getTitle()}|" class="fw-bold fs-5 mb-0 text-1"></p>
+                    <p th:text="|${post.getTitle()}|" class="fs-5 mb-0 text-1"></p>
                     <p th:text="|${post.getCategory()} - ${post.getTimeSinceEdited()}|" class="mb-2 text-1"></p>
                 </a>
             </th:block>
