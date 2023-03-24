@@ -69,7 +69,7 @@ public class Post {
         } else if ((diff = ChronoUnit.MINUTES.between(lastEdited,now)) < 60) {
             unit = "minutes ago";
         } else if ((diff = ChronoUnit.HOURS.between(lastEdited,now)) < 24) {
-            unit = "hour ago";
+            unit = "hours ago";
         } else if ((diff = ChronoUnit.DAYS.between(lastEdited,now)) < 30) {
             unit = "days ago";
         } else if ((diff = ChronoUnit.MONTHS.between(lastEdited,now)) < 12) {

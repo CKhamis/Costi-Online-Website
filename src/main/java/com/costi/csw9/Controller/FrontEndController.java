@@ -939,8 +939,9 @@ public class FrontEndController {
         model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
 
         // Newsroom posts
-        List<Post> allRecent = postService.getByApproval(true);
+        List<Post> allPosts = postService.getByApproval(true);
         List<Post> recentNews = postService.getWikiPagesByCategory(PostCategory.NEWS.name());
+        List<Post> recentPosts = postService.getFixedAmount(15);
 
         if(recentNews.size() == 0){
             // if no news posts at all
@@ -970,6 +971,7 @@ public class FrontEndController {
             model.addAttribute("slide10", recentNews.get(LogicTools.clamp(9, 0, recentNews.size()-1)));
         }
 
+        model.addAttribute("recentPosts", recentPosts);
 
 
         return "newsroom/NewsroomHome";

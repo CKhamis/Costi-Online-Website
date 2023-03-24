@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -41,6 +42,14 @@ public class PostService {
     public void save(Post post){
         post.setLastEdited(LocalDateTime.now());
         postRepository.save(post);
+    }
+
+    public List<Post> getFixedAmount(int entries){
+        List<Post> original = postRepository.getByApproval(true), outputList = new ArrayList<>();
+        for (int i = 0; i < entries && i < original.size() - 1; i++) {
+            outputList.add(original.get(i));
+        }
+        return outputList;
     }
 
     public void save(Post post, MultipartFile file) throws IOException {
