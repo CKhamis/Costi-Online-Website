@@ -59,7 +59,7 @@
                     <input type="hidden" th:field="*{id}"/>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
-                <form id="with-image" th:action="@{${action}}" method="post" th:object="${post}" enctype="multipart/form-data">
+                <form id="with-image" th:action="@{${action}}" method="post" th:object="${post}" enctype="">
                     <h2>Post with Image</h2>
                     <hr/>
                     <button type="button" class="btn btn-primary go-back">< Go Back</button>

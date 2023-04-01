@@ -108,13 +108,17 @@
             </div>
         </div>
         <div class="col-md-4">
-            <h3>Recent Posts</h3>
+            <h2>Recent Posts</h2>
             <th:block th:each="post : ${recentPosts}">
-                <a class="mb-3">
-                    <p th:text="|${post.getTitle()}|" class="fs-5 mb-0 text-1"></p>
-                    <p th:text="|${post.getCategory()} - ${post.getTimeSinceEdited()}|" class="mb-2 text-1"></p>
-                </a>
+                <a class="mb-3"><p th:text="|${post.getTitle()}|" class="fs-4 mb-0 text-1"></p></a>
+                <p th:text="|${post.getCategory()} - ${post.getTimeSinceEdited()}|" class="mb-2 text-1"></p>
             </th:block>
+        </div>
+    </div>
+    <div class="container mt-3">
+        <h3 th:if="${isAnnouncement}">📢Announcements</h3>
+        <div th:each="message : ${announcements}">
+            <div th:replace="Components :: message" class="mt-2"></div>
         </div>
     </div>
 </main>
