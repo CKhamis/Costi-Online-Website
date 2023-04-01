@@ -115,11 +115,38 @@
             </th:block>
         </div>
     </div>
-    <div class="container mt-3">
+    <div class="mt-3">
         <h3 th:if="${isAnnouncement}">📢Announcements</h3>
         <div th:each="message : ${announcements}">
             <div th:replace="Components :: message" class="mt-2"></div>
         </div>
+    </div>
+
+    <div class="container mt-4">
+        <h2 class="text-center fw-bold border-bottom pb-2">All Posts</h2>
+
+        <th:block th:each="post : ${allPosts}">
+            <div class="row mt-3">
+                <div class="col-sm-4 grid-margin">
+                    <div class="position-relative">
+                        <div class="rotate-img">
+                            <img th:src="@{*{post.getPhotosImagePath()}}" th:alt="|${post.getTitle()}|" class="img-fluid newsroom-slide">
+                        </div>
+                        <div class="badge-positioned">
+                            <span class="badge bg-secondary font-weight-bold" th:text="|${post.getCategory()}|">news</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <h2 class="mb-2 fw-bold" th:text="|${post.getSubtitle()}|"></h2>
+                    <div class="fs-13 mb-2">
+                        <p class="mr-2" th:text="|${post.getDateEdited()} - ${post.getTimeSinceEdited()}|"></p>
+                    </div>
+                    <p class="mb-0" th:text="|${post.getSubtitle()}|"></p>
+                </div>
+            </div>
+        </th:block>
+
     </div>
 </main>
 

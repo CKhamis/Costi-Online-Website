@@ -972,7 +972,12 @@ public class FrontEndController {
         }
 
         model.addAttribute("recentPosts", recentPosts);
+        model.addAttribute("allPosts", allPosts);
 
+        //Announcements
+        List<Announcement> announcements = announcementService.getByApproval(true);
+        model.addAttribute("announcements", announcements);
+        model.addAttribute("isAnnouncement", announcements.size() > 0);
 
         return "newsroom/NewsroomHome";
     }

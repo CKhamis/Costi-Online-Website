@@ -117,6 +117,12 @@
     aspect-ratio: 16 / 9;
     object-fit:cover;
 }
+
+.badge-positioned{
+    position: absolute;
+    left: 1rem;
+    bottom: 1rem;
+}
 .newsroom-slide-caption{
     background: rgb(0,0,0);
     background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 10%, rgba(0,0,0,0.5) 90%, rgba(0,0,0,0) 100%);
