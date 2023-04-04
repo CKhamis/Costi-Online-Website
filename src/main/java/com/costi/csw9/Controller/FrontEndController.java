@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -946,6 +947,7 @@ public class FrontEndController {
         if(recentNews.size() == 0){
             // if no news posts at all
             Post blank = new Post("No Posts", "No posts were found in database", PostCategory.NEWS.name(), "");
+            blank.setLastEdited(LocalDateTime.MIN);
             blank.setId(-1L);
             blank.setImageName("no-image.png");
             model.addAttribute("slide1", blank);
