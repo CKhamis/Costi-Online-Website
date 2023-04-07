@@ -7,5 +7,6 @@ public enum PostCategory {
     EMERGENCY,
     ARTICLE,
     DISCOVERY,
-    UPDATE
+    UPDATE,
+    EVENT
 }
