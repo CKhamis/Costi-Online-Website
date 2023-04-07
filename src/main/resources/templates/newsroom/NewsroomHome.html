@@ -126,15 +126,14 @@
         <h2 class="text-center fw-bold border-bottom pb-2">All Posts</h2>
 
         <th:block th:each="post : ${allPosts}">
-            <div class="row mt-3">
+            <div class="row mt-3" th:classappend="*{post.getCategory()}">
                 <div class="col-sm-4 grid-margin">
                     <div class="position-relative">
                         <div class="rotate-img">
-                            <img th:src="@{*{post.getPhotosImagePath()}}" th:alt="|${post.getTitle()}|" class="img-fluid newsroom-slide">
+                            <img th:src="${post.getPhotosImagePath() != null}? *{post.getPhotosImagePath()} : '/post-images/-1/no-image.png'" th:alt="|${post.getTitle()}|" class="img-fluid newsroom-slide">
                         </div>
                         <div class="badge-positioned">
-                            <span class="badge bg-secondary font-weight-bold" th:text="|${post.getCategory()}|">news</span>
-                        </div>
+                            <span class="badge" th:classappend="${post.getCategory() == 'ACHIEVEMENT'} ? 'bg-primary' : (${post.getCategory() == 'NEWS'} ? 'bg-secondary' : (${post.getCategory() == 'JOURNAL'} ? 'bg-info' : (${post.getCategory() == 'EMERGENCY'} ? 'bg-danger' : (${post.getCategory() == 'ARTICLE'} ? 'badge-warning' : (${post.getCategory() == 'DISCOVERY'} ? 'badge-success' : (${post.getCategory() == 'UPDATE'} ? 'bg-dark' : 'bg-dark'))))))" th:text="${post.getCategory()}"></span>                        </div>
                     </div>
                 </div>
                 <div class="col-sm-8">
@@ -152,5 +151,26 @@
 
 <div th:replace="Components :: footer"></div>
 <div th:replace="Components :: scripts"></div>
+<script>
+    $(document).ready(function(){
+        $(".enable-toggle").css("display", "none");
+
+        $("#enable-logo").click(function(){
+            $("#enable-logo").css("display", "none");
+            $("#disable-logo").css("display", "inline");
+
+            $(".logo-card").css("display", "block");
+
+        });
+
+        $("#disable-logo").click(function(){
+            $("#disable-logo").css("display", "none");
+            $("#enable-logo").css("display", "inline");
+
+            $(".logo-card").css("display", "none");
+
+        });
+    });
+</script>
 </body>
 </html>
