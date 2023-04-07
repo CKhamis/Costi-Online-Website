@@ -942,7 +942,7 @@ public class FrontEndController {
         // Newsroom posts
         List<Post> allPosts = postService.getByApproval(true);
         List<Post> recentNews = postService.getWikiPagesByCategory(PostCategory.NEWS.name());
-        List<Post> recentPosts = postService.getFixedAmount(10);
+        List<Post> recentPosts = postService.getFixedAmount(6);
 
         if(recentNews.size() == 0){
             // if no news posts at all
