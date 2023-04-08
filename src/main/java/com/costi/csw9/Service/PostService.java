@@ -57,8 +57,6 @@ public class PostService {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         post.setImagePath(fileName);
         post.setLastEdited(LocalDateTime.now());
-        // TODO: assign id variable here?
-        // FIXME: asdf
         postRepository.save(post);
         post.setImagePath("/uploads/posts/" + post.getId() + "/" + fileName);
         postRepository.save(post);
