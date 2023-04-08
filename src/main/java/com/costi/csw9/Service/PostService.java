@@ -41,6 +41,7 @@ public class PostService {
 
     public void save(Post post){
         post.setLastEdited(LocalDateTime.now());
+        post.setImagePath("/images/default-posts/" + post.getCategory() + ".png");
         postRepository.save(post);
     }
 
@@ -54,8 +55,12 @@ public class PostService {
 
     public void save(Post post, MultipartFile file) throws IOException {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        post.setImageName(fileName);
+        post.setImagePath(fileName);
         post.setLastEdited(LocalDateTime.now());
+        // TODO: assign id variable here?
+        // FIXME: asdf
+        postRepository.save(post);
+        post.setImagePath("/uploads/posts/" + post.getId() + "/" + fileName);
         postRepository.save(post);
 
         FileUploadUtil.saveFile(post.getId().toString(), fileName, file);

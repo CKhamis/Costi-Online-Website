@@ -44,7 +44,7 @@
                     </div>
                 </td>
                 <td>
-                    <img th:src="@{*{post.getPhotosImagePath()}}" style="height:40px"/>
+                    <img th:src="@{*{post.getImagePath()}}" style="height:40px"/>
                 </td>
                 <td th:text="*{post.dateEdited}">Last Edited</td>
                 <td>
@@ -99,7 +99,7 @@
                 </div>
             </td>
             <td>
-                <img th:src="@{*{post.getPhotosImagePath()}}" style="height:40px"/>
+                <img th:src="@{*{post.getImagePath()}}" style="height:40px"/>
             </td>
             <td th:text="*{post.dateEdited}">Last Edited</td>
             <td>

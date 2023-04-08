@@ -27,70 +27,70 @@
                 <!-- The slideshow/carousel -->
                 <div class="carousel-inner">
                     <div class="carousel-item active" th:object="${slide1}">
-                        <img th:src="@{*{getPhotosImagePath()}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
+                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
                         <div class="carousel-caption newsroom-slide-caption">
                             <a ><h3 th:text="*{getTitle()}" class="fw-bold">Slide</h3></a>
                             <p th:text="*{getTimeSinceEdited()}" class="pb-0"></p>
                         </div>
                     </div>
                     <div class="carousel-item" th:object="${slide2}">
-                        <img th:src="@{*{getPhotosImagePath()}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
+                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
                         <div class="carousel-caption newsroom-slide-caption">
                             <a ><h3 th:text="*{getTitle()}" class="fw-bold">Slide</h3></a>
                             <p th:text="*{getTimeSinceEdited()}" class="pb-0"></p>
                         </div>
                     </div>
                     <div class="carousel-item" th:object="${slide3}">
-                        <img th:src="@{*{getPhotosImagePath()}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
+                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
                         <div class="carousel-caption newsroom-slide-caption">
                             <a ><h3 th:text="*{getTitle()}" class="fw-bold">Slide</h3></a>
                             <p th:text="*{getTimeSinceEdited()}" class="pb-0"></p>
                         </div>
                     </div>
                     <div class="carousel-item" th:object="${slide4}">
-                        <img th:src="@{*{getPhotosImagePath()}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
+                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
                         <div class="carousel-caption newsroom-slide-caption">
                             <a ><h3 th:text="*{getTitle()}" class="fw-bold">Slide</h3></a>
                             <p th:text="*{getTimeSinceEdited()}" class="pb-0"></p>
                         </div>
                     </div>
                     <div class="carousel-item" th:object="${slide5}">
-                        <img th:src="@{*{getPhotosImagePath()}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
+                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
                         <div class="carousel-caption newsroom-slide-caption">
                             <a ><h3 th:text="*{getTitle()}" class="fw-bold">Slide</h3></a>
                             <p th:text="*{getTimeSinceEdited()}" class="pb-0"></p>
                         </div>
                     </div>
                     <div class="carousel-item" th:object="${slide6}">
-                        <img th:src="@{*{getPhotosImagePath()}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
+                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
                         <div class="carousel-caption newsroom-slide-caption">
                             <a ><h3 th:text="*{getTitle()}" class="fw-bold">Slide</h3></a>
                             <p th:text="*{getTimeSinceEdited()}" class="pb-0"></p>
                         </div>
                     </div>
                     <div class="carousel-item" th:object="${slide7}">
-                        <img th:src="@{*{getPhotosImagePath()}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
+                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
                         <div class="carousel-caption newsroom-slide-caption">
                             <a ><h3 th:text="*{getTitle()}" class="fw-bold">Slide</h3></a>
                             <p th:text="*{getTimeSinceEdited()}" class="pb-0"></p>
                         </div>
                     </div>
                     <div class="carousel-item" th:object="${slide8}">
-                        <img th:src="@{*{getPhotosImagePath()}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
+                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
                         <div class="carousel-caption newsroom-slide-caption">
                             <a ><h3 th:text="*{getTitle()}" class="fw-bold">Slide</h3></a>
                             <p th:text="*{getTimeSinceEdited()}" class="pb-0"></p>
                         </div>
                     </div>
                     <div class="carousel-item" th:object="${slide9}">
-                        <img th:src="@{*{getPhotosImagePath()}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
+                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
                         <div class="carousel-caption newsroom-slide-caption">
                             <a ><h3 th:text="*{getTitle()}" class="fw-bold">Slide</h3></a>
                             <p th:text="*{getTimeSinceEdited()}" class="pb-0"></p>
                         </div>
                     </div>
                     <div class="carousel-item" th:object="${slide10}">
-                        <img th:src="@{*{getPhotosImagePath()}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
+                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
                         <div class="carousel-caption newsroom-slide-caption">
                             <a ><h3 th:text="*{getTitle()}" class="fw-bold">Slide</h3></a>
                             <p th:text="*{getTimeSinceEdited()}" class="pb-0"></p>
@@ -150,8 +150,8 @@
             <div class="row mt-3" th:classappend="|post-*{post.getCategory()}|">
                 <div class="col-sm-4 grid-margin">
                     <div class="position-relative">
-                        <div class="rotate-img">
-                            <img th:src="${post.getPhotosImagePath() != null}? *{post.getPhotosImagePath()} : '/post-images/-1/no-image.png'" th:alt="|${post.getTitle()}|" class="img-fluid newsroom-slide">
+                        <div class="">
+                            <img th:src="${post.getImagePath() != null}? *{post.getImagePath()} : '/images/default-posts/no-image.png'" th:alt="|${post.getTitle()}|" class="img-fluid newsroom-slide">
                         </div>
                         <div class="badge-positioned">
                             <span class="badge" th:classappend="${post.getCategory() == 'ACHIEVEMENT'} ? 'bg-primary' : (${post.getCategory() == 'NEWS'} ? 'bg-secondary' : (${post.getCategory() == 'JOURNAL'} ? 'bg-info' : (${post.getCategory() == 'EMERGENCY'} ? 'bg-danger' : (${post.getCategory() == 'ARTICLE'} ? 'bg-warning' : (${post.getCategory() == 'DISCOVERY'} ? 'bg-success' : (${post.getCategory() == 'UPDATE'} ? 'bg-dark' : (${post.getCategory() == 'EVENT'} ? 'bg-success' : 'bg-dark')))))))" th:text="${post.getCategory()}"></span>                        </div>

@@ -34,7 +34,9 @@ public class Post {
     @Column(columnDefinition="text")
     private String body;
 
-    private String imageName;
+    private String imagePath;
+    @Column(nullable = false)
+    private int views = 0;
 
     public Post(String title, String subtitle, String category, String body) {
         this.title = title;
@@ -47,15 +49,12 @@ public class Post {
         return lastEdited.getMonthValue() + "/" + lastEdited.getDayOfMonth() + "/" + lastEdited.getYear();
     }
 
-    public boolean isEnabled() {
-        return enabled;
+    public void incrementViews(){
+        this.views++;
     }
 
-    @Transient
-    public String getPhotosImagePath() {
-        if (imageName == null || id == null) return null;
-        String path = "/post-images/" + id + "/" + imageName;
-        return path;
+    public boolean isEnabled() {
+        return enabled;
     }
 
     @Transient
