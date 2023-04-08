@@ -41,7 +41,7 @@ public class PostService {
 
     public void save(Post post){
         post.setLastEdited(LocalDateTime.now());
-        post.setImagePath("/images/default-posts/" + post.getCategory() + ".png");
+        post.setImagePath("/images/default-posts/" + post.getCategory() + ".jpg");
         postRepository.save(post);
     }
 
