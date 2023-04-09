@@ -87,16 +87,7 @@
             <td scope="row" th:text="*{post.title}">Title</td>
             <td th:text="*{post.subtitle}">Subtitle</td>
             <td class="text-center">
-                <div th:switch="${post.category}">
-                    <span th:case="ACHIEVEMENT"   class="badge badge-pill bg-primary">Achievement</span>
-                    <span th:case="NEWS"    class="badge badge-pill bg-info">News</span>
-                    <span th:case="JOURNAL"        class="badge badge-pill bg-success">Journal</span>
-                    <span th:case="EMERGENCY"  class="badge badge-pill bg-danger">Emergency</span>
-                    <span th:case="ARTICLE"  class="badge badge-pill bg-warning">Article</span>
-                    <span th:case="DISCOVERY"  class="badge badge-pill bg-info">Discovery</span>
-                    <span th:case="UPDATE"  class="badge badge-pill bg-light">Update</span>
-                    <span th:case="*"             class="badge badge-pill bg-dark">Other</span>
-                </div>
+                <span class="badge" th:classappend="${post.getCategory() == 'ACHIEVEMENT'} ? 'bg-primary' : (${post.getCategory() == 'NEWS'} ? 'bg-secondary' : (${post.getCategory() == 'JOURNAL'} ? 'bg-info' : (${post.getCategory() == 'EMERGENCY'} ? 'bg-danger' : (${post.getCategory() == 'ARTICLE'} ? 'bg-warning' : (${post.getCategory() == 'DISCOVERY'} ? 'bg-success' : (${post.getCategory() == 'UPDATE'} ? 'bg-dark' : (${post.getCategory() == 'EVENT'} ? 'bg-success' : 'bg-dark')))))))" th:text="${post.getCategory()}"></span>
             </td>
             <td>
                 <img th:src="@{*{post.getImagePath()}}" style="height:40px"/>
