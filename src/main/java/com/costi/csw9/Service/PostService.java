@@ -68,4 +68,8 @@ public class PostService {
         postRepository.enable(post.getId(), enable);
     }
 
+    public void forceSave(Post post) {
+        post.setLastEdited(LocalDateTime.now());
+        postRepository.save(post);
+    }
 }

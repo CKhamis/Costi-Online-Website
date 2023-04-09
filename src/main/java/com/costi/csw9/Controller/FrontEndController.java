@@ -323,45 +323,90 @@ public class FrontEndController {
         return "moderator/EditPost";
     }
 
+    @RequestMapping(value = "/COMT/Newsroom/{PostId}/editNoImage", method = RequestMethod.POST)
+    public String editPostNoImage(@PathVariable Long PostId, Post post, Principal principal, BindingResult result, RedirectAttributes redirectAttributes){
+        if (result.hasErrors()) {
+            // Include validation errors upon redirect
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category", result);
+
+            // Re populate credentials in form
+            redirectAttributes.addFlashAttribute("post", post);
+
+            // Redirect back to the form
+            return "redirect:/COMT/Newsroom/" + PostId + "/editNoImage";
+        }
+
+        postService.save(post);
+        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Newsroom Post Edited.", "Newsroom post #" + PostId + " has been modified successfully", FlashMessage.Status.SUCCESS));
+
+        return "redirect:/COMT/Newsroom";
+    }
+
+    @RequestMapping(value = "/COMT/Newsroom/{PostId}/edit", method = RequestMethod.POST)
+    public String editPost(@PathVariable Long PostId, @RequestParam("image") MultipartFile file, Post post, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) throws IOException {
+        if (result.hasErrors()) {
+            // Include validation errors upon redirect
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category", result);
+
+            // Re populate credentials in form
+            redirectAttributes.addFlashAttribute("post", post);
+
+            // Redirect back to the form
+            return "redirect:/COMT/Newsroom/" + PostId + "/edit";
+        }
+
+        if(file.isEmpty()){
+            post.setImagePath(postService.loadById(PostId).getImagePath());
+            postService.forceSave(post);
+        }else{
+            postService.save(post, file);
+        }
+        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Newsroom Post Edited.", "Newsroom post #" + PostId + " has been modified successfully", FlashMessage.Status.SUCCESS));
+
+        return "redirect:/COMT/Newsroom";
+    }
+
     @RequestMapping(value = "/Newsroom/{PostId}/delete", method = RequestMethod.POST)
     public String deletePost(@PathVariable Long PostId, Principal principal, RedirectAttributes redirectAttributes) {
         Post post = postService.loadById(PostId);
-        if (getCurrentUser(principal).isAdmin()) {
+        if (getCurrentUser(principal).getRole() == UserRole.OWNER) {
             postService.delete(post);
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Newsroom post deleted!", "Post is no longer accessible nor recoverable.", FlashMessage.Status.SUCCESS));
+
         } else {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "Please use an owner account to continue.", FlashMessage.Status.DANGER));
             System.out.println("Invalid Permissions");
         }
 
-        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Newsroom post deleted!", "Post is no longer accessible nor recoverable.", FlashMessage.Status.SUCCESS));
         return "redirect:/COMT/Newsroom";
     }
 
     @RequestMapping(value = "/Newsroom/{PostId}/enable", method = RequestMethod.POST)
     public String enablePost(@PathVariable Long PostId, Principal principal, RedirectAttributes redirectAttributes) {
         Post post = postService.loadById(PostId);
-        if (getCurrentUser(principal).isAdmin()) {
+        if (getCurrentUser(principal).getRole() == UserRole.OWNER) {
             postService.enable(post, true);
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Post Published!", "Post is now accessible by non-administrators on the Newsroom page", FlashMessage.Status.SUCCESS));
         } else {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "Please use an owner account to continue.", FlashMessage.Status.DANGER));
             System.out.println("Invalid Permissions");
         }
 
-        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Post Published!", "Post is now accessible by non-administrators on the Newsroom page", FlashMessage.Status.SUCCESS));
         return "redirect:/COMT/Newsroom";
     }
 
     @RequestMapping(value = "/Newsroom/{PostId}/disable", method = RequestMethod.POST)
     public String disablePost(@PathVariable Long PostId, Principal principal, RedirectAttributes redirectAttributes) {
         Post post = postService.loadById(PostId);
-        if (getCurrentUser(principal).isAdmin()) {
+        if (getCurrentUser(principal).getRole() == UserRole.OWNER) {
             postService.enable(post, false);
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Post disabled!", "Post is no longer accessible by public.", FlashMessage.Status.SUCCESS));
+
         } else {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "Please use an owner account to continue.", FlashMessage.Status.DANGER));
             System.out.println("Invalid Permissions");
         }
 
-        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Post disabled!", "Post is no longer accessible by public.", FlashMessage.Status.SUCCESS));
         return "redirect:/COMT/Newsroom";
     }
 
