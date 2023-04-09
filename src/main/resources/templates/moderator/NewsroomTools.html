@@ -51,7 +51,7 @@
                     <a th:href="'/Newsroom/' + *{post.Id} + '/view'" class="card-link">View Post ></a>
                 </td>
                 <td>
-                    <a th:href="@{|/Newsroom/${post.id}/edit|}" class="btn btn-secondary btn-sm" role="button" aria-pressed="true">Edit</a>
+                    <a th:href="@{|/COMT/Newsroom/${post.id}/edit|}" class="btn btn-secondary btn-sm" role="button" aria-pressed="true">Edit</a>
                 </td>
                 <td>
                     <form th:action="@{|/Newsroom/${post.id}/enable|}" method="post">
@@ -106,7 +106,7 @@
                 <a th:href="'/Newsroom/' + *{post.Id} + '/view'" class="card-link">View Post ></a>
             </td>
             <td>
-                <a th:href="@{|/Newsroom/${post.id}/edit|}" class="btn btn-secondary btn-sm" role="button" aria-pressed="true">Edit</a>
+                <a th:href="@{|/COMT/Newsroom/${post.id}/edit|}" class="btn btn-secondary btn-sm" role="button" aria-pressed="true">Edit</a>
             </td>
             <td>
                 <form th:action="@{|/Newsroom/${post.id}/disable|}" method="post">
