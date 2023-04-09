@@ -949,7 +949,7 @@ public class FrontEndController {
             Post blank = new Post("No Posts", "No posts were found in database", PostCategory.NEWS.name(), "");
             blank.setLastEdited(LocalDateTime.MIN);
             blank.setId(-1L);
-            blank.setImagePath("no-image.png");
+            blank.setImagePath("/images/default-posts/no-image.png");
             model.addAttribute("slide1", blank);
             model.addAttribute("slide2", blank);
             model.addAttribute("slide3", blank);
