@@ -308,12 +308,11 @@ public class FrontEndController {
     public String getEditPost(@PathVariable Long PostId, Model model, Principal principal, RedirectAttributes redirectAttributes) {
         User current = getCurrentUser(principal);
         Post post = postService.loadById(PostId);
-        System.out.println(post.getImagePath().substring(0,14) + "  " + post.getImagePath().substring(0,14).equals("/images/default"));
 
         model.addAttribute("post", post);
         model.addAttribute("categories", PostCategory.values());
         model.addAttribute("isAllowed", current.getRole().equals(UserRole.OWNER));
-        model.addAttribute("hasImage", post.getImagePath().substring(0,14).equals("/images/defaul"));
+        model.addAttribute("hasImage", !post.getImagePath().substring(0,14).equals("/images/defaul"));
         model.addAttribute("action", "/COMT/Newsroom/" + PostId + "/edit");
         model.addAttribute("title", "Edit Costi Newsroom Post");
 
