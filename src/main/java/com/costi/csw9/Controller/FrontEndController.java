@@ -1057,4 +1057,20 @@ public class FrontEndController {
 
         return "newsroom/NewsroomHome";
     }
+
+    @GetMapping("/Newsroom/{PageId}/view")
+    public String getNewsroomHome(@PathVariable Long PageId, Model model, Principal principal) {
+
+        User user = getCurrentUser(principal);
+        model.addAttribute("user", user);
+        model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("theme", choseTheme());
+        model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
+
+        Post post = postService.loadById(PageId);
+        model.addAttribute("post", post);
+        model.addAttribute("isViewable", post.isEnabled() || user.getRole() == UserRole.OWNER);
+        model.addAttribute("isOwner",user.getRole() == UserRole.OWNER);
+        return "newsroom/ViewPost";
+    }
 }
