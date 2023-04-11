@@ -59,7 +59,7 @@ public class Post {
 
     @Transient
     public String getTimeSinceEdited() {
-        //return dateCreated.getMonthValue() + "/" + dateCreated.getDayOfMonth() + "/" + dateCreated.getYear();
+        //return lastEdited.getMonthValue() + "/" + lastEdited.getDayOfMonth() + "/" + lastEdited.getYear();
         String unit = "";
         LocalDateTime now = LocalDateTime.now();
         long diff;
@@ -73,6 +73,28 @@ public class Post {
             unit = "days ago";
         } else if ((diff = ChronoUnit.MONTHS.between(lastEdited,now)) < 12) {
             unit = "month ago";
+        } else{
+            diff = ChronoUnit.YEARS.between(lastEdited,now);
+        }
+        return String.format("%d %s",diff,unit);
+    }
+
+    @Transient
+    public String getTimeSinceeditedShort() {
+        //return lastEdited.getMonthValue() + "/" + lastEdited.getDayOfMonth() + "/" + lastEdited.getYear();
+        String unit = "";
+        LocalDateTime now = LocalDateTime.now();
+        long diff;
+        if((diff = ChronoUnit.SECONDS.between(lastEdited,now)) < 60){
+            unit = "s";
+        } else if ((diff = ChronoUnit.MINUTES.between(lastEdited,now)) < 60) {
+            unit = "m";
+        } else if ((diff = ChronoUnit.HOURS.between(lastEdited,now)) < 24) {
+            unit = "h";
+        } else if ((diff = ChronoUnit.DAYS.between(lastEdited,now)) < 30) {
+            unit = "d";
+        } else if ((diff = ChronoUnit.MONTHS.between(lastEdited,now)) < 12) {
+            unit = "mo";
         } else{
             diff = ChronoUnit.YEARS.between(lastEdited,now);
         }

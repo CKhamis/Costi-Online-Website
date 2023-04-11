@@ -4,11 +4,17 @@
 <body class="bg-1 text-1 pt-5">
 <div th:replace="Components :: nav"></div>
 
-<main class="container-fluid mx-2 mt-4">
+<main class="container-fluid mt-4">
     <div class="row" th:if="${isViewable}">
         <div class="d-none d-md-block col-md-3">
-            <h3 class="text-secondary fw-bold" th:text="|More ${post.getCategory()}|">Category</h3>
-
+            <h3 class="text-secondary fw-bold" th:text="${post.getCategory() == 'ACHIEVEMENT'} ? 'All achievements' : (${post.getCategory() == 'NEWS'} ? 'All news' : (${post.getCategory() == 'JOURNAL'} ? 'All journals' : (${post.getCategory() == 'EMERGENCY'} ? 'All emergencies' : (${post.getCategory() == 'ARTICLE'} ? 'All articles' : (${post.getCategory() == 'DISCOVERY'} ? 'All discoveries' : (${post.getCategory() == 'UPDATE'} ? 'All updates' : (${post.getCategory() == 'EVENT'} ? 'All events' : 'Unknown category')))))))">Category</h3>
+            <th:block th:each="related : ${relatedPosts}">
+                <a th:href="|/Newsroom/*{related.getId()}/view|">
+                    <img th:src="@{*{related.getImagePath()}}" style="aspect-ratio: 16 / 9; object-fit:cover;width: 100%;"/>
+                    <h4 class="fw-bold mb-5 text-1 text-decoration-none float-start" th:text="*{related.getTitle()}"></h4>
+                    <h4 class="text-secondary float-end" th:text="${related.getTimeSinceeditedShort()}"></h4>
+                </a>
+            </th:block>
         </div>
         <div class="col-12 col-md-8 col-lg-6 px-lg-5" th:object="${post}">
             <div class="row">
@@ -33,16 +39,25 @@
 
             <div th:unless="*{enabled}" class="alert alert-secondary text-center" role="alert">
                 <p>This post is not visible to the public</p>
-                <a class="btn btn-primary btn-sm d-inline" th:href="@{|/COMT/Newsroom/*{getId()}/edit|}" th:if="${isOwner}">Edit</a>
-                <a class="btn btn-secondary btn-sm d-inline" href="/COMT/Newsroom" th:if="${isOwner}">COMT</a>
             </div>
 
             <div id="contentBody">
                 <p class="fs-5" th:utext="*{getBody()}"></p>
             </div>
+
+            <a class="btn btn-primary btn-sm d-inline" th:href="@{|/COMT/Newsroom/*{getId()}/edit|}" th:if="${isOwner}">Edit</a>
+            <a class="btn btn-secondary btn-sm d-inline" href="/COMT/Newsroom" th:if="${isOwner}">COMT</a>
+            <p th:text="|views: ${post.getViews()}|"></p>
         </div>
         <div class="d-none d-lg-block col-lg-3">
             <h3 class="text-secondary fw-bold">Recent Content</h3>
+            <th:block th:each="recent : ${recentPosts}">
+                <a th:href="|/Newsroom/*{recent.getId()}/view|">
+                    <img th:src="@{*{recent.getImagePath()}}" style="aspect-ratio: 16 / 9; object-fit:cover;width: 100%;"/>
+                    <h4 class="fw-bold mb-5 text-1 text-decoration-none float-start" th:text="*{recent.getTitle()}"></h4>
+                    <h4 class="text-secondary float-end" th:text="${recent.getTimeSinceeditedShort()}"></h4>
+                </a>
+            </th:block>
         </div>
     </div>
     <div th:unless="${isViewable}">

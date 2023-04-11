@@ -53,6 +53,14 @@ public class PostService {
         return outputList;
     }
 
+    public List<Post> getFixedAmount(int entries, String category){
+        List<Post> original = postRepository.findByCategory(category), outputList = new ArrayList<>();
+        for (int i = 0; i < entries && i < original.size() - 1; i++) {
+            outputList.add(original.get(i));
+        }
+        return outputList;
+    }
+
     public void save(Post post, MultipartFile file) throws IOException {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         post.setImagePath(fileName);
@@ -70,6 +78,11 @@ public class PostService {
 
     public void forceSave(Post post) {
         post.setLastEdited(LocalDateTime.now());
+        postRepository.save(post);
+    }
+
+    public void addView(Post post) {
+        post.setViews(post.getViews() + 1);
         postRepository.save(post);
     }
 }
