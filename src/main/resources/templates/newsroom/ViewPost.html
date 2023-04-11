@@ -4,20 +4,19 @@
 <body class="bg-1 text-1 pt-5">
 <div th:replace="Components :: nav"></div>
 
-<main class="container mt-5">
+<main class="container-fluid mx-2 mt-4">
     <div class="row" th:if="${isViewable}">
-        <h1 class="text-center fw-bold border-bottom mb-3 pb-2">Costi Newsroom</h1>
-        <div class="d-none d-md-block col-md-2">
-            <h3 class="text-secondary fw-bold" th:text="${post.getCategory()}">Category</h3>
+        <div class="d-none d-md-block col-md-3">
+            <h3 class="text-secondary fw-bold" th:text="|More ${post.getCategory()}|">Category</h3>
 
         </div>
-        <div class="col-12 col-md-10 col-lg-8 px-lg-5" th:object="${post}">
+        <div class="col-12 col-md-8 col-lg-6 px-lg-5" th:object="${post}">
             <div class="row">
                 <div class="col col-md-8 d-none d-md-block">
                     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="/">Costi Online</a></li>
-                            <li class="breadcrumb-item"><a href="/Newsroom">Newsroom Home</a></li>
+                            <li class="breadcrumb-item"><a href="/" class="text-secondary">Costi Online</a></li>
+                            <li class="breadcrumb-item"><a href="/Newsroom" class="text-secondary">Newsroom Home</a></li>
                             <li class="breadcrumb-item active" aria-current="page" th:text="*{getTitle()}"></li>
                         </ol>
                     </nav>
@@ -26,6 +25,8 @@
                     <p th:text="'Last Edited: ' + *{getDateEdited()}" class="text-end"></p>
                 </div>
             </div>
+            <img th:src="@{*{getImagePath()}}" style="aspect-ratio: 16 / 9; object-fit:cover;width: 100%;"/>
+
             <h1 class="fw-bold" th:text="*{getTitle()}"></h1>
             <p class="text-muted fw-bold" th:text="*{getSubtitle()}"></p>
             <p>By: Website Operator</p>
@@ -40,7 +41,7 @@
                 <p class="fs-5" th:utext="*{getBody()}"></p>
             </div>
         </div>
-        <div class="d-none d-lg-block col-lg-2">
+        <div class="d-none d-lg-block col-lg-3">
             other side
         </div>
     </div>
