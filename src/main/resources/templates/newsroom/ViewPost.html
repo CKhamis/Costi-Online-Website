@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xml:th="https://www.thymeleaf.org">
+<head th:replace="Components :: head('View Wiki')"></head>
+<body class="bg-1 text-1 pt-5">
+<div th:replace="Components :: nav"></div>
+
+<main class="container mt-5">
+    <div class="row" th:if="${isViewable}">
+        <div class="col-lg-3 col-md-5 col-xs-12" th:switch="${wiki.category}">
+            <div th:case="INSIDE_JOKE"   class="fs-3 mb-2 mt-0" th:text="|&#128518; Inside Jokes|">title</div>
+            <div th:case="HISTORICAL"    class="fs-3 mb-2 mt-0" th:text="|&#127984; Historical|">title</div>
+            <div th:case="PEOPLE"        class="fs-3 mb-2 mt-0" th:text="|&#128697; People|">title</div>
+            <div th:case="PROFESSIONAL"  class="fs-3 mb-2 mt-0" th:text="|&#128084; Professional|">title</div>
+            <div th:case="*"             class="fs-3 mb-2 mt-0" th:text="|&#10067; Other|">title</div>
+            <div class="list-group mb-3">
+                <a th:each="page : ${categoryPages}" th:href="'/Wiki/' + *{page.Id} + '/view'" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1 text-truncate" th:text="*{page.title}">title</h5>
+                    </div>
+                    <p class="mb-1 text-truncate" th:text="*{page.subtitle}">Some placeholder content in a paragraph.</p>
+                    <small class="text-truncate" th:text="'By ' + *{page.author.firstName} + ' ' + *{page.author.lastName}">And some small print.</small>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-9 col-md-7 col-xs-12 px-lg-5" th:object="${wiki}">
+            <div class="row">
+                <div class="col col-md-8 d-none d-md-block">
+                    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/">Costi Online</a></li>
+                            <li class="breadcrumb-item"><a href="/Wiki">Wiki Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page" th:text="*{title}"></li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col col-md-4 d-none d-md-block">
+                    <p th:text="'Last Edited: ' + *{dateEdited}" class="text-end"></p>
+                </div>
+            </div>
+            <h1 class="fw-bold" th:text="*{title}"></h1>
+            <p class="text-muted fw-bold" th:text="*{subtitle}"></p>
+            <p th:text="'By ' + *{author.firstName} + ' ' + *{author.lastName}"></p>
+            <span th:unless="*{enabled}" class="badge bg-light text-dark">NOT VISIBLE</span>
+
+            <div class="px-md-4" id="contentBody">
+                <p class="fs-5" th:utext="*{body}"></p>
+                <a class="btn btn-primary btn-sm" th:href="@{|/Wiki/${wiki.id}/edit|}" th:if="${showEdit}">Edit</a>
+                <a class="btn btn-secondary btn-sm d-inline" href="/COMT/Wiki" th:if="${isAdmin}">COMT</a>
+            </div>
+        </div>
+    </div>
+    <div th:unless="${isViewable}">
+        <div class="p-3 p-lg-5 mb-4 border-box">
+            <div class="container py-5">
+                <h1 class="display-5 fw-bold">⚠️You do not have access to this post</h1>
+                <p class="col-lg-10 fs-4">This post is currently under review by the website owner. Please check back on this page at a future point</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:replace="Components :: footer"></div>
+<div th:replace="Components :: scripts"></div>
+</body>
+</html>

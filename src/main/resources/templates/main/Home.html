@@ -11,7 +11,7 @@
             <div class="container-fluid" style="padding-top:160px;">
                 <img th:src="@{/icons/CO White.png}" class="img-fluid mb-2 banner-logo" style="width:0%;margin-left:50%"/>
                 <h3 class="fw-bold text-white changing-text text-center">:(</h3>
-                <p class="col-md-8 fs-5 text-white text-center w-100">Version 3.5</p>
+                <p class="col-md-8 fs-5 text-white text-center w-100" th:text="|Version: ${version}|">Version X</p>
             </div>
         </div>
         <video class="w-100" autoplay preload="true" loop="loop" style="margin-top:-150px;opacity:.5; " muted>
