@@ -22,7 +22,7 @@
                     </nav>
                 </div>
                 <div class="col col-md-4 d-none d-md-block">
-                    <p th:text="'Last Edited: ' + *{getDateEdited()}" class="text-end"></p>
+                    <p th:text="'Last Edited: ' + *{getDateEdited()}" class="text-end text-secondary"></p>
                 </div>
             </div>
             <img th:src="@{*{getImagePath()}}" style="aspect-ratio: 16 / 9; object-fit:cover;width: 100%;"/>
@@ -37,12 +37,12 @@
                 <a class="btn btn-secondary btn-sm d-inline" href="/COMT/Newsroom" th:if="${isOwner}">COMT</a>
             </div>
 
-            <div class="px-md-4" id="contentBody">
+            <div id="contentBody">
                 <p class="fs-5" th:utext="*{getBody()}"></p>
             </div>
         </div>
         <div class="d-none d-lg-block col-lg-3">
-            other side
+            <h3 class="text-secondary fw-bold">Recent Content</h3>
         </div>
     </div>
     <div th:unless="${isViewable}">
