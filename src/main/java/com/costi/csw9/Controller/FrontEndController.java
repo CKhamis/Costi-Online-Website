@@ -710,7 +710,14 @@ public class FrontEndController {
             random = new ArrayList<>(random.subList(0, 3));
         }
 
-        List<Post> recentNews = postService.getWikiPagesByCategory(PostCategory.NEWS.name());
+        List<Post> recentNews = postService.getFixedAmount(10);
+        generateSlides(model, recentNews);
+
+        model.addAttribute("wiki", random);
+        return "main/Home";
+    }
+
+    private void generateSlides(Model model, List<Post> recentNews) {
         if(recentNews.size() == 0){
             // if no news posts at all
             Post blank = new Post("No Posts", "No posts were found in database", PostCategory.NEWS.name(), "");
@@ -739,9 +746,6 @@ public class FrontEndController {
             model.addAttribute("slide9", recentNews.get(LogicTools.clamp(8, 0, recentNews.size()-1)));
             model.addAttribute("slide10", recentNews.get(LogicTools.clamp(9, 0, recentNews.size()-1)));
         }
-
-        model.addAttribute("wiki", random);
-        return "main/Home";
     }
 
     @GetMapping("/Projects")
@@ -1041,34 +1045,7 @@ public class FrontEndController {
         List<Post> recentNews = postService.getWikiPagesByCategory(PostCategory.NEWS.name());
         List<Post> recentPosts = postService.getFixedAmount(6);
 
-        if(recentNews.size() == 0){
-            // if no news posts at all
-            Post blank = new Post("No Posts", "No posts were found in database", PostCategory.NEWS.name(), "");
-            blank.setLastEdited(LocalDateTime.MIN);
-            blank.setId(-1L);
-            blank.setImagePath("/images/default-posts/no-image.png");
-            model.addAttribute("slide1", blank);
-            model.addAttribute("slide2", blank);
-            model.addAttribute("slide3", blank);
-            model.addAttribute("slide4", blank);
-            model.addAttribute("slide5", blank);
-            model.addAttribute("slide6", blank);
-            model.addAttribute("slide7", blank);
-            model.addAttribute("slide8", blank);
-            model.addAttribute("slide9", blank);
-            model.addAttribute("slide10", blank);
-        }else{
-            model.addAttribute("slide1", recentNews.get(LogicTools.clamp(0, 0, recentNews.size()-1)));
-            model.addAttribute("slide2", recentNews.get(LogicTools.clamp(1, 0, recentNews.size()-1)));
-            model.addAttribute("slide3", recentNews.get(LogicTools.clamp(2, 0, recentNews.size()-1)));
-            model.addAttribute("slide4", recentNews.get(LogicTools.clamp(3, 0, recentNews.size()-1)));
-            model.addAttribute("slide5", recentNews.get(LogicTools.clamp(4, 0, recentNews.size()-1)));
-            model.addAttribute("slide6", recentNews.get(LogicTools.clamp(5, 0, recentNews.size()-1)));
-            model.addAttribute("slide7", recentNews.get(LogicTools.clamp(6, 0, recentNews.size()-1)));
-            model.addAttribute("slide8", recentNews.get(LogicTools.clamp(7, 0, recentNews.size()-1)));
-            model.addAttribute("slide9", recentNews.get(LogicTools.clamp(8, 0, recentNews.size()-1)));
-            model.addAttribute("slide10", recentNews.get(LogicTools.clamp(9, 0, recentNews.size()-1)));
-        }
+        generateSlides(model, recentNews);
 
         model.addAttribute("recentPosts", recentPosts);
         model.addAttribute("allPosts", allPosts);
