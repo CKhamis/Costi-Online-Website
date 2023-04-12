@@ -1079,9 +1079,6 @@ public class FrontEndController {
         if (session.getAttribute("noViewIncrement" + post.getId()) == null) {
             postService.addView(post);
             session.setAttribute("noViewIncrement" + post.getId(), true);
-            System.out.println("created");
-        } else {
-            System.out.println("already exists");
         }
 
 
