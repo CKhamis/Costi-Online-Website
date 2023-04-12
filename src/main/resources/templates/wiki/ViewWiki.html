@@ -42,7 +42,7 @@
             <p th:text="'By ' + *{author.firstName} + ' ' + *{author.lastName}"></p>
             <span th:unless="*{enabled}" class="badge bg-light text-dark">NOT VISIBLE</span>
 
-            <div class="px-md-4" id="contentBody">
+            <div id="contentBody">
                 <p class="fs-5" th:utext="*{body}"></p>
                 <a class="btn btn-primary btn-sm" th:href="@{|/Wiki/${wiki.id}/edit|}" th:if="${showEdit}">Edit</a>
                 <a class="btn btn-secondary btn-sm d-inline" href="/COMT/Wiki" th:if="${isAdmin}">COMT</a>

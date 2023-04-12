@@ -10,10 +10,11 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 public class FileUploadUtil {
+  private static final String UPLOAD_DIRECTORY = "src/main/resources/static/uploads/posts/";
 
-  public static void saveFile(String uploadDir, String fileName, MultipartFile multipartFile) throws IOException {
-    Path uploadPath = Paths.get(uploadDir);
-
+  public static void saveFile(String subDirectory, String fileName, MultipartFile multipartFile) throws IOException {
+    Path uploadPath = Paths.get(UPLOAD_DIRECTORY + subDirectory);
+    // TODO: check for ../ xxs vulnerability
     if (!Files.exists(uploadPath)) {
       Files.createDirectories(uploadPath);
     }

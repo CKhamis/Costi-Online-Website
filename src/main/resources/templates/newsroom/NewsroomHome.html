@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html xml:th="https://www.thymeleaf.org">
+<head th:replace="Components :: head('Newsroom')"></head>
+<body class="bg-1 text-1 pt-5">
+<div th:replace="Components :: nav"></div>
+
+<main class="container main-content-1" id="top">
+    <h1 class="text-center fw-bold border-bottom mb-3 pb-2">Costi Newsroom</h1>
+    <div class="row">
+        <div class="col-md-8">
+            <div id="newsroom-slideshow" class="carousel slide mb-4" data-bs-ride="carousel">
+
+                <!-- Indicators/dots -->
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#newsroom-slideshow" data-bs-slide-to="0" class="active"></button>
+                    <button type="button" data-bs-target="#newsroom-slideshow" data-bs-slide-to="1"></button>
+                    <button type="button" data-bs-target="#newsroom-slideshow" data-bs-slide-to="2"></button>
+                    <button type="button" data-bs-target="#newsroom-slideshow" data-bs-slide-to="3"></button>
+                    <button type="button" data-bs-target="#newsroom-slideshow" data-bs-slide-to="4"></button>
+                    <button type="button" data-bs-target="#newsroom-slideshow" data-bs-slide-to="5"></button>
+                    <button type="button" data-bs-target="#newsroom-slideshow" data-bs-slide-to="6"></button>
+                    <button type="button" data-bs-target="#newsroom-slideshow" data-bs-slide-to="7"></button>
+                    <button type="button" data-bs-target="#newsroom-slideshow" data-bs-slide-to="8"></button>
+                    <button type="button" data-bs-target="#newsroom-slideshow" data-bs-slide-to="9"></button>
+                </div>
+
+                <!-- The slideshow/carousel -->
+                <div class="carousel-inner">
+                    <div class="carousel-item active" th:object="${slide1}">
+                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
+                        <div class="carousel-caption newsroom-slide-caption">
+                            <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold">Slide</h3></a>
+                            <p th:text="*{getTimeSinceEdited()}" class="pb-0"></p>
+                        </div>
+                    </div>
+                    <div class="carousel-item" th:object="${slide2}">
+                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
+                        <div class="carousel-caption newsroom-slide-caption">
+                            <a class="text-1" th:href="|/Newsroom/${slide2.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold">Slide</h3></a>
+                            <p th:text="*{getTimeSinceEdited()}" class="pb-0"></p>
+                        </div>
+                    </div>
+                    <div class="carousel-item" th:object="${slide3}">
+                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
+                        <div class="carousel-caption newsroom-slide-caption">
+                            <a class="text-1" th:href="|/Newsroom/${slide3.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold">Slide</h3></a>
+                            <p th:text="*{getTimeSinceEdited()}" class="pb-0"></p>
+                        </div>
+                    </div>
+                    <div class="carousel-item" th:object="${slide4}">
+                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
+                        <div class="carousel-caption newsroom-slide-caption">
+                            <a class="text-1" th:href="|/Newsroom/${slide4.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold">Slide</h3></a>
+                            <p th:text="*{getTimeSinceEdited()}" class="pb-0"></p>
+                        </div>
+                    </div>
+                    <div class="carousel-item" th:object="${slide5}">
+                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
+                        <div class="carousel-caption newsroom-slide-caption">
+                            <a class="text-1" th:href="|/Newsroom/${slide5.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold">Slide</h3></a>
+                            <p th:text="*{getTimeSinceEdited()}" class="pb-0"></p>
+                        </div>
+                    </div>
+                    <div class="carousel-item" th:object="${slide6}">
+                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
+                        <div class="carousel-caption newsroom-slide-caption">
+                            <a class="text-1" th:href="|/Newsroom/${slide6.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold">Slide</h3></a>
+                            <p th:text="*{getTimeSinceEdited()}" class="pb-0"></p>
+                        </div>
+                    </div>
+                    <div class="carousel-item" th:object="${slide7}">
+                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
+                        <div class="carousel-caption newsroom-slide-caption">
+                            <a class="text-1" th:href="|/Newsroom/${slide7.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold">Slide</h3></a>
+                            <p th:text="*{getTimeSinceEdited()}" class="pb-0"></p>
+                        </div>
+                    </div>
+                    <div class="carousel-item" th:object="${slide8}">
+                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
+                        <div class="carousel-caption newsroom-slide-caption">
+                            <a class="text-1" th:href="|/Newsroom/${slide8.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold">Slide</h3></a>
+                            <p th:text="*{getTimeSinceEdited()}" class="pb-0"></p>
+                        </div>
+                    </div>
+                    <div class="carousel-item" th:object="${slide9}">
+                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
+                        <div class="carousel-caption newsroom-slide-caption">
+                            <a class="text-1" th:href="|/Newsroom/${slide9.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold">Slide</h3></a>
+                            <p th:text="*{getTimeSinceEdited()}" class="pb-0"></p>
+                        </div>
+                    </div>
+                    <div class="carousel-item" th:object="${slide10}">
+                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="newsroom-slide">
+                        <div class="carousel-caption newsroom-slide-caption">
+                            <a class="text-1" th:href="|/Newsroom/${slide10.getId()}/view|" ><h3 th:text="*{getTitle()}" class="fw-bold">Slide</h3></a>
+                            <p th:text="*{getTimeSinceEdited()}" class="pb-0"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Left and right controls/icons -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#newsroom-slideshow" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#newsroom-slideshow" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+        <div class="col-md-4 d-none d-md-block">
+            <h2 class="mb-4">Recent Posts</h2>
+            <a th:each="post : ${recentPosts}" th:href="|/Newsroom/${post.getId()}/view|" class="mb-3">
+                <h4 th:text="|${post.getTitle()}|" class="mb-0 text-1"></h4>
+                <p th:text="|${post.getCategory()} - ${post.getTimeSinceEdited()}|" class="text-1"></p>
+            </a>
+        </div>
+    </div>
+    <div class="mt-3">
+        <h3 th:if="${isAnnouncement}">📢Announcements</h3>
+        <div th:each="message : ${announcements}">
+            <div th:replace="Components :: message" class="mt-2"></div>
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <h2 class="text-center fw-bold border-bottom pb-2">All Posts</h2>
+
+        <div class="fw-bold d-inline-block">
+            <h4 class="fw-bold d-inline-block lh-lg">Post Type:
+                <span class="badge rounded-pill bg-info" id="disable-ACHIEVEMENT">Achievement</span>
+                <span class="badge rounded-pill bg-dark enable-toggle" id="enable-ACHIEVEMENT">Achievement</span>
+                <span class="badge rounded-pill bg-info" id="disable-NEWS">News</span>
+                <span class="badge rounded-pill bg-dark enable-toggle" id="enable-NEWS">News</span>
+                <span class="badge rounded-pill bg-info" id="disable-JOURNAL">Journal</span>
+                <span class="badge rounded-pill bg-dark enable-toggle" id="enable-JOURNAL">Journal</span>
+                <span class="badge rounded-pill bg-info" id="disable-EMERGENCY">Emergency</span>
+                <span class="badge rounded-pill bg-dark enable-toggle" id="enable-EMERGENCY">Emergency</span>
+                <span class="badge rounded-pill bg-info" id="disable-ARTICLE">Article</span>
+                <span class="badge rounded-pill bg-dark enable-toggle" id="enable-ARTICLE">Article</span>
+                <span class="badge rounded-pill bg-info" id="disable-DISCOVERY">Discovery</span>
+                <span class="badge rounded-pill bg-dark enable-toggle" id="enable-DISCOVERY">Discovery</span>
+                <span class="badge rounded-pill bg-info" id="disable-UPDATE">Update</span>
+                <span class="badge rounded-pill bg-dark enable-toggle" id="enable-UPDATE">Update</span>
+                <span class="badge rounded-pill bg-info" id="disable-EVENT">Event</span>
+                <span class="badge rounded-pill bg-dark enable-toggle" id="enable-EVENT">Event</span>
+            </h4>
+        </div>
+
+        <th:block th:each="post : ${allPosts}">
+            <a th:href="|/Newsroom/${post.getId()}/view|">
+                <div class="row mt-3" th:classappend="|post-*{post.getCategory()}|">
+                    <div class="col-sm-4 grid-margin">
+                        <div class="position-relative">
+                            <div class="">
+                                <img th:src="${post.getImagePath() != null}? *{post.getImagePath()} : '/images/default-posts/no-image.jpg'" th:alt="|${post.getTitle()}|" class="img-fluid newsroom-slide">
+                            </div>
+                            <div class="badge-positioned">
+                                <span class="badge" th:classappend="${post.getCategory() == 'ACHIEVEMENT'} ? 'bg-primary' : (${post.getCategory() == 'NEWS'} ? 'bg-secondary' : (${post.getCategory() == 'JOURNAL'} ? 'bg-info' : (${post.getCategory() == 'EMERGENCY'} ? 'bg-danger' : (${post.getCategory() == 'ARTICLE'} ? 'bg-warning' : (${post.getCategory() == 'DISCOVERY'} ? 'bg-success' : (${post.getCategory() == 'UPDATE'} ? 'bg-dark' : (${post.getCategory() == 'EVENT'} ? 'bg-success' : 'bg-dark')))))))" th:text="${post.getCategory()}"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-8 mb-4">
+                        <h2 class="mb-1 fw-bold text-1" th:text="|${post.getTitle()}|"></h2>
+                        <h5 class="mb-2 fw-bold text-secondary" th:text="|${post.getSubtitle()}|"></h5>
+                        <div class="fs-13 mb-2 text-1">
+                            <p class="mr-2" th:text="|${post.getViews()} Views ∙ ${post.getTimeSinceEdited()}|"></p>
+                            <p class="text-truncate" th:text="*{post.getBody()}"></p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </th:block>
+        <br />
+        <a href="#top" class="mt-4"><button type="button" class="btn btn-primary">Top</button></a>
+    </div>
+</main>
+
+<div th:replace="Components :: footer"></div>
+<div th:replace="Components :: scripts"></div>
+<script>
+    $(document).ready(function(){
+        $(".enable-toggle").css("display", "none");
+
+        $("#enable-ACHIEVEMENT").click(function(){
+            $("#enable-ACHIEVEMENT").css("display", "none");
+            $("#disable-ACHIEVEMENT").css("display", "inline-block");
+
+            $(".post-ACHIEVEMENT").css("display", "flex");
+
+        });
+
+        $("#disable-ACHIEVEMENT").click(function(){
+            $("#disable-ACHIEVEMENT").css("display", "none");
+            $("#enable-ACHIEVEMENT").css("display", "inline-block");
+
+            $(".post-ACHIEVEMENT").css("display", "none");
+
+        });
+
+        $("#enable-NEWS").click(function(){
+            $("#enable-NEWS").css("display", "none");
+            $("#disable-NEWS").css("display", "inline-block");
+
+            $(".post-NEWS").css("display", "flex");
+
+        });
+
+        $("#disable-NEWS").click(function(){
+            $("#disable-NEWS").css("display", "none");
+            $("#enable-NEWS").css("display", "inline-block");
+
+            $(".post-NEWS").css("display", "none");
+
+        });
+
+        $("#enable-JOURNAL").click(function(){
+            $("#enable-JOURNAL").css("display", "none");
+            $("#disable-JOURNAL").css("display", "inline-block");
+
+            $(".post-JOURNAL").css("display", "flex");
+
+        });
+
+        $("#disable-JOURNAL").click(function(){
+            $("#disable-JOURNAL").css("display", "none");
+            $("#enable-JOURNAL").css("display", "inline-block");
+
+            $(".post-JOURNAL").css("display", "none");
+
+        });
+
+        $("#enable-EMERGENCY").click(function(){
+            $("#enable-EMERGENCY").css("display", "none");
+            $("#disable-EMERGENCY").css("display", "inline-block");
+
+            $(".post-EMERGENCY").css("display", "flex");
+
+        });
+
+        $("#disable-EMERGENCY").click(function(){
+            $("#disable-EMERGENCY").css("display", "none");
+            $("#enable-EMERGENCY").css("display", "inline-block");
+
+            $(".post-EMERGENCY").css("display", "none");
+
+        });
+
+        $("#enable-ARTICLE").click(function(){
+            $("#enable-ARTICLE").css("display", "none");
+            $("#disable-ARTICLE").css("display", "inline-block");
+
+            $(".post-ARTICLE").css("display", "flex");
+
+        });
+
+        $("#disable-ARTICLE").click(function(){
+            $("#disable-ARTICLE").css("display", "none");
+            $("#enable-ARTICLE").css("display", "inline-block");
+
+            $(".post-ARTICLE").css("display", "none");
+
+        });
+
+        $("#enable-DISCOVERY").click(function(){
+            $("#enable-DISCOVERY").css("display", "none");
+            $("#disable-DISCOVERY").css("display", "inline-block");
+
+            $(".post-DISCOVERY").css("display", "flex");
+
+        });
+
+        $("#disable-DISCOVERY").click(function(){
+            $("#disable-DISCOVERY").css("display", "none");
+            $("#enable-DISCOVERY").css("display", "inline-block");
+
+            $(".post-DISCOVERY").css("display", "none");
+
+        });
+
+        $("#enable-UPDATE").click(function(){
+            $("#enable-UPDATE").css("display", "none");
+            $("#disable-UPDATE").css("display", "inline-block");
+
+            $(".post-UPDATE").css("display", "flex");
+
+        });
+
+        $("#disable-UPDATE").click(function(){
+            $("#disable-UPDATE").css("display", "none");
+            $("#enable-UPDATE").css("display", "inline-block");
+
+            $(".post-UPDATE").css("display", "none");
+
+        });
+
+        $("#enable-EVENT").click(function(){
+            $("#enable-EVENT").css("display", "none");
+            $("#disable-EVENT").css("display", "inline-block");
+
+            $(".post-EVENT").css("display", "flex");
+
+        });
+
+        $("#disable-EVENT").click(function(){
+            $("#disable-EVENT").css("display", "none");
+            $("#enable-EVENT").css("display", "inline-block");
+
+            $(".post-EVENT").css("display", "none");
+
+        });
+    });
+</script>
+</body>
+</html>

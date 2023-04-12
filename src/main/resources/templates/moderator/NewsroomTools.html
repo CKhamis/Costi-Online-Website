@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xml:th="https://www.thymeleaf.org">
+<head th:replace="Components :: head('COMT Newsroom')"></head>
+<body class="bg-1 text-1">
+<div th:replace="moderator/ModeratorComponents :: nav"></div>
+<main class="container mt-5 pt-5">
+    <div class="p-5 mb-4 mt-5 border-box">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">Costi Online Management Terminal</h1>
+            <p class="col-md-8 fs-4">Create & Edit Newsroom content</p>
+            <a href="/COMT/Newsroom/Create" class="btn btn-primary" role="button">Create new post ></a>
+        </div>
+    </div>
+    <div th:replace="Components :: flash" class="mt-2"></div>
+    <h2 class="fs-2 mb-3">Disabled, Needs Approval</h2>
+    <table class="table table-bordered table-sm align-middle table-hover table-dark">
+        <thead>
+            <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Subtitle</th>
+                <th scope="col">Category</th>
+                <th scope="col">Image</th>
+                <th scope="col">Last Edited</th>
+                <th scope="col">View</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Enable</th>
+                <th scope="col">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="post : ${disabled}">
+                <td scope="row" th:text="*{post.title}">Title</td>
+                <td th:text="*{post.subtitle}">Subtitle</td>
+                <td  class="text-center">
+                    <span class="badge" th:classappend="${post.getCategory() == 'ACHIEVEMENT'} ? 'bg-primary' : (${post.getCategory() == 'NEWS'} ? 'bg-secondary' : (${post.getCategory() == 'JOURNAL'} ? 'bg-info' : (${post.getCategory() == 'EMERGENCY'} ? 'bg-danger' : (${post.getCategory() == 'ARTICLE'} ? 'bg-warning' : (${post.getCategory() == 'DISCOVERY'} ? 'bg-success' : (${post.getCategory() == 'UPDATE'} ? 'bg-dark' : (${post.getCategory() == 'EVENT'} ? 'bg-success' : 'bg-dark')))))))" th:text="${post.getCategory()}"></span>
+                </td>
+                <td>
+                    <img th:src="@{*{post.getImagePath()}}" style="height:40px"/>
+                </td>
+                <td th:text="*{post.dateEdited}">Last Edited</td>
+                <td>
+                    <a th:href="'/Newsroom/' + *{post.Id} + '/view'" class="card-link">View Post ></a>
+                </td>
+                <td>
+                    <a th:href="@{|/COMT/Newsroom/${post.id}/edit|}" class="btn btn-secondary btn-sm" role="button" aria-pressed="true">Edit</a>
+                </td>
+                <td>
+                    <form th:action="@{|/Newsroom/${post.id}/enable|}" method="post">
+                        <button type="submit" class="btn btn-success btn-sm">Enable</button>
+                    </form>
+                </td>
+                <td>
+                    <form th:action="@{|/Newsroom/${post.id}/delete|}" method="post">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 class="fs-2 mb-3">Visible Posts</h2>
+    <table class="table table-bordered table-sm align-middle table-hover table-dark">
+        <thead>
+        <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Subtitle</th>
+            <th scope="col">Category</th>
+            <th scope="col">Image</th>
+            <th scope="col">Last Edited</th>
+            <th scope="col">View</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Enable</th>
+            <th scope="col">Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="post : ${enabled}">
+            <td scope="row" th:text="*{post.title}">Title</td>
+            <td th:text="*{post.subtitle}">Subtitle</td>
+            <td class="text-center">
+                <span class="badge" th:classappend="${post.getCategory() == 'ACHIEVEMENT'} ? 'bg-primary' : (${post.getCategory() == 'NEWS'} ? 'bg-secondary' : (${post.getCategory() == 'JOURNAL'} ? 'bg-info' : (${post.getCategory() == 'EMERGENCY'} ? 'bg-danger' : (${post.getCategory() == 'ARTICLE'} ? 'bg-warning' : (${post.getCategory() == 'DISCOVERY'} ? 'bg-success' : (${post.getCategory() == 'UPDATE'} ? 'bg-dark' : (${post.getCategory() == 'EVENT'} ? 'bg-success' : 'bg-dark')))))))" th:text="${post.getCategory()}"></span>
+            </td>
+            <td>
+                <img th:src="@{*{post.getImagePath()}}" style="height:40px"/>
+            </td>
+            <td th:text="*{post.dateEdited}">Last Edited</td>
+            <td>
+                <a th:href="'/Newsroom/' + *{post.Id} + '/view'" class="card-link">View Post ></a>
+            </td>
+            <td>
+                <a th:href="@{|/COMT/Newsroom/${post.id}/edit|}" class="btn btn-secondary btn-sm" role="button" aria-pressed="true">Edit</a>
+            </td>
+            <td>
+                <form th:action="@{|/Newsroom/${post.id}/disable|}" method="post">
+                    <button type="submit" class="btn btn-warning btn-sm">Disable</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{|/Newsroom/${post.id}/delete|}" method="post">
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+<div th:replace="Components :: footer"></div>
+<div th:replace="Components :: scripts"></div>
+</body>
+</html>

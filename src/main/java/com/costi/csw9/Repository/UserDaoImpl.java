@@ -90,7 +90,6 @@ public class UserDaoImpl implements UserRepository{
         session.close();
     }
 
-    //TODO: this does not work if owns wiki pages!
     @Override
     public void delete(User user) {
         // Open a session

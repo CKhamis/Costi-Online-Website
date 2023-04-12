@@ -3,15 +3,20 @@ package com.costi.csw9.Controller;
 import com.costi.csw9.Model.*;
 import com.costi.csw9.Model.Temp.AccountNotificationRequest;
 import com.costi.csw9.Service.*;
+import com.costi.csw9.Util.LogicTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,15 +32,19 @@ public class FrontEndController {
     private AccountLogService accountLogService;
 
     private AccountNotificationService accountNotificationService;
+    private PostService postService;
+
+    private static final String VERSION = "4.0.0";
 
     @Autowired
-    public FrontEndController(UserService userService, RegistrationService registrationService, WikiService wikiService, AnnouncementService announcementService, AccountLogService accountLogService, AccountNotificationService accountNotificationService) {
+    public FrontEndController(UserService userService, RegistrationService registrationService, WikiService wikiService, AnnouncementService announcementService, AccountLogService accountLogService, AccountNotificationService accountNotificationService, PostService postService) {
         this.userService = userService;
         this.registrationService = registrationService;
         this.wikiService = wikiService;
         this.announcementService = announcementService;
         this.accountLogService = accountLogService;
         this.accountNotificationService = accountNotificationService;
+        this.postService = postService;
     }
 
     // Theme
@@ -170,6 +179,19 @@ public class FrontEndController {
         return "moderator/AccountTools";
     }
 
+    @GetMapping("/COMT/Newsroom")
+    public String getNewsroomTools(Model model, Principal principal, RedirectAttributes redirectAttributes) {
+
+        User user = getCurrentUser(principal);
+        model.addAttribute("user", user);
+        model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("disabled", postService.getByApproval(false));
+        model.addAttribute("enabled", postService.getByApproval(true));
+        model.addAttribute("theme", choseTheme());
+        model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
+        return "moderator/NewsroomTools";
+    }
+
     @GetMapping("/COMT/Accounts/{id}")
     public String getCostiOnlineAccountSettings(Model model, Principal principal, RedirectAttributes redirectAttributes, @PathVariable Long id) {
         // TODO: add a nicer way to enable/disable, lock/unlock accounts
@@ -198,6 +220,197 @@ public class FrontEndController {
 //        model.addAttribute("SUWikiPages", wikiPages);
 
         return "moderator/AdminAccountView";
+    }
+
+    @GetMapping("/COMT/Newsroom/Create")
+    public String getNewsroomPostMaker(Model model, Principal principal, RedirectAttributes redirectAttributes) {
+        User user = getCurrentUser(principal);
+        model.addAttribute("user", user);
+        model.addAttribute("loggedIn", true);
+        model.addAttribute("theme", choseTheme());
+        model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
+
+        model.addAttribute("isAllowed", user.getRole() == UserRole.OWNER);
+        model.addAttribute("categories", PostCategory.values());
+        model.addAttribute("title", "Create Newsroom Post");
+        if (!model.containsAttribute("post")) {
+            model.addAttribute("post", new Post());
+        }
+        model.addAttribute("action", "/COMT/Newsroom/Create");
+
+        return "moderator/NewPost";
+    }
+
+    @RequestMapping(value = "/COMT/Newsroom/Create", method = RequestMethod.POST)
+    public String createNewPostImage(Post post, @RequestParam("image") MultipartFile file, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) throws IOException {
+        if (result.hasErrors()) {
+            // Include validation errors upon redirect
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category", result);
+
+            // Re populate credentials in form
+            redirectAttributes.addFlashAttribute("post", post);
+
+            // Redirect back to the form
+            return "redirect:/COMT/Newsroom/Create";
+        }
+
+        if(post.getCategory().equals(PostCategory.EMERGENCY.name())){
+            AccountNotification notification = null;
+            for(User user : userService.loadAll()){
+                notification = new AccountNotification();
+                notification.setNotificationType("danger");
+                notification.setUser(user);
+                notification.setTitle("EMERGENCY");
+                notification.setBody("An emergency post was made. View it in Newsroom");
+                accountNotificationService.save(notification);
+            }
+            postService.save(post, file);
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Emergency Notification Sent", "Notification was sent to all accounts on Costi Online. Please publish draft.", FlashMessage.Status.SUCCESS));
+        }else{
+            postService.save(post, file);
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Newsroom Draft Created", "Please approve via COMT to publish.", FlashMessage.Status.SUCCESS));
+        }
+
+        return "redirect:/COMT/Newsroom/Create";
+    }
+
+    @RequestMapping(value = "/COMT/Newsroom/CreateNoImage", method = RequestMethod.POST)
+    public String createNewPost(Post post, Principal principal, BindingResult result, RedirectAttributes redirectAttributes){
+        if (result.hasErrors()) {
+            // Include validation errors upon redirect
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category", result);
+
+            // Re populate credentials in form
+            redirectAttributes.addFlashAttribute("post", post);
+
+            // Redirect back to the form
+            return "redirect:/COMT/Newsroom/Create";
+        }
+
+        if(post.getCategory().equals(PostCategory.EMERGENCY.name())){
+            AccountNotification notification = null;
+            for(User user : userService.loadAll()){
+                notification = new AccountNotification();
+                notification.setNotificationType("danger");
+                notification.setUser(user);
+                notification.setTitle("EMERGENCY");
+                notification.setBody("An emergency post was made. View it in Newsroom");
+                accountNotificationService.save(notification);
+            }
+            postService.save(post);
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Emergency Notification Sent", "Notification was sent to all accounts on Costi Online. Please publish draft.", FlashMessage.Status.SUCCESS));
+        }else{
+            postService.save(post);
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Newsroom Draft Created", "Please approve via COMT to publish.", FlashMessage.Status.SUCCESS));
+        }
+
+        return "redirect:/COMT/Newsroom/Create";
+    }
+
+    @RequestMapping("/COMT/Newsroom/{PostId}/edit")
+    public String getEditPost(@PathVariable Long PostId, Model model, Principal principal, RedirectAttributes redirectAttributes) {
+        User current = getCurrentUser(principal);
+        Post post = postService.loadById(PostId);
+
+        model.addAttribute("post", post);
+        model.addAttribute("categories", PostCategory.values());
+        model.addAttribute("isAllowed", current.getRole().equals(UserRole.OWNER));
+        model.addAttribute("hasImage", !post.getImagePath().substring(0,14).equals("/images/defaul"));
+        model.addAttribute("action", "/COMT/Newsroom/" + PostId + "/edit");
+        model.addAttribute("title", "Edit Costi Newsroom Post");
+
+        model.addAttribute("user", current);
+        model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("theme", choseTheme());
+        model.addAttribute("notificationCount", accountNotificationService.findByUser(current.getId()).size());
+        return "moderator/EditPost";
+    }
+
+    @RequestMapping(value = "/COMT/Newsroom/{PostId}/editNoImage", method = RequestMethod.POST)
+    public String editPostNoImage(@PathVariable Long PostId, Post post, Principal principal, BindingResult result, RedirectAttributes redirectAttributes){
+        if (result.hasErrors()) {
+            // Include validation errors upon redirect
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category", result);
+
+            // Re populate credentials in form
+            redirectAttributes.addFlashAttribute("post", post);
+
+            // Redirect back to the form
+            return "redirect:/COMT/Newsroom/" + PostId + "/editNoImage";
+        }
+
+        postService.save(post);
+        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Newsroom Post Edited.", "Newsroom post #" + PostId + " has been modified successfully", FlashMessage.Status.SUCCESS));
+
+        return "redirect:/COMT/Newsroom";
+    }
+
+    @RequestMapping(value = "/COMT/Newsroom/{PostId}/edit", method = RequestMethod.POST)
+    public String editPost(@PathVariable Long PostId, @RequestParam("image") MultipartFile file, Post post, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) throws IOException {
+        if (result.hasErrors()) {
+            // Include validation errors upon redirect
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category", result);
+
+            // Re populate credentials in form
+            redirectAttributes.addFlashAttribute("post", post);
+
+            // Redirect back to the form
+            return "redirect:/COMT/Newsroom/" + PostId + "/edit";
+        }
+
+        if(file.isEmpty()){
+            post.setImagePath(postService.loadById(PostId).getImagePath());
+            postService.forceSave(post);
+        }else{
+            postService.save(post, file);
+        }
+        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Newsroom Post Edited.", "Newsroom post #" + PostId + " has been modified successfully", FlashMessage.Status.SUCCESS));
+
+        return "redirect:/COMT/Newsroom";
+    }
+
+    @RequestMapping(value = "/Newsroom/{PostId}/delete", method = RequestMethod.POST)
+    public String deletePost(@PathVariable Long PostId, Principal principal, RedirectAttributes redirectAttributes) {
+        Post post = postService.loadById(PostId);
+        if (getCurrentUser(principal).getRole() == UserRole.OWNER) {
+            postService.delete(post);
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Newsroom post deleted!", "Post is no longer accessible nor recoverable.", FlashMessage.Status.SUCCESS));
+
+        } else {
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "Please use an owner account to continue.", FlashMessage.Status.DANGER));
+            System.out.println("Invalid Permissions");
+        }
+
+        return "redirect:/COMT/Newsroom";
+    }
+
+    @RequestMapping(value = "/Newsroom/{PostId}/enable", method = RequestMethod.POST)
+    public String enablePost(@PathVariable Long PostId, Principal principal, RedirectAttributes redirectAttributes) {
+        Post post = postService.loadById(PostId);
+        if (getCurrentUser(principal).getRole() == UserRole.OWNER) {
+            postService.enable(post, true);
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Post Published!", "Post is now accessible by non-administrators on the Newsroom page", FlashMessage.Status.SUCCESS));
+        } else {
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "Please use an owner account to continue.", FlashMessage.Status.DANGER));
+            System.out.println("Invalid Permissions");
+        }
+
+        return "redirect:/COMT/Newsroom";
+    }
+
+    @RequestMapping(value = "/Newsroom/{PostId}/disable", method = RequestMethod.POST)
+    public String disablePost(@PathVariable Long PostId, Principal principal, RedirectAttributes redirectAttributes) {
+        Post post = postService.loadById(PostId);
+        if (getCurrentUser(principal).getRole() == UserRole.OWNER) {
+            postService.enable(post, false);
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Post disabled!", "Post is no longer accessible by public.", FlashMessage.Status.SUCCESS));
+
+        } else {
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "Please use an owner account to continue.", FlashMessage.Status.DANGER));
+            System.out.println("Invalid Permissions");
+        }
+
+        return "redirect:/COMT/Newsroom";
     }
 
     @GetMapping("/COMT/Notifications/Create")
@@ -486,6 +699,7 @@ public class FrontEndController {
         model.addAttribute("theme", choseTheme());
         model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
 
+        model.addAttribute("version", VERSION);
         List<Announcement> announcements = announcementService.getByApproval(true);
         model.addAttribute("announcements", announcements);
         model.addAttribute("isAnnouncement", announcements.size() > 0);
@@ -497,8 +711,42 @@ public class FrontEndController {
             random = new ArrayList<>(random.subList(0, 3));
         }
 
+        List<Post> recentNews = postService.getFixedAmount(10);
+        generateSlides(model, recentNews);
+
         model.addAttribute("wiki", random);
         return "main/Home";
+    }
+
+    private void generateSlides(Model model, List<Post> recentNews) {
+        if(recentNews.size() == 0){
+            // if no news posts at all
+            Post blank = new Post("No Posts", "No posts were found in database", PostCategory.NEWS.name(), "");
+            blank.setLastEdited(LocalDateTime.MIN);
+            blank.setId(-1L);
+            blank.setImagePath("/images/default-posts/no-image.jpg");
+            model.addAttribute("slide1", blank);
+            model.addAttribute("slide2", blank);
+            model.addAttribute("slide3", blank);
+            model.addAttribute("slide4", blank);
+            model.addAttribute("slide5", blank);
+            model.addAttribute("slide6", blank);
+            model.addAttribute("slide7", blank);
+            model.addAttribute("slide8", blank);
+            model.addAttribute("slide9", blank);
+            model.addAttribute("slide10", blank);
+        }else{
+            model.addAttribute("slide1", recentNews.get(LogicTools.clamp(0, 0, recentNews.size()-1)));
+            model.addAttribute("slide2", recentNews.get(LogicTools.clamp(1, 0, recentNews.size()-1)));
+            model.addAttribute("slide3", recentNews.get(LogicTools.clamp(2, 0, recentNews.size()-1)));
+            model.addAttribute("slide4", recentNews.get(LogicTools.clamp(3, 0, recentNews.size()-1)));
+            model.addAttribute("slide5", recentNews.get(LogicTools.clamp(4, 0, recentNews.size()-1)));
+            model.addAttribute("slide6", recentNews.get(LogicTools.clamp(5, 0, recentNews.size()-1)));
+            model.addAttribute("slide7", recentNews.get(LogicTools.clamp(6, 0, recentNews.size()-1)));
+            model.addAttribute("slide8", recentNews.get(LogicTools.clamp(7, 0, recentNews.size()-1)));
+            model.addAttribute("slide9", recentNews.get(LogicTools.clamp(8, 0, recentNews.size()-1)));
+            model.addAttribute("slide10", recentNews.get(LogicTools.clamp(9, 0, recentNews.size()-1)));
+        }
     }
 
     @GetMapping("/Projects")
@@ -782,4 +1030,60 @@ public class FrontEndController {
         model.addAttribute("user", user);
         return "minecraft/ElectionResults";
     }
+
+    // Newsroom
+    @GetMapping("/Newsroom")
+    public String getNewsroomHome(Model model, Principal principal) {
+
+        User user = getCurrentUser(principal);
+        model.addAttribute("user", user);
+        model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("theme", choseTheme());
+        model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
+
+        // Newsroom posts
+        List<Post> allPosts = postService.getByApproval(true);
+        List<Post> recentNews = postService.getWikiPagesByCategory(PostCategory.NEWS.name());
+        List<Post> recentPosts = postService.getFixedAmount(6);
+
+        generateSlides(model, recentNews);
+
+        model.addAttribute("recentPosts", recentPosts);
+        model.addAttribute("allPosts", allPosts);
+
+        //Announcements
+        List<Announcement> announcements = announcementService.getByApproval(true);
+        model.addAttribute("announcements", announcements);
+        model.addAttribute("isAnnouncement", announcements.size() > 0);
+
+        return "newsroom/NewsroomHome";
+    }
+
+    @GetMapping("/Newsroom/{PageId}/view")
+    public String getNewsroomView(@PathVariable Long PageId, Model model, Principal principal, HttpSession session) {
+
+        User user = getCurrentUser(principal);
+        model.addAttribute("user", user);
+        model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("theme", choseTheme());
+        model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
+
+        Post post = postService.loadById(PageId);
+        List<Post> recent = postService.getByApprovalFixedAmountWithException(true, post.getId(), 5), related = postService.getWikiPagesByCategoryFixedAmountWithException(post.getCategory(), post.getId(), 5);
+        model.addAttribute("post", post);
+        model.addAttribute("isViewable", post.isEnabled() || user.getRole() == UserRole.OWNER);
+        model.addAttribute("isOwner",user.getRole() == UserRole.OWNER);
+        model.addAttribute("relatedPosts", related);
+        model.addAttribute("recentPosts", recent);
+
+        if (session.getAttribute("noViewIncrement" + post.getId()) == null) {
+            postService.addView(post);
+            session.setAttribute("noViewIncrement" + post.getId(), true);
+        }
+
+
+        return "newsroom/ViewPost";
+    }
+
+
 }

@@ -2,6 +2,8 @@
 
 Costi Online is a website I designed and built using Java Spring and Hibernate. It is currently being hosted on [costionline.com](costionline.com). Costi Online is a centralized publicly-facing informative website that is centered around me, my friends, my projects, and more. The backend of the website is based on Java Spring and Java Hibernate with an H2 databse. I use both Hibernate and JPA queries for CRUD operations. The front end of the website uses Bootstrap 5 as well as its JavaScript dependencies. This website uses many of the skills I have built up over my 10+ years of experience in Java, HTML, CSS, and JavaScript.
 
+## Costi Newsroom
+Costi Newsroom is a relatively new feature of the website that is most similar to a blog. The owner of the website is able to add new content on demand to display in the Newsroom page. Users can then view these posts in a chronological order. Posts can be under many categories including Update, Event, Journal, Article, Emergency, Achievement, News, and Discovery. All content displayed in newsoom is editable, deletable, and viewable within Costi Online's custom content management system, COMT. For the first time ever in Costi Online's history, you are now able to upload a custom image for each newsroom post, with the option to change the photo once uploaded
 ## Costipedia (Online Wiki)
 Costipedia is an online wiki similar to Wikipedia and article publishers. If you have an account, you will be able to create and edit your own wiki pages. Wiki pages need to be approved by a moderator before it is published to the website. Content in the wiki has to be related to the categories that are on the Wiki homepage.
 ## Costi Survival World X
