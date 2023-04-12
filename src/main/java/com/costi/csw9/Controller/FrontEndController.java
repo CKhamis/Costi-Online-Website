@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDate;
@@ -1059,7 +1060,7 @@ public class FrontEndController {
     }
 
     @GetMapping("/Newsroom/{PageId}/view")
-    public String getNewsroomHome(@PathVariable Long PageId, Model model, Principal principal) {
+    public String getNewsroomView(@PathVariable Long PageId, Model model, Principal principal, HttpSession session) {
 
         User user = getCurrentUser(principal);
         model.addAttribute("user", user);
@@ -1075,7 +1076,17 @@ public class FrontEndController {
         model.addAttribute("relatedPosts", related);
         model.addAttribute("recentPosts", recent);
 
-        postService.addView(post);
+        if (session.getAttribute("noViewIncrement" + post.getId()) == null) {
+            postService.addView(post);
+            session.setAttribute("noViewIncrement" + post.getId(), true);
+            System.out.println("created");
+        } else {
+            System.out.println("already exists");
+        }
+
+
         return "newsroom/ViewPost";
     }
+
+
 }
