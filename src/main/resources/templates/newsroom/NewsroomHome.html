@@ -152,7 +152,7 @@
                     <div class="col-sm-4 grid-margin">
                         <div class="position-relative">
                             <div class="">
-                                <img th:src="${post.getImagePath() != null}? *{post.getImagePath()} : '/images/default-posts/no-image.png'" th:alt="|${post.getTitle()}|" class="img-fluid newsroom-slide">
+                                <img th:src="${post.getImagePath() != null}? *{post.getImagePath()} : '/images/default-posts/no-image.jpg'" th:alt="|${post.getTitle()}|" class="img-fluid newsroom-slide">
                             </div>
                             <div class="badge-positioned">
                                 <span class="badge" th:classappend="${post.getCategory() == 'ACHIEVEMENT'} ? 'bg-primary' : (${post.getCategory() == 'NEWS'} ? 'bg-secondary' : (${post.getCategory() == 'JOURNAL'} ? 'bg-info' : (${post.getCategory() == 'EMERGENCY'} ? 'bg-danger' : (${post.getCategory() == 'ARTICLE'} ? 'bg-warning' : (${post.getCategory() == 'DISCOVERY'} ? 'bg-success' : (${post.getCategory() == 'UPDATE'} ? 'bg-dark' : (${post.getCategory() == 'EVENT'} ? 'bg-success' : 'bg-dark')))))))" th:text="${post.getCategory()}"></span>
