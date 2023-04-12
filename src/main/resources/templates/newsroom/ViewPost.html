@@ -4,10 +4,10 @@
 <body class="bg-1 text-1 pt-5">
 <div th:replace="Components :: nav"></div>
 
-<main class="container-fluid mt-4">
+<main class="container-fluid mt-3">
     <div class="row" th:if="${isViewable}">
         <div class="d-none d-md-block col-md-3 px-5">
-            <h3 class="text-secondary fw-bold" th:text="${post.getCategory() == 'ACHIEVEMENT'} ? 'All achievements' : (${post.getCategory() == 'NEWS'} ? 'All news' : (${post.getCategory() == 'JOURNAL'} ? 'All journals' : (${post.getCategory() == 'EMERGENCY'} ? 'All emergencies' : (${post.getCategory() == 'ARTICLE'} ? 'All articles' : (${post.getCategory() == 'DISCOVERY'} ? 'All discoveries' : (${post.getCategory() == 'UPDATE'} ? 'All updates' : (${post.getCategory() == 'EVENT'} ? 'All events' : 'Unknown category')))))))">Category</h3>
+            <h3 class="text-secondary fw-bold" th:text="${post.getCategory() == 'ACHIEVEMENT'} ? 'Other achievements' : (${post.getCategory() == 'NEWS'} ? 'Other news' : (${post.getCategory() == 'JOURNAL'} ? 'Other journals' : (${post.getCategory() == 'EMERGENCY'} ? 'Other emergencies' : (${post.getCategory() == 'ARTICLE'} ? 'Other articles' : (${post.getCategory() == 'DISCOVERY'} ? 'Other discoveries' : (${post.getCategory() == 'UPDATE'} ? 'Other updates' : (${post.getCategory() == 'EVENT'} ? 'Other events' : 'Unknown category')))))))">Category</h3>
             <th:block th:each="related : ${relatedPosts}">
                 <a th:href="|/Newsroom/*{related.getId()}/view|">
                     <img th:src="@{*{related.getImagePath()}}" style="aspect-ratio: 16 / 9; object-fit:cover;width: 100%;"/>
@@ -17,6 +17,9 @@
                     </div>
                 </a>
             </th:block>
+            <div th:if="${relatedPosts.isEmpty()}">
+                <p>No posts :(</p>
+            </div>
         </div>
         <div class="col-12 col-md-8 col-lg-6" th:object="${post}">
             <div class="row">
@@ -29,18 +32,18 @@
                         </ol>
                     </nav>
                 </div>
+                <a href="/Newsroom" class="text-secondary d-block d-md-none">< Back to Newsroom</a>
                 <div class="col col-md-4 d-none d-md-block">
                     <p th:text="'Last Edited: ' + *{getDateEdited()}" class="text-end text-secondary"></p>
                 </div>
             </div>
-            <img th:src="@{*{getImagePath()}}" style="aspect-ratio: 16 / 9; object-fit:cover;width: 100%;"/>
+            <img th:src="@{*{getImagePath()}}" class="newsroom-slide"/>
 
-            <h1 class="fw-bold" th:text="*{getTitle()}"></h1>
-            <p class="text-muted fw-bold" th:text="*{getSubtitle()}"></p>
-            <p>By: Website Operator</p>
+            <h1 class="fw-bold mb-0" th:text="*{getTitle()}"></h1>
+            <h4 class="text-muted fw-bold" th:text="*{getSubtitle()}"></h4>
 
             <div th:unless="*{enabled}" class="alert alert-secondary text-center" role="alert">
-                <p>This post is not visible to the public</p>
+                <h4>This post is not visible to the public</h4>
             </div>
 
             <div id="contentBody">
@@ -60,6 +63,9 @@
                     <p class="text-secondary mb-5" th:text="|${recent.getTimeSinceEdited()}|"></p>
                 </a>
             </th:block>
+            <div th:if="${recentPosts.isEmpty()}">
+                <p>No posts :(</p>
+            </div>
         </div>
     </div>
     <div th:unless="${isViewable}">

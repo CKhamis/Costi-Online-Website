@@ -107,7 +107,7 @@
                 </button>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 d-none d-md-block">
             <h2 class="mb-4">Recent Posts</h2>
             <a th:each="post : ${recentPosts}" th:href="|/Newsroom/${post.getId()}/view|" class="mb-3">
                 <h4 th:text="|${post.getTitle()}|" class="mb-0 text-1"></h4>

@@ -33,7 +33,7 @@ public class PostService {
 
     public List<Post> getWikiPagesByCategoryFixedAmountWithException(String category, Long exception, int entries){
         List<Post> original = postRepository.findByCategory(category, exception), outputList = new ArrayList<>();
-        for (int i = 0; i < entries && i < original.size() - 1; i++) {
+        for (int i = 0; i < entries && i < original.size(); i++) {
             outputList.add(original.get(i));
         }
         return outputList;
@@ -45,7 +45,7 @@ public class PostService {
 
     public List<Post> getByApprovalFixedAmountWithException(boolean enabled, long exception, int entries){
         List<Post> original = postRepository.getByApproval(enabled, exception), outputList = new ArrayList<>();
-        for (int i = 0; i < entries && i < original.size() - 1; i++) {
+        for (int i = 0; i < entries && i < original.size(); i++) {
             outputList.add(original.get(i));
         }
         return outputList;
@@ -63,7 +63,7 @@ public class PostService {
 
     public List<Post> getFixedAmount(int entries){
         List<Post> original = postRepository.getByApproval(true), outputList = new ArrayList<>();
-        for (int i = 0; i < entries && i < original.size() - 1; i++) {
+        for (int i = 0; i < entries && i < original.size(); i++) {
             outputList.add(original.get(i));
         }
         return outputList;
@@ -71,7 +71,7 @@ public class PostService {
 
     public List<Post> getFixedAmount(int entries, String category){
         List<Post> original = postRepository.findByCategory(category), outputList = new ArrayList<>();
-        for (int i = 0; i < entries && i < original.size() - 1; i++) {
+        for (int i = 0; i < entries && i < original.size(); i++) {
             outputList.add(original.get(i));
         }
         return outputList;

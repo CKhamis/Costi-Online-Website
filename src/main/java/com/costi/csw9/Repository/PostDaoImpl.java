@@ -45,7 +45,7 @@ public class PostDaoImpl implements PostRepository{
         Session session = sessionFactory.openSession();
 
         // Get Results
-        Query query = session.createQuery("SELECT e FROM Post e WHERE category = '" + category + "\' AND enabled = true AND id != " + exception + "ORDER BY lastEdited DESC");
+        Query query = session.createQuery("SELECT e FROM Post e WHERE category = '" + category + "\' AND enabled = true AND id != " + exception + " ORDER BY lastEdited DESC");
         List<Post> res = query.getResultList();
 
         // Close session
