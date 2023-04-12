@@ -1,13 +1,10 @@
 package com.costi.csw9.Repository;
 
 import com.costi.csw9.Model.Post;
-import com.costi.csw9.Model.PostCategory;
-import com.costi.csw9.Model.WikiPage;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -43,12 +40,42 @@ public class PostDaoImpl implements PostRepository{
     }
 
     @Override
+    public List<Post> findByCategory(String category, Long exception) {
+        // Open session
+        Session session = sessionFactory.openSession();
+
+        // Get Results
+        Query query = session.createQuery("SELECT e FROM Post e WHERE category = '" + category + "\' AND enabled = true AND id != " + exception + "ORDER BY lastEdited DESC");
+        List<Post> res = query.getResultList();
+
+        // Close session
+        session.close();
+
+        return res;
+    }
+
+    @Override
     public List<Post> getByApproval(boolean enabled) {
         // Open session
         Session session = sessionFactory.openSession();
 
         // Get Results
-        Query query = session.createQuery("SELECT e FROM Post e WHERE enabled = " + enabled  + " ORDER BY lastEdited desc ");
+        Query query = session.createQuery("SELECT e FROM Post e WHERE enabled = " + enabled  + " ORDER BY lastEdited desc");
+        List<Post> res = query.getResultList();
+
+        // Close session
+        session.close();
+
+        return res;
+    }
+
+    @Override
+    public List<Post> getByApproval(boolean enabled, Long exception) {
+        // Open session
+        Session session = sessionFactory.openSession();
+
+        // Get Results
+        Query query = session.createQuery("SELECT e FROM Post e WHERE enabled = " + enabled  + " AND id != " + exception + " ORDER BY lastEdited desc");
         List<Post> res = query.getResultList();
 
         // Close session

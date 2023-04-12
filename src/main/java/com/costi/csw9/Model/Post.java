@@ -80,7 +80,7 @@ public class Post {
     }
 
     @Transient
-    public String getTimeSinceeditedShort() {
+    public String getTimeSinceEditedShort() {
         //return lastEdited.getMonthValue() + "/" + lastEdited.getDayOfMonth() + "/" + lastEdited.getYear();
         String unit = "";
         LocalDateTime now = LocalDateTime.now();

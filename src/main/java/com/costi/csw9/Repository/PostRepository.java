@@ -9,7 +9,11 @@ import java.util.List;
 public interface PostRepository {
     Post findById(Long id);
     List<Post> findByCategory(String category);
+    List<Post> findByCategory(String category, Long exception);
     List<Post> getByApproval(boolean enabled);
+
+    List<Post> getByApproval(boolean enabled, Long exception);
+
     @Modifying
     void save(Post page);
     @Modifying

@@ -31,8 +31,24 @@ public class PostService {
         return postRepository.findByCategory(category);
     }
 
+    public List<Post> getWikiPagesByCategoryFixedAmountWithException(String category, Long exception, int entries){
+        List<Post> original = postRepository.findByCategory(category, exception), outputList = new ArrayList<>();
+        for (int i = 0; i < entries && i < original.size() - 1; i++) {
+            outputList.add(original.get(i));
+        }
+        return outputList;
+    }
+
     public List<Post> getByApproval(boolean enabled){
         return postRepository.getByApproval(enabled);
+    }
+
+    public List<Post> getByApprovalFixedAmountWithException(boolean enabled, long exception, int entries){
+        List<Post> original = postRepository.getByApproval(enabled, exception), outputList = new ArrayList<>();
+        for (int i = 0; i < entries && i < original.size() - 1; i++) {
+            outputList.add(original.get(i));
+        }
+        return outputList;
     }
 
     public void delete(Post post){

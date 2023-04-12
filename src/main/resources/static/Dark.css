@@ -5526,8 +5526,7 @@ textarea.form-control-lg {
   float: left;
   width: 100%;
   margin-right: -100%;
-  -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
+  backface-visibility: hidden;
   transition: transform 0.6s ease-in-out;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -9795,6 +9794,10 @@ textarea.form-control-lg {
 }
 .blue-v-gradient {
   background-image: linear-gradient(rgb(0, 0, 0), #212529);
+}
+
+a {
+  text-decoration: none;
 }
 
 ul {
