@@ -27,11 +27,11 @@ public class PostService {
         return postRepository.findById(id);
     }
 
-    public List<Post> getWikiPagesByCategory(String category){
+    public List<Post> getByCategory(String category){
         return postRepository.findByCategory(category);
     }
 
-    public List<Post> getWikiPagesByCategoryFixedAmountWithException(String category, Long exception, int entries){
+    public List<Post> getByCategoryFixedAmountWithException(String category, Long exception, int entries){
         List<Post> original = postRepository.findByCategory(category, exception), outputList = new ArrayList<>();
         for (int i = 0; i < entries && i < original.size(); i++) {
             outputList.add(original.get(i));

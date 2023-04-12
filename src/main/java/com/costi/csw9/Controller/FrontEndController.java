@@ -1043,7 +1043,7 @@ public class FrontEndController {
 
         // Newsroom posts
         List<Post> allPosts = postService.getByApproval(true);
-        List<Post> recentNews = postService.getWikiPagesByCategory(PostCategory.NEWS.name());
+        List<Post> recentNews = postService.getByCategory(PostCategory.NEWS.name());
         List<Post> recentPosts = postService.getFixedAmount(6);
 
         generateSlides(model, recentNews);
@@ -1069,7 +1069,7 @@ public class FrontEndController {
         model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
 
         Post post = postService.loadById(PageId);
-        List<Post> recent = postService.getByApprovalFixedAmountWithException(true, post.getId(), 5), related = postService.getWikiPagesByCategoryFixedAmountWithException(post.getCategory(), post.getId(), 5);
+        List<Post> recent = postService.getByApprovalFixedAmountWithException(true, post.getId(), 5), related = postService.getByCategoryFixedAmountWithException(post.getCategory(), post.getId(), 5);
         model.addAttribute("post", post);
         model.addAttribute("isViewable", post.isEnabled() || user.getRole() == UserRole.OWNER);
         model.addAttribute("isOwner",user.getRole() == UserRole.OWNER);
