@@ -38,6 +38,15 @@ public class Post {
     @Column(nullable = false)
     private int views = 0;
 
+    @Column(nullable = false)
+    private boolean isPinned = false;
+
+    @Column(nullable = false)
+    private boolean isFavorite = false;
+
+    @Column(nullable = false)
+    private boolean isFeatured = false;
+
     public Post(String title, String subtitle, String category, String body) {
         this.title = title;
         this.subtitle = subtitle;
