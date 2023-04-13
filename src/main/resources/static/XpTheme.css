@@ -45,6 +45,10 @@ ul {
     color: #ffffe1;
 }
 
+.hamburger-menu-icon{
+    fill:#ffffe1;
+}
+
 .wikiBannerBg{
      background-image: url(images/webpageImages/WikiBg.jpg);
      background-size: 100%;
