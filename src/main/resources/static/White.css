@@ -9796,6 +9796,10 @@ textarea.form-control-lg {
   background-image: linear-gradient(rgb(255, 255, 255), #f2f1f1);
 }
 
+.navbar-toggler-icon {
+  fill: #212529;
+}
+
 a {
   text-decoration: none;
 }
