@@ -38,18 +38,27 @@
                     <a class="nav-link px-3" href="/Newsroom">Newsroom</a>
                     <a class="nav-link px-3" href="/Minecraft">Minecraft</a>
                     <a class="nav-link px-3" href="/About">About</a>
+
+                    <li class="nav-item dropdown px-3">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Account
+                        </a>
+                        <ul th:unless="${loggedIn}" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/SignUp">Sign Up</a></li>
+                            <li><a class="dropdown-item" href="/Account">Sign In</a></li>
+                        </ul>
+
+                        <ul th:if="${loggedIn}" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/Account" th:text="|${user.firstName} ${user.lastName} [${notificationCount}]|">Action</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/Account">Account Settings</a></li>
+                            <li><a class="dropdown-item" href="/logout">Log out</a></li>
+                        </ul>
+                    </li>
+
                 </div>
             </div>
-            <div th:class="'' + (*{loggedIn}? 'd-none' : 'd-flex')">
-                <a href="/SignUp" class="link-secondary px-3" style="padding-top:5px;">Sign up</a>
-                <a href="/Account" class="btn btn-primary">Sign In</a>
-            </div>
-            <div th:class="'' + (*{loggedIn}? 'd-flex' : 'd-none')">
-                <a class="nav-link px-3 text-1 fw-bold" href="/Account" th:utext="|${user.firstName} ${user.lastName} [${notificationCount}]|">Account</a>
-                <form th:action="@{/logout}" method="post">
-                    <button type="submit" value="Sign Out" class="btn btn-primary">Sign Out</button>
-                </form>
-            </div>
+
         </div>
     </nav>
 </div>

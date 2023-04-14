@@ -9792,6 +9792,21 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+.dropdown-menu {
+  color: rgb(255, 255, 255);
+  background-color: #212529;
+  border-color: rgba(255, 255, 255, 0.9);
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+  background-color: rgba(255, 255, 255, 0.3);
+  color: rgb(255, 255, 255);
+}
+
+.dropdown-item {
+  color: rgb(255, 255, 255);
+}
+
 .blue-v-gradient {
   background-image: linear-gradient(rgb(0, 0, 0), #212529);
 }
