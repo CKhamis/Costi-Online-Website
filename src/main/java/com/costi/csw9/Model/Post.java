@@ -58,10 +58,6 @@ public class Post {
         return lastEdited.getMonthValue() + "/" + lastEdited.getDayOfMonth() + "/" + lastEdited.getYear();
     }
 
-    public void incrementViews(){
-        this.views++;
-    }
-
     public boolean isEnabled() {
         return enabled;
     }
