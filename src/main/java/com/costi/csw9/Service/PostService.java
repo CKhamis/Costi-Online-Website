@@ -85,7 +85,11 @@ public class PostService {
         // check if file is empty or bad path
         if(file.getName().contains("..")) {
             throw new IOException("File contains a bad filepath");
-        }else if(file.isEmpty()){
+        }else if(file.isEmpty() && file.getName().equals("")){
+            // User just wants to edit the text
+            post.setLastEdited(LocalDateTime.now());
+            postRepository.save(post);
+        }if(file.isEmpty()){
             throw new IOException("File contains no data");
         }
 
