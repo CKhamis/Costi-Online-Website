@@ -1,6 +1,6 @@
 package com.costi.csw9.Repository;
 
-import com.costi.csw9.Model.ConfirmationToken;
+import com.costi.csw9.Model.Temp.ConfirmationToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

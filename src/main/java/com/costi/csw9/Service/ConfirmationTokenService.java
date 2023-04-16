@@ -1,6 +1,6 @@
 package com.costi.csw9.Service;
 
-import com.costi.csw9.Model.ConfirmationToken;
+import com.costi.csw9.Model.Temp.ConfirmationToken;
 import com.costi.csw9.Repository.ConfirmationTokenRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
