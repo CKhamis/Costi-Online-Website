@@ -86,28 +86,35 @@ public class PostService {
         if(file.getName().contains("..")) {
             throw new IOException("File contains a bad filepath");
         }else if(file.isEmpty()){
-            // User just wants to edit the text
-            post.setLastEdited(LocalDateTime.now());
-            postRepository.save(post);
+            try{
+                post.setImagePath(postRepository.findById(post.getId()).getImagePath());
+                // File is not present, just save the text
+                post.setLastEdited(LocalDateTime.now());
+                postRepository.save(post);
+            } catch (Exception e){
+                throw new IOException("File contains no data");
+            }
+        }else {
+            // File is present
+            // Validate that the uploaded file is an image
+            try {
+                ImageIO.read(file.getInputStream()).toString();
+                //File is valid and not null:
+                try {
+                    Attachment attachment = attachmentService.saveAttachment(file);
+                    post.setLastEdited(LocalDateTime.now());
+                    post.setImagePath(POST_IMAGE_PATH + attachment.getId());
+                    postRepository.save(post);
+                } catch (Exception e) {
+                    throw new IOException(e.getMessage());
+                }
+
+            } catch (Exception e) {
+                throw new IOException("File is not an image");
+            }
         }
 
-        // Validate that the uploaded file is an image
-        try {
-            ImageIO.read(file.getInputStream()).toString();
-        } catch (Exception e) {
-            throw new IOException("File is not an image");
-        }
 
-        // Try actually saving the post
-        try {
-            Attachment attachment = attachmentService.saveAttachment(file);
-            post.setLastEdited(LocalDateTime.now());
-            post.setImagePath(POST_IMAGE_PATH + attachment.getId()); // TODO: change this directory
-            postRepository.save(post);
-
-        } catch (Exception e) {
-            throw new IOException(e.getMessage());
-        }
     }
 
     public void enable(Post post, boolean enable) {
