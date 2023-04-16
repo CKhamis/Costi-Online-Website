@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import static com.costi.csw9.Util.LogicTools.POST_IMAGE_PATH;
+
 @RestController
 public class FileController {
 
@@ -31,7 +33,7 @@ public class FileController {
         return new FileUploadResponseData(attachment.getFilename(), downloadURL, file.getContentType(), file.getSize());
     }
 
-    @GetMapping("/Download/Uploads/{fileId}")
+    @GetMapping(POST_IMAGE_PATH + "{fileId}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileId) throws Exception {
         Attachment attachment = attachmentService.getAttachment(fileId);
         return ResponseEntity.ok()

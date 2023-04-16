@@ -2,25 +2,29 @@ package com.costi.csw9.Service;
 
 import com.costi.csw9.Model.*;
 import com.costi.csw9.Repository.PostRepository;
-import com.costi.csw9.Util.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.costi.csw9.Util.LogicTools.POST_IMAGE_PATH;
 
 @Service
 public class PostService {
     @Autowired
     private final PostRepository postRepository;
 
+    private AttachmentService attachmentService;
 
-    public PostService(PostRepository postRepository) {
+
+    public PostService(PostRepository postRepository, AttachmentService attachmentService) {
         this.postRepository = postRepository;
+        this.attachmentService = attachmentService;
     }
 
     public Post loadById(Long id){
@@ -78,14 +82,30 @@ public class PostService {
     }
 
     public void save(Post post, MultipartFile file) throws IOException {
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        post.setImagePath(fileName);
-        post.setLastEdited(LocalDateTime.now());
-        postRepository.save(post);
-        post.setImagePath("/uploads/posts/" + post.getId() + "/" + fileName);
-        postRepository.save(post);
+        // check if file is empty or bad path
+        if(file.getName().contains("..")) {
+            throw new IOException("File contains a bad filepath");
+        }else if(file.isEmpty()){
+            throw new IOException("File contains no data");
+        }
 
-        FileUploadUtil.saveFile(post.getId().toString(), fileName, file);
+        // Validate that the uploaded file is an image
+        try {
+            ImageIO.read(file.getInputStream()).toString();
+        } catch (Exception e) {
+            throw new IOException("File is not an image");
+        }
+
+        // Try actually saving the post
+        try {
+            Attachment attachment = attachmentService.saveAttachment(file);
+            post.setLastEdited(LocalDateTime.now());
+            post.setImagePath(POST_IMAGE_PATH + attachment.getId()); // TODO: change this directory
+            postRepository.save(post);
+
+        } catch (Exception e) {
+            throw new IOException(e.getMessage());
+        }
     }
 
     public void enable(Post post, boolean enable) {

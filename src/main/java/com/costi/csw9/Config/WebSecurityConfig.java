@@ -28,7 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/COMT/**", "/Wiki/**/delete", "/Wiki/**/enable", "/Wiki/**/disable", "/Accounts/**/unlock", "/Accounts/**/lock").hasAnyAuthority(UserRole.ADMIN.toString(), UserRole.OWNER.toString())
+                .antMatchers("/Upload", "/COMT/**", "/Wiki/**/delete", "/Wiki/**/enable", "/Wiki/**/disable", "/Accounts/**/unlock", "/Accounts/**/lock").hasAnyAuthority(UserRole.ADMIN.toString(), UserRole.OWNER.toString())
                 .antMatchers("/Account", "/Wiki/Create").authenticated()
                 .anyRequest().permitAll()
                 .and()

@@ -27,18 +27,16 @@ public class FrontEndController {
     private final UserService userService;
     private RegistrationService registrationService;
     private WikiService wikiService;
-
     private AnnouncementService announcementService;
-
     private AccountLogService accountLogService;
-
     private AccountNotificationService accountNotificationService;
     private PostService postService;
+    private AttachmentService attachmentService;
 
     private static final String VERSION = "4.0.0";
 
     @Autowired
-    public FrontEndController(UserService userService, RegistrationService registrationService, WikiService wikiService, AnnouncementService announcementService, AccountLogService accountLogService, AccountNotificationService accountNotificationService, PostService postService) {
+    public FrontEndController(AttachmentService attachmentService, UserService userService, RegistrationService registrationService, WikiService wikiService, AnnouncementService announcementService, AccountLogService accountLogService, AccountNotificationService accountNotificationService, PostService postService) {
         this.userService = userService;
         this.registrationService = registrationService;
         this.wikiService = wikiService;
@@ -46,6 +44,7 @@ public class FrontEndController {
         this.accountLogService = accountLogService;
         this.accountNotificationService = accountNotificationService;
         this.postService = postService;
+        this.attachmentService = attachmentService;
     }
 
     // Theme
@@ -243,24 +242,16 @@ public class FrontEndController {
     }
 
     @PostMapping(value = "/COMT/Newsroom/Create")
-    public String createNewPostImage(Post post, @RequestParam("image") MultipartFile file, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) throws IOException {
-        // check if file is empty
-        if (file.isEmpty()) {
-            redirectAttributes.addFlashAttribute(new FlashMessage("Invalid File", "The file uploaded is empty", FlashMessage.Status.DANGER));
-            return "redirect:/COMT/Newsroom/Create";
-        }
+    public String createNewPostImage(Post post, @RequestParam("image") MultipartFile file, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) {
 
-        // Validate that the uploaded file is an image
         try {
-            ImageIO.read(file.getInputStream()).toString();
+            postService.save(post, file);
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute(new FlashMessage("Invalid File", "The file uploaded is not an image file", FlashMessage.Status.DANGER));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error Uploading File", e.getMessage(), FlashMessage.Status.DANGER));
             return "redirect:/COMT/Newsroom/Create";
         }
 
         if(post.getCategory().equals(PostCategory.EMERGENCY.name())){
-            postService.save(post, file);
-
             AccountNotification notification = null;
             for(User user : userService.loadAll()){
                 notification = new AccountNotification();
@@ -272,7 +263,6 @@ public class FrontEndController {
             }
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Emergency Notification Sent", "Notification was sent to all accounts on Costi Online. Please publish draft.", FlashMessage.Status.SUCCESS));
         }else{
-            postService.save(post, file);
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Newsroom Draft Created", "Please approve via COMT to publish.", FlashMessage.Status.SUCCESS));
         }
 
@@ -352,26 +342,14 @@ public class FrontEndController {
 
     @RequestMapping(value = "/COMT/Newsroom/{PostId}/edit", method = RequestMethod.POST)
     public String editPost(@PathVariable Long PostId, @RequestParam("image") MultipartFile file, Post post, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) throws IOException {
-        if (result.hasErrors()) {
-            // Include validation errors upon redirect
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category", result);
-
-            // Re populate credentials in form
-            redirectAttributes.addFlashAttribute("post", post);
-
-            // Redirect back to the form
+        try {
+            postService.save(post, file);
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Newsroom Post Edited.", "Newsroom post #" + PostId + " has been modified successfully", FlashMessage.Status.SUCCESS));
+            return "redirect:/COMT/Newsroom";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error Uploading File", e.getMessage(), FlashMessage.Status.DANGER));
             return "redirect:/COMT/Newsroom/" + PostId + "/edit";
         }
-
-        if(file.isEmpty()){
-            post.setImagePath(postService.loadById(PostId).getImagePath());
-            postService.forceSave(post);
-        }else{
-            postService.save(post, file);
-        }
-        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Newsroom Post Edited.", "Newsroom post #" + PostId + " has been modified successfully", FlashMessage.Status.SUCCESS));
-
-        return "redirect:/COMT/Newsroom";
     }
 
     @RequestMapping(value = "/Newsroom/{PostId}/delete", method = RequestMethod.POST)
