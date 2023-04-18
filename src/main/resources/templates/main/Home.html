@@ -73,100 +73,98 @@
         </div>
     </div>
 
-    <div class="container-fluid" id="highlights">
-        <div class="container">
-            <h2 class="pb-2 border-bottom">Recent Highlights</h2>
-            <div id="home-slideshow" class="carousel slide mb-4" data-bs-ride="carousel">
+    <div class="container" id="highlights">
+        <h2 class="pb-2 border-bottom">Recent Highlights</h2>
+        <div id="home-slideshow" class="carousel slide mb-2" data-bs-ride="carousel">
 
-                <!-- Indicators/dots -->
-                <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="0" class="active"></button>
-                    <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="1"></button>
-                    <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="2"></button>
-                    <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="3"></button>
-                    <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="4"></button>
-                    <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="5"></button>
-                    <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="6"></button>
-                    <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="7"></button>
-                    <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="8"></button>
-                    <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="9"></button>
-                </div>
-
-                <!-- The slideshow/carousel -->
-                <div class="carousel-inner">
-                    <div class="carousel-item active" th:object="${slide1}">
-                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
-                        <div class="carousel-caption newsroom-slide-caption">
-                            <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
-
-                        </div>
-                    </div>
-                    <div class="carousel-item" th:object="${slide2}">
-                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
-                        <div class="carousel-caption newsroom-slide-caption">
-                            <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
-                        </div>
-                    </div>
-                    <div class="carousel-item" th:object="${slide3}">
-                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
-                        <div class="carousel-caption newsroom-slide-caption">
-                            <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
-                        </div>
-                    </div>
-                    <div class="carousel-item" th:object="${slide4}">
-                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
-                        <div class="carousel-caption newsroom-slide-caption">
-                            <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
-                        </div>
-                    </div>
-                    <div class="carousel-item" th:object="${slide5}">
-                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
-                        <div class="carousel-caption newsroom-slide-caption">
-                            <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
-                        </div>
-                    </div>
-                    <div class="carousel-item" th:object="${slide6}">
-                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
-                        <div class="carousel-caption newsroom-slide-caption">
-                            <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
-                        </div>
-                    </div>
-                    <div class="carousel-item" th:object="${slide7}">
-                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
-                        <div class="carousel-caption newsroom-slide-caption">
-                            <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
-                        </div>
-                    </div>
-                    <div class="carousel-item" th:object="${slide8}">
-                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
-                        <div class="carousel-caption newsroom-slide-caption">
-                            <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
-                        </div>
-                    </div>
-                    <div class="carousel-item" th:object="${slide9}">
-                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
-                        <div class="carousel-caption newsroom-slide-caption">
-                            <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
-                        </div>
-                    </div>
-                    <div class="carousel-item" th:object="${slide10}">
-                        <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
-                        <div class="carousel-caption newsroom-slide-caption">
-                            <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Left and right controls/icons -->
-                <button class="carousel-control-prev" type="button" data-bs-target="#home-slideshow" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon"></span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#home-slideshow" data-bs-slide="next">
-                    <span class="carousel-control-next-icon"></span>
-                </button>
+            <!-- Indicators/dots -->
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="2"></button>
+                <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="3"></button>
+                <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="4"></button>
+                <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="5"></button>
+                <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="6"></button>
+                <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="7"></button>
+                <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="8"></button>
+                <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="9"></button>
             </div>
-            <a href="/Newsroom"><p class="text-secondary">View more in Costi Newsroom ></p></a>
+
+            <!-- The slideshow/carousel -->
+            <div class="carousel-inner">
+                <div class="carousel-item active" th:object="${slide1}">
+                    <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
+                    <div class="carousel-caption newsroom-slide-caption">
+                        <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
+
+                    </div>
+                </div>
+                <div class="carousel-item" th:object="${slide2}">
+                    <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
+                    <div class="carousel-caption newsroom-slide-caption">
+                        <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
+                    </div>
+                </div>
+                <div class="carousel-item" th:object="${slide3}">
+                    <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
+                    <div class="carousel-caption newsroom-slide-caption">
+                        <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
+                    </div>
+                </div>
+                <div class="carousel-item" th:object="${slide4}">
+                    <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
+                    <div class="carousel-caption newsroom-slide-caption">
+                        <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
+                    </div>
+                </div>
+                <div class="carousel-item" th:object="${slide5}">
+                    <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
+                    <div class="carousel-caption newsroom-slide-caption">
+                        <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
+                    </div>
+                </div>
+                <div class="carousel-item" th:object="${slide6}">
+                    <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
+                    <div class="carousel-caption newsroom-slide-caption">
+                        <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
+                    </div>
+                </div>
+                <div class="carousel-item" th:object="${slide7}">
+                    <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
+                    <div class="carousel-caption newsroom-slide-caption">
+                        <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
+                    </div>
+                </div>
+                <div class="carousel-item" th:object="${slide8}">
+                    <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
+                    <div class="carousel-caption newsroom-slide-caption">
+                        <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
+                    </div>
+                </div>
+                <div class="carousel-item" th:object="${slide9}">
+                    <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
+                    <div class="carousel-caption newsroom-slide-caption">
+                        <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
+                    </div>
+                </div>
+                <div class="carousel-item" th:object="${slide10}">
+                    <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
+                    <div class="carousel-caption newsroom-slide-caption">
+                        <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Left and right controls/icons -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#home-slideshow" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#home-slideshow" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
         </div>
+        <a href="/Newsroom"><p class="text-secondary">View more in Costi Newsroom ></p></a>
     </div>
 
     <div class="container py-5" id="about">
