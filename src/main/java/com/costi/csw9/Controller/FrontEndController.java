@@ -76,7 +76,7 @@ public class FrontEndController {
         if (principal != null) {
             User user = getCurrentUser(principal);
             model.addAttribute("user", user);
-            List<AccountNotification> notifications = accountNotificationService.findByUser(user.getId());
+            List<AccountNotification> notifications = accountNotificationService.findByUser(user);
             model.addAttribute("notificationCount", notifications.size());
         }else{
             // If user is logged out
@@ -97,7 +97,7 @@ public class FrontEndController {
         User user = getCurrentUser(principal);
         model.addAttribute("action", "/Account/edit");
         model.addAttribute("logs", accountLogService.findByUser(user));
-        List<AccountNotification> notifications = accountNotificationService.findByUser(user.getId());
+        List<AccountNotification> notifications = accountNotificationService.findByUser(user);
         model.addAttribute("notifications", notifications);
         return "main/ViewAccount";
     }
@@ -129,14 +129,12 @@ public class FrontEndController {
 
     @RequestMapping(value = "/Account/Notification/{id}/delete", method = RequestMethod.GET)
     public String deleteNotification(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes) {
-        AccountNotification notification = accountNotificationService.findById(id);
-        if (getCurrentUser(principal).isAdmin() || notification.getUser().getId() == getCurrentUser(principal).getId()) {
-            accountNotificationService.delete(id);
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Notification Dismissed", "Notification was permanently removed from your account", FlashMessage.Status.SUCCESS));
-        } else {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
-            System.out.println("Invalid Permissions");
+        try{
+            accountNotificationService.delete(id, getCurrentUser(principal));
+        }catch (Exception e){
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error deleting notification", e.getMessage(), FlashMessage.Status.DANGER));
         }
+
         return "redirect:/Account";
     }
 
@@ -200,7 +198,7 @@ public class FrontEndController {
         //Selected User
         User selectedUser = userService.loadUserObjectById(id);
         model.addAttribute("selectedUser", selectedUser);
-        List<AccountNotification> notifications = accountNotificationService.findByUser(id);
+        List<AccountNotification> notifications = accountNotificationService.findByUser(selectedUser);
         model.addAttribute("SUNotificationCount", notifications.size());
         model.addAttribute("SUNotifications", notifications);
         List<AccountLog> logs = accountLogService.findByUser(selectedUser);
@@ -428,13 +426,10 @@ public class FrontEndController {
 
     @RequestMapping(value = "/COMT/Accounts/{userId}/Notification/{id}/delete", method = RequestMethod.GET)
     public String adminDeleteNotification(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes, @PathVariable Long userId) {
-        AccountNotification notification = accountNotificationService.findById(id);
-        if (getCurrentUser(principal).isAdmin() || notification.getUser().getId() == getCurrentUser(principal).getId()) {
-            accountNotificationService.delete(id);
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Notification Dismissed", "Notification was permanently removed from your account", FlashMessage.Status.SUCCESS));
-        } else {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
-            System.out.println("Invalid Permissions");
+        try{
+            accountNotificationService.delete(id, getCurrentUser(principal));
+        }catch (Exception e){
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error deleting notification", e.getMessage(), FlashMessage.Status.DANGER));
         }
         return "redirect:/COMT/Accounts/" + userId;
     }
