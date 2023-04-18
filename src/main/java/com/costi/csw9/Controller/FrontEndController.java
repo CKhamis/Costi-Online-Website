@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class FrontEndController {
@@ -245,9 +244,16 @@ public class FrontEndController {
                 notification.setUser(user);
                 notification.setTitle("EMERGENCY");
                 notification.setBody("An emergency post was made. View it in Newsroom");
-                accountNotificationService.save(notification);
+
+                try{
+                    accountNotificationService.save(notification, getCurrentUser(principal));
+                }catch (Exception e){
+                    redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error saving notification", e.getMessage(), FlashMessage.Status.DANGER));
+                    return "redirect:/COMT/Newsroom/Create";
+                }
             }
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Emergency Notification Sent", "Notification was sent to all accounts on Costi Online. Please publish draft.", FlashMessage.Status.SUCCESS));
+
         }else{
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Newsroom Draft Created", "Please approve via COMT to publish.", FlashMessage.Status.SUCCESS));
         }
@@ -267,7 +273,7 @@ public class FrontEndController {
             // Redirect back to the form
             return "redirect:/COMT/Newsroom/Create";
         }
-
+        postService.save(post);
         if(post.getCategory().equals(PostCategory.EMERGENCY.name())){
             AccountNotification notification = null;
             for(User user : userService.loadAll()){
@@ -276,12 +282,17 @@ public class FrontEndController {
                 notification.setUser(user);
                 notification.setTitle("EMERGENCY");
                 notification.setBody("An emergency post was made. View it in Newsroom");
-                accountNotificationService.save(notification);
+
+                try{
+                    accountNotificationService.save(notification, getCurrentUser(principal));
+                }catch (Exception e){
+                    redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error saving notification", e.getMessage(), FlashMessage.Status.DANGER));
+                    return "redirect:/COMT/Newsroom/Create";
+                }
             }
-            postService.save(post);
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Emergency Notification Sent", "Notification was sent to all accounts on Costi Online. Please publish draft.", FlashMessage.Status.SUCCESS));
+
         }else{
-            postService.save(post);
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Newsroom Draft Created", "Please approve via COMT to publish.", FlashMessage.Status.SUCCESS));
         }
 
@@ -412,16 +423,23 @@ public class FrontEndController {
             for(User user : userService.loadAll()){
                 notification = new AccountNotification(notificationRequest);
                 notification.setUser(user);
-                accountNotificationService.save(notification);
+                try {
+                    accountNotificationService.save(notification, getCurrentUser(principal));
+                    redirectAttributes.addFlashAttribute("flash", new FlashMessage("Notification Batch Sent", "Notification was sent to all accounts on Costi Online", FlashMessage.Status.SUCCESS));
+                } catch (Exception e) {
+                    redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error saving notification.", e.getMessage(), FlashMessage.Status.DANGER));
+                }
             }
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Notification Batch Sent", "Notification was sent to all accounts on Costi Online", FlashMessage.Status.SUCCESS));
         }else{
             AccountNotification notification = new AccountNotification(notificationRequest);
             notification.setUser(userService.loadUserObjectById(Long.parseLong(notificationRequest.getDestination())));
-            accountNotificationService.save(notification);
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Notification Sent", "Notification was sent to user with ID of " + notificationRequest.getDestination(), FlashMessage.Status.SUCCESS));
+            try {
+                accountNotificationService.save(notification, getCurrentUser(principal));
+                redirectAttributes.addFlashAttribute("flash", new FlashMessage("Notification Sent", "Notification was sent to user with ID of " + notificationRequest.getDestination(), FlashMessage.Status.SUCCESS));
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error saving notification.", e.getMessage(), FlashMessage.Status.DANGER));
+            }
         }
-
         return "redirect:/COMT/Notifications/Create";
     }
 

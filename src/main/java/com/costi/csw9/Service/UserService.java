@@ -93,7 +93,11 @@ public class UserService implements UserDetailsService {
 
             //Add welcome message
             AccountNotification welcome = new AccountNotification("Welcome!", "<p>Welcome to your Costi Network ID, here you will see various details regarding your account. Try changing your profile picture!</p>", "primary", user);
-            accountNotificationService.save(welcome);
+            try {
+                accountNotificationService.save(welcome, user);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

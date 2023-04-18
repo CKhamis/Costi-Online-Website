@@ -42,6 +42,7 @@ public class AnnouncementService {
         return announcementRepository.findAll();
     }
 
+    // TODO: permissions checking
     public void save(Announcement announcement){
         announcement.setDate(LocalDateTime.now());
         announcementRepository.save(announcement);

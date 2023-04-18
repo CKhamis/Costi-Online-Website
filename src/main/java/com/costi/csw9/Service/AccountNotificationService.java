@@ -28,8 +28,13 @@ public class AccountNotificationService {
         return accountNotificationRepository.findByUser(user);
     }
 
-    public void save(AccountNotification notification){
-        accountNotificationRepository.save(notification);
+    public void save(AccountNotification notification, User currentUser) throws Exception{
+        // Check if right permissions
+        if(currentUser.isAdmin() || notification.getUser().getId() == currentUser.getId() || currentUser.isOwner()){
+            accountNotificationRepository.save(notification);
+        }else{
+            throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
+        }
     }
 
     public void delete(Long id, User currentUser) throws Exception{
@@ -48,7 +53,5 @@ public class AccountNotificationService {
         }else{
             throw new Exception("Notification" + LogicTools.NOT_FOUND_MESSAGE);
         }
-
-
     }
 }
