@@ -10,10 +10,7 @@ import java.util.regex.Pattern;
 public class EmailValidator implements Predicate<String> {
     @Override
     public boolean test(String s) {
-        //TODO: implement this!
-        Pattern pattern = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher("Visit W3Schools!");
-        boolean matchFound = matcher.find();
-        return true;
+        String regex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+        return s.matches(regex);
     }
 }

@@ -32,7 +32,6 @@ public class FrontEndController {
     private AccountNotificationService accountNotificationService;
     private PostService postService;
     private AttachmentService attachmentService;
-
     private static final String VERSION = "4.1.5";
 
     @Autowired
@@ -46,6 +45,10 @@ public class FrontEndController {
         this.postService = postService;
         this.attachmentService = attachmentService;
     }
+
+    /**************************
+       Common Model Attributes
+     **************************/
 
     // Theme
     private String choseTheme() {
@@ -69,17 +72,35 @@ public class FrontEndController {
         return u;
     }
 
+    @ModelAttribute
+    public void addCommonAttributes(Model model, Principal principal) {
+        // If user is logged in
+        if (principal != null) {
+            User user = getCurrentUser(principal);
+            model.addAttribute("user", user);
+            List<AccountNotification> notifications = accountNotificationService.findByUser(user.getId());
+            model.addAttribute("notificationCount", notifications.size());
+        }else{
+            // If user is logged out
+            model.addAttribute("notificationCount", 0);
+        }
+        
+        // User is logged in or out
+        model.addAttribute("loggedIn", principal != null);
+        model.addAttribute("theme", choseTheme());
+    }
+
+    /*******************
+        Page Mappings
+     ******************/
+
     @RequestMapping("/Account")
     public String editUser(Model model, Principal principal, RedirectAttributes redirectAttributes) {
         User user = getCurrentUser(principal);
-        model.addAttribute("user", user);
         model.addAttribute("action", "/Account/edit");
-        model.addAttribute("loggedIn", principal != null);
-        model.addAttribute("theme", choseTheme());
         model.addAttribute("logs", accountLogService.findByUser(user.getId()));
         List<AccountNotification> notifications = accountNotificationService.findByUser(user.getId());
         model.addAttribute("notifications", notifications);
-        model.addAttribute("notificationCount", notifications.size());
         return "main/ViewAccount";
     }
 
@@ -127,7 +148,6 @@ public class FrontEndController {
             model.addAttribute("user", new User());
         }
         model.addAttribute("action", "/SignUp/post");
-        model.addAttribute("theme", choseTheme());
         return "main/NewAccount";
     }
 
@@ -155,52 +175,29 @@ public class FrontEndController {
     //Moderator
     @GetMapping("/COMT/Wiki")
     public String getCostiOnlineWikiTools(Model model, Principal principal, RedirectAttributes redirectAttributes) {
-
         User user = getCurrentUser(principal);
-        model.addAttribute("user", user);
-        model.addAttribute("loggedIn", principal != null);
         model.addAttribute("disabled", wikiService.getByApproval(false));
         model.addAttribute("enabled", wikiService.getByApproval(true));
-        model.addAttribute("theme", choseTheme());
-        model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
         return "moderator/WikiTools";
     }
 
     @GetMapping("/COMT/Accounts")
     public String getCostiOnlineAccountTools(Model model, Principal principal, RedirectAttributes redirectAttributes) {
-
         User user = getCurrentUser(principal);
-        model.addAttribute("user", user);
-        model.addAttribute("loggedIn", principal != null);
-        model.addAttribute("theme", choseTheme());
-        model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
-
         model.addAttribute("all", userService.loadAll());
         return "moderator/AccountTools";
     }
 
     @GetMapping("/COMT/Newsroom")
     public String getNewsroomTools(Model model, Principal principal, RedirectAttributes redirectAttributes) {
-
-        User user = getCurrentUser(principal);
-        model.addAttribute("user", user);
-        model.addAttribute("loggedIn", principal != null);
         model.addAttribute("disabled", postService.getByApproval(false));
         model.addAttribute("enabled", postService.getByApproval(true));
-        model.addAttribute("theme", choseTheme());
-        model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
         return "moderator/NewsroomTools";
     }
 
     @GetMapping("/COMT/Accounts/{id}")
     public String getCostiOnlineAccountSettings(Model model, Principal principal, RedirectAttributes redirectAttributes, @PathVariable Long id) {
         // TODO: add a nicer way to enable/disable, lock/unlock accounts
-        User user = getCurrentUser(principal);
-        model.addAttribute("user", user);
-        model.addAttribute("loggedIn", true);
-        model.addAttribute("theme", choseTheme());
-        model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
-
         model.addAttribute("all", userService.loadAll());
         model.addAttribute("action", "/COMT/Accounts/" + id + "/edit");
 
@@ -225,11 +222,6 @@ public class FrontEndController {
     @GetMapping("/COMT/Newsroom/Create")
     public String getNewsroomPostMaker(Model model, Principal principal, RedirectAttributes redirectAttributes) {
         User user = getCurrentUser(principal);
-        model.addAttribute("user", user);
-        model.addAttribute("loggedIn", true);
-        model.addAttribute("theme", choseTheme());
-        model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
-
         model.addAttribute("isAllowed", user.getRole() == UserRole.OWNER);
         model.addAttribute("categories", PostCategory.values());
         model.addAttribute("title", "Create Newsroom Post");
@@ -243,7 +235,6 @@ public class FrontEndController {
 
     @PostMapping(value = "/COMT/Newsroom/Create")
     public String createNewPostImage(Post post, @RequestParam("image") MultipartFile file, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) {
-
         try {
             postService.save(post, file);
         } catch (Exception e) {
@@ -252,7 +243,7 @@ public class FrontEndController {
         }
 
         if(post.getCategory().equals(PostCategory.EMERGENCY.name())){
-            AccountNotification notification = null;
+            AccountNotification notification;
             for(User user : userService.loadAll()){
                 notification = new AccountNotification();
                 notification.setNotificationType("danger");
@@ -314,10 +305,7 @@ public class FrontEndController {
         model.addAttribute("action", "/COMT/Newsroom/" + PostId + "/edit");
         model.addAttribute("title", "Edit Costi Newsroom Post");
 
-        model.addAttribute("user", current);
-        model.addAttribute("loggedIn", principal != null);
-        model.addAttribute("theme", choseTheme());
-        model.addAttribute("notificationCount", accountNotificationService.findByUser(current.getId()).size());
+        
         return "moderator/EditPost";
     }
 
@@ -399,11 +387,7 @@ public class FrontEndController {
     @GetMapping("/COMT/Notifications/Create")
     public String getCostiOnlineNotificationSettings(Model model, Principal principal, RedirectAttributes redirectAttributes) {
         // TODO: add a nicer way to enable/disable, lock/unlock accounts
-        User user = getCurrentUser(principal);
-        model.addAttribute("user", user);
         model.addAttribute("loggedIn", true);
-        model.addAttribute("theme", choseTheme());
-        model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
 
         if (!model.containsAttribute("notification")) {
             model.addAttribute("notification", new AccountNotificationRequest());
@@ -476,14 +460,8 @@ public class FrontEndController {
 
     @GetMapping("/COMT/Announcements")
     public String getCostiOnlineAnnouncementTools(Model model, Principal principal, RedirectAttributes redirectAttributes) {
-
-        User user = getCurrentUser(principal);
-        model.addAttribute("user", user);
-        model.addAttribute("loggedIn", principal != null);
         model.addAttribute("enabled", announcementService.getByApproval(true));
         model.addAttribute("disabled", announcementService.getByApproval(false));
-        model.addAttribute("theme", choseTheme());
-        model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
         return "moderator/AnnouncementTools";
     }
 
@@ -494,12 +472,7 @@ public class FrontEndController {
         }
         model.addAttribute("action", "/COMT/Announcements/Create");
         model.addAttribute("title", "Create New Announcement");
-        model.addAttribute("theme", choseTheme());
 
-        User user = getCurrentUser(principal);
-        model.addAttribute("user", user);
-        model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
-        model.addAttribute("loggedIn", principal != null);
         return "moderator/AnnouncementMaker";
     }
 
@@ -558,10 +531,7 @@ public class FrontEndController {
         model.addAttribute("action", "/COMT/Announcements/" + id + "/edit");
         model.addAttribute("title", "Edit Announcement");
 
-        model.addAttribute("user", current);
-        model.addAttribute("loggedIn", principal != null);
-        model.addAttribute("theme", choseTheme());
-        model.addAttribute("notificationCount", accountNotificationService.findByUser(current.getId()).size());
+        
         return "moderator/AnnouncementMaker";
     }
 
@@ -676,12 +646,6 @@ public class FrontEndController {
     //Main
     @GetMapping("/")
     public String getHome(Model model, Principal principal, RedirectAttributes redirectAttributes) {
-        User user = getCurrentUser(principal);
-        model.addAttribute("user", user);
-        model.addAttribute("loggedIn", principal != null);
-        model.addAttribute("theme", choseTheme());
-        model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
-
         model.addAttribute("version", VERSION);
         List<Announcement> announcements = announcementService.getByApproval(true);
         model.addAttribute("announcements", announcements);
@@ -734,36 +698,20 @@ public class FrontEndController {
 
     @GetMapping("/Projects")
     public String getProjects(Model model, Principal principal) {
-        model.addAttribute("loggedIn", principal != null);
-        User user = getCurrentUser(principal);
-        model.addAttribute("user", user);
-        model.addAttribute("theme", choseTheme());
-        model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
         return "main/Projects";
     }
 
     @GetMapping("/login")
     public String getLogin(Model model, Principal principal) {
-        User user = getCurrentUser(principal);
-        model.addAttribute("user", user);
-        model.addAttribute("loggedIn", principal != null);
-        model.addAttribute("theme", choseTheme());
-        model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
         return "main/login";
     }
 
     //Wiki
     @GetMapping("/Wiki")
     public String getWikiHome(Model model, Principal principal) {
-
-        User user = getCurrentUser(principal);
-        model.addAttribute("user", user);
-        model.addAttribute("loggedIn", principal != null);
         List<WikiPage> allEnabled = wikiService.getByApproval(true);
         model.addAttribute("all", allEnabled);
         model.addAttribute("categories", WikiCategory.values());
-        model.addAttribute("theme", choseTheme());
-        model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
         return "wiki/WikiHome";
     }
 
@@ -776,13 +724,7 @@ public class FrontEndController {
         model.addAttribute("action", "/Wiki/Create/post");
         model.addAttribute("categories", WikiCategory.values());
         model.addAttribute("title", "Create New Wiki Page");
-        model.addAttribute("theme", choseTheme());
 
-
-        User user = getCurrentUser(principal);
-        model.addAttribute("user", user);
-        model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
-        model.addAttribute("loggedIn", principal != null);
         return "wiki/NewWiki";
     }
 
@@ -813,13 +755,9 @@ public class FrontEndController {
         model.addAttribute("isAdmin", current.isAdmin());
         model.addAttribute("user", current);
         model.addAttribute("isViewable", current.isAdmin() || wiki.isEnabled());
-        model.addAttribute("loggedIn", principal != null);
 
         model.addAttribute("wiki", wiki);
         model.addAttribute("categoryPages", wikiService.getWikiPagesByCat(wiki.getCategory()));
-        model.addAttribute("theme", choseTheme());
-        model.addAttribute("notificationCount", accountNotificationService.findByUser(current.getId()).size());
-
         return "wiki/ViewWiki";
     }
 
@@ -876,10 +814,7 @@ public class FrontEndController {
         model.addAttribute("categories", WikiCategory.values());
         model.addAttribute("title", "Edit Wiki Page");
 
-        model.addAttribute("user", current);
-        model.addAttribute("loggedIn", principal != null);
-        model.addAttribute("theme", choseTheme());
-        model.addAttribute("notificationCount", accountNotificationService.findByUser(current.getId()).size());
+        
         return "wiki/NewWiki";
     }
 
@@ -913,22 +848,12 @@ public class FrontEndController {
     //Media
     @GetMapping("/Media")
     public String getMedia(Model model, Principal principal) {
-        User user = getCurrentUser(principal);
-        model.addAttribute("user", user);
-        model.addAttribute("loggedIn", principal != null);
-        model.addAttribute("theme", choseTheme());
-        model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
         return "main/Media";
     }
 
     //About
     @GetMapping("/About")
     public String getAbout(Model model, Principal principal) {
-        User user = getCurrentUser(principal);
-        model.addAttribute("user", user);
-        model.addAttribute("loggedIn", principal != null);
-        model.addAttribute("theme", choseTheme());
-        model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
         return "main/About";
     }
 
@@ -936,94 +861,57 @@ public class FrontEndController {
     //Minecraft
     @GetMapping("/Minecraft")
     public String getMCHome(Model model, Principal principal) {
-        User user = getCurrentUser(principal);
-        model.addAttribute("user", user);
-        model.addAttribute("loggedIn", principal != null);
         return "minecraft/MCHome";
     }
 
     @GetMapping("/Minecraft/gov")
     public String getGovernmentInfo(Model model, Principal principal) {
-        model.addAttribute("loggedIn", principal != null);
-        User user = getCurrentUser(principal);
-        model.addAttribute("user", user);
         return "minecraft/YourGovernment";
     }
 
     @GetMapping("/Minecraft/vote")
     public String getVoting(Model model, Principal principal) {
-        model.addAttribute("loggedIn", principal != null);
-        User user = getCurrentUser(principal);
-        model.addAttribute("user", user);
         return "minecraft/VotingCenter";
     }
 
     @GetMapping("/Minecraft/vote/VotingBooth")
     public String getVotingBooth(Model model, Principal principal) {
-        model.addAttribute("loggedIn", principal != null);
-        User user = getCurrentUser(principal);
-        model.addAttribute("user", user);
         return "minecraft/VotingBooth";
     }
 
     @GetMapping("/Minecraft/vote/allCitizens")
     public String getAllCitizens(Model model, Principal principal) {
-        model.addAttribute("loggedIn", principal != null);
-        User user = getCurrentUser(principal);
-        model.addAttribute("user", user);
         return "minecraft/AllCitizens";
     }
 
     @GetMapping("/Minecraft/vote/register")
     public String getRegister(Model model, Principal principal) {
-        model.addAttribute("loggedIn", principal != null);
-        User user = getCurrentUser(principal);
-        model.addAttribute("user", user);
         return "minecraft/Register";
     }
 
     @GetMapping("/Minecraft/vote/runForOffice")
     public String getAddCandidate(Model model, Principal principal) {
-        model.addAttribute("loggedIn", principal != null);
-        User user = getCurrentUser(principal);
-        model.addAttribute("user", user);
         return "minecraft/AddCandidate";
     }
 
     @GetMapping("/Minecraft/vote/Polls")
     public String getPolls(Model model, Principal principal) {
-        model.addAttribute("loggedIn", principal != null);
-        User user = getCurrentUser(principal);
-        model.addAttribute("user", user);
         return "minecraft/Polls";
     }
 
     @GetMapping("/Minecraft/vote/BallotInfo")
     public String getBallotInfo(Model model, Principal principal) {
-        model.addAttribute("loggedIn", principal != null);
-        User user = getCurrentUser(principal);
-        model.addAttribute("user", user);
         return "minecraft/BallotInfo";
     }
 
     @GetMapping("/Minecraft/vote/results")
     public String getResults(Model model, Principal principal) {
-        model.addAttribute("loggedIn", principal != null);
-        User user = getCurrentUser(principal);
-        model.addAttribute("user", user);
         return "minecraft/ElectionResults";
     }
 
     // Newsroom
     @GetMapping("/Newsroom")
     public String getNewsroomHome(Model model, Principal principal) {
-
-        User user = getCurrentUser(principal);
-        model.addAttribute("user", user);
-        model.addAttribute("loggedIn", principal != null);
-        model.addAttribute("theme", choseTheme());
-        model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
-
         // Newsroom posts
         List<Post> allPosts = postService.getByApproval(true);
         List<Post> recentNews = postService.getByCategory(PostCategory.NEWS.name());
@@ -1044,13 +932,7 @@ public class FrontEndController {
 
     @GetMapping("/Newsroom/{PageId}/view")
     public String getNewsroomView(@PathVariable Long PageId, Model model, Principal principal, HttpSession session) {
-
         User user = getCurrentUser(principal);
-        model.addAttribute("user", user);
-        model.addAttribute("loggedIn", principal != null);
-        model.addAttribute("theme", choseTheme());
-        model.addAttribute("notificationCount", accountNotificationService.findByUser(user.getId()).size());
-
         Post post = postService.loadById(PageId);
         List<Post> recent = postService.getByApprovalFixedAmountWithException(true, post.getId(), 5), related = postService.getByCategoryFixedAmountWithException(post.getCategory(), post.getId(), 5);
         model.addAttribute("post", post);
