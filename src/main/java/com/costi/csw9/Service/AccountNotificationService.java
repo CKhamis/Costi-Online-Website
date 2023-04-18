@@ -4,6 +4,7 @@ import com.costi.csw9.Model.AccountLog;
 import com.costi.csw9.Model.AccountNotification;
 import com.costi.csw9.Model.User;
 import com.costi.csw9.Repository.AccountNotificationRepository;
+import com.costi.csw9.Util.LogicTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,11 +42,11 @@ public class AccountNotificationService {
             if(currentUser.isAdmin() || notification.getUser().getId() == currentUser.getId() || currentUser.isOwner()){
                 accountNotificationRepository.deleteById(id);
             }else{
-                throw new Exception("Current account does not have sufficient permissions.");
+                throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
             }
 
         }else{
-            throw new Exception("The requested notification was not found in the database.");
+            throw new Exception("Notification" + LogicTools.NOT_FOUND_MESSAGE);
         }
 
 

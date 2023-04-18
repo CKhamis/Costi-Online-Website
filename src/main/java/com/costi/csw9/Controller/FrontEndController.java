@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class FrontEndController {
@@ -487,43 +488,39 @@ public class FrontEndController {
 
     @RequestMapping(value = "/COMT/Announcements/{id}/enable", method = RequestMethod.POST)
     public String enableAnnouncement(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes) {
-        Announcement announcement = announcementService.findById(id);
-        if (getCurrentUser(principal).isAdmin()) {
-            announcementService.enable(announcement, true);
-        } else {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
-            System.out.println("Invalid Permissions");
+        try{
+            announcementService.enable(id, true, getCurrentUser(principal));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Announcement Published!", "Announcement is publicly visible", FlashMessage.Status.SUCCESS));
+        }catch (Exception e){
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error enabling announcement", e.getMessage(), FlashMessage.Status.DANGER));
         }
-
-        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Announcement Published!", "Announcement is publicly visible", FlashMessage.Status.SUCCESS));
         return "redirect:/COMT/Announcements";
     }
 
     @RequestMapping(value = "/COMT/Announcements/{id}/disable", method = RequestMethod.POST)
     public String disableAnnouncement(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes) {
-        Announcement announcement = announcementService.findById(id);
-        if (getCurrentUser(principal).isAdmin()) {
-            announcementService.enable(announcement, false);
-        } else {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
-            System.out.println("Invalid Permissions");
+        try{
+            announcementService.enable(id, false, getCurrentUser(principal));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Announcement Published!", "Announcement is publicly visible", FlashMessage.Status.SUCCESS));
+        }catch (Exception e){
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error enabling announcement", e.getMessage(), FlashMessage.Status.DANGER));
         }
 
-        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Announcement Private!", "Announcement was removed from public view", FlashMessage.Status.SUCCESS));
         return "redirect:/COMT/Announcements";
     }
 
     @RequestMapping("/COMT/Announcements/{id}/edit")
     public String getEditAnnouncement(@PathVariable Long id, Model model, Principal principal, RedirectAttributes redirectAttributes) {
-        User current = getCurrentUser(principal);
-        Announcement announcement = announcementService.findById(id);
-
-        model.addAttribute("announcement", announcement);
-        model.addAttribute("action", "/COMT/Announcements/" + id + "/edit");
-        model.addAttribute("title", "Edit Announcement");
-
-        
-        return "moderator/AnnouncementMaker";
+        try{
+            Announcement announcement = announcementService.findById(id);
+            model.addAttribute("announcement", announcement);
+            model.addAttribute("action", "/COMT/Announcements/" + id + "/edit");
+            model.addAttribute("title", "Edit Announcement");
+            return "moderator/AnnouncementMaker";
+        }catch (Exception e){
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error loading announcement", e.getMessage(), FlashMessage.Status.DANGER));
+            return "redirect:/COMT/Announcements";
+        }
     }
 
     @RequestMapping(value = "/COMT/Announcements/{id}/edit", method = RequestMethod.POST)
@@ -535,9 +532,6 @@ public class FrontEndController {
             redirectAttributes.addFlashAttribute("announcement", announcement);
         }
 
-        //Transfer id
-        announcement.setId(id);
-
         //Save
         announcementService.save(announcement);
 
@@ -547,15 +541,14 @@ public class FrontEndController {
 
     @RequestMapping(value = "/COMT/Announcements/{id}/delete", method = RequestMethod.POST)
     public String deleteAnnouncement(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes) {
-        Announcement announcement = announcementService.findById(id);
-        if (getCurrentUser(principal).isAdmin()) {
-            announcementService.delete(announcement);
-        } else {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
-            System.out.println("Invalid Permissions");
+        try{
+            announcementService.delete(id, getCurrentUser(principal));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Announcement Deleted!", "Announcement was permanently removed from database", FlashMessage.Status.SUCCESS));
+
+        }catch (Exception e){
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error deleting announcement", e.getMessage(), FlashMessage.Status.DANGER));
         }
 
-        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Announcement Deleted!", "Announcement was permanently removed from database", FlashMessage.Status.SUCCESS));
         return "redirect:/COMT/Announcements";
     }
 
