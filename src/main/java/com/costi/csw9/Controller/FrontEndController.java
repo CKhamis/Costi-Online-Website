@@ -96,7 +96,7 @@ public class FrontEndController {
     public String editUser(Model model, Principal principal, RedirectAttributes redirectAttributes) {
         User user = getCurrentUser(principal);
         model.addAttribute("action", "/Account/edit");
-        model.addAttribute("logs", accountLogService.findByUser(user.getId()));
+        model.addAttribute("logs", accountLogService.findByUser(user));
         List<AccountNotification> notifications = accountNotificationService.findByUser(user.getId());
         model.addAttribute("notifications", notifications);
         return "main/ViewAccount";
@@ -203,7 +203,7 @@ public class FrontEndController {
         List<AccountNotification> notifications = accountNotificationService.findByUser(id);
         model.addAttribute("SUNotificationCount", notifications.size());
         model.addAttribute("SUNotifications", notifications);
-        List<AccountLog> logs = accountLogService.findByUser(id);
+        List<AccountLog> logs = accountLogService.findByUser(selectedUser);
         model.addAttribute("SULogCount", logs.size());
         model.addAttribute("SULogs", logs);
         model.addAttribute("SUlastInteraction", logs.get(logs.size()-1).getDateCreated());

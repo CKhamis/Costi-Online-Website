@@ -1,6 +1,7 @@
 package com.costi.csw9.Service;
 
 import com.costi.csw9.Model.AccountLog;
+import com.costi.csw9.Model.User;
 import com.costi.csw9.Repository.AccountLogRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +18,8 @@ public class AccountLogService {
         this.accountLogRepository = accountLogRepository;
     }
 
-    public AccountLog loadById(Long id){
-        return accountLogRepository.findById(id);
-    }
-
-    public List<AccountLog> findByUser(Long id){
-        return accountLogRepository.findByUser(id);
+    public List<AccountLog> findByUser(User user){
+        return accountLogRepository.findByUser(user);
     }
 
     public void save(AccountLog log){
