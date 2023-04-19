@@ -3,6 +3,7 @@ package com.costi.csw9.Service;
 import com.costi.csw9.Model.*;
 import com.costi.csw9.Model.Temp.ConfirmationToken;
 import com.costi.csw9.Repository.UserRepository;
+import com.costi.csw9.Util.LogicTools;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,12 +13,12 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @AllArgsConstructor
 public class UserService implements UserDetailsService {
-    private final static String USER_NOT_FOUND_MESSAGE = "Oh RATS! %s not found";
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
@@ -25,21 +26,22 @@ public class UserService implements UserDetailsService {
 
     private final AccountLogService accountLogService;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MESSAGE, username)));
+    public User findByEmail(String email) throws UsernameNotFoundException {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        if(optionalUser.isPresent()){
+            return optionalUser.get();
+        }else{
+            throw new UsernameNotFoundException("User" + LogicTools.NOT_FOUND_MESSAGE);
+        }
     }
 
-    public UserDetails findById(Long id) {
-        return userRepository.findById(id);
-    }
-
-    public User loadUserObjectByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MESSAGE, username)));
-    }
-
-    public User loadUserObjectById(Long id) throws UsernameNotFoundException {
-        return userRepository.findById(id);
+    public User findById(Long id) throws UsernameNotFoundException {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if(optionalUser.isPresent()){
+            return optionalUser.get();
+        }else{
+            throw new UsernameNotFoundException("User" + LogicTools.NOT_FOUND_MESSAGE);
+        }
     }
 
     public List<User> loadAll(){
@@ -129,23 +131,31 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
-    public void updateUser(User user){
-        System.out.println(user.getPassword());
-        if(user.getPassword().equals("")){
-            //Reuse old password
-            User old = userRepository.findById(user.getId());
-            user.setPassword(old.getPassword());
+    public void updateUser(User user, User requester) throws Exception {
+        if(requester.isAdmin() || requester.isOwner() || requester.getId().equals(user.getId())){
+            if(user.getPassword().equals("")){
+                //Reuse old password
+                Optional<User> optionalOld = userRepository.findById(user.getId());
+                if(optionalOld.isPresent()){
+                    User old = optionalOld.get();
+                    user.setPassword(old.getPassword());
+                }else{
+                    throw new Exception("User" + LogicTools.NOT_FOUND_MESSAGE);
+                }
+            }else{
+                //Encode Password
+                String encodedPass = bCryptPasswordEncoder.encode(user.getPassword());
+                user.setPassword(encodedPass);
+            }
+
+            //Add to log
+            AccountLog log = new AccountLog("Account details updated", user.toString(), user);
+            accountLogService.save(log);
+
+            userRepository.save(user);
         }else{
-            //Encode Password
-            String encodedPass = bCryptPasswordEncoder.encode(user.getPassword());
-            user.setPassword(encodedPass);
+            throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
         }
-
-        //Add to log
-        AccountLog log = new AccountLog("Account details updated", user.toString(), user);
-        accountLogService.save(log);
-
-        userRepository.save(user);
     }
 
     public boolean demoteUser(User user){
@@ -157,12 +167,22 @@ public class UserService implements UserDetailsService {
             AccountLog log = new AccountLog("Account demoted", "Account is now regular user", user);
             accountLogService.save(log);
 
-            userRepository.demote(user);
+            userRepository.demote(user.getId());
             return true;
         }
     }
 
     public boolean isEmpty(){
         return userRepository.findAll().isEmpty();
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<User> optionalUser = userRepository.findByEmail(username);
+        if(optionalUser.isPresent()){
+            return optionalUser.get();
+        }else{
+            throw new UsernameNotFoundException("User" + LogicTools.NOT_FOUND_MESSAGE);
+        }
     }
 }

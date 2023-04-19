@@ -144,6 +144,10 @@ public class User implements UserDetails {
         this.notifications = notifications;
     }
 
+    public String getFormattedDateCreated(){
+        return dateCreated.getMonthValue() + "/" + dateCreated.getDayOfMonth() + "/" + dateCreated.getYear();
+    }
+
     @Override
     public String toString() {
         return firstName + " " + lastName + " of ID " + id;

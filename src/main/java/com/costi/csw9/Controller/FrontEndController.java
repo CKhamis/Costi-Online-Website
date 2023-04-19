@@ -64,7 +64,7 @@ public class FrontEndController {
             return new User("NULL", "NULL", "Not Signed In", "error", UserRole.USER);
         }
         String username = principal.getName();
-        User u = userService.loadUserObjectByUsername(username);
+        User u = userService.findByEmail(username);
         return u;
     }
 
@@ -107,6 +107,9 @@ public class FrontEndController {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.User", result);
             // Add  member if invalid was received
             redirectAttributes.addFlashAttribute("user", user);
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing account", result.getAllErrors().get(0).toString(), FlashMessage.Status.DANGER));
+
+            return "redirect:/Account";
         }
 
         //Transfer id so it gets overwritten in data
@@ -120,8 +123,12 @@ public class FrontEndController {
         user.setRole(currentUser.getRole());
 
         //Save new user
-        userService.updateUser(user);
-        redirectAttributes.addFlashAttribute("flash", new FlashMessage("✅ Account Successfully Edited", "Changes saved to server", FlashMessage.Status.SUCCESS));
+        try {
+            userService.updateUser(user, getCurrentUser(principal));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("✅ Account Successfully Edited", "Changes saved to server", FlashMessage.Status.SUCCESS));
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing account", result.getAllErrors().get(0).toString(), FlashMessage.Status.DANGER));
+        }
         return "redirect:/Account";
     }
 
@@ -194,7 +201,7 @@ public class FrontEndController {
         model.addAttribute("action", "/COMT/Accounts/" + id + "/edit");
 
         //Selected User
-        User selectedUser = userService.loadUserObjectById(id);
+        User selectedUser = userService.findById(id);
         model.addAttribute("selectedUser", selectedUser);
         List<AccountNotification> notifications = accountNotificationService.findByUser(selectedUser);
         model.addAttribute("SUNotificationCount", notifications.size());
@@ -229,7 +236,7 @@ public class FrontEndController {
     public String createNewPostImage(@Valid Post post, @RequestParam("image") MultipartFile file, BindingResult result, Principal principal, RedirectAttributes redirectAttributes) {
         if(result.hasErrors()) {
             // If there are validation errors, re-populate the form with the submitted data and error messages
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.psot", result);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.post", result);
             redirectAttributes.addFlashAttribute("post", post);
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating post", result.getAllErrors().get(0).toString(), FlashMessage.Status.DANGER));
 
@@ -450,7 +457,7 @@ public class FrontEndController {
             }
         }else{
             AccountNotification notification = new AccountNotification(notificationRequest);
-            notification.setUser(userService.loadUserObjectById(Long.parseLong(notificationRequest.getDestination())));
+            notification.setUser(userService.findById(Long.parseLong(notificationRequest.getDestination())));
             try {
                 accountNotificationService.save(notification, getCurrentUser(principal));
                 redirectAttributes.addFlashAttribute("flash", new FlashMessage("Notification Sent", "Notification was sent to user with ID of " + notificationRequest.getDestination(), FlashMessage.Status.SUCCESS));
@@ -478,11 +485,17 @@ public class FrontEndController {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.User", result);
             // Add  member if invalid was received
             redirectAttributes.addFlashAttribute("selectedUser", user);
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing user", result.getAllErrors().get(0).toString(), FlashMessage.Status.DANGER));
+            return "redirect:/COMT/Accounts/" + id;
         }
 
         //Save new user
-        userService.updateUser(user);
-        redirectAttributes.addFlashAttribute("flash", new FlashMessage("✅ Account Successfully Edited", "Changes saved to server", FlashMessage.Status.SUCCESS));
+        try {
+            userService.updateUser(user, getCurrentUser(principal));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("✅ Account Successfully Edited", "Changes saved to server", FlashMessage.Status.SUCCESS));
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("❌ Account Edit Failed", "Changes not saved to server", FlashMessage.Status.DANGER));
+        }
         return "redirect:/COMT/Accounts/" + id;
     }
 
@@ -597,7 +610,7 @@ public class FrontEndController {
 
     @RequestMapping(value = "/Accounts/{accountId}/lock", method = RequestMethod.POST)
     public String lockAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
-        User user = userService.loadUserObjectById(accountId);
+        User user = userService.findById(accountId);
         if (getCurrentUser(principal).isAdmin()) {
             if (!userService.lock(user, true)) {
                 redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "You are unable to modify owner account", FlashMessage.Status.DANGER));
@@ -612,7 +625,7 @@ public class FrontEndController {
 
     @RequestMapping(value = "/Accounts/{accountId}/unlock", method = RequestMethod.POST)
     public String unlockAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
-        User user = userService.loadUserObjectById(accountId);
+        User user = userService.findById(accountId);
         if (getCurrentUser(principal).isAdmin()) {
             userService.lock(user, false);
         } else {
@@ -626,7 +639,7 @@ public class FrontEndController {
 
     @RequestMapping(value = "/Accounts/{accountId}/enable", method = RequestMethod.POST)
     public String enableAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
-        User user = userService.loadUserObjectById(accountId);
+        User user = userService.findById(accountId);
         if (getCurrentUser(principal).isAdmin()) {
             if (!userService.enable(user, true)) {
                 redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "You are unable to modify owner account", FlashMessage.Status.DANGER));
@@ -641,7 +654,7 @@ public class FrontEndController {
 
     @RequestMapping(value = "/Accounts/{accountId}/demote", method = RequestMethod.POST)
     public String demoteAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
-        User user = userService.loadUserObjectById(accountId);
+        User user = userService.findById(accountId);
         if (getCurrentUser(principal).isAdmin()) {
             if (!userService.enable(user, false)) {
                 redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "You are unable to modify owner account", FlashMessage.Status.DANGER));
@@ -657,7 +670,7 @@ public class FrontEndController {
 
     @RequestMapping(value = "/Accounts/{accountId}/disable", method = RequestMethod.POST)
     public String disableAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
-        User user = userService.loadUserObjectById(accountId);
+        User user = userService.findById(accountId);
         if (getCurrentUser(principal).isAdmin()) {
             if (!userService.enable(user, false)) {
                 redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "You are unable to modify owner account", FlashMessage.Status.DANGER));

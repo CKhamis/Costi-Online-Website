@@ -30,7 +30,7 @@
                 <h3 class="fw-bold mb-2" th:text="|*{firstName} *{lastName}|">Account Name</h3>
                 <p th:text="|ID: *{id}|"></p>
                 <p th:text="|Role: *{role}|"></p>
-                <p th:text="|Joined: *{dateCreated}|"></p>
+                <p th:text="|Joined: *{getFormattedDateCreated}|"></p>
                 <p th:text="|Log Count: ${SULogCount}|"></p>
                 <p th:text="|Notification Count: ${SUNotificationCount}|"></p>
                 <p th:text="|Last Activity: ${SUlastInteraction}|"></p>
