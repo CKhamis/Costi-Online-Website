@@ -1,6 +1,5 @@
 package com.costi.csw9.Service;
 
-import com.costi.csw9.Model.AccountNotification;
 import com.costi.csw9.Model.Announcement;
 import com.costi.csw9.Model.User;
 import com.costi.csw9.Repository.AnnouncementRepository;
@@ -34,7 +33,7 @@ public class AnnouncementService {
         }
     }
 
-    public List<Announcement> getByApproval(boolean enabled){
+    public List<Announcement> findByApproval(boolean enabled){
         return announcementRepository.findByEnable(enabled);
     }
 
@@ -42,10 +41,14 @@ public class AnnouncementService {
         return announcementRepository.findAll();
     }
 
-    // TODO: permissions checking
-    public void save(Announcement announcement){
-        announcement.setDate(LocalDateTime.now());
-        announcementRepository.save(announcement);
+    public void save(Announcement announcement, User current) throws Exception {
+        //Check if right permissions
+        if(current.isAdmin() || current.isOwner()){
+            announcement.setDate(LocalDateTime.now());
+            announcementRepository.save(announcement);
+        }else{
+            throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
+        }
     }
 
     public void delete(Long id, User current) throws Exception{

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
+import javax.validation.Valid;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -29,11 +29,10 @@ public class FrontEndController {
     private AccountLogService accountLogService;
     private AccountNotificationService accountNotificationService;
     private PostService postService;
-    private AttachmentService attachmentService;
     private static final String VERSION = "4.1.5";
 
     @Autowired
-    public FrontEndController(AttachmentService attachmentService, UserService userService, RegistrationService registrationService, WikiService wikiService, AnnouncementService announcementService, AccountLogService accountLogService, AccountNotificationService accountNotificationService, PostService postService) {
+    public FrontEndController(UserService userService, RegistrationService registrationService, WikiService wikiService, AnnouncementService announcementService, AccountLogService accountLogService, AccountNotificationService accountNotificationService, PostService postService) {
         this.userService = userService;
         this.registrationService = registrationService;
         this.wikiService = wikiService;
@@ -41,7 +40,6 @@ public class FrontEndController {
         this.accountLogService = accountLogService;
         this.accountNotificationService = accountNotificationService;
         this.postService = postService;
-        this.attachmentService = attachmentService;
     }
 
     /**************************
@@ -228,7 +226,7 @@ public class FrontEndController {
     }
 
     @PostMapping(value = "/COMT/Newsroom/Create")
-    public String createNewPostImage(Post post, @RequestParam("image") MultipartFile file, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) {
+    public String createNewPostImage(Post post, @RequestParam("image") MultipartFile file, Principal principal, RedirectAttributes redirectAttributes) {
         try {
             postService.save(post, file);
         } catch (Exception e) {
@@ -275,7 +273,7 @@ public class FrontEndController {
         }
         postService.save(post);
         if(post.getCategory().equals(PostCategory.EMERGENCY.name())){
-            AccountNotification notification = null;
+            AccountNotification notification;
             for(User user : userService.loadAll()){
                 notification = new AccountNotification();
                 notification.setNotificationType("danger");
@@ -335,7 +333,7 @@ public class FrontEndController {
     }
 
     @RequestMapping(value = "/COMT/Newsroom/{PostId}/edit", method = RequestMethod.POST)
-    public String editPost(@PathVariable Long PostId, @RequestParam("image") MultipartFile file, Post post, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) throws IOException {
+    public String editPost(@PathVariable Long PostId, @RequestParam("image") MultipartFile file, Post post, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) {
         try {
             postService.save(post, file);
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Newsroom Post Edited.", "Newsroom post #" + PostId + " has been modified successfully", FlashMessage.Status.SUCCESS));
@@ -470,8 +468,8 @@ public class FrontEndController {
 
     @GetMapping("/COMT/Announcements")
     public String getCostiOnlineAnnouncementTools(Model model, Principal principal, RedirectAttributes redirectAttributes) {
-        model.addAttribute("enabled", announcementService.getByApproval(true));
-        model.addAttribute("disabled", announcementService.getByApproval(false));
+        model.addAttribute("enabled", announcementService.findByApproval(true));
+        model.addAttribute("disabled", announcementService.findByApproval(false));
         return "moderator/AnnouncementTools";
     }
 
@@ -487,21 +485,24 @@ public class FrontEndController {
     }
 
     @RequestMapping(value = "/COMT/Announcements/Create", method = RequestMethod.POST)
-    public String addNewAnnouncement(Announcement announcement, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) {
-            // Include validation errors upon redirect
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category", result);
-
-            // Re populate credentials in form
+    public String addNewAnnouncement(@Valid Announcement announcement, BindingResult result, Principal principal, RedirectAttributes redirectAttributes) {
+        if(result.hasErrors()) {
+            // If there are validation errors, re-populate the form with the submitted data and error messages
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.announcement", result);
             redirectAttributes.addFlashAttribute("announcement", announcement);
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating announcement", result.getAllErrors().get(0).toString(), FlashMessage.Status.DANGER));
 
-            // Redirect back to the form
             return "redirect:/COMT/Announcements/Create";
         }
 
-        announcementService.save(announcement);
-        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Announcement has been created", "To publish it, please press enable", FlashMessage.Status.SUCCESS));
-        return "redirect:/COMT/Announcements";
+        try {
+            announcementService.save(announcement, getCurrentUser(principal));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Announcement has been created", "To publish it, please press enable", FlashMessage.Status.SUCCESS));
+            return "redirect:/COMT/Announcements/Create";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating announcement", e.getMessage(), FlashMessage.Status.DANGER));
+            return "redirect:/COMT/Announcements";
+        }
     }
 
     @RequestMapping(value = "/COMT/Announcements/{id}/enable", method = RequestMethod.POST)
@@ -542,19 +543,24 @@ public class FrontEndController {
     }
 
     @RequestMapping(value = "/COMT/Announcements/{id}/edit", method = RequestMethod.POST)
-    public String editAnnouncement(@PathVariable Long id, Announcement announcement, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) {
-            // Include validation errors upon redirect
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.User", result);
-            // Add  member if invalid was received
+    public String editAnnouncement(@PathVariable Long id, @Valid Announcement announcement, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) {
+        if(result.hasErrors()) {
+            // If there are validation errors, re-populate the form with the submitted data and error messages
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.announcement", result);
             redirectAttributes.addFlashAttribute("announcement", announcement);
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing announcement", result.getAllErrors().get(0).toString(), FlashMessage.Status.DANGER));
+
+            return "redirect:/COMT/Announcements/edit";
         }
 
-        //Save
-        announcementService.save(announcement);
-
-        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Announcement Edited", "Announcement contents was modified.", FlashMessage.Status.SUCCESS));
-        return "redirect:/COMT/Announcements";
+        try {
+            announcementService.save(announcement, getCurrentUser(principal));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Announcement has been modified", "To publish it, please press enable", FlashMessage.Status.SUCCESS));
+            return "redirect:/COMT/Announcements/Create";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing announcement", e.getMessage(), FlashMessage.Status.DANGER));
+            return "redirect:/COMT/Announcements";
+        }
     }
 
     @RequestMapping(value = "/COMT/Announcements/{id}/delete", method = RequestMethod.POST)
@@ -649,7 +655,7 @@ public class FrontEndController {
     @GetMapping("/")
     public String getHome(Model model, Principal principal, RedirectAttributes redirectAttributes) {
         model.addAttribute("version", VERSION);
-        List<Announcement> announcements = announcementService.getByApproval(true);
+        List<Announcement> announcements = announcementService.findByApproval(true);
         model.addAttribute("announcements", announcements);
         model.addAttribute("isAnnouncement", announcements.size() > 0);
 
@@ -925,7 +931,7 @@ public class FrontEndController {
         model.addAttribute("allPosts", allPosts);
 
         //Announcements
-        List<Announcement> announcements = announcementService.getByApproval(true);
+        List<Announcement> announcements = announcementService.findByApproval(true);
         model.addAttribute("announcements", announcements);
         model.addAttribute("isAnnouncement", announcements.size() > 0);
 
