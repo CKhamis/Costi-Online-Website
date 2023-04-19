@@ -226,9 +226,18 @@ public class FrontEndController {
     }
 
     @PostMapping(value = "/COMT/Newsroom/Create")
-    public String createNewPostImage(Post post, @RequestParam("image") MultipartFile file, Principal principal, RedirectAttributes redirectAttributes) {
+    public String createNewPostImage(@Valid Post post, @RequestParam("image") MultipartFile file, BindingResult result, Principal principal, RedirectAttributes redirectAttributes) {
+        if(result.hasErrors()) {
+            // If there are validation errors, re-populate the form with the submitted data and error messages
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.psot", result);
+            redirectAttributes.addFlashAttribute("post", post);
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating post", result.getAllErrors().get(0).toString(), FlashMessage.Status.DANGER));
+
+            return "redirect:/COMT/Newsroom/Create";
+        }
+
         try {
-            postService.save(post, file);
+            postService.save(post, file, getCurrentUser(principal));
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error Uploading File", e.getMessage(), FlashMessage.Status.DANGER));
             return "redirect:/COMT/Newsroom/Create";
@@ -271,53 +280,55 @@ public class FrontEndController {
             // Redirect back to the form
             return "redirect:/COMT/Newsroom/Create";
         }
-        postService.save(post);
-        if(post.getCategory().equals(PostCategory.EMERGENCY.name())){
-            AccountNotification notification;
-            for(User user : userService.loadAll()){
-                notification = new AccountNotification();
-                notification.setNotificationType("danger");
-                notification.setUser(user);
-                notification.setTitle("EMERGENCY");
-                notification.setBody("An emergency post was made. View it in Newsroom");
 
-                try{
-                    accountNotificationService.save(notification, getCurrentUser(principal));
-                }catch (Exception e){
-                    redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error saving notification", e.getMessage(), FlashMessage.Status.DANGER));
-                    return "redirect:/COMT/Newsroom/Create";
-                }
+        // Save Post
+        try{
+            postService.save(post, getCurrentUser(principal));
+
+            // Check if emergency
+            if(post.getCategory().equals(PostCategory.EMERGENCY.name())){
+                // Attempt to create and send notifications
+                broadcastEmergencyPostNotification(getCurrentUser(principal));
+                redirectAttributes.addFlashAttribute("flash", new FlashMessage("Newsroom Draft Created", "Emergency broadcast was created", FlashMessage.Status.SUCCESS));
+            }else{
+                // Not an emergency
+                redirectAttributes.addFlashAttribute("flash", new FlashMessage("Newsroom Draft Created", "Please approve via COMT to publish.", FlashMessage.Status.SUCCESS));
             }
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Emergency Notification Sent", "Notification was sent to all accounts on Costi Online. Please publish draft.", FlashMessage.Status.SUCCESS));
 
-        }else{
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Newsroom Draft Created", "Please approve via COMT to publish.", FlashMessage.Status.SUCCESS));
+            return "redirect:/COMT/Newsroom/Create";
+        }catch (Exception e){
+            //Post or notification could not be saved
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.post", result);
+            redirectAttributes.addFlashAttribute("post", post);
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error saving post", e.getMessage(), FlashMessage.Status.DANGER));
+            return "redirect:/COMT/Newsroom/Create";
         }
-
-        return "redirect:/COMT/Newsroom/Create";
     }
 
     @RequestMapping("/COMT/Newsroom/{PostId}/edit")
     public String getEditPost(@PathVariable Long PostId, Model model, Principal principal, RedirectAttributes redirectAttributes) {
-        User current = getCurrentUser(principal);
-        Post post = postService.loadById(PostId);
+        try{
+            Post post = postService.loadById(PostId);
+            User current = getCurrentUser(principal);
+            model.addAttribute("post", post);
+            model.addAttribute("categories", PostCategory.values());
+            model.addAttribute("isAllowed", current.getRole().equals(UserRole.OWNER));
+            model.addAttribute("hasImage", !post.getImagePath().substring(0,14).equals("/images/defaul"));
+            model.addAttribute("action", "/COMT/Newsroom/" + PostId + "/edit");
+            model.addAttribute("title", "Edit Costi Newsroom Post");
 
-        model.addAttribute("post", post);
-        model.addAttribute("categories", PostCategory.values());
-        model.addAttribute("isAllowed", current.getRole().equals(UserRole.OWNER));
-        model.addAttribute("hasImage", !post.getImagePath().substring(0,14).equals("/images/defaul"));
-        model.addAttribute("action", "/COMT/Newsroom/" + PostId + "/edit");
-        model.addAttribute("title", "Edit Costi Newsroom Post");
-
-        
-        return "moderator/EditPost";
+            return "moderator/EditPost";
+        }catch (Exception e){
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing post", e.getMessage(), FlashMessage.Status.DANGER));
+            return "redirect:/COMT/Newsroom/" + PostId + "/edit";
+        }
     }
 
-    @RequestMapping(value = "/COMT/Newsroom/{PostId}/editNoImage", method = RequestMethod.POST)
-    public String editPostNoImage(@PathVariable Long PostId, Post post, Principal principal, BindingResult result, RedirectAttributes redirectAttributes){
+    @PostMapping(value = "/COMT/Newsroom/{PostId}/editNoImage")
+    public String editPostNoImage(@PathVariable Long PostId, @Valid Post post, Principal principal, BindingResult result, RedirectAttributes redirectAttributes){
         if (result.hasErrors()) {
             // Include validation errors upon redirect
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category", result);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.post", result);
 
             // Re populate credentials in form
             redirectAttributes.addFlashAttribute("post", post);
@@ -326,65 +337,74 @@ public class FrontEndController {
             return "redirect:/COMT/Newsroom/" + PostId + "/editNoImage";
         }
 
-        postService.save(post);
-        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Newsroom Post Edited.", "Newsroom post #" + PostId + " has been modified successfully", FlashMessage.Status.SUCCESS));
-
-        return "redirect:/COMT/Newsroom";
-    }
-
-    @RequestMapping(value = "/COMT/Newsroom/{PostId}/edit", method = RequestMethod.POST)
-    public String editPost(@PathVariable Long PostId, @RequestParam("image") MultipartFile file, Post post, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) {
+        // Check if post can be saved
         try {
-            postService.save(post, file);
+            postService.save(post, getCurrentUser(principal));
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Newsroom Post Edited.", "Newsroom post #" + PostId + " has been modified successfully", FlashMessage.Status.SUCCESS));
             return "redirect:/COMT/Newsroom";
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error Uploading File", e.getMessage(), FlashMessage.Status.DANGER));
+            // Post could not be saved. Redirect to form
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.post", result);
+            redirectAttributes.addFlashAttribute("post", post);
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing post", e.getMessage(), FlashMessage.Status.DANGER));
+            return "redirect:/COMT/Newsroom/" + PostId + "/editNoImage";
+        }
+    }
+
+    @PostMapping(value = "/COMT/Newsroom/{PostId}/edit")
+    public String editPost(@PathVariable Long PostId, @RequestParam("image") MultipartFile file, @Valid Post post, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) {
+        if(result.hasErrors()) {
+            // If there are validation errors, re-populate the form with the submitted data and error messages
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.post", result);
+            redirectAttributes.addFlashAttribute("post", post);
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing post", result.getAllErrors().get(0).toString(), FlashMessage.Status.DANGER));
+
+            return "redirect:/COMT/Newsroom/" + PostId + "/edit";
+        }
+
+        try {
+            postService.save(post, file, getCurrentUser(principal));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Newsroom Post Edited.", "Newsroom post #" + PostId + " has been modified successfully", FlashMessage.Status.SUCCESS));
+            return "redirect:/COMT/Newsroom";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing post", e.getMessage(), FlashMessage.Status.DANGER));
             return "redirect:/COMT/Newsroom/" + PostId + "/edit";
         }
     }
 
-    @RequestMapping(value = "/Newsroom/{PostId}/delete", method = RequestMethod.POST)
+    @PostMapping(value = "/Newsroom/{PostId}/delete")
     public String deletePost(@PathVariable Long PostId, Principal principal, RedirectAttributes redirectAttributes) {
-        Post post = postService.loadById(PostId);
-        if (getCurrentUser(principal).getRole() == UserRole.OWNER) {
-            postService.delete(post);
+        try{
+            postService.loadById(PostId);
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Newsroom post deleted!", "Post is no longer accessible nor recoverable.", FlashMessage.Status.SUCCESS));
-
-        } else {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "Please use an owner account to continue.", FlashMessage.Status.DANGER));
-            System.out.println("Invalid Permissions");
+        }catch (Exception e){
+            // Invalid id, permission denial, or database error
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error deleting post", e.getMessage(), FlashMessage.Status.DANGER));
         }
-
         return "redirect:/COMT/Newsroom";
     }
 
-    @RequestMapping(value = "/Newsroom/{PostId}/enable", method = RequestMethod.POST)
+    @PostMapping(value = "/Newsroom/{PostId}/enable")
     public String enablePost(@PathVariable Long PostId, Principal principal, RedirectAttributes redirectAttributes) {
-        Post post = postService.loadById(PostId);
-        if (getCurrentUser(principal).getRole() == UserRole.OWNER) {
-            postService.enable(post, true);
+        try{
+            postService.enable(PostId, true, getCurrentUser(principal));
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Post Published!", "Post is now accessible by non-administrators on the Newsroom page", FlashMessage.Status.SUCCESS));
-        } else {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "Please use an owner account to continue.", FlashMessage.Status.DANGER));
-            System.out.println("Invalid Permissions");
+        }catch (Exception e){
+            // Invalid id, permission denial, or database error
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Post could not be published", e.getMessage(), FlashMessage.Status.DANGER));
         }
-
         return "redirect:/COMT/Newsroom";
     }
 
-    @RequestMapping(value = "/Newsroom/{PostId}/disable", method = RequestMethod.POST)
+    @PostMapping(value = "/Newsroom/{PostId}/disable")
     public String disablePost(@PathVariable Long PostId, Principal principal, RedirectAttributes redirectAttributes) {
-        Post post = postService.loadById(PostId);
-        if (getCurrentUser(principal).getRole() == UserRole.OWNER) {
-            postService.enable(post, false);
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Post disabled!", "Post is no longer accessible by public.", FlashMessage.Status.SUCCESS));
-
-        } else {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "Please use an owner account to continue.", FlashMessage.Status.DANGER));
-            System.out.println("Invalid Permissions");
+        try{
+            postService.enable(PostId, false, getCurrentUser(principal));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Post Privated!", "Post is now inaccessible by non-owners", FlashMessage.Status.SUCCESS));
+        }catch (Exception e){
+            // Invalid id, permission denial, or database error
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Post could not be privated", e.getMessage(), FlashMessage.Status.DANGER));
         }
-
         return "redirect:/COMT/Newsroom";
     }
 
@@ -484,7 +504,7 @@ public class FrontEndController {
         return "moderator/AnnouncementMaker";
     }
 
-    @RequestMapping(value = "/COMT/Announcements/Create", method = RequestMethod.POST)
+    @PostMapping(value = "/COMT/Announcements/Create")
     public String addNewAnnouncement(@Valid Announcement announcement, BindingResult result, Principal principal, RedirectAttributes redirectAttributes) {
         if(result.hasErrors()) {
             // If there are validation errors, re-populate the form with the submitted data and error messages
@@ -498,10 +518,10 @@ public class FrontEndController {
         try {
             announcementService.save(announcement, getCurrentUser(principal));
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Announcement has been created", "To publish it, please press enable", FlashMessage.Status.SUCCESS));
-            return "redirect:/COMT/Announcements/Create";
+            return "redirect:/COMT/Announcements";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating announcement", e.getMessage(), FlashMessage.Status.DANGER));
-            return "redirect:/COMT/Announcements";
+            return "redirect:/COMT/Announcements/Create";
         }
     }
 
@@ -520,9 +540,9 @@ public class FrontEndController {
     public String disableAnnouncement(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes) {
         try{
             announcementService.enable(id, false, getCurrentUser(principal));
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Announcement Published!", "Announcement is publicly visible", FlashMessage.Status.SUCCESS));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Announcement Disabled!", "Announcement is publicly visible", FlashMessage.Status.SUCCESS));
         }catch (Exception e){
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error enabling announcement", e.getMessage(), FlashMessage.Status.DANGER));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error disabling announcement", e.getMessage(), FlashMessage.Status.DANGER));
         }
 
         return "redirect:/COMT/Announcements";
@@ -542,7 +562,7 @@ public class FrontEndController {
         }
     }
 
-    @RequestMapping(value = "/COMT/Announcements/{id}/edit", method = RequestMethod.POST)
+    @PostMapping(value = "/COMT/Announcements/{id}/edit")
     public String editAnnouncement(@PathVariable Long id, @Valid Announcement announcement, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) {
         if(result.hasErrors()) {
             // If there are validation errors, re-populate the form with the submitted data and error messages
@@ -556,11 +576,10 @@ public class FrontEndController {
         try {
             announcementService.save(announcement, getCurrentUser(principal));
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Announcement has been modified", "To publish it, please press enable", FlashMessage.Status.SUCCESS));
-            return "redirect:/COMT/Announcements/Create";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing announcement", e.getMessage(), FlashMessage.Status.DANGER));
-            return "redirect:/COMT/Announcements";
         }
+        return "redirect:/COMT/Announcements";
     }
 
     @RequestMapping(value = "/COMT/Announcements/{id}/delete", method = RequestMethod.POST)
@@ -940,23 +959,36 @@ public class FrontEndController {
 
     @GetMapping("/Newsroom/{PageId}/view")
     public String getNewsroomView(@PathVariable Long PageId, Model model, Principal principal, HttpSession session) {
-        User user = getCurrentUser(principal);
-        Post post = postService.loadById(PageId);
-        List<Post> recent = postService.getByApprovalFixedAmountWithException(true, post.getId(), 5), related = postService.getByCategoryFixedAmountWithException(post.getCategory(), post.getId(), 5);
-        model.addAttribute("post", post);
-        model.addAttribute("isViewable", post.isEnabled() || user.getRole() == UserRole.OWNER);
-        model.addAttribute("isOwner",user.getRole() == UserRole.OWNER);
-        model.addAttribute("relatedPosts", related);
-        model.addAttribute("recentPosts", recent);
+        try{
+            Post post = postService.loadById(PageId);
+            User user = getCurrentUser(principal);
 
-        if (session.getAttribute("noViewIncrement" + post.getId()) == null) {
-            postService.addView(post);
-            session.setAttribute("noViewIncrement" + post.getId(), true);
+            List<Post> recent = postService.getByApprovalFixedAmountWithException(true, post.getId(), 5), related = postService.getByCategoryFixedAmountWithException(post.getCategory(), post.getId(), 5);
+            model.addAttribute("post", post);
+            model.addAttribute("isViewable", post.isEnabled() || user.getRole() == UserRole.OWNER);
+            model.addAttribute("isOwner",user.getRole() == UserRole.OWNER);
+            model.addAttribute("relatedPosts", related);
+            model.addAttribute("recentPosts", recent);
+
+            if (session.getAttribute("noViewIncrement" + post.getId()) == null) {
+                postService.addView(post);
+                session.setAttribute("noViewIncrement" + post.getId(), true);
+            }
+            return "newsroom/ViewPost";
+        }catch (Exception e){
+            // Post not found
+            return "redirect:/Account";
         }
-
-
-        return "newsroom/ViewPost";
     }
 
-
+    public void broadcastEmergencyPostNotification(User current) throws Exception{
+        for(User user : userService.loadAll()){
+            AccountNotification notification = new AccountNotification();
+            notification.setNotificationType("danger");
+            notification.setUser(user);
+            notification.setTitle("EMERGENCY");
+            notification.setBody("An emergency post was made. View it in Newsroom");
+            accountNotificationService.save(notification, current);
+        }
+    }
 }

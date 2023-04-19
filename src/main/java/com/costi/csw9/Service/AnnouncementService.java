@@ -13,7 +13,6 @@ import java.util.Optional;
 
 @Service
 public class AnnouncementService {
-    @Autowired
     private final AnnouncementRepository announcementRepository;
 
 

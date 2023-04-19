@@ -36,22 +36,26 @@ public class Post {
 
     private String imagePath;
     @Column(nullable = false)
-    private int views = 0;
+    private int views;
 
     @Column(nullable = false)
-    private boolean isPinned = false;
+    private boolean isPinned;
 
     @Column(nullable = false)
-    private boolean isFavorite = false;
+    private boolean isFavorite;
 
     @Column(nullable = false)
-    private boolean isFeatured = false;
+    private boolean isFeatured;
 
     public Post(String title, String subtitle, String category, String body) {
         this.title = title;
         this.subtitle = subtitle;
         this.category = category;
         this.body = body;
+        this.views = 0;
+        isPinned = false;
+        isFavorite = false;
+        isFeatured = false;
     }
 
     public String getDateEdited(){

@@ -13,7 +13,6 @@ import java.util.Optional;
 
 @Service
 public class AccountNotificationService {
-    @Autowired
     private final AccountNotificationRepository accountNotificationRepository;
 
     public AccountNotificationService(AccountNotificationRepository accountNotificationRepository){

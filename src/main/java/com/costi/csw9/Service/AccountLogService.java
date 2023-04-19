@@ -11,7 +11,6 @@ import java.util.List;
 
 @Service
 public class AccountLogService {
-    @Autowired
     private final AccountLogRepository accountLogRepository;
 
     private AccountLogService(AccountLogRepository accountLogRepository){

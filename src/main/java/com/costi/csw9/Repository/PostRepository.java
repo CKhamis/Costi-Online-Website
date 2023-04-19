@@ -1,23 +1,22 @@
 package com.costi.csw9.Repository;
 
 import com.costi.csw9.Model.Post;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 @Repository
-public interface PostRepository {
-    Post findById(Long id);
+public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByCategory(String category);
-    List<Post> findByCategory(String category, Long exception);
-    List<Post> getByApproval(boolean enabled);
-
-    List<Post> getByApproval(boolean enabled, Long exception);
-
+    List<Post> findByCategoryAndIdNot(String category, Long exception);
+    List<Post> findByEnabled(boolean enabled);
+    List<Post> findByEnabledAndIdNot(boolean enabled, Long exception);
     @Modifying
-    void save(Post page);
-    @Modifying
-    void delete(Long id);
-    @Modifying
-    void enable(Long id, boolean enable);
+    @Transactional
+    @Query("UPDATE Post p SET p.enabled = :enabled WHERE p.id = :id")
+    void setEnabledById(@Param("id") Long id, @Param("enabled") boolean enabled);
 }
