@@ -46,7 +46,7 @@ public class WikiService {
         Optional<WikiPage> wikiPage = wikiRepository.findById(id);
         try{
             WikiPage page = wikiPage.get();
-            if(requester.isAdmin() || requester.isOwner() || requester.getId().equals(page.getAuthor().getId())){
+            if(requester.isAdmin() || requester.isOwner()){
                 wikiRepository.deleteById(id);
             }else{
                 throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
@@ -71,7 +71,7 @@ public class WikiService {
     }
 
     public void enable(WikiPage wikiPage, boolean enable, User requester) throws Exception {
-        if(requester.isAdmin() || requester.isOwner() || requester.getId().equals(wikiPage.getAuthor().getId())){
+        if(requester.isAdmin() || requester.isOwner()){
             wikiRepository.setEnabledById(wikiPage.getId(), enable);
         }else{
             throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
