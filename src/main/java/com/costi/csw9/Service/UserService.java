@@ -158,17 +158,14 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public boolean demoteUser(User user){
-        if(!user.getRole().equals(UserRole.ADMIN)){
-            //User is already not an admin
-            return false;
-        }else{
-            //Add to log
+    public void demoteUser(User user, User requester) throws Exception{
+        if(requester.isAdmin() || requester.isOwner()){
             AccountLog log = new AccountLog("Account demoted", "Account is now regular user", user);
             accountLogService.save(log);
 
             userRepository.demote(user.getId());
-            return true;
+        }else{
+            throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
         }
     }
 

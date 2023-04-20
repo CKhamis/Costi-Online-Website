@@ -633,6 +633,7 @@ public class FrontEndController {
         return "redirect:/COMT/Announcements";
     }
 
+    // TODO: re-do this
     @RequestMapping(value = "/Accounts/{accountId}/lock", method = RequestMethod.POST)
     public String lockAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
         User user = userService.findById(accountId);
@@ -648,6 +649,7 @@ public class FrontEndController {
         return "redirect:/COMT/Accounts";
     }
 
+    // TODO: re-do this
     @RequestMapping(value = "/Accounts/{accountId}/unlock", method = RequestMethod.POST)
     public String unlockAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
         User user = userService.findById(accountId);
@@ -662,6 +664,7 @@ public class FrontEndController {
         return "redirect:/COMT/Accounts";
     }
 
+    // TODO: re-do this
     @RequestMapping(value = "/Accounts/{accountId}/enable", method = RequestMethod.POST)
     public String enableAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
         User user = userService.findById(accountId);
@@ -677,22 +680,21 @@ public class FrontEndController {
         return "redirect:/COMT/Accounts";
     }
 
-    @RequestMapping(value = "/Accounts/{accountId}/demote", method = RequestMethod.POST)
+    @PostMapping(value = "/Accounts/{accountId}/demote")
     public String demoteAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
-        User user = userService.findById(accountId);
-        if (getCurrentUser(principal).isAdmin()) {
-            if (!userService.enable(user, false)) {
-                redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "You are unable to modify owner account", FlashMessage.Status.DANGER));
-            } else {
-                redirectAttributes.addFlashAttribute("flash", new FlashMessage("Account Demoted", user.getFirstName() + " " + user.getLastName() + " is now a user.", FlashMessage.Status.SUCCESS));
-            }
-        } else {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
+        try{
+            User user = userService.findById(accountId);
+            userService.demoteUser(user, getCurrentUser(principal));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Account demoted", user.getFirstName() + " " + user.getLastName() + " is now demoted.", FlashMessage.Status.SUCCESS));
+        }catch (Exception e){
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error demoting user", e.getMessage(), FlashMessage.Status.DANGER));
         }
+
         return "redirect:/COMT/Accounts";
 
     }
 
+    // TODO: re-do this
     @RequestMapping(value = "/Accounts/{accountId}/disable", method = RequestMethod.POST)
     public String disableAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
         User user = userService.findById(accountId);
