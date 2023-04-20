@@ -5,6 +5,7 @@ import com.costi.csw9.Model.Temp.AccountNotificationRequest;
 import com.costi.csw9.Service.*;
 import com.costi.csw9.Util.LogicTools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -792,11 +793,11 @@ public class FrontEndController {
         return "wiki/NewWiki";
     }
 
-    @RequestMapping(value = "/Wiki/Create/post", method = RequestMethod.POST)
+    @PostMapping(value = "/Wiki/Create/post")
     public String addNewPage(WikiPage wikiPage, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             // Include validation errors upon redirect
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category", result);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.WikiPage", result);
 
             // Re populate credentials in form
             redirectAttributes.addFlashAttribute("page", wikiPage);
@@ -808,109 +809,127 @@ public class FrontEndController {
         }
         wikiPage.setAuthor(getCurrentUser(principal));
 
-        wikiService.save(wikiPage);
-        return "redirect:/Wiki/" + wikiPage.getId() + "/view";
+        try {
+            wikiService.save(wikiPage, getCurrentUser(principal));
+            return "redirect:/Wiki/" + wikiPage.getId() + "/view";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating wiki page", e.getMessage(), FlashMessage.Status.DANGER));
+            // Re populate credentials in form
+            redirectAttributes.addFlashAttribute("page", wikiPage);
+
+            // Redirect back to the form
+            return "redirect:/Wiki/Create";
+        }
     }
 
     @RequestMapping("/Wiki/{PageId}/view")
     public String viewPage(Model model, Principal principal, RedirectAttributes redirectAttributes, @PathVariable Long PageId) {
         User current = getCurrentUser(principal);
-        WikiPage wiki = wikiService.loadById(PageId);
 
-        model.addAttribute("showEdit", (current.isAdmin() || wiki.getAuthor().equals(current)));
-        model.addAttribute("isAdmin", current.isAdmin());
-        model.addAttribute("user", current);
-        model.addAttribute("isViewable", current.isAdmin() || wiki.isEnabled());
+        try {
+            WikiPage wiki = wikiService.loadById(PageId);
 
-        model.addAttribute("wiki", wiki);
-        model.addAttribute("categoryPages", wikiService.getWikiPagesByCat(wiki.getCategory()));
-        return "wiki/ViewWiki";
+            model.addAttribute("showEdit", (current.isAdmin() || wiki.getAuthor().equals(current)));
+            model.addAttribute("isAdmin", current.isAdmin());
+            model.addAttribute("user", current);
+            model.addAttribute("isViewable", current.isAdmin() || wiki.isEnabled());
+
+            model.addAttribute("wiki", wiki);
+            model.addAttribute("categoryPages", wikiService.findWikiByCategory(wiki.getCategory()));
+            return "wiki/ViewWiki";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error loading wiki page", e.getMessage(), FlashMessage.Status.DANGER));
+
+            // Redirect back to the form
+            return "redirect:/Wiki";
+        }
     }
 
     @RequestMapping(value = "/Wiki/{PageId}/delete", method = RequestMethod.POST)
     public String deleteWikiPage(@PathVariable Long PageId, Principal principal, RedirectAttributes redirectAttributes) {
-        WikiPage page = wikiService.loadById(PageId);
-        if (getCurrentUser(principal).isAdmin()) {
-            wikiService.delete(page);
-        } else {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
-            System.out.println("Invalid Permissions");
+        try{
+            wikiService.delete(PageId, getCurrentUser(principal));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Wiki Page deleted!", "Page is no longer accessible nor recoverable.", FlashMessage.Status.SUCCESS));
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error deleting wiki page", e.getMessage(), FlashMessage.Status.DANGER));
         }
-
-        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Wiki Page deleted!", "Page is no longer accessible nor recoverable.", FlashMessage.Status.SUCCESS));
         return "redirect:/COMT/Wiki";
     }
 
     @RequestMapping(value = "/Wiki/{PageId}/enable", method = RequestMethod.POST)
     public String enableWikiPage(@PathVariable Long PageId, Principal principal, RedirectAttributes redirectAttributes) {
-        WikiPage page = wikiService.loadById(PageId);
-        if (getCurrentUser(principal).isAdmin()) {
-            wikiService.enable(page, true);
-        } else {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
-            System.out.println("Invalid Permissions");
+        try{
+            WikiPage page = wikiService.loadById(PageId);
+            wikiService.enable(page, true, getCurrentUser(principal));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Wiki page enabled!", "Wiki page is published and is viewable publicly.", FlashMessage.Status.SUCCESS));
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error enabling wiki page", e.getMessage(), FlashMessage.Status.DANGER));
         }
-
-        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Wiki Page Published!", "Page is now accessible by non-administrators on the Costipedia page", FlashMessage.Status.SUCCESS));
         return "redirect:/COMT/Wiki";
     }
 
     @RequestMapping(value = "/Wiki/{PageId}/disable", method = RequestMethod.POST)
     public String disableWikiPage(@PathVariable Long PageId, Principal principal, RedirectAttributes redirectAttributes) {
-        WikiPage page = wikiService.loadById(PageId);
-        if (getCurrentUser(principal).isAdmin()) {
-            wikiService.enable(page, false);
-        } else {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
-            System.out.println("Invalid Permissions");
+        try{
+            WikiPage page = wikiService.loadById(PageId);
+            wikiService.enable(page, false, getCurrentUser(principal));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Wiki page disabled!", "Wiki page is published and is viewable publicly.", FlashMessage.Status.SUCCESS));
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error disabling wiki page", e.getMessage(), FlashMessage.Status.DANGER));
         }
-
-        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Wiki Page disabled!", "Page is no longer accessible by public.", FlashMessage.Status.SUCCESS));
         return "redirect:/COMT/Wiki";
     }
 
     @RequestMapping("/Wiki/{PageId}/edit")
     public String getEditWiki(@PathVariable Long PageId, Model model, Principal principal, RedirectAttributes redirectAttributes) {
         User current = getCurrentUser(principal);
-        WikiPage page = wikiService.loadById(PageId);
+        try{
+            WikiPage page = wikiService.loadById(PageId);
 
-        model.addAttribute("page", page);
-        model.addAttribute("isAllowed", (current.isAdmin() || page.getAuthor().equals(current)));
-        model.addAttribute("action", "/Wiki/" + PageId + "/edit");
-        model.addAttribute("categories", WikiCategory.values());
-        model.addAttribute("title", "Edit Wiki Page");
+            model.addAttribute("page", page);
+            model.addAttribute("isAllowed", (current.isAdmin() || page.getAuthor().equals(current)));
+            model.addAttribute("action", "/Wiki/" + PageId + "/edit");
+            model.addAttribute("categories", WikiCategory.values());
+            model.addAttribute("title", "Edit Wiki Page");
 
-        
-        return "wiki/NewWiki";
+            return "wiki/NewWiki";
+        }catch (Exception e){
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error viewing wiki page", e.getMessage(), FlashMessage.Status.DANGER));
+            return "redirect:/COMT/Wiki";
+        }
     }
 
-    @RequestMapping(value = "/Wiki/{PageId}/edit", method = RequestMethod.POST)
-    public String addNewPage(@PathVariable Long PageId, WikiPage wikiPage, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) {
+    @PostMapping(value = "/Wiki/{PageId}/edit")
+    public String editWikiPage(@PathVariable Long PageId, WikiPage wikiPage, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             // Include validation errors upon redirect
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.wiki", result);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.WikiPage", result);
             // Add  member if invalid was received
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing wiki page", result.getAllErrors().get(0).toString(), FlashMessage.Status.DANGER));
 
             redirectAttributes.addFlashAttribute("page", wikiPage);
+            return "redirect:/Wiki/" + PageId + "/edit";
         }
 
         wikiPage.setId(PageId);
 
-        // Keep author the same
-        wikiPage.setAuthor(wikiService.loadById(PageId).getAuthor());
+        try{
+            // Keep author the same
+            wikiPage.setAuthor(wikiService.loadById(PageId).getAuthor());
 
-        //Save new user
-        wikiService.save(wikiPage);
+            //Save new user
+            wikiService.save(wikiPage, getCurrentUser(principal));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Wiki Page Edited!", "Page has been updated.", FlashMessage.Status.SUCCESS));
+        }catch (Exception e){
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing wiki page", e.getMessage(), FlashMessage.Status.DANGER));
+        }
 
         //Redirect depending on type of user
         if (getCurrentUser(principal).isAdmin()) {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Wiki Page Edited!", "Page has been updated.", FlashMessage.Status.SUCCESS));
             return "redirect:/COMT/Wiki";
         } else {
             return "redirect:/Wiki/" + wikiPage.getId() + "/view";
         }
-
     }
 
     //Media

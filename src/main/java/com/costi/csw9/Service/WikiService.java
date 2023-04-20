@@ -1,21 +1,19 @@
 package com.costi.csw9.Service;
 
 import com.costi.csw9.Model.AccountLog;
-import com.costi.csw9.Model.WikiCategory;
+import com.costi.csw9.Model.User;
 import com.costi.csw9.Model.WikiPage;
 import com.costi.csw9.Repository.WikiRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.costi.csw9.Util.LogicTools;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class WikiService {
-    @Autowired
     private final WikiRepository wikiRepository;
-
-    @Autowired
     private final AccountLogService accountLogService;
 
     public WikiService(WikiRepository wikiRepository, AccountLogService accountLogService) {
@@ -23,19 +21,16 @@ public class WikiService {
         this.accountLogService = accountLogService;
     }
 
-    public WikiPage loadById(Long id){
-        return wikiRepository.findById(id);
+    public WikiPage loadById(Long id) throws Exception{
+        Optional<WikiPage> optionalWikiPage = wikiRepository.findById(id);
+        try{
+            return optionalWikiPage.get();
+        }catch (Exception e){
+            throw new Exception("Wiki Page" + LogicTools.NOT_FOUND_MESSAGE);
+        }
     }
 
-    public List<WikiPage> getWikiPagesByCat(WikiCategory category){
-        return wikiRepository.findByCategory(category.name());
-    }
-
-    public List<WikiPage> getWikiPagesByAuthor(Long id){
-        return wikiRepository.findByAuthor(id);
-    }
-
-    public List<WikiPage> getWikiPagesByCat(String category){
+    public List<WikiPage> findWikiByCategory(String category){
         return wikiRepository.findByCategory(category);
     }
 
@@ -44,24 +39,42 @@ public class WikiService {
     }
 
     public List<WikiPage> getByApproval(boolean enabled){
-        return wikiRepository.getByApproval(enabled);
+        return wikiRepository.findByEnabled(enabled);
     }
 
-    public void delete(WikiPage wikiPage){
-        wikiRepository.delete(wikiPage.getId());
+    public void delete(Long id, User requester) throws Exception {
+        Optional<WikiPage> wikiPage = wikiRepository.findById(id);
+        try{
+            WikiPage page = wikiPage.get();
+            if(requester.isAdmin() || requester.isOwner() || requester.getId().equals(page.getAuthor().getId())){
+                wikiRepository.deleteById(id);
+            }else{
+                throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
+            }
+        }catch (Exception e){
+            throw new Exception("Wiki page" + LogicTools.NOT_FOUND_MESSAGE);
+        }
     }
 
-    public void save(WikiPage wikiPage){
-        wikiPage.setLastEdited(LocalDateTime.now());
+    public void save(WikiPage wikiPage, User requester) throws Exception {
+        if(requester.isAdmin() || requester.isOwner() || requester.getId().equals(wikiPage.getAuthor().getId())){
+            wikiPage.setLastEdited(LocalDateTime.now());
 
-        //Add to log
-        AccountLog log = new AccountLog("Wiki page created/changed", wikiPage.getTitle() + " is saved.", wikiPage.getAuthor());
-        accountLogService.save(log);
+            //Add to log
+            AccountLog log = new AccountLog("Wiki page created/changed", wikiPage.getTitle() + " is saved.", wikiPage.getAuthor());
+            accountLogService.save(log);
 
-        wikiRepository.save(wikiPage);
+            wikiRepository.save(wikiPage);
+        }else{
+            throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
+        }
     }
 
-    public void enable(WikiPage page, boolean enable) {
-        wikiRepository.enable(page.getId(), enable);
+    public void enable(WikiPage wikiPage, boolean enable, User requester) throws Exception {
+        if(requester.isAdmin() || requester.isOwner() || requester.getId().equals(wikiPage.getAuthor().getId())){
+            wikiRepository.setEnabledById(wikiPage.getId(), enable);
+        }else{
+            throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
+        }
     }
 }
