@@ -148,11 +148,11 @@ public class FrontEndController {
         if (!model.containsAttribute("user")) {
             model.addAttribute("user", new User());
         }
-        model.addAttribute("action", "/SignUp/post");
+        model.addAttribute("action", "/SignUp");
         return "main/NewAccount";
     }
 
-    @RequestMapping(value = "/SignUp/post", method = RequestMethod.POST)
+    @PostMapping(value = "/SignUp")
     public String addNewUser(User user, BindingResult result, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             // Include validation errors upon redirect
@@ -161,6 +161,9 @@ public class FrontEndController {
             // Re populate credentials in form
             redirectAttributes.addFlashAttribute("user", user);
 
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating account", result.getAllErrors().get(0).toString(), FlashMessage.Status.DANGER));
+
+
             // Redirect back to the form
             return "redirect:/";
         }
@@ -168,9 +171,22 @@ public class FrontEndController {
             registrationService.registerAdmin(user);
             return "redirect:/";
         }
-        registrationService.registerUser(user);
-        redirectAttributes.addFlashAttribute("flash", new FlashMessage("✅ Costi Account Created!", "Please sign in to continue.", FlashMessage.Status.SUCCESS));
-        return "redirect:/";
+
+        try{
+            registrationService.registerUser(user);
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("✅ Costi Account Created!", "Please sign in to continue.", FlashMessage.Status.SUCCESS));
+            return "redirect:/";
+        }catch (Exception e){
+            // Include validation errors upon redirect
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category", result);
+
+            // Re populate credentials in form
+            redirectAttributes.addFlashAttribute("user", user);
+
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating account", e.getMessage(), FlashMessage.Status.DANGER));
+            return "redirect:/SignUp";
+        }
+
     }
 
     //Moderator
@@ -284,6 +300,8 @@ public class FrontEndController {
             // Re populate credentials in form
             redirectAttributes.addFlashAttribute("post", post);
 
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating post", result.getAllErrors().get(0).toString(), FlashMessage.Status.DANGER));
+
             // Redirect back to the form
             return "redirect:/COMT/Newsroom/Create";
         }
@@ -339,6 +357,9 @@ public class FrontEndController {
 
             // Re populate credentials in form
             redirectAttributes.addFlashAttribute("post", post);
+
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing post", result.getAllErrors().get(0).toString(), FlashMessage.Status.DANGER));
+
 
             // Redirect back to the form
             return "redirect:/COMT/Newsroom/" + PostId + "/editNoImage";
@@ -437,6 +458,9 @@ public class FrontEndController {
 
             // Re populate credentials in form
             redirectAttributes.addFlashAttribute("notification", notificationRequest);
+
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating notification", result.getAllErrors().get(0).toString(), FlashMessage.Status.DANGER));
+
 
             // Redirect back to the form
             return "redirect:/COMT/Notifications/Create";
@@ -777,6 +801,8 @@ public class FrontEndController {
             // Re populate credentials in form
             redirectAttributes.addFlashAttribute("page", wikiPage);
 
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating wiki page", result.getAllErrors().get(0).toString(), FlashMessage.Status.DANGER));
+
             // Redirect back to the form
             return "redirect:/Wiki/Create";
         }
@@ -862,8 +888,10 @@ public class FrontEndController {
     public String addNewPage(@PathVariable Long PageId, WikiPage wikiPage, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             // Include validation errors upon redirect
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.User", result);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.wiki", result);
             // Add  member if invalid was received
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing wiki page", result.getAllErrors().get(0).toString(), FlashMessage.Status.DANGER));
+
             redirectAttributes.addFlashAttribute("page", wikiPage);
         }
 

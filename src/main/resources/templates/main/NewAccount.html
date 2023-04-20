@@ -21,6 +21,7 @@
     </div>
     <div class="col-lg-9 col-md-7 col-xs-12">
         <div class="p-5 mb-4 border-box">
+            <div th:replace="Components :: flash" class="mt-2"></div>
             <form th:action="@{${action}}" method="post" th:object="${user}">
                 <h2>General Information</h2>
                 <hr/>
