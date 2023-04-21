@@ -5,7 +5,6 @@ import com.costi.csw9.Model.Temp.AccountNotificationRequest;
 import com.costi.csw9.Service.*;
 import com.costi.csw9.Util.LogicTools;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -131,7 +130,7 @@ public class FrontEndController {
 
         //Save new user
         try {
-            userService.updateUser(user, getCurrentUser(principal));
+            userService.save(user);
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("✅ Account Successfully Edited", "Changes saved to server", FlashMessage.Status.SUCCESS));
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing account", e.getMessage(), FlashMessage.Status.DANGER));
@@ -524,12 +523,12 @@ public class FrontEndController {
     }
 
     @PostMapping("/COMT/Accounts/{id}/edit")
-    public String adminUpdateUser(User user, BindingResult result, RedirectAttributes redirectAttributes, Principal principal, @PathVariable Long id) {
+    public String adminUpdateUser(@Valid @ModelAttribute("selectedUser") User formUser, BindingResult result, RedirectAttributes redirectAttributes, Principal principal, @PathVariable Long id) {
         if (result.hasErrors()) {
             // Include validation errors upon redirect
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.User", result);
             // Add  member if invalid was received
-            redirectAttributes.addFlashAttribute("selectedUser", user);
+            redirectAttributes.addFlashAttribute("selectedUser", formUser);
 
             String errors = getErrorString(result);
 
@@ -537,12 +536,16 @@ public class FrontEndController {
             return "redirect:/COMT/Accounts/" + id;
         }
 
+        // TODO: finish doing permissions issue
         //Save new user
         try {
-            userService.updateUser(user, getCurrentUser(principal));
+            User loggedInUser = userService.findByEmail(principal.getName());
+            System.out.println(loggedInUser.getFirstName());
+
+            userService.save(formUser);
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("✅ Account Successfully Edited", "Changes saved to server", FlashMessage.Status.SUCCESS));
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("❌ Account Edit Failed", "Changes not saved to server", FlashMessage.Status.DANGER));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("❌ Account Edit Failed", e.getMessage(), FlashMessage.Status.DANGER));
         }
         return "redirect:/COMT/Accounts/" + id;
     }

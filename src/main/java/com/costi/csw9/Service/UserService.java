@@ -137,31 +137,27 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public void updateUser(User user, User requester) throws Exception {
-        if(requester.isAdmin() || requester.isOwner() || requester.getId().equals(user.getId())){
-            if(user.getPassword().equals("")){
-                //Reuse old password
-                Optional<User> optionalOld = userRepository.findById(user.getId());
-                if(optionalOld.isPresent()){
-                    User old = optionalOld.get();
-                    user.setPassword(old.getPassword());
-                }else{
-                    throw new Exception("User" + LogicTools.NOT_FOUND_MESSAGE);
-                }
+    public void save(User user) throws Exception {
+        if(user.getPassword().equals("")){
+            //Reuse old password
+            Optional<User> optionalOld = userRepository.findById(user.getId());
+            if(optionalOld.isPresent()){
+                User old = optionalOld.get();
+                user.setPassword(old.getPassword());
             }else{
-                //Encode Password
-                String encodedPass = bCryptPasswordEncoder.encode(user.getPassword());
-                user.setPassword(encodedPass);
+                throw new Exception("User" + LogicTools.NOT_FOUND_MESSAGE);
             }
-
-            //Add to log
-            AccountLog log = new AccountLog("Account details updated", user.toString(), user);
-            accountLogService.save(log);
-
-            userRepository.save(user);
         }else{
-            throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
+            //Encode Password
+            String encodedPass = bCryptPasswordEncoder.encode(user.getPassword());
+            user.setPassword(encodedPass);
         }
+
+        //Add to log
+        AccountLog log = new AccountLog("Account details updated", user.toString(), user);
+        accountLogService.save(log);
+
+        userRepository.save(user);
     }
 
     public void demoteUser(User user, User requester) throws Exception{
