@@ -3,6 +3,7 @@ package com.costi.csw9.Service;
 import com.costi.csw9.Model.User;
 import com.costi.csw9.Model.UserRole;
 import com.costi.csw9.Model.Temp.ConfirmationToken;
+import com.costi.csw9.Repository.UserRepository;
 import com.costi.csw9.Validation.EmailValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ public class RegistrationService {
     private final EmailValidator emailValidator;
     private final UserService userService;
     private final ConfirmationTokenService confirmationTokenService;
+    private final UserRepository userRepository;
 
     public String registerAdmin(RegistrationRequest request) {
         boolean isValidEmail = emailValidator.test(request.getEmail());
@@ -135,6 +137,6 @@ public class RegistrationService {
         }
 
         confirmationTokenService.setConfirmedAt(token);
-        userService.enable(confirmationToken.getUser(), true);
+        userRepository.enable(confirmationToken.getUser().getId(), true);
     }
 }

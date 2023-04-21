@@ -103,32 +103,38 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public boolean enable(User user, boolean enable) {
-        if(enable == false && user.getRole().equals(UserRole.OWNER)){
-            //Cannot be locked out
-            return false;
+    public void enable(User user, boolean enable, User requester) throws Exception {
+        if(requester.isAdmin() || requester.isOwner() || requester.getId().equals(user.getId())){
+            if(user.getRole().equals(UserRole.OWNER)){
+                //Cannot be locked out
+                throw new Exception("Owner account cannot be disabled");
+            }
+
+            userRepository.enable(user.getId(), enable);
+
+            //Add to log
+            AccountLog log = new AccountLog("Account Status Updated", "Account status set to: " + enable, user);
+            accountLogService.save(log);
+        }else{
+            throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
         }
-
-        //Add to log
-        AccountLog log = new AccountLog("Account enabled/disabled", "Account activation set to: " + enable, user);
-        accountLogService.save(log);
-
-        userRepository.enable(user.getId(), enable);
-        return true;
     }
 
-    public boolean lock(User user, boolean lock) {
-        if(user.getRole().equals(UserRole.OWNER)){
-            //Cannot be locked out
-            return false;
+    public void lock(User user, boolean lock, User requester) throws Exception{
+        if(requester.isAdmin() || requester.isOwner() || requester.getId().equals(user.getId())){
+            if(user.getRole().equals(UserRole.OWNER)){
+                //Cannot be locked out
+                throw new Exception("Owner account cannot be locked");
+            }
+
+            userRepository.lock(user.getId(), lock);
+
+            //Add to log
+            AccountLog log = new AccountLog("Account locked/unlocked", "Account lock set to: " + lock, user);
+            accountLogService.save(log);
+        }else{
+            throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
         }
-
-        //Add to log
-        AccountLog log = new AccountLog("Account locked/unlocked", "Account lock set to: " + lock, user);
-        accountLogService.save(log);
-
-        userRepository.lock(user.getId(), lock);
-        return true;
     }
 
     public void updateUser(User user, User requester) throws Exception {

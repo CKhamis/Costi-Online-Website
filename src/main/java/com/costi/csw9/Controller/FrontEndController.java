@@ -9,9 +9,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.Principal;
@@ -102,13 +105,16 @@ public class FrontEndController {
     }
 
     @PostMapping("/Account/edit")
-    public String updateUser(User user, BindingResult result, RedirectAttributes redirectAttributes, Principal principal) {
+    public String updateUser(@Valid User user, BindingResult result, RedirectAttributes redirectAttributes, Principal principal) {
         if (result.hasErrors()) {
             // Include validation errors upon redirect
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.User", result);
             // Add  member if invalid was received
             redirectAttributes.addFlashAttribute("user", user);
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing account", result.getAllErrors().get(0).toString(), FlashMessage.Status.DANGER));
+
+            String errors = getErrorString(result);
+
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing account", errors, FlashMessage.Status.DANGER));
 
             return "redirect:/Account";
         }
@@ -128,7 +134,7 @@ public class FrontEndController {
             userService.updateUser(user, getCurrentUser(principal));
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("✅ Account Successfully Edited", "Changes saved to server", FlashMessage.Status.SUCCESS));
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing account", result.getAllErrors().get(0).toString(), FlashMessage.Status.DANGER));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing account", e.getMessage(), FlashMessage.Status.DANGER));
         }
         return "redirect:/Account";
     }
@@ -154,7 +160,7 @@ public class FrontEndController {
     }
 
     @PostMapping(value = "/SignUp")
-    public String addNewUser(User user, BindingResult result, RedirectAttributes redirectAttributes) {
+    public String addNewUser(@Valid  User user, BindingResult result, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             // Include validation errors upon redirect
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category", result);
@@ -162,12 +168,14 @@ public class FrontEndController {
             // Re populate credentials in form
             redirectAttributes.addFlashAttribute("user", user);
 
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating account", result.getAllErrors().get(0).toString(), FlashMessage.Status.DANGER));
+            String errors = getErrorString(result);
 
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating account", errors, FlashMessage.Status.DANGER));
 
             // Redirect back to the form
-            return "redirect:/";
+            return "redirect:/SignUp";
         }
+
         if (user.getRole().name().equals("ADMIN")) {
             registrationService.registerAdmin(user);
             return "redirect:/";
@@ -255,7 +263,10 @@ public class FrontEndController {
             // If there are validation errors, re-populate the form with the submitted data and error messages
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.post", result);
             redirectAttributes.addFlashAttribute("post", post);
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating post", result.getAllErrors().get(0).toString(), FlashMessage.Status.DANGER));
+
+            String errors = getErrorString(result);
+
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating post", errors, FlashMessage.Status.DANGER));
 
             return "redirect:/COMT/Newsroom/Create";
         }
@@ -293,7 +304,7 @@ public class FrontEndController {
     }
 
     @RequestMapping(value = "/COMT/Newsroom/CreateNoImage", method = RequestMethod.POST)
-    public String createNewPost(Post post, Principal principal, BindingResult result, RedirectAttributes redirectAttributes){
+    public String createNewPost(@Valid Post post, Principal principal, BindingResult result, RedirectAttributes redirectAttributes){
         if (result.hasErrors()) {
             // Include validation errors upon redirect
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category", result);
@@ -301,7 +312,9 @@ public class FrontEndController {
             // Re populate credentials in form
             redirectAttributes.addFlashAttribute("post", post);
 
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating post", result.getAllErrors().get(0).toString(), FlashMessage.Status.DANGER));
+            String errors = getErrorString(result);
+
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating post", errors, FlashMessage.Status.DANGER));
 
             // Redirect back to the form
             return "redirect:/COMT/Newsroom/Create";
@@ -359,7 +372,9 @@ public class FrontEndController {
             // Re populate credentials in form
             redirectAttributes.addFlashAttribute("post", post);
 
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing post", result.getAllErrors().get(0).toString(), FlashMessage.Status.DANGER));
+            String errors = getErrorString(result);
+
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing post", errors, FlashMessage.Status.DANGER));
 
 
             // Redirect back to the form
@@ -386,7 +401,10 @@ public class FrontEndController {
             // If there are validation errors, re-populate the form with the submitted data and error messages
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.post", result);
             redirectAttributes.addFlashAttribute("post", post);
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing post", result.getAllErrors().get(0).toString(), FlashMessage.Status.DANGER));
+
+            String errors = getErrorString(result);
+
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing post", errors, FlashMessage.Status.DANGER));
 
             return "redirect:/COMT/Newsroom/" + PostId + "/edit";
         }
@@ -452,7 +470,7 @@ public class FrontEndController {
     }
 
     @RequestMapping(value = "/COMT/Notifications/Create/post", method = RequestMethod.POST)
-    public String createNewNotification(AccountNotificationRequest notificationRequest, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) {
+    public String createNewNotification(@Valid AccountNotificationRequest notificationRequest, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             // Include validation errors upon redirect
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category", result);
@@ -460,7 +478,9 @@ public class FrontEndController {
             // Re populate credentials in form
             redirectAttributes.addFlashAttribute("notification", notificationRequest);
 
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating notification", result.getAllErrors().get(0).toString(), FlashMessage.Status.DANGER));
+            String errors = getErrorString(result);
+
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating notification", errors, FlashMessage.Status.DANGER));
 
 
             // Redirect back to the form
@@ -510,7 +530,10 @@ public class FrontEndController {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.User", result);
             // Add  member if invalid was received
             redirectAttributes.addFlashAttribute("selectedUser", user);
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing user", result.getAllErrors().get(0).toString(), FlashMessage.Status.DANGER));
+
+            String errors = getErrorString(result);
+
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing user", errors, FlashMessage.Status.DANGER));
             return "redirect:/COMT/Accounts/" + id;
         }
 
@@ -548,7 +571,10 @@ public class FrontEndController {
             // If there are validation errors, re-populate the form with the submitted data and error messages
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.announcement", result);
             redirectAttributes.addFlashAttribute("announcement", announcement);
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating announcement", result.getAllErrors().get(0).toString(), FlashMessage.Status.DANGER));
+
+            String errors = getErrorString(result);
+
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating announcement", errors, FlashMessage.Status.DANGER));
 
             return "redirect:/COMT/Announcements/Create";
         }
@@ -606,7 +632,10 @@ public class FrontEndController {
             // If there are validation errors, re-populate the form with the submitted data and error messages
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.announcement", result);
             redirectAttributes.addFlashAttribute("announcement", announcement);
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing announcement", result.getAllErrors().get(0).toString(), FlashMessage.Status.DANGER));
+
+            String errors = getErrorString(result);
+
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing announcement", errors, FlashMessage.Status.DANGER));
 
             return "redirect:/COMT/Announcements/edit";
         }
@@ -618,6 +647,19 @@ public class FrontEndController {
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing announcement", e.getMessage(), FlashMessage.Status.DANGER));
         }
         return "redirect:/COMT/Announcements";
+    }
+
+    private static String getErrorString(BindingResult result) {
+        String errors = "";
+        if(result.getAllErrors().size() > 1){
+
+            for(ObjectError error : result.getAllErrors()){
+                errors += error.getDefaultMessage() + ". ";
+            }
+        }else{
+            errors = result.getAllErrors().get(0).getDefaultMessage();
+        }
+        return errors;
     }
 
     @RequestMapping(value = "/COMT/Announcements/{id}/delete", method = RequestMethod.POST)
@@ -633,51 +675,58 @@ public class FrontEndController {
         return "redirect:/COMT/Announcements";
     }
 
-    // TODO: re-do this
-    @RequestMapping(value = "/Accounts/{accountId}/lock", method = RequestMethod.POST)
-    public String lockAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
+    @PostMapping(value = "/Accounts/{accountId}/lock")
+    public String lockAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes, HttpServletRequest request) {
         User user = userService.findById(accountId);
-        if (getCurrentUser(principal).isAdmin()) {
-            if (!userService.lock(user, true)) {
-                redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "You are unable to modify owner account", FlashMessage.Status.DANGER));
-            } else {
-                redirectAttributes.addFlashAttribute("flash", new FlashMessage("Account Locked", user.getFirstName() + " " + user.getLastName() + " is locked and can no longer log in.", FlashMessage.Status.SUCCESS));
-            }
-        } else {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
+
+        try{
+            userService.lock(user, true, getCurrentUser(principal));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Announcement Lock Changed!", "Account is now locked", FlashMessage.Status.SUCCESS));
+
+        }catch (Exception e){
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error locking/unlocking account", e.getMessage(), FlashMessage.Status.DANGER));
         }
-        return "redirect:/COMT/Accounts";
+
+        // get the referer URL from the HTTP headers
+        String referer = request.getHeader("Referer");
+
+        return "redirect:" + referer;
     }
 
-    // TODO: re-do this
-    @RequestMapping(value = "/Accounts/{accountId}/unlock", method = RequestMethod.POST)
-    public String unlockAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
+    @PostMapping(value = "/Accounts/{accountId}/unlock")
+    public String unlockAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes, HttpServletRequest request) {
         User user = userService.findById(accountId);
-        if (getCurrentUser(principal).isAdmin()) {
-            userService.lock(user, false);
-        } else {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
-            System.out.println("Invalid Permissions");
-        }
-        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Account Unlocked!", user.getFirstName() + " " + user.getLastName() + " is now unlocked.", FlashMessage.Status.SUCCESS));
 
-        return "redirect:/COMT/Accounts";
+        try{
+            userService.lock(user, false, getCurrentUser(principal));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Announcement Lock Changed!", "Account is now unlocked", FlashMessage.Status.SUCCESS));
+
+        }catch (Exception e){
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error locking/unlocking account", e.getMessage(), FlashMessage.Status.DANGER));
+        }
+
+        // get the referer URL from the HTTP headers
+        String referer = request.getHeader("Referer");
+
+        return "redirect:" + referer;
     }
 
-    // TODO: re-do this
     @RequestMapping(value = "/Accounts/{accountId}/enable", method = RequestMethod.POST)
-    public String enableAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
+    public String enableAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes, HttpServletRequest request) {
         User user = userService.findById(accountId);
-        if (getCurrentUser(principal).isAdmin()) {
-            if (!userService.enable(user, true)) {
-                redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "You are unable to modify owner account", FlashMessage.Status.DANGER));
-            } else {
-                redirectAttributes.addFlashAttribute("flash", new FlashMessage("Account Enabled", user.getFirstName() + " " + user.getLastName() + " is now enabled.", FlashMessage.Status.SUCCESS));
-            }
-        } else {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
+
+        try{
+            userService.enable(user, true, getCurrentUser(principal));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Announcement Enabled!", "Account is now enabled", FlashMessage.Status.SUCCESS));
+
+        }catch (Exception e){
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error Disabling Account", e.getMessage(), FlashMessage.Status.DANGER));
         }
-        return "redirect:/COMT/Accounts";
+
+        // get the referer URL from the HTTP headers
+        String referer = request.getHeader("Referer");
+
+        return "redirect:" + referer;
     }
 
     @PostMapping(value = "/Accounts/{accountId}/demote")
@@ -694,20 +743,22 @@ public class FrontEndController {
 
     }
 
-    // TODO: re-do this
-    @RequestMapping(value = "/Accounts/{accountId}/disable", method = RequestMethod.POST)
-    public String disableAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes) {
+    @PostMapping(value = "/Accounts/{accountId}/disable")
+    public String disableAccount(@PathVariable Long accountId, Principal principal, RedirectAttributes redirectAttributes, HttpServletRequest request) {
         User user = userService.findById(accountId);
-        if (getCurrentUser(principal).isAdmin()) {
-            if (!userService.enable(user, false)) {
-                redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "You are unable to modify owner account", FlashMessage.Status.DANGER));
-            } else {
-                redirectAttributes.addFlashAttribute("flash", new FlashMessage("Account Disabled", user.getFirstName() + " " + user.getLastName() + " is now enabled.", FlashMessage.Status.SUCCESS));
-            }
-        } else {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid Permissions!", "Please use a moderator account to continue.", FlashMessage.Status.DANGER));
+
+        try{
+            userService.enable(user, false, getCurrentUser(principal));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Announcement Disabled!", "Account is now enabled", FlashMessage.Status.SUCCESS));
+
+        }catch (Exception e){
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error Enabling Account", e.getMessage(), FlashMessage.Status.DANGER));
         }
-        return "redirect:/COMT/Accounts";
+
+        // get the referer URL from the HTTP headers
+        String referer = request.getHeader("Referer");
+
+        return "redirect:" + referer;
     }
 
     //Main
@@ -796,7 +847,7 @@ public class FrontEndController {
     }
 
     @PostMapping(value = "/Wiki/Create/post")
-    public String addNewPage(WikiPage wikiPage, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) {
+    public String addNewPage(@Valid WikiPage wikiPage, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             // Include validation errors upon redirect
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.WikiPage", result);
@@ -804,7 +855,7 @@ public class FrontEndController {
             // Re populate credentials in form
             redirectAttributes.addFlashAttribute("page", wikiPage);
 
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating wiki page", result.getAllErrors().get(0).toString(), FlashMessage.Status.DANGER));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating wiki page", getErrorString(result), FlashMessage.Status.DANGER));
 
             // Redirect back to the form
             return "redirect:/Wiki/Create";
@@ -902,12 +953,15 @@ public class FrontEndController {
     }
 
     @PostMapping(value = "/Wiki/{PageId}/edit")
-    public String editWikiPage(@PathVariable Long PageId, WikiPage wikiPage, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) {
+    public String editWikiPage(@PathVariable Long PageId, @Valid WikiPage wikiPage, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             // Include validation errors upon redirect
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.WikiPage", result);
             // Add  member if invalid was received
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing wiki page", result.getAllErrors().get(0).toString(), FlashMessage.Status.DANGER));
+
+            String errors = getErrorString(result);
+
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing wiki page", errors, FlashMessage.Status.DANGER));
 
             redirectAttributes.addFlashAttribute("page", wikiPage);
             return "redirect:/Wiki/" + PageId + "/edit";
