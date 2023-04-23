@@ -536,14 +536,16 @@ public class FrontEndController {
             return "redirect:/COMT/Accounts/" + id;
         }
 
-        // TODO: finish doing permissions issue
         //Save new user
         try {
             User loggedInUser = userService.findByEmail(principal.getName());
-            System.out.println(loggedInUser.getFirstName());
+            if(((!loggedInUser.isOwner()) && formUser.isOwner())){
+                throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
+            }else{
+                userService.save(formUser);
+                redirectAttributes.addFlashAttribute("flash", new FlashMessage("✅ Account Successfully Edited", "Changes saved to server", FlashMessage.Status.SUCCESS));
 
-            userService.save(formUser);
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("✅ Account Successfully Edited", "Changes saved to server", FlashMessage.Status.SUCCESS));
+            }
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("❌ Account Edit Failed", e.getMessage(), FlashMessage.Status.DANGER));
         }
