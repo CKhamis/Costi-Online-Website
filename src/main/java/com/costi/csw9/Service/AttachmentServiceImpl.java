@@ -1,18 +1,17 @@
 package com.costi.csw9.Service;
 
 import com.costi.csw9.Model.Attachment;
-import com.costi.csw9.Repository.AttachmentDao;
-import com.costi.csw9.Service.AttachmentService;
+import com.costi.csw9.Repository.AttachmentRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class AttachmentServiceImpl implements AttachmentService {
-    private AttachmentDao attachmentDao;
+    private AttachmentRepository attachmentRepository;
 
-    public AttachmentServiceImpl(AttachmentDao attachmentDao) {
-        this.attachmentDao = attachmentDao;
+    public AttachmentServiceImpl(AttachmentRepository attachmentRepository) {
+        this.attachmentRepository = attachmentRepository;
     }
 
 
@@ -27,7 +26,7 @@ public class AttachmentServiceImpl implements AttachmentService {
             }
 
             Attachment attachment = new Attachment(fileName, file.getContentType(), file.getBytes());
-            return attachmentDao.save(attachment);
+            return attachmentRepository.save(attachment);
 
        } catch (Exception e) {
             throw new Exception("File was not saved: " + fileName);
@@ -36,7 +35,7 @@ public class AttachmentServiceImpl implements AttachmentService {
 
     @Override
     public Attachment getAttachment(String fileId) throws Exception {
-        return attachmentDao
+        return attachmentRepository
                 .findById(fileId)
                 .orElseThrow(
                         () -> new Exception("File not found with Id: " + fileId));

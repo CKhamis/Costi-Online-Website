@@ -161,7 +161,7 @@ public class UserService implements UserDetailsService {
     }
 
     public void demoteUser(User user, User requester) throws Exception{
-        if(requester.isAdmin() || requester.isOwner()){
+        if((requester.isAdmin() || requester.isOwner()) && !user.isOwner()){
             AccountLog log = new AccountLog("Account demoted", "Account is now regular user", user);
             accountLogService.save(log);
 

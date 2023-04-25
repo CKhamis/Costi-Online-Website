@@ -138,7 +138,7 @@ public class FrontEndController {
         return "redirect:/Account";
     }
 
-    @RequestMapping(value = "/Account/Notification/{id}/delete", method = RequestMethod.GET)
+    @RequestMapping(value = "/Account/Notification/{id}/delete")
     public String deleteNotification(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes) {
         try{
             accountNotificationService.delete(id, getCurrentUser(principal));
@@ -375,7 +375,6 @@ public class FrontEndController {
 
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing post", errors, FlashMessage.Status.DANGER));
 
-
             // Redirect back to the form
             return "redirect:/COMT/Newsroom/" + PostId + "/editNoImage";
         }
@@ -418,10 +417,10 @@ public class FrontEndController {
         }
     }
 
-    @PostMapping(value = "/Newsroom/{PostId}/delete")
-    public String deletePost(@PathVariable Long PostId, Principal principal, RedirectAttributes redirectAttributes) {
+    @PostMapping(value = "/Newsroom/{postId}/delete")
+    public String deletePost(@PathVariable Long postId, Principal principal, RedirectAttributes redirectAttributes) {
         try{
-            postService.loadById(PostId);
+            postService.delete(postService.loadById(postId), getCurrentUser(principal));
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Newsroom post deleted!", "Post is no longer accessible nor recoverable.", FlashMessage.Status.SUCCESS));
         }catch (Exception e){
             // Invalid id, permission denial, or database error
@@ -903,7 +902,7 @@ public class FrontEndController {
         }
     }
 
-    @RequestMapping(value = "/Wiki/{PageId}/delete", method = RequestMethod.POST)
+    @PostMapping(value = "/Wiki/{PageId}/delete")
     public String deleteWikiPage(@PathVariable Long PageId, Principal principal, RedirectAttributes redirectAttributes) {
         try{
             wikiService.delete(PageId, getCurrentUser(principal));
