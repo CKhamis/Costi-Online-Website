@@ -1,7 +1,6 @@
-version: "3.8"
+version: "3.9"
 services:
   web:
-    build: .
     restart: always
     image: costi-online
     ports:
@@ -10,6 +9,7 @@ services:
       - db
   db:
     image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
       MYSQL_DATABASE: costi_online
