@@ -1,11 +1,20 @@
+version: "3.8"
 services:
   web:
-    image: csw
+    build: .
+    restart: always
+    image: costi-online
     ports:
       - "80:80"
+    depends_on:
+      - db
   db:
-    image: cswdb
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: costi_online
+      MYSQL_USER: cow
+      MYSQL_PASSWORD: 1234
+      MYSQL_ROOT_PASSWORD: 1234
     ports:
-      - "8082:8082"
-    volumes:
-        - "./db:/root/data"
+      - "3307:3306"
