@@ -1004,6 +1004,12 @@ public class FrontEndController {
         return "main/About";
     }
 
+    //Landing Page
+    @GetMapping("/CostiCard")
+    public String getLandingPage(Model model, Principal principal) {
+        return "main/Tree";
+    }
+
 
     //Minecraft
     @GetMapping("/Minecraft")
