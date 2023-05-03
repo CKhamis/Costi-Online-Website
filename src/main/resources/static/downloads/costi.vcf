@@ -1,0 +1,15 @@
+BEGIN:VCARD
+VERSION:3.0
+FN:Constantine Khamis
+N:Khamis;Constantine;;;
+EMAIL;TYPE=INTERNET;TYPE=HOME:costikhamis@gmail.com
+TEL;TYPE=CELL:(408) 460-6391
+TEL;TYPE=WORK:+1 408-795-3152
+item1.ORG:City of San Jose
+item1.X-ABLabel:
+item2.TITLE:Cyber Security Intern
+item2.X-ABLabel:
+BDAY:20010713
+NOTE:Gender: Male
+CATEGORIES:myContacts
+END:VCARD
