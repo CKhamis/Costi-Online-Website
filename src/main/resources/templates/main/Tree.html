@@ -2,10 +2,26 @@
 <html xml:th="https://www.thymeleaf.org">
 <head th:replace="Components :: head('Welcome')"></head>
 <body class="bg-1 text-1">
-<div th:replace="Components :: tinyNav"></div>
+<nav class="navbar navbar-expand-lg navbar-dark nav p-0">
+    <div class="container-fluid d-flex justify-content-center">
+        <a class="navbar-brand" href="/">
+            <img th:src="@{/icons/Logo.png}" alt="" width="20" height="20" class="d-inline-block align-text-top" style="margin-top: 4px;">
+            <strong class="text-1" style="font-size: 20px;">Costi Online</strong>
+        </a>
+    </div>
+</nav>
 
-<main>
-
+<main class="container mt-3">
+    <div class="card">
+        <img th:src="@{images/webpageImages/WikiBg.jpg}" class="card-img-top" alt="Costi's banner" style="aspect-ratio: 16 / 9; object-fit: cover;">
+        <div class="card-body">
+            <div style="position: absolute; transform: translate(0%, -75%); z-index: 1;">
+                <img th:src="@{images/About/Costi.jpg}" alt="Costi himself" style="aspect-ratio: 1 / 1; object-fit: cover;width:30%">
+            </div>
+            <h1 class="pt-5 mt-lg-5 fw-bold">Constantin Khamis</h1>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        </div>
+    </div>
 </main>
 
 <div th:replace="Components :: footer"></div>
