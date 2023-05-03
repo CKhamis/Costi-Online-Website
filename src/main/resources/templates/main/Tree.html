@@ -24,7 +24,7 @@
             </div>
             <h1 class="pt-5 mt-2 fw-bold">Constantin Khamis</h1>
             <h5 class="text-secondary">Student intern at City of San Jose</h5>
-            <p class="card-text">Hello! I am Constantin, or Costi for short (pronounced Coasty). I am very passionate about computers and technology. This website is coded, designed, and deployed by me!</p>
+            <p class="card-text">Hello! I am Constantin, or Costi for short (pronounced Coasty). I am very passionate about technology, cybersecurity, and web development.</p>
         </div>
     </div>
 
@@ -34,30 +34,67 @@
         <div class="col h-100 text-center">
             <a href="/" class="h-100">
                 <div class="border-box h-100 p-2">
-                    <img th:src="@{images/About/Costi.jpg}" alt="Costi himself" style="aspect-ratio: 1 / 1; object-fit: cover;width:100%">
+                    <img th:src="@{icons/Contact.svg}" alt="Contact icon" style="aspect-ratio: 1 / 1; object-fit: cover;width:100%">
                     <p class="m-0 pt-1 fw-bold text-1">Contact</p>
                 </div>
             </a>
         </div>
 
         <div class="col h-100 text-center">
-            <a href="/" class="h-100">
+            <a href="mailto:admin@costionline.com" class="h-100">
                 <div class="border-box h-100 p-2">
-                    <img th:src="@{images/About/Costi.jpg}" alt="Costi himself" style="aspect-ratio: 1 / 1; object-fit: cover;width:100%">
-                    <p class="m-0 pt-1 fw-bold text-1">Contact</p>
+                    <img th:src="@{icons/Email.svg}" alt="Email icon" style="aspect-ratio: 1 / 1; object-fit: cover;width:100%">
+                    <p class="m-0 pt-1 fw-bold text-1">Email</p>
                 </div>
             </a>
         </div>
 
         <div class="col h-100 text-center">
-            <a href="/" class="h-100">
+            <a href="tel:+14084606391" class="h-100">
                 <div class="border-box h-100 p-2">
-                    <img th:src="@{images/About/Costi.jpg}" alt="Costi himself" style="aspect-ratio: 1 / 1; object-fit: cover;width:100%">
-                    <p class="m-0 pt-1 fw-bold text-1">Contact</p>
+                    <img th:src="@{icons/Call.svg}" alt="Call icon" style="aspect-ratio: 1 / 1; object-fit: cover;width:100%">
+                    <p class="m-0 pt-1 fw-bold text-1">Call</p>
                 </div>
             </a>
         </div>
     </div>
+
+    <h2 class="text-center fw-bold border-bottom pb-2 mt-4 mb-3">External Links</h2>
+    <a href="https://www.instagram.com/costikhamis/">
+        <div class="border-box">
+            <img th:src="@{icons/Instagram.svg}" class="float-start p-2" alt="Instagram icon" style="aspect-ratio: 1 / 1; object-fit: cover;width:70px">
+            <div class="float-start p-2">
+                <h3 class="fw-bold text-1 mb-0">Instagram</h3>
+                <p class="text-1 mb-0">@costikhamis</p>
+            </div>
+            <img th:src="@{icons/Arrow.svg}" class="float-end p-2" alt="Arrow icon" style="aspect-ratio: 1 / 1; object-fit: cover;width:70px;transform: rotate(-90deg);">
+            <br  clear="all"/>
+        </div>
+    </a>
+
+    <a href="https://www.youtube.com/@costimedia7326/" class="d-block mt-3">
+        <div class="border-box">
+            <img th:src="@{icons/YouTube.svg}" class="float-start p-2" alt="YouTube icon" style="aspect-ratio: 1 / 1; object-fit: cover;width:70px">
+            <div class="float-start p-2">
+                <h3 class="fw-bold text-1 mb-0">YouTube</h3>
+                <p class="text-1 mb-0">Costi Media</p>
+            </div>
+            <img th:src="@{icons/Arrow.svg}" class="float-end p-2" alt="Arrow icon" style="aspect-ratio: 1 / 1; object-fit: cover;width:70px;transform: rotate(-90deg);">
+            <br  clear="all"/>
+        </div>
+    </a>
+
+    <a href="https://github.com/CKhamis" class="d-block mt-3">
+        <div class="border-box">
+            <img th:src="@{icons/GitHub.svg}" class="float-start p-2" alt="YouTube icon" style="aspect-ratio: 1 / 1; object-fit: cover;width:70px">
+            <div class="float-start p-2">
+                <h3 class="fw-bold text-1 mb-0">GitHub</h3>
+                <p class="text-1 mb-0">CKhamis</p>
+            </div>
+            <img th:src="@{icons/Arrow.svg}" class="float-end p-2" alt="Arrow icon" style="aspect-ratio: 1 / 1; object-fit: cover;width:70px;transform: rotate(-90deg);">
+            <br  clear="all"/>
+        </div>
+    </a>
 </main>
 
 <div th:replace="Components :: footer"></div>
