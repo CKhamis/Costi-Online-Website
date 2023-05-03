@@ -1005,7 +1005,7 @@ public class FrontEndController {
     }
 
     //Landing Page
-    @GetMapping("/CostiCard")
+    @GetMapping("/Tree")
     public String getLandingPage(Model model, Principal principal) {
         return "main/Tree";
     }
