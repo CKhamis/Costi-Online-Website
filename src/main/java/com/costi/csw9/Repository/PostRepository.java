@@ -11,10 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
-    List<Post> findByCategory(String category);
-    List<Post> findByCategoryAndIdNot(String category, Long exception);
-    List<Post> findByEnabled(boolean enabled);
-    List<Post> findByEnabledAndIdNot(boolean enabled, Long exception);
+    List<Post> findByCategoryOrderByLastEditedDesc(String category);
+    List<Post> findByCategoryAndIdNotOrderByLastEditedDesc(String category, Long exception);
+    List<Post> findByEnabledOrderByLastEditedDesc(boolean enabled);
+    List<Post> findByEnabledAndIdNotOrderByLastEditedDesc(boolean enabled, Long exception);
     @Modifying
     @Transactional
     @Query("UPDATE Post p SET p.enabled = :enabled WHERE p.id = :id")
