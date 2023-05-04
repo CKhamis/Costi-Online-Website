@@ -5,8 +5,8 @@
 <nav class="navbar navbar-expand-lg navbar-dark nav p-0">
     <div class="container-fluid d-flex justify-content-center">
         <a class="navbar-brand" href="/">
-            <img th:src="@{/icons/Logo.png}" alt="" width="20" height="20" class="d-inline-block align-text-top" style="margin-top: 4px;">
-            <strong class="text-1" style="font-size: 20px;">Costi Online</strong>
+            <img id="cow-logo" th:src="@{/icons/Logo.png}" alt="" width="20" height="20" class="d-inline-block align-text-top" style="margin-top: 4px;">
+            <strong id="cow-logo-text" class="text-1" style="font-size: 20px;">Costi Online</strong>
         </a>
     </div>
 </nav>
@@ -17,20 +17,20 @@
     </div>
 
     <div class="card">
-        <img th:src="@{images/webpageImages/WikiBg.jpg}" class="card-img-top" alt="Costi's banner" style="aspect-ratio: 16 / 7; object-fit: cover;">
+        <img th:src="@{images/webpageImages/City Hall.jpg}" class="card-img-top" alt="Costi's banner" style="aspect-ratio: 16 / 7; object-fit: cover;">
         <div class="card-body">
             <div style="position: absolute; transform: translate(0%, -75%); z-index: 1;">
                 <img th:src="@{images/About/Costi.jpg}" class="rounded-3" alt="Costi himself" style="aspect-ratio: 1 / 1; object-fit: cover;width:150px">
             </div>
-            <h1 class="pt-5 mt-2 fw-bold">Constantin Khamis</h1>
-            <h5 class="text-secondary">Student intern at City of San Jose</h5>
-            <p class="card-text">Hello! I am Constantin, or Costi for short (pronounced Coasty). I am very passionate about technology, cybersecurity, and web development.</p>
+            <h1 class="pt-5 mt-2 fw-bold" id="name">Constantin Khamis</h1>
+            <h5 class="text-secondary" id="subtitle">Student intern at City of San Jose</h5>
+            <p class="card-text" id="description">Hello! I am Constantin, or Costi for short (pronounced Coasty). I am very passionate about technology, cybersecurity, and web development.</p>
         </div>
     </div>
 
     <a href="/" class="class mt-3 d-block"><button type="button" class="btn btn-primary btn-lg w-100">Proceed to Costi Online</button></a>
 
-    <div class="row mt-3">
+    <div class="row mt-3" id="quick-links">
         <div class="col h-100 text-center">
             <a th:href="@{downloads/costi.vcf}" class="h-100">
                 <div class="border-box h-100 p-2">
@@ -99,5 +99,37 @@
 
 <div th:replace="Components :: footer"></div>
 <div th:replace="Components :: scripts"></div>
+<script>
+    $(document).ready(function(){
+        //Definitions
+        let quickLinks = $("#quick-links").children();
+        let name = $("#name");
+        let subtitle = $("#subtitle");
+        let description = $("#description");
+        let logo = $("#cow-logo");
+        let logoText = $("#cow-logo-text");
+
+        // Initialize
+        $(quickLinks[0]).css("opacity", "0");
+        $(quickLinks[1]).css("opacity", "0");
+        $(quickLinks[2]).css("opacity", "0");
+
+        $(name).css({"marginLeft": "-50px", "opacity": "0"});
+        $(subtitle).css({"marginLeft": "-50px", "opacity": "0"});
+        $(description).css("opacity", "0");
+        $(logo).css("marginRight", "100px");
+
+        //Execute
+        $(logo).delay(0).animate({marginRight: '0px'}, {duration:700});
+
+        $(name).delay(500).animate({opacity: '1', marginLeft: '0'}, {duration:500});
+        $(subtitle).delay(600).animate({opacity: '1', marginLeft: '0'}, {duration:500});
+        $(description).delay(700).animate({opacity: '1'}, {duration:500});
+
+        $(quickLinks[0]).delay(900).animate({opacity: '1'}, {duration:500});
+        $(quickLinks[1]).delay(1000).animate({opacity: '1'}, {duration:500});
+        $(quickLinks[2]).delay(1100).animate({opacity: '1'}, {duration:500});
+    });
+</script>
 </body>
 </html>
