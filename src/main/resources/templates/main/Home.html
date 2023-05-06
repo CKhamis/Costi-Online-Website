@@ -45,6 +45,7 @@
             <div th:replace="Components :: message" class="mt-2"></div>
         </div>
     </div>
+    <button id="axcel">Start Game</button>
     <!-- Quick Links-->
     <div class="container mt-3">
         <div th:replace="Components :: flash" class="mt-2"></div>
@@ -284,8 +285,30 @@
                                             marginTop: '0px'}, {duration:500})
         $(quickLinks[2]).delay(800).animate({opacity: '1',
                                             marginTop: '0px'}, {duration:500})
+        $("#axcel").click(startGame());
+
     });
 
+    function startGame() {
+        // Send an AJAX request to the server to start the game
+        $.ajax({
+            url: "/start-game",
+            type: "POST",
+            success: function(response) {
+                if (response.success) {
+                    // Update the UI to indicate that the game has started
+                    alert("The game has started!");
+                } else {
+                    // Handle the error condition if the server returns an error response
+                    alert("Error starting game: " + response.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                // Handle any errors that occur during the AJAX request
+                alert("Error starting game: " + error);
+            }
+        });
+    }
 
 </script>
 </body>
