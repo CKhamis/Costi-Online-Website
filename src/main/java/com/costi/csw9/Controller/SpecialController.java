@@ -18,26 +18,29 @@ public class SpecialController {
     private static final HashSet<Sprite> preDefinedSprites = SpriteFactory.createSprites();
     private static final int requiredFinds = 0;
 
-    @PostMapping("/start-game")
+    @PostMapping("/games/Axcel/start-game")
     @ResponseBody
     public Map<String, Object> startGame(HttpSession session) {
         GameProgress gameProgress = (GameProgress) session.getAttribute("gameProgress");
+        String responseBody = "Game started";
 
         // Start a new name if one was not already created
         if (gameProgress == null) {
             gameProgress = new GameProgress();
             session.setAttribute("gameProgress", gameProgress);
+        }else{
+            responseBody += "Game started already";
         }
 
         // Construct the JSON response
         Map<String, Object> jsonResponse = new HashMap<>();
         jsonResponse.put("success", true);
-        jsonResponse.put("message", "Game started!");
+        jsonResponse.put("message", responseBody);
 
         return jsonResponse;
     }
 
-    @PostMapping("/found-sprite")
+    @PostMapping("/games/Axcel/found-sprite")
     @ResponseBody
     public Map<String, Object> handleFoundSprite(@RequestParam String spriteName, HttpSession session) {
         GameProgress gameProgress = (GameProgress) session.getAttribute("gameProgress");

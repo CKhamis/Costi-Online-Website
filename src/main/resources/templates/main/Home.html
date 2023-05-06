@@ -268,7 +268,7 @@
 <div th:replace="Components :: footer"></div>
 <div th:replace="Components :: scripts"></div>
 <script>
-    var subtitles = ["Costi's favorite website", "I haven't seen you in a BILLION years!", "Jedi Terence", "Chelsea Stacie Ingrid Marla Darla", "MAAAAARRIOOOOO!", "A project by Costi", "An interdimensional project",
+    let subtitles = ["Costi's favorite website", "I haven't seen you in a BILLION years!", "Jedi Terence", "Chelsea Stacie Ingrid Marla Darla", "MAAAAARRIOOOOO!", "A project by Costi", "An interdimensional project",
     "'Ello", "📮😳😳😳", "What's puopping", "Death, Dying, Religion", "ur mum", "Free Taiwan 🇹🇼 ", "🥩🇯🇲🥞"]
 
     $(document).ready(function(){
@@ -285,19 +285,18 @@
                                             marginTop: '0px'}, {duration:500})
         $(quickLinks[2]).delay(800).animate({opacity: '1',
                                             marginTop: '0px'}, {duration:500})
-        $("#axcel").click(startGame());
-
+        $("#axcel").click(startGame);
     });
 
     function startGame() {
         // Send an AJAX request to the server to start the game
         $.ajax({
-            url: "/start-game",
+            url: "/games/Axcel/start-game",
             type: "POST",
             success: function(response) {
                 if (response.success) {
                     // Update the UI to indicate that the game has started
-                    alert("The game has started!");
+                    alert(response.message);
                 } else {
                     // Handle the error condition if the server returns an error response
                     alert("Error starting game: " + response.message);
@@ -309,6 +308,7 @@
             }
         });
     }
+
 
 </script>
 </body>
