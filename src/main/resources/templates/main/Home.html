@@ -45,7 +45,7 @@
             <div th:replace="Components :: message" class="mt-2"></div>
         </div>
     </div>
-    <button id="axcel">Start Game</button>
+
     <!-- Quick Links-->
     <div class="container mt-3">
         <div th:replace="Components :: flash" class="mt-2"></div>
@@ -168,6 +168,11 @@
         <a href="/Newsroom"><p class="text-1 text-decoration-underline">View more in Costi Newsroom ></p></a>
     </div>
 
+    <!-- Axcel Minigame -->
+    <div class="container-fluid overflow-hidden px-0" id="axcel-container">
+        <img id="axcel-running" th:src="@{images/games/axcel/running.gif}" class="position-relative" style="height: 80px; top:0px;left:0px;"/>
+    </div>
+
     <div class="container mt-5" id="about">
         <div class="row">
             <div class="col-md-6 col-xs-12 mb-4">
@@ -285,7 +290,9 @@
                                             marginTop: '0px'}, {duration:500})
         $(quickLinks[2]).delay(800).animate({opacity: '1',
                                             marginTop: '0px'}, {duration:500})
-        $("#axcel").click(startGame);
+
+        $("#axcel-running").click(startGame);
+        moveGif();
     });
 
     function startGame() {
@@ -309,7 +316,20 @@
         });
     }
 
+    let containerWidth = $('#axcel-container').width();
+    let gifWidth = $('#axcel-running').width();
+    let leftOffset = containerWidth + gifWidth;
+    function moveGif() {
+        $('#axcel-container').css('display', 'block');
+        leftOffset -= 2; // adjust the speed of the animation here
 
+        if (leftOffset < -gifWidth) {
+            leftOffset = containerWidth;
+        }
+
+        $('#axcel-running').css('left', leftOffset);
+        window.requestAnimationFrame(moveGif);
+    }
 </script>
 </body>
 </html>
