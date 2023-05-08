@@ -169,11 +169,30 @@
     </div>
 
     <!-- Axcel Minigame -->
-    <div class="container-fluid overflow-hidden px-0" id="axcel-container">
+    <div class="container-fluid overflow-hidden px-0 pt-3" id="axcel-container">
         <img id="axcel-running" th:src="@{images/games/axcel/running.gif}" class="position-relative" style="height: 80px; top:0px;left:0px;"/>
     </div>
 
-    <div class="container mt-5" id="about">
+    <!-- Axcel Dialogue -->
+    <div class="container-fluid position-fixed" style="bottom:30px">
+        <div class="row">
+            <div class="d-none d-md-block col-md-1 col-lg-2"></div>
+            <div class="col-12 col-md-10 col-lg-8">
+                <div>
+                    <img th:src="@{images/games/axcel/sitting.gif}" style="height:100px;"/>
+                </div>
+                <div class="alert alert-primary mb-0" id="axcel-dialogue">
+                    <h3 class="fw-bold float-start">Axcel</h3>
+                    <p class="float-end text-decoration-underline">Skip</p>
+                    <br clear="all">
+                    <p class="mb-1">adf asdfua fdaufd asfud asdfnasdf asldfh dfjha sfdkjahf as fdaksjdf asdfhsd fjhaksdfjh sdfs df sdd sdfj adf</p>
+                    <p class="text-decoration-underline mb-0">Next</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="about">
         <div class="row">
             <div class="col-md-6 col-xs-12 mb-4">
                 <div class="border-box text-1 p-4">
