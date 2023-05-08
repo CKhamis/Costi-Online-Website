@@ -4,6 +4,7 @@ import com.costi.csw9.Model.Axcel.GameProgress;
 import com.costi.csw9.Model.Axcel.Sprite;
 import com.costi.csw9.Model.Axcel.SpriteFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -68,6 +69,18 @@ public class SpecialController {
         return jsonResponse;
     }
 
+    @GetMapping("/games/Axcel/check-game-status")
+    @ResponseBody
+    public Map<String, Object> isGameStarted(HttpSession session) {
+        GameProgress gameProgress = (GameProgress) session.getAttribute("gameProgress");
+        boolean gameStarted = (gameProgress != null);
 
+        // Construct the JSON response
+        Map<String, Object> jsonResponse = new HashMap<>();
+        jsonResponse.put("gameStarted", gameStarted);
+
+        //TODO: return the start time
+        return jsonResponse;
+    }
 
 }
