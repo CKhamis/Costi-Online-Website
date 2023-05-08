@@ -75,7 +75,7 @@
     </div>
 
     <div class="container" id="highlights">
-        <h2 class="pb-2 border-bottom">Recent Highlights</h2>
+        <h2 class="pb-2 border-bottom" id="timer">Recent Highlights</h2>
         <div id="home-slideshow" class="carousel slide mb-2" data-bs-ride="carousel">
 
             <!-- Indicators/dots -->
@@ -324,6 +324,7 @@
                     // Update the UI to indicate that the game has already started
                     showAxcelWaiting();
                     gameStatus = 0;
+                    startTimer(response.timeStart);
                 } else {
                     // Show Axcel running section
                     $("#axcel-running").delay(0).animate({height: '80px'}, {duration:500});
@@ -449,6 +450,22 @@
 
         $('#axcel-running').css('left', leftOffset);
         window.requestAnimationFrame(moveGif);
+    }
+
+    function startTimer(startTime) {
+        // Get the current time
+        var currentTime = new Date().getTime();
+
+        // Calculate the time elapsed since the game started
+        var timeElapsed = Math.floor((currentTime - startTime) / 1000); // Convert to seconds
+
+        // Display the elapsed time in seconds
+        $("#timer").text(timeElapsed);
+
+        // Schedule the next update in 1 second
+        setTimeout(function() {
+            startTimer(startTime);
+        }, 1000);
     }
 </script>
 </body>

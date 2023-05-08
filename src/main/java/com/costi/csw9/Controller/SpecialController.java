@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -74,10 +75,12 @@ public class SpecialController {
     public Map<String, Object> isGameStarted(HttpSession session) {
         GameProgress gameProgress = (GameProgress) session.getAttribute("gameProgress");
         boolean gameStarted = (gameProgress != null);
+        LocalDateTime timeStart = (gameStarted ? gameProgress.getTimeStart() : null);
 
         // Construct the JSON response
         Map<String, Object> jsonResponse = new HashMap<>();
         jsonResponse.put("gameStarted", gameStarted);
+        jsonResponse.put("timeStart", timeStart);
 
         //TODO: return the start time
         return jsonResponse;
