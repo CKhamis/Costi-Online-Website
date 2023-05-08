@@ -174,23 +174,7 @@
     </div>
 
     <!-- Axcel Dialogue -->
-    <div class="container-fluid position-fixed" style="bottom:30px">
-        <div class="row">
-            <div class="d-none d-md-block col-md-1 col-lg-2"></div>
-            <div class="col-12 col-md-10 col-lg-8">
-                <div>
-                    <img th:src="@{images/games/axcel/sitting.gif}" style="height:100px;"/>
-                </div>
-                <div class="alert alert-primary mb-0" id="axcel-dialogue">
-                    <h3 class="fw-bold float-start">Axcel</h3>
-                    <p class="float-end text-decoration-underline">Skip</p>
-                    <br clear="all">
-                    <p class="mb-1">adf asdfua fdaufd asfud asdfnasdf asldfh dfjha sfdkjahf as fdaksjdf asdfhsd fjhaksdfjh sdfs df sdd sdfj adf</p>
-                    <p class="text-decoration-underline mb-0">Next</p>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div th:replace="Components :: dialogue-box"></div>
 
     <div class="container" id="about">
         <div class="row">
@@ -310,11 +294,71 @@
         $(quickLinks[2]).delay(800).animate({opacity: '1',
                                             marginTop: '0px'}, {duration:500})
 
-        $("#axcel-running").click(startGame);
+        $("#axcel-running").click(startDialogue);
+        $("#dialogue-skip").click(skipPressed);
+        $("#dialogue-next").click(nextPressed);
         moveGif();
     });
 
-    function startGame() {
+    let stage = 0;
+    function startDialogue() {
+        stage = 0;
+
+        // Hide Axcel running section
+        $("#axcel-running").delay(0).animate({height: '0px'}, {duration:500})
+
+        // Start dialogue with Mr. Rat
+        $("#dialogue-container").css("display", "block");
+        $("#dialogue-message").text("WOFWOFWOFWOF. WOF. (Hi there, my name is Axcel. I'm Costi's dog, although sometimes he likes to call me Habibi. I need your help finding my lost toys. Do you think you can help me?)");
+        $("#dialogue-skip").text("No. Good luck");
+        $("#dialogue-next").text("Sure, what do I do?");
+    }
+
+    function skipPressed(){
+        hideDialogue();
+        if(stage == 0){
+            // Show Axcel running section
+            $("#axcel-running").delay(1000).animate({height: '80px'}, {duration:500});
+        }else if(stage >= 1){
+            startGame()
+            // TODO: start placing stuff
+        }
+    }
+
+    function nextPressed(){
+        if(stage == 0){
+            stage = 1;
+            $("#dialogue-message").text("WOFWOF. WOF. (Thank you thank you thank you! My toys are everywhere on this website.)");
+            $("#dialogue-skip").text("Skip. Start game");
+            $("#dialogue-next").text("Next");
+        }else if(stage == 1){
+            stage = 2;
+            $("#dialogue-message").text("WOFFFFFF. WOF. (You should take a look around on each page and click on them. I don't hang around the Newsroom or Wiki pages, so don't bother looking there.)");
+        }else if(stage == 2){
+            stage = 3;
+            $("#dialogue-message").text("WOF. (I think I have 5 toys. Once you got all of them, come back here and give them to me. I might have a surprise for you.)");
+        }else if(stage == 3){
+            stage = 4;
+            $("#dialogue-message").text("WOFWOFWOF (Readyyyy? Start!)");
+            $("#dialogue-skip").text("");
+            startGame();
+        }else{
+            hideDialogue();
+        }
+    }
+
+    function hideDialogue(){
+        $("#dialogue-container").delay(0).animate({bottom: '-400px'}, {
+            duration: 700,
+            complete: function() {
+                $('#dialogue-container').css({
+                    'bottom': '0',
+                    'display': 'none'
+                });
+            }
+        });
+    }
+    function startGame(){
         // Send an AJAX request to the server to start the game
         $.ajax({
             url: "/games/Axcel/start-game",
@@ -322,7 +366,7 @@
             success: function(response) {
                 if (response.success) {
                     // Update the UI to indicate that the game has started
-                    alert(response.message);
+                    return response.message;
                 } else {
                     // Handle the error condition if the server returns an error response
                     alert("Error starting game: " + response.message);

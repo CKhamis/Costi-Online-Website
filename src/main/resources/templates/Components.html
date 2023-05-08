@@ -91,6 +91,24 @@
     <p th:utext="${notification.body}"></p>
 </div>
 
+<div th:fragment="dialogue-box" class="container-fluid position-fixed" id="dialogue-container" style="display:none;bottom:0px; background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);">
+    <div class="row" style="bottom: 50px; position: relative">
+        <div class="d-none d-md-block col-md-1 col-lg-2"></div>
+        <div class="col-12 col-md-10 col-lg-8">
+            <div>
+                <img th:src="@{images/games/axcel/sitting.gif}" style="height:100px;"/>
+            </div>
+            <div class="alert alert-primary mb-0">
+                <h3 class="fw-bold float-start" id="dialogue-name">Axcel</h3>
+                <p class="float-end text-decoration-underline" id="dialogue-skip">Skip</p>
+                <br clear="all">
+                <p class="mb-1" id="dialogue-message">adf asdfua fdaufd asfud asdfnasdf asldfh dfjha sfdkjahf as fdaksjdf asdfhsd fjhaksdfjh sdfs df sdd sdfj adf</p>
+                <p class="text-decoration-underline mb-0" id="dialogue-next">Next</p>
+            </div>
+        </div>
+    </div>
+</div>
+
 <th:block th:fragment="profilePhoto" th:switch="*{profilePicture}">
     <img th:case="0" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/airplane.jpg}" />
     <img th:case="1" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/ball.jpg}" />
