@@ -14,12 +14,10 @@ import java.util.List;
 @EqualsAndHashCode
 public class GameProgress implements Serializable {
     private List<String> spriteNamesFound;
-    private boolean dialogueCompleted;
     private LocalDateTime timeStart;
     private LocalDateTime timeEnd;
 
     public GameProgress(){
-        dialogueCompleted = false;
         timeStart = LocalDateTime.now();
     }
 }

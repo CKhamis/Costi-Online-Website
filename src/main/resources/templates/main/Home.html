@@ -3,6 +3,7 @@
 <head th:replace="Components :: head('Home')"></head>
 <body class="bg-1 text-1">
 <div th:replace="Components :: main-navigation"></div>
+<div th:replace="Components :: timer-box"></div>
 
 <!-- Desktop -->
 <div class="p-0 m-0 overflow-hidden">
@@ -75,7 +76,7 @@
     </div>
 
     <div class="container" id="highlights">
-        <h2 class="pb-2 border-bottom" id="timer">Recent Highlights</h2>
+        <h2 class="pb-2 border-bottom">Recent Highlights</h2>
         <div id="home-slideshow" class="carousel slide mb-2" data-bs-ride="carousel">
 
             <!-- Indicators/dots -->
@@ -288,7 +289,7 @@
             marginLeft: '30%'
             });
 
-        var quickLinks = $("#quick-links").children();
+        let quickLinks = $("#quick-links").children();
         $(quickLinks[0]).delay(0).animate({opacity: '1',
                                             marginTop: '0px'}, {duration:500})
         $(quickLinks[1]).delay(400).animate({opacity: '1',
@@ -324,6 +325,7 @@
                     // Update the UI to indicate that the game has already started
                     showAxcelWaiting();
                     gameStatus = 0;
+
                     startTimer(response.timeStart);
                 } else {
                     // Show Axcel running section
@@ -424,6 +426,7 @@
             success: function(response) {
                 if (response.success) {
                     // POST successful
+                    checkGameStarted();
                     return response.message;
                 } else {
                     // Display error
@@ -442,7 +445,7 @@
     let leftOffset = containerWidth + gifWidth;
     function moveGif() {
         $('#axcel-container').css('display', 'block');
-        leftOffset -= 2; // adjust the speed of the animation here
+        leftOffset -= 2; // animation speed
 
         if (leftOffset < -gifWidth) {
             leftOffset = containerWidth;
@@ -450,22 +453,6 @@
 
         $('#axcel-running').css('left', leftOffset);
         window.requestAnimationFrame(moveGif);
-    }
-
-    function startTimer(startTime) {
-        // Get the current time
-        var currentTime = new Date().getTime();
-
-        // Calculate the time elapsed since the game started
-        var timeElapsed = Math.floor((currentTime - startTime) / 1000); // Convert to seconds
-
-        // Display the elapsed time in seconds
-        $("#timer").text(timeElapsed);
-
-        // Schedule the next update in 1 second
-        setTimeout(function() {
-            startTimer(startTime);
-        }, 1000);
     }
 </script>
 </body>

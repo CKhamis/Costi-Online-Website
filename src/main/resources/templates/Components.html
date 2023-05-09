@@ -68,9 +68,61 @@
     </nav>
 </div>
 
-<div th:fragment="scripts">
-    <!--<script th:src="@{/app.js}"></script>-->
-</div>
+<script th:fragment="scripts">
+    function checkGameStarted() {
+        $.ajax({
+            url: "/games/Axcel/check-game-status",
+            type: "GET",
+            success: function(response) {
+                if (response.gameStarted) {
+                    $(".toy").css("display", "block");
+                    startTimer(response.timeStart);
+                }
+            },
+            error: function(xhr, status, error) {
+                // Handle any errors that occur during the AJAX request
+                alert("Error checking if game has started: " + error);
+            }
+        });
+    }
+    function startTimer(startTimeString) {
+        // Display timer
+        $("#timer").css("display", "block");
+
+        // Parse the start time string into a Date object
+        let startTime = new Date(Date.parse(startTimeString));
+
+        // Check if the start time is a valid date object
+        if (isNaN(startTime.getTime())) {
+            console.error("Invalid start time:", startTimeString);
+            return;
+        }
+
+        // Get the current time
+        let currentTime = new Date();
+
+        // Calculate the time elapsed since the game started
+        let timeElapsed = Math.floor((currentTime - startTime) / 1000); // Convert to seconds
+
+        // Format the elapsed time in minutes and seconds
+        let minutes = Math.floor(timeElapsed / 60);
+        let seconds = timeElapsed % 60;
+        let timeString = minutes.toString().padStart(2, "0") + ":" + seconds.toString().padStart(2, "0");
+
+        // Display the elapsed time in minutes and seconds
+        $("#timer").text("Time Elapsed: " + timeString);
+
+        // Schedule the next update in 1 second
+        setTimeout(function() {
+            startTimer(startTimeString);
+        }, 1000);
+    }
+</script>
+<script th:fragment="axcel-game">
+    $(document).ready(function() {
+        checkGameStarted();
+    });
+</script>
 
 <div th:fragment="flash" th:if="${flash != null}" th:class="'alert alert-dismissible fade show alert-' + ${#strings.toLowerCase(flash.status)}" role="alert">
     <div class="fw-bold d-inline" th:text="${flash.title}"></div>
@@ -107,6 +159,9 @@
             </div>
         </div>
     </div>
+</div>
+
+<div th:fragment="timer-box" class="alert alert-dark position-fixed" style="bottom: 20px; left:50px;display: none;z-index: 99" id="timer">
 </div>
 
 <th:block th:fragment="profilePhoto" th:switch="*{profilePicture}">
