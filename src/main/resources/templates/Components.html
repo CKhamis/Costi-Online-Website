@@ -87,7 +87,7 @@
     }
     function startTimer(startTimeString) {
         // Display timer
-        $("#timer").css("display", "block");
+        $("#timer-container").css("display", "block");
 
         // Parse the start time string into a Date object
         let startTime = new Date(Date.parse(startTimeString));
@@ -110,7 +110,7 @@
         let timeString = minutes.toString().padStart(2, "0") + ":" + seconds.toString().padStart(2, "0");
 
         // Display the elapsed time in minutes and seconds
-        $("#timer").text("Time Elapsed: " + timeString);
+        $("#timer").text(timeString);
 
         // Schedule the next update in 1 second
         setTimeout(function() {
@@ -118,6 +118,7 @@
         }, 1000);
     }
 </script>
+
 <script th:fragment="axcel-game">
     $(document).ready(function() {
         checkGameStarted();
@@ -161,7 +162,9 @@
     </div>
 </div>
 
-<div th:fragment="timer-box" class="alert alert-dark position-fixed" style="bottom: 20px; left:50px;display: none;z-index: 99" id="timer">
+<div th:fragment="timer-box" class="alert alert-dark position-fixed" style="bottom: 20px; left:50px;display: none;z-index: 99" id="timer-container">
+    <img th:src="@{/icons/Timer.svg}" class="float-start"  alt="timer icon" style="width:20px; margin-right: 10px; padding-top:2px;">
+    <p class="float-start mb-0 ml-1" id="timer"></p>
 </div>
 
 <th:block th:fragment="profilePhoto" th:switch="*{profilePicture}">
