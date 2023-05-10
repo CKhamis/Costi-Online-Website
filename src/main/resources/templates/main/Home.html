@@ -324,6 +324,7 @@
                 if (response.gameStarted) {
                     // Update the UI to indicate that the game has already started
                     showAxcelWaiting();
+                    stage = 0;
                     gameStatus = 0;
 
                     startTimer(response.timeStart);
@@ -400,9 +401,11 @@
                 $("#dialogue-skip").text("");
                 startGame();
             }else{
+                $("#dialogue-message").text("WOFWOFWOF (Logic Error)");
+            }
+        }else if(gameStatus == 0){
+            if(stage == 0){
                 hideDialogue();
-                showAxcelWaiting();
-                gameStatus = 0;
             }
         }
     }
