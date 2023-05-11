@@ -72,11 +72,12 @@
     // Universal assets for Axcel Game
     $('.sprite').click(function() {
         let spriteName = $(this).data('sprite-name');
+        let sprite = $(this); // save a reference to the clicked sprite element
         $.post("/games/Axcel/found-sprite", { spriteName: spriteName }, function(response) {
             if (response.success) {
-                // Update the HTML to reflect that the sprite has been found
-                $(this).animate({height: '0px'}, {duration:500});
-                $(this).css("display", "none");
+                sprite.animate({ height: '0px' }, 500, function() {
+                    sprite.css("display", "none");
+                });
             } else {
                 alert(response.message);
             }
