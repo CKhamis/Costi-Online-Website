@@ -51,25 +51,23 @@ public class SpecialController {
         Map<String, Object> jsonResponse = new HashMap<>();
 
         // Add the found sprite name to the game progress
-        if(gameProgress.getSpriteNamesFound().contains(spriteName)){
+        if (!gameProgress.getSpriteNamesFound().stream().anyMatch(s -> s.equals(spriteName))) {
             gameProgress.getSpriteNamesFound().add(spriteName);
 
-            if(gameProgress.getSpriteNamesFound().size() == requiredFinds){
+            if (gameProgress.getSpriteNamesFound().size() == requiredFinds) {
                 // All sprites found
                 gameProgress.setTimeEnd(LocalDateTime.now());
             }
 
             jsonResponse.put("success", true);
             jsonResponse.put("message", "Sprite found!");
-        }else{
+        } else {
             jsonResponse.put("success", false);
             jsonResponse.put("message", "Sprite already found!");
         }
 
         return jsonResponse;
     }
-
-
 
     @GetMapping("/games/Axcel/check-game-status")
     @ResponseBody

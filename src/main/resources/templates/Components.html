@@ -69,6 +69,19 @@
 </div>
 
 <script th:fragment="scripts">
+    $('.sprite').click(function() {
+        let spriteName = $(this).data('sprite-name');
+        $.post("/games/Axcel/found-sprite", { spriteName: spriteName }, function(response) {
+            if (response.success) {
+                // Update the HTML to reflect that the sprite has been found
+                $(this).hide();
+                $("#found-sprites").append("<p>" + spriteName + "</p>");
+            } else {
+                alert(response.message);
+            }
+        });
+    });
+
     function checkGameStarted() {
         $.ajax({
             url: "/games/Axcel/check-game-status",

@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -19,5 +20,6 @@ public class GameProgress implements Serializable {
 
     public GameProgress(){
         timeStart = LocalDateTime.now();
+        spriteNamesFound = new ArrayList<>();
     }
 }
