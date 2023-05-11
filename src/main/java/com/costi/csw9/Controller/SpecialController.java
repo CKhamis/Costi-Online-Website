@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -74,14 +75,15 @@ public class SpecialController {
     public Map<String, Object> isGameStarted(HttpSession session) {
         GameProgress gameProgress = (GameProgress) session.getAttribute("gameProgress");
         boolean gameStarted = (gameProgress != null);
-        LocalDateTime timeStart = (gameStarted ? gameProgress.getTimeStart() : null);
+        LocalDateTime timeStart = (gameStarted ? gameProgress.getTimeStart() : LocalDateTime.MIN);
+        List<String> foundSprites = (gameStarted ? gameProgress.getSpriteNamesFound() : null);
 
         // Construct the JSON response
         Map<String, Object> jsonResponse = new HashMap<>();
         jsonResponse.put("gameStarted", gameStarted);
         jsonResponse.put("timeStart", timeStart);
+        jsonResponse.put("foundSprites", foundSprites);
 
-        //TODO: return the start time
         return jsonResponse;
     }
 

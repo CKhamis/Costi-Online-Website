@@ -331,6 +331,7 @@
                     gameStatus = 0;
 
                     startTimer(response.timeStart);
+                    updateSpriteVisibility(response.foundSprites);
                 } else {
                     // Show Axcel running section
                     $("#axcel-running").delay(0).animate({height: '80px'}, {duration:500});

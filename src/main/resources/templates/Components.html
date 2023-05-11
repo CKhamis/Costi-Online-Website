@@ -69,35 +69,31 @@
 </div>
 
 <script th:fragment="scripts">
+    // Universal assets for Axcel Game
     $('.sprite').click(function() {
         let spriteName = $(this).data('sprite-name');
         $.post("/games/Axcel/found-sprite", { spriteName: spriteName }, function(response) {
             if (response.success) {
                 // Update the HTML to reflect that the sprite has been found
-                $(this).hide();
-                $("#found-sprites").append("<p>" + spriteName + "</p>");
+                $(this).animate({height: '0px'}, {duration:500});
+                $(this).css("display", "none");
             } else {
                 alert(response.message);
             }
         });
     });
 
-    function checkGameStarted() {
-        $.ajax({
-            url: "/games/Axcel/check-game-status",
-            type: "GET",
-            success: function(response) {
-                if (response.gameStarted) {
-                    $(".toy").css("display", "block");
-                    startTimer(response.timeStart);
-                }
-            },
-            error: function(xhr, status, error) {
-                // Handle any errors that occur during the AJAX request
-                alert("Error checking if game has started: " + error);
+    function updateSpriteVisibility(foundSprites) {
+        $(".sprite").each(function() {
+            let spriteName = $(this).data("sprite-name");
+            if ($.inArray(spriteName, foundSprites) !== -1) {
+                $(this).css("display", "none");
+            } else {
+                $(this).css("display", "block");
             }
         });
     }
+
     function startTimer(startTimeString) {
         // Display timer
         $("#timer-container").css("display", "block");
@@ -133,9 +129,27 @@
 </script>
 
 <script th:fragment="axcel-game">
+    // Everything except for home page
     $(document).ready(function() {
         checkGameStarted();
     });
+
+    function checkGameStarted() {
+        $.ajax({
+            url: "/games/Axcel/check-game-status",
+            type: "GET",
+            success: function(response) {
+                if (response.gameStarted) {
+                    startTimer(response.timeStart);
+                    updateSpriteVisibility(response.foundSprites);
+                }
+            },
+            error: function(xhr, status, error) {
+                // Handle any errors that occur during the AJAX request
+                alert("Error checking if game has started: " + error);
+            }
+        });
+    }
 </script>
 
 <div th:fragment="flash" th:if="${flash != null}" th:class="'alert alert-dismissible fade show alert-' + ${#strings.toLowerCase(flash.status)}" role="alert">
