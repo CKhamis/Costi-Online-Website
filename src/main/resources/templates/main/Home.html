@@ -309,13 +309,14 @@
 
     let gameStatus = -1;
     function waitingPressed(){
-        if(gameStatus == 0){
-            // Start dialogue with Mr. Rat
-            $("#dialogue-message").text("WOFWOFWOFWOF. WOF. (Hello again. I never got your name... eh who cares. Do you have my toys?)");
-            $("#dialogue-skip").text("");
-            $("#dialogue-next").text("Yep!");
-            showDialogueBox();
+        //elevate gameStatus if everything was found
+        if(numFoundSprites >= quota){
+            gameStatus = 1;
         }
+
+        // Start dialogue with Mr. Rat
+        nextPressed();
+        showDialogueBox();
     }
 
     function checkGameStarted() {
@@ -384,16 +385,12 @@
                 stage = 0;
                 showAxcelWaiting();
             }
-        }
+        }X
     }
 
     function nextPressed(){
-        //elevate gameStatus if everything was found
-        if(numFoundSprites >= quota){
-            gameStatus = 1;
-        }
-
         if(gameStatus == -1){
+            // Game not started yet
             if(stage == 0){
                 stage = 1;
                 $("#dialogue-message").text("WOFWOF. WOF. (Thank you thank you thank you! My toys are everywhere on this website.)");
@@ -417,24 +414,28 @@
             }
         }else if(gameStatus == 0){
             if(stage == 0){
-                $("#dialogue-message").text(quota);
+                $("#dialogue-message").text("WOWOWOF (Hey there, I never got your name. Oh well. Do you have my toys?)");
                 $("#dialogue-skip").text("");
-                $("#dialogue-next").text("Yep!");
+                $("#dialogue-next").text("Not yet, how many did I find?");
                 stage = 1;
             }else if(stage == 1){
-                $("#dialogue-message").text(numFoundSprites);
+                $("#dialogue-message").text("WOFWOFWF (Oh. That's disappointing. Lets see here... You have " + numFoundSprites + " toys here, but I want " + quota + " toys. Check back here once you found them.");
                 $("#dialogue-skip").text("");
-                $("#dialogue-next").text("Yep!");
+                $("#dialogue-next").text("Aw ok.");
+                stage = 2;
+            }else{
                 stage = 0;
+                hideDialogue();
+                showAxcelWaiting();
             }
         }else if(gameStatus == 1){
             if(stage == 0){
-                $("#dialogue-message").text("YOU WIN");
+                $("#dialogue-message").text("WOWOWOF (Hey there, I never got your name. Oh well. Do you have my toys?)");
                 $("#dialogue-skip").text("");
                 $("#dialogue-next").text("Yep!");
                 stage = 1;
             }else if(stage == 1){
-                $("#dialogue-message").text(numFoundSprites);
+                $("#dialogue-message").text("WOFFFFFF (Wow you did! You found them. Thank you so much!");
                 $("#dialogue-skip").text("");
                 $("#dialogue-next").text("Yep!");
                 stage = 0;
