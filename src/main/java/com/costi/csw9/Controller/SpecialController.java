@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Controller
 public class SpecialController {
-    private static final int requiredFinds = 5;
+    private static final int requiredFinds = 2;
 
     @PostMapping("/games/Axcel/start-game")
     @ResponseBody
@@ -50,6 +50,7 @@ public class SpecialController {
         }
 
         Map<String, Object> jsonResponse = new HashMap<>();
+        List<String> foundSprites = (gameProgress.getSpriteNamesFound());
 
         // Add the found sprite name to the game progress
         if (!gameProgress.getSpriteNamesFound().stream().anyMatch(s -> s.equals(spriteName))) {
@@ -66,6 +67,7 @@ public class SpecialController {
             jsonResponse.put("success", false);
             jsonResponse.put("message", "Sprite already found!");
         }
+        jsonResponse.put("foundSprites", foundSprites);
 
         return jsonResponse;
     }
@@ -83,6 +85,7 @@ public class SpecialController {
         jsonResponse.put("gameStarted", gameStarted);
         jsonResponse.put("timeStart", timeStart);
         jsonResponse.put("foundSprites", foundSprites);
+        jsonResponse.put("quota", requiredFinds);
 
         return jsonResponse;
     }

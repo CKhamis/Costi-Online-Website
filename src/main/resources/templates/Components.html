@@ -70,6 +70,9 @@
 
 <script th:fragment="scripts">
     // Universal assets for Axcel Game
+    let numFoundSprites = 0;
+    let quota = 0;
+
     $('.sprite').click(function() {
         let spriteName = $(this).data('sprite-name');
         let sprite = $(this); // save a reference to the clicked sprite element
@@ -78,6 +81,7 @@
                 sprite.animate({ height: '0px' }, 500, function() {
                     sprite.css("display", "none");
                 });
+                numFoundSprites = response.foundSprites.length;
             } else {
                 alert(response.message);
             }
@@ -143,6 +147,7 @@
                 if (response.gameStarted) {
                     startTimer(response.timeStart);
                     updateSpriteVisibility(response.foundSprites);
+                    quota = response.quota;
                 }
             },
             error: function(xhr, status, error) {
