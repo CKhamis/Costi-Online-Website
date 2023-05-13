@@ -82,6 +82,7 @@
                     sprite.css("display", "none");
                 });
                 numFoundSprites = response.foundSprites.length;
+                $("#toy-counter").text(numFoundSprites + " / " + quota);
             } else {
                 alert(response.message);
             }
@@ -99,10 +100,22 @@
         });
     }
 
-    function startTimer(startTimeString) {
-        // Display timer
-        $("#timer-container").css("display", "block");
+    function hideTimer(){
+        let timer = $("#timer-container");
+        timer.css("left", "50px");
+        timer.animate({ left: '-200px' }, 600, function() {
+            timer.css("display", "none");
+        });
+    }
 
+    function showTimer(){
+        let timer = $("#timer-container");
+        timer.css("left", "-200px");
+        timer.css("display", "block");
+        timer.animate({ left: '50px' }, 600);
+    }
+
+    function startTimer(startTimeString) {
         // Parse the start time string into a Date object
         let startTime = new Date(Date.parse(startTimeString));
 
@@ -145,9 +158,13 @@
             type: "GET",
             success: function(response) {
                 if (response.gameStarted) {
+                    showTimer();
                     startTimer(response.timeStart);
                     updateSpriteVisibility(response.foundSprites);
                     quota = response.quota;
+                    numFoundSprites = response.foundSprites.length;
+                    $("#toy-counter").text(numFoundSprites + " / " + quota);
+
                 }
             },
             error: function(xhr, status, error) {
@@ -198,6 +215,9 @@
 <div th:fragment="timer-box" class="alert alert-dark position-fixed" style="bottom: 20px; left:50px;display: none;z-index: 99" id="timer-container">
     <img th:src="@{/icons/Timer.svg}" class="float-start"  alt="timer icon" style="width:20px; margin-right: 10px; padding-top:2px;">
     <p class="float-start mb-0 ml-1" id="timer"></p>
+    <br clear="all">
+    <img th:src="@{/icons/Toys.svg}" class="float-start"  alt="timer icon" style="width:20px; margin-right: 10px; padding-top:4px;">
+    <p class="float-start mb-0 ml-1" id="toy-counter">1/1</p>
 </div>
 
 <th:block th:fragment="profilePhoto" th:switch="*{profilePicture}">
