@@ -1062,6 +1062,12 @@ public class FrontEndController {
         return "minecraft/ElectionResults";
     }
 
+    // Axcel
+    @GetMapping("/Axcel")
+    public String getAxcel(Model model, Principal principal) {
+        return "main/Axcel";
+    }
+
     // Newsroom
     @GetMapping("/Newsroom")
     public String getNewsroomHome(Model model, Principal principal) {
