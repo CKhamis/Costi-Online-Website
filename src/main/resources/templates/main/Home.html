@@ -225,8 +225,6 @@
 
                         <a href="/Projects" class="btn btn-primary" aria-current="page">See Projects page</a>
                         <img th:src="@{images/games/axcel/toys/Bear.png}" class="sprite" style="height:40px;" data-sprite-name="bear"/>
-                        <img th:src="@{images/games/axcel/toys/Terence Plush.png}" class="sprite" style="height:40px;" data-sprite-name="terence"/>
-                        <img th:src="@{images/games/axcel/toys/Chuck Plush.png}" class="sprite" style="height:40px;" data-sprite-name="chuck"/>
                     </div>
                 </div>
             </div>
@@ -335,6 +333,7 @@
                     startTimer(response.timeStart);
                     $("#toy-counter").text(numFoundSprites + " / " + quota);
                     updateSpriteVisibility(response.foundSprites);
+                    gameStatus = 0;
                 } else {
                     // Show Axcel running section
                     $("#axcel-running").delay(0).animate({height: '80px'}, {duration:500});
@@ -387,7 +386,7 @@
                 stage = 0;
                 showAxcelWaiting();
             }
-        }X
+        }
     }
 
     function nextPressed(){
@@ -443,9 +442,9 @@
                 $("#dialogue-next").text("Of course");
                 stage = 2;
             }else if(stage == 2){
-                $("#dialogue-message").text("WOF (Well, I did promise you a prise. Want to see it?)");
+                $("#dialogue-message").text("WOF (Well, I did promise you a z. Want to see it?)");
                 $("#dialogue-skip").text("");
-                $("#dialogue-next").text("Show me the prise");
+                $("#dialogue-next").text("Show me the prize");
                 stage = 3;
             }else if(stage == 3){
                 $("#dialogue-message").text("WOFWOFWOF (Here you go:)");

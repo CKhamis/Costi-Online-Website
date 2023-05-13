@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Controller
 public class SpecialController {
-    private static final int requiredFinds = 2;
+    private static final int requiredFinds = 7;
 
     @PostMapping("/games/Axcel/start-game")
     @ResponseBody
