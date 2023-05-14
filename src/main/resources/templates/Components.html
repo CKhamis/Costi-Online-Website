@@ -115,6 +115,11 @@
         timer.animate({ left: '50px' }, 600);
     }
 
+    function showHint(text){
+        $("#toast-text").text(text);
+        $("#toast-container").fadeIn(2000).delay(4000).fadeOut(2000);
+    }
+
     function startTimer(startTimeString) {
         // Parse the start time string into a Date object
         let startTime = new Date(Date.parse(startTimeString));
@@ -144,6 +149,13 @@
             startTimer(startTimeString);
         }, 1000);
     }
+
+    function countSpritesOnPage(){
+        let count = $('.sprite').filter(function() {
+            return $(this).css('display') === 'block';
+        }).length;
+        return count;
+    }
 </script>
 
 <script th:fragment="axcel-game">
@@ -164,7 +176,7 @@
                     quota = response.quota;
                     numFoundSprites = response.foundSprites.length;
                     $("#toy-counter").text(numFoundSprites + " / " + quota);
-
+                    showHint(countSpritesOnPage() + " toys left here!");
                 }
             },
             error: function(xhr, status, error) {
@@ -218,6 +230,10 @@
     <br clear="all">
     <img th:src="@{/icons/Toys.svg}" class="float-start"  alt="timer icon" style="width:20px; margin-right: 10px; padding-top:4px;">
     <p class="float-start mb-0 ml-1" id="toy-counter">1/1</p>
+</div>
+
+<div th:fragment="toast-box" class="alert alert-info position-fixed" style="bottom: 20px; right:50px;display: none;z-index: 99" id="toast-container">
+    <p class="float-start mb-0 ml-1" id="toast-text"></p>
 </div>
 
 <th:block th:fragment="profilePhoto" th:switch="*{profilePicture}">

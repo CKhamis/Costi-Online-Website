@@ -4,6 +4,7 @@
 <body class="bg-1 text-1">
 <div th:replace="Components :: main-navigation"></div>
 <div th:replace="Components :: timer-box"></div>
+<div th:replace="Components :: toast-box"></div>
 
 <!-- Desktop -->
 <div class="p-0 m-0 overflow-hidden">
@@ -333,6 +334,8 @@
                     startTimer(response.timeStart);
                     $("#toy-counter").text(numFoundSprites + " / " + quota);
                     updateSpriteVisibility(response.foundSprites);
+
+                    showHint(countSpritesOnPage() + " toys left here!");
                     gameStatus = 0;
                 } else {
                     // Show Axcel running section
@@ -386,6 +389,10 @@
                 stage = 0;
                 showAxcelWaiting();
             }
+        }else if(gameStatus == 1){
+            stage = 0;
+            showAxcelWaiting();
+            hideDialogue();
         }
     }
 
@@ -433,22 +440,20 @@
         }else if(gameStatus == 1){
             if(stage == 0){
                 $("#dialogue-message").text("WOWOWOF (Hey there, I never got your name. Oh well. Do you have my toys?)");
-                $("#dialogue-skip").text("");
+                $("#dialogue-skip").text("Scram");
                 $("#dialogue-next").text("Yep!");
                 stage = 1;
             }else if(stage == 1){
                 $("#dialogue-message").text("WOFFFFFF (Wow you did! You found them. Thank you so much!)");
-                $("#dialogue-skip").text("");
                 $("#dialogue-next").text("Of course");
                 stage = 2;
             }else if(stage == 2){
-                $("#dialogue-message").text("WOF (Well, I did promise you a z. Want to see it?)");
-                $("#dialogue-skip").text("");
+                $("#dialogue-message").text("WOF (Well, I did promise you a prize. Want to see it?)");
                 $("#dialogue-next").text("Show me the prize");
                 stage = 3;
             }else if(stage == 3){
                 $("#dialogue-message").text("WOFWOFWOF (Here you go:)");
-                $("#dialogue-skip").text("");
+                $("#dialogue-message").append('<a href="/Axcel">Da Prize 😳</a>');
                 $("#dialogue-next").text("Ok");
                 stage = 0;
                 //showTimer();
