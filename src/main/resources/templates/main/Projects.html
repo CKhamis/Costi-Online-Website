@@ -2,6 +2,9 @@
 <html xml:th="https://www.thymeleaf.org">
 <head th:replace="Components :: head('Projects')"></head>
 <div th:replace="Components :: main-navigation"></div>
+<div th:replace="Components :: timer-box"></div>
+<div th:replace="Components :: toast-box"></div>
+<script th:replace="Components :: axcel-game"></script>
 
 <body class="bg-1 text-1">
 <div class="container-fluid row px-0 mx-0 d-none d-lg-block">
@@ -62,6 +65,7 @@
                 <div class="card-body px-5 blue-v-gradient">
                     <h5 class="card-title fw-bold fs-4">Costi Online</h5>
                     <p class="text-secondary">2022</p>
+                    <img th:src="@{images/games/axcel/toys/Chuck Plush.png}" class="sprite" style="height:40px;" data-sprite-name="chuck"/>
                     <p class="card-text fs-5">Costi Online is a website that is designed to show off various projects, services, and media I made. This project initially began as a website that covers my 9th Minecraft survival world. It had links to participate in elections, polls, and the history of the previous worlds. After it was published on costionline.com, I decided to make it more general. The aforementioned feature has been moved to the <a href="/Minecraft">Minecraft</a> section.</p>
                     <a href="https://github.com/CKhamis/Costi-Online-Website" class="btn btn-primary mb-3">See GitHub Page</a>
                 </div>
@@ -137,6 +141,7 @@
                 <div class="card-body px-5 blue-v-gradient">
                     <h5 class="card-title fw-bold fs-4">Costi Inc.<span class="badge rounded-pill bg-danger">Discontinued</span></h5>
                     <p class="text-secondary">2018</p>
+                    <img th:src="@{images/games/axcel/toys/Bone.png}" class="sprite" style="height:40px;" data-sprite-name="bone"/>
                     <p class="card-text fs-5">This project is a website I made in 2018 that shared a very similar purpose to this website. It featured the different projects and video channels I was posting to at the time. It utilized bootstrap and was hand coded by me.</p>
                     <a href="https://github.com/CKhamis/Costi-Inc" class="btn btn-primary mb-3">See GitHub Page</a>
                 </div>

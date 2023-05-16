@@ -3,6 +3,10 @@
 <head th:replace="Components :: head('Costi Media')"></head>
 <body class="bg-1 text-1">
 <div th:replace="Components :: main-navigation"></div>
+<div th:replace="Components :: timer-box"></div>
+<div th:replace="Components :: toast-box"></div>
+<script th:replace="Components :: axcel-game"></script>
+
 <!-- Desktop -->
 <div class="p-0 m-0 overflow-hidden">
     <div class="container-fluid p-0 overflow-hidden d-none d-lg-block bg-black" style="height:600px">
@@ -51,6 +55,7 @@
                     <h4 class="fw-bold">🎞️View Video History</h4>
                     <p>View the mostly-complete timeline of Costi Media videos and how it changed over time</p>
                     <a href="#beginning" type="button" class="btn btn-primary btn-sm">Jump to First Section</a>
+                    <img th:src="@{images/games/axcel/toys/Jimmy Plush.png}" class="sprite" style="height:20px;" data-sprite-name="jimmy"/>
                 </div>
             </div>
             <div class="col col-12 col-lg-4">
@@ -190,6 +195,7 @@
         <div class="container">
             <h2 class="text-center fw-bold">Costi logo History</h2>
             <p class="text-center pb-2 border-bottom">View the history of my logos used for internal and external use</p>
+            <img th:src="@{images/games/axcel/toys/Leash.png}" class="sprite" style="height:40px;" data-sprite-name="leash"/>
 
             <div class="card border-box my-5">
                 <img th:src="@{/images/webpageImages/Costi Logo Evolution.jpg}" class="card-img-top" alt="Costi Logo Evolution" style="aspect-ratio: auto;">
@@ -1896,6 +1902,7 @@
         });
     });
 </script>
+
 </div>
 </body>
 </html>

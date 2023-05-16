@@ -11,7 +11,6 @@
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <link rel="stylesheet" th:href="@{${theme}}" />
     <link rel="stylesheet" th:href="@{/Styles.css}" />
-
     <title th:text="'Costi Online | ' + ${page_title}">Costi Online</title>
 </head>
 
@@ -69,9 +68,131 @@
     </nav>
 </div>
 
-<div th:fragment="scripts">
-    <!--<script th:src="@{/app.js}"></script>-->
-</div>
+<script th:fragment="scripts">
+    // Universal assets for Axcel Game
+    let numFoundSprites = 0;
+    let quota = 0;
+
+    $('.sprite').click(function() {
+        let spriteName = $(this).data('sprite-name');
+        let sprite = $(this); // save a reference to the clicked sprite element
+        $.post("/games/Axcel/found-sprite", { spriteName: spriteName }, function(response) {
+            if (response.success) {
+                sprite.animate({ height: '0px' }, 500, function() {
+                    sprite.css("display", "none");
+                });
+                numFoundSprites = response.foundSprites.length;
+                $("#toy-counter").text(numFoundSprites + " / " + quota);
+            } else {
+                alert(response.message);
+            }
+        });
+    });
+
+    function updateSpriteVisibility(foundSprites) {
+        $(".sprite").each(function() {
+            let spriteName = $(this).data("sprite-name");
+            if ($.inArray(spriteName, foundSprites) !== -1) {
+                $(this).css("display", "none");
+            } else {
+                $(this).css("display", "block");
+            }
+        });
+    }
+
+    function hideTimer(){
+        let timer = $("#timer-container");
+        timer.css("left", "50px");
+        timer.animate({ left: '-200px' }, 600, function() {
+            timer.css("display", "none");
+        });
+    }
+
+    function showTimer(){
+        let timer = $("#timer-container");
+        timer.css("left", "-200px");
+        timer.css("display", "block");
+        timer.animate({ left: '50px' }, 600);
+    }
+
+    function showHint(text){
+        $("#toast-text").text(text);
+        $("#toast-container").fadeIn(2000).delay(4000).fadeOut(2000);
+    }
+
+    function startTimer(startTimeString) {
+        // Parse the start time string into a Date object
+        let startTime = new Date(Date.parse(startTimeString));
+
+        // Check if the start time is a valid date object
+        if (isNaN(startTime.getTime())) {
+            console.error("Invalid start time:", startTimeString);
+            return;
+        }
+
+        // Get the current time
+        let currentTime = new Date();
+
+        // Calculate the elapsed time
+        let timeDifference = getTimeDifference(startTime, currentTime);
+        let timeString = timeDifference.minutes + ":" + timeDifference.seconds;
+
+        // Display the elapsed time in minutes and seconds
+        $("#timer").text(timeString);
+
+        // Schedule the next update in 1 second
+        setTimeout(function() {
+            startTimer(startTimeString);
+        }, 1000);
+    }
+
+    function countSpritesOnPage(){
+        let count = $('.sprite').filter(function() {
+            return $(this).css('display') === 'block';
+        }).length;
+        return count;
+    }
+
+    function getTimeDifference(start, end) {
+        // Calculate the time difference in milliseconds
+        let timeDiff = end - start;
+
+        // Calculate the number of minutes and seconds
+        let minutes = Math.floor(timeDiff / 60000);
+        let seconds = Math.floor((timeDiff % 60000) / 1000);
+
+        return { minutes: minutes, seconds: seconds };
+    }
+</script>
+
+<script th:fragment="axcel-game">
+    // Everything except for home page
+    $(document).ready(function() {
+        checkGameStarted();
+    });
+
+    function checkGameStarted() {
+        $.ajax({
+            url: "/games/Axcel/check-game-status",
+            type: "GET",
+            success: function(response) {
+                if (response.gameStarted) {
+                    showTimer();
+                    startTimer(response.timeStart);
+                    updateSpriteVisibility(response.foundSprites);
+                    quota = response.quota;
+                    numFoundSprites = response.foundSprites.length;
+                    $("#toy-counter").text(numFoundSprites + " / " + quota);
+                    showHint(countSpritesOnPage() + " toys left here!");
+                }
+            },
+            error: function(xhr, status, error) {
+                // Handle any errors that occur during the AJAX request
+                alert("Error checking if game has started: " + error);
+            }
+        });
+    }
+</script>
 
 <div th:fragment="flash" th:if="${flash != null}" th:class="'alert alert-dismissible fade show alert-' + ${#strings.toLowerCase(flash.status)}" role="alert">
     <div class="fw-bold d-inline" th:text="${flash.title}"></div>
@@ -90,6 +211,36 @@
     <p class="d-inline" th:text="${notification.dateCreated}"></p>
     <a class="btn-close" th:href="@{|/Account/Notification/${notification.id}/delete|}"></a>
     <p th:utext="${notification.body}"></p>
+</div>
+
+<div th:fragment="dialogue-box" class="container-fluid position-fixed" id="dialogue-container" style="display:none;bottom:0px; background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);">
+    <div class="row" style="bottom: 50px; position: relative">
+        <div class="d-none d-md-block col-md-1 col-lg-2"></div>
+        <div class="col-12 col-md-10 col-lg-8">
+            <div>
+                <img th:src="@{images/games/axcel/sitting.gif}" style="height:100px;"/>
+            </div>
+            <div class="alert alert-primary mb-0">
+                <h3 class="fw-bold float-start" id="dialogue-name">Axcel</h3>
+                <p class="float-end text-decoration-underline" id="dialogue-skip">Skip</p>
+                <br clear="all">
+                <p class="mb-1" id="dialogue-message">adf asdfua fdaufd asfud asdfnasdf asldfh dfjha sfdkjahf as fdaksjdf asdfhsd fjhaksdfjh sdfs df sdd sdfj adf</p>
+                <p class="text-decoration-underline mb-0" id="dialogue-next">Next</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="timer-box" class="alert alert-dark position-fixed" style="bottom: 20px; left:50px;display: none;z-index: 99" id="timer-container">
+    <img th:src="@{/icons/Timer.svg}" class="float-start"  alt="timer icon" style="width:20px; margin-right: 10px; padding-top:2px;">
+    <p class="float-start mb-0 ml-1" id="timer"></p>
+    <br clear="all">
+    <img th:src="@{/icons/Toys.svg}" class="float-start"  alt="timer icon" style="width:20px; margin-right: 10px; padding-top:4px;">
+    <p class="float-start mb-0 ml-1" id="toy-counter">1/1</p>
+</div>
+
+<div th:fragment="toast-box" class="alert alert-info position-fixed" style="bottom: 20px; right:50px;display: none;z-index: 99" id="toast-container">
+    <p class="float-start mb-0 ml-1" id="toast-text"></p>
 </div>
 
 <th:block th:fragment="profilePhoto" th:switch="*{profilePicture}">

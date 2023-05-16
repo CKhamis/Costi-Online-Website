@@ -128,3 +128,8 @@
         object-fit:cover;
     }
 }
+
+/* Game */
+.sprite{
+    display: none;
+}
