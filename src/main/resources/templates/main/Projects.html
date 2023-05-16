@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xml:th="https://www.thymeleaf.org">
 <head th:replace="Components :: head('Projects')"></head>
-<div th:replace="Components :: main-navigation" style="position: fixed"></div>
+<div th:replace="Components :: main-navigation"></div>
 
 <body class="bg-1 text-1">
 <div class="container-fluid row px-0 mx-0 d-none d-lg-block">
@@ -38,7 +38,7 @@
     <div class="col-lg-3 d-none d-lg-block">
         behind
     </div>
-    <div class="col-xs-12 col-lg-9 px-0" style="height:100vh;padding-top:20px">
+    <div class="col-xs-12 col-lg-9 px-0" style="padding-top:20px">
         <div class="container-fluid">
             <img th:src="@{/images/webpageImages/History.png}" class="img-fluid w-100" >
 
