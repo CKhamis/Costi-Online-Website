@@ -133,13 +133,9 @@
         // Get the current time
         let currentTime = new Date();
 
-        // Calculate the time elapsed since the game started
-        let timeElapsed = Math.floor((currentTime - startTime) / 1000); // Convert to seconds
-
-        // Format the elapsed time in minutes and seconds
-        let minutes = Math.floor(timeElapsed / 60);
-        let seconds = timeElapsed % 60;
-        let timeString = minutes.toString().padStart(2, "0") + ":" + seconds.toString().padStart(2, "0");
+        // Calculate the elapsed time
+        let timeDifference = getTimeDifference(startTime, currentTime);
+        let timeString = timeDifference.minutes + ":" + timeDifference.seconds;
 
         // Display the elapsed time in minutes and seconds
         $("#timer").text(timeString);
@@ -155,6 +151,17 @@
             return $(this).css('display') === 'block';
         }).length;
         return count;
+    }
+
+    function getTimeDifference(start, end) {
+        // Calculate the time difference in milliseconds
+        let timeDiff = end - start;
+
+        // Calculate the number of minutes and seconds
+        let minutes = Math.floor(timeDiff / 60000);
+        let seconds = Math.floor((timeDiff % 60000) / 1000);
+
+        return { minutes: minutes, seconds: seconds };
     }
 </script>
 

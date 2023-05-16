@@ -78,12 +78,15 @@ public class SpecialController {
         GameProgress gameProgress = (GameProgress) session.getAttribute("gameProgress");
         boolean gameStarted = (gameProgress != null);
         LocalDateTime timeStart = (gameStarted ? gameProgress.getTimeStart() : LocalDateTime.MIN);
+        LocalDateTime timeEnd = (gameStarted ? gameProgress.getTimeEnd() : LocalDateTime.MAX);
+
         List<String> foundSprites = (gameStarted ? gameProgress.getSpriteNamesFound() : null);
 
         // Construct the JSON response
         Map<String, Object> jsonResponse = new HashMap<>();
         jsonResponse.put("gameStarted", gameStarted);
         jsonResponse.put("timeStart", timeStart);
+        jsonResponse.put("timeEnd", timeEnd);
         jsonResponse.put("foundSprites", foundSprites);
         jsonResponse.put("quota", requiredFinds);
 
