@@ -1,12 +1,14 @@
 package com.costi.csw9.Controller;
 
 import com.costi.csw9.Model.Axcel.GameProgress;
+import org.apache.tomcat.jni.Local;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -87,10 +89,38 @@ public class SpecialController {
         jsonResponse.put("gameStarted", gameStarted);
         jsonResponse.put("timeStart", timeStart);
         jsonResponse.put("timeEnd", timeEnd);
+        jsonResponse.put("timeNow", LocalDateTime.now());
         jsonResponse.put("foundSprites", foundSprites);
         jsonResponse.put("quota", requiredFinds);
 
         return jsonResponse;
     }
+
+    @PostMapping("/games/Axcel/end-game")
+    @ResponseBody
+    public Map<String, Object> endGame(HttpSession session, HttpServletResponse response) {
+        GameProgress gameProgress = (GameProgress) session.getAttribute("gameProgress");
+        if (gameProgress != null) {
+            // Update the game progress in the session
+            session.setAttribute("gameProgress", gameProgress);
+
+            // Invalidate the session to delete the session cookie
+            session.invalidate();
+
+            // Construct the JSON response
+            Map<String, Object> jsonResponse = new HashMap<>();
+            jsonResponse.put("success", true);
+            jsonResponse.put("message", "Game ended successfully");
+            return jsonResponse;
+        } else {
+            // Game progress not found, handle the error case
+            Map<String, Object> jsonResponse = new HashMap<>();
+            jsonResponse.put("success", false);
+            jsonResponse.put("message", "Game progress not found");
+            return jsonResponse;
+        }
+    }
+
+
 
 }

@@ -72,6 +72,7 @@
     // Universal assets for Axcel Game
     let numFoundSprites = 0;
     let quota = 0;
+    let timeNow, localTimeChecked;
 
     $('.sprite').click(function() {
         let spriteName = $(this).data('sprite-name');
@@ -130,12 +131,14 @@
             return;
         }
 
-        // Get the current time
-        let currentTime = new Date();
-
         // Calculate the elapsed time
-        let timeDifference = getTimeDifference(startTime, currentTime);
-        let timeString = timeDifference.minutes + ":" + timeDifference.seconds;
+        let timeDifference = getTimeDifference(startTime, timeNow);
+        let seconds = timeDifference.seconds;
+        // Add a leading zero to seconds if it's a single digit
+        if (seconds < 10) {
+            seconds = '0' + seconds;
+        }
+        let timeString = timeDifference.minutes + ":" + seconds;
 
         // Display the elapsed time in minutes and seconds
         $("#timer").text(timeString);
@@ -154,8 +157,16 @@
     }
 
     function getTimeDifference(start, end) {
-        // Calculate the time difference in milliseconds
-        let timeDiff = end - start;
+        // Calculate the time difference in milliseconds (local)
+        let currentLocalTIme = new Date();
+        let localTimeDiff = currentLocalTIme - localTimeChecked;
+        console.log(localTimeDiff);
+
+        // Calculate the time difference in milliseconds (server)
+        let serverTimeDiff = end - start;
+
+        // Combine local and server times to get the elapsed time
+        let timeDiff = localTimeDiff + serverTimeDiff;
 
         // Calculate the number of minutes and seconds
         let minutes = Math.floor(timeDiff / 60000);
@@ -182,6 +193,8 @@
                     updateSpriteVisibility(response.foundSprites);
                     quota = response.quota;
                     numFoundSprites = response.foundSprites.length;
+                    timeNow = new Date(Date.parse(response.timeNow));
+                    localTimeChecked = new Date();
                     $("#toy-counter").text(numFoundSprites + " / " + quota);
                     showHint(countSpritesOnPage() + " toys left here!");
                 }

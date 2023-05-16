@@ -335,7 +335,9 @@
                     showTimer();
                     startTimer(response.timeStart);
                     timeEnd = new Date(Date.parse(response.timeEnd));
+                    timeNow = new Date(Date.parse(response.timeNow));
                     timeBegin = new Date(Date.parse(response.timeStart));
+                    localTimeChecked = new Date();
                     $("#toy-counter").text(numFoundSprites + " / " + quota);
                     updateSpriteVisibility(response.foundSprites);
 
@@ -459,11 +461,12 @@
             }else if(stage == 3){
                 $("#dialogue-message").text("WOFWOFWOF (Here you go:)");
                 $("#dialogue-message").append('<a href="/Axcel" class="text-decoration-underline">About Axcel</a>');
-                $("#dialogue-next").text("Ok");
+                $("#dialogue-next").text("End Game");
                 stage = 4;
             }else{
                 hideDialogue();
                 showAxcelWaiting();
+                endGame();
                 stage = 0;
             }
         }
@@ -516,6 +519,19 @@
         $('#axcel-running').css('left', leftOffset);
         window.requestAnimationFrame(moveGif);
     }
+
+    function endGame() {
+        $.post("/games/Axcel/end-game", function(response) {
+            if (response.success) {
+                // Game ended successfully, perform any necessary actions
+                console.log("Game ended successfully");
+            } else {
+                // Game end request failed, handle the error case
+                console.log("Error ending the game: " + response.message);
+            }
+        });
+    }
+
 </script>
 </body>
 </html>
