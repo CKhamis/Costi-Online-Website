@@ -10,14 +10,14 @@
 <div class="p-0 m-0 overflow-hidden">
     <div class="container-fluid p-0 overflow-hidden d-none d-lg-block bg-black" style="height:600px">
         <div class="position-absolute p-5" style="z-index:1;height:600px; width:100%">
-            <div class="container-fluid" style="padding-top:140px;">
-                <img th:src="@{/icons/CO White.png}" class="img-fluid mb-2 banner-logo" style="width:0%;margin-left:50%"/>
-                <h3 class="fw-bold text-white changing-text text-center">:(</h3>
+            <div class="container-fluid" style="transform: translate(0%, -50%);top: 50%;position: relative;">
+                <img src="/icons/CO White.svg" class="img-fluid mb-2 banner-logo" style="width: 50%; transform: translate(-50%, 0%); left: 50%; position: relative; display: inline-block;">
+                <h3 class="fw-bold text-white changing-text text-center">Free Taiwan 🇹🇼 </h3>
                 <p class="col-md-8 fs-5 text-white text-center w-100" th:text="|Version: ${version}|">Version X</p>
             </div>
         </div>
-        <video class="w-100" autoplay preload="true" loop="loop" style="margin-top:-150px;opacity:.5; " muted>
-            <source th:src="@{/videos/banners/Costi Online Home Banner.m4v}" type="video/mp4">
+        <video class="w-100" autoplay="" preload="true" loop="loop" style="/*! margin-top:-150px; */opacity:.5; " muted="">
+            <source src="/videos/banners/Costi Online Home Banner.m4v" type="video/mp4">
             video not supported
         </video>
     </div>
@@ -27,13 +27,15 @@
 <div class="container d-xs-block d-lg-none mt-3">
     <div class="p-0 mb-4 border-box bg-black">
         <div class="container-fluid p-0 overflow-hidden" style="height:300px;">
-            <div class="position-absolute p-5 text-white" style="z-index:1;">
-                <img th:src="@{/icons/CO White.png}" class="img-fluid mb-2" style="width:80%;margin-left:10%"/>
-                <h3 class="fw-bold text-white changing-text text-center">:(</h3>
-                <p class="col-md-8 fs-4 text-white text-center w-100" th:text="|Version: ${version}|">Version X</p>
+            <div class="position-relative px-5 text-white" style="z-index: 1;height:100%">
+                <div class="px-md-5" style="transform: translate(0%, -50%);position: relative; top:50%">
+                    <img src="/icons/CO White.svg" class="img-fluid mb-3" style="width:100%">
+                    <h3 class="fw-bold text-white changing-text text-center">📮😳😳😳</h3>
+                    <p class="col-md-8 fs-4 text-white text-center w-100" th:text="|Version: ${version}|">Version X</p>
+                </div>
             </div>
-            <video style="width:310%; opacity:.5; margin-left:-400px" autoplay preload="true" loop="loop" muted>
-                <source th:src="@{/videos/banners/Costi Online Home Banner.m4v}" type="video/mp4">
+            <video style="width:310%; opacity:.5; transform:translate(-50%, -50%);" autoplay="" preload="true" loop="loop" muted="">
+                <source src="/videos/banners/Costi Online Home Banner.m4v" type="video/mp4">
                 video not supported
             </video>
         </div>
@@ -235,7 +237,7 @@
     <div class="container-fluid p-0 mb-3" id="media">
         <div class="container-fluid">
             <div class="container py-5">
-                <img th:src="@{/icons/CM White.png}" class="img-fluid mb-2"/>
+                <img th:src="@{/icons/CM White.svg}" class="img-fluid mb-2"/>
                 <p class="fs-4 text-white">View various video, image, and flyer materials I made. This features projects I created since I was in sixth grade in chronological order.</p>
                 <a href="/Media" class="btn btn-primary" aria-current="page">Visit Costi Media</a>
             </div>
@@ -287,8 +289,7 @@
         checkGameStarted();
         $('.changing-text').text(subtitles[Math.floor(Math.random() * subtitles.length)]);
         $('.banner-logo').animate({
-            width: '40%',
-            marginLeft: '30%'
+            width: '50%',
             });
 
         let quickLinks = $("#quick-links").children();

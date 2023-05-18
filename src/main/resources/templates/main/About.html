@@ -11,7 +11,7 @@
     <div class="container-fluid p-0 overflow-hidden d-none d-lg-block bg-black" style="height:400px">
         <div class="position-absolute p-5" style="z-index:1;height:400px; width:100%">
             <div class="container-fluid" style="padding-top:90px;">
-                <img th:src="@{/icons/Constantine Logo.png}" class="img-fluid mb-2" style="width:50%;"/>
+                <img th:src="@{icons/Constantine Logo.svg}" class="img-fluid mb-2" style="width:50%;"/>
             </div>
         </div>
         <video class="w-100" autoplay preload="true" loop="loop" style="margin-top:-150px;opacity:.5; " muted>
@@ -25,10 +25,10 @@
 <div class="container d-xs-block d-lg-none mt-3">
     <div class="p-0 mb-4 border-box bg-black">
         <div class="container-fluid p-0 overflow-hidden" style="height:200px;">
-            <div class="position-absolute p-5 text-white" style="z-index:1;">
-                <img th:src="@{/icons/Constantine Logo.png}" class="img-fluid mb-2" style="width:80%;"/>
+            <div class="position-relative px-4 text-white" style="z-index: 1; height:100%">
+                <img th:src="@{icons/Constantine Logo.svg}" class="img-fluid mb-3" style="width:100%;transform:translate(0%, -60%);top:50%;position: relative;"/>
             </div>
-            <video style="width:310%; opacity:.5; margin-left:-400px" autoplay preload="true" loop="loop" muted>
+            <video style="width:310%; opacity:.5; transform:translate(-50%, -50%);" autoplay preload="true" loop="loop" muted>
                 <source th:src="@{/videos/banners/Costi Online About Banner.m4v}" type="video/mp4">
                 video not supported
             </video>
@@ -45,13 +45,13 @@
             <div class="row">
                 <div class="col-3 mb-4">
                     <a href="#about-me" class="m-0 p-0">
-                        <img th:src="@{/icons/Constantine Logo v5.png}" class="img-fluid logo-list" alt="My logo">
+                        <img th:src="@{/icons/Constantine Logo v5.svg}" class="img-fluid logo-list" alt="My logo">
                         <h5 class="fw-bold text-center text-1">About Me</h5>
                     </a>
                 </div>
                 <div class="col-3 mb-4">
                     <a href="#career-history" class="m-0 p-0">
-                        <img th:src="@{/icons/Work.png}" class="img-fluid logo-list" alt="Work">
+                        <img th:src="@{/icons/Work.svg}" class="img-fluid logo-list" alt="Work">
                         <h5 class="fw-bold text-center text-1">Career</h5>
                     </a>
                 </div>
@@ -63,7 +63,7 @@
                 </div>
                 <div class="col-3 mb-4">
                     <a href="#website" class="m-0 p-0">
-                        <img th:src="@{/icons/Logo.png}" class="img-fluid logo-list" alt="website">
+                        <img th:src="@{/icons/Logo.svg}" class="img-fluid logo-list" alt="website">
                         <h5 class="fw-bold text-center text-1">Website</h5>
                     </a>
                 </div>
@@ -75,7 +75,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-12 col-lg-5 pt-5 px-5 pb-lg-5">
-                    <img class="img-fluid pb-3" th:src="@{/images/About/Costi.jpg}" />
+                    <img class="img-fluid pb-3" th:src="@{/images/About/Costi.jpg}" style="width: 100%"/>
                     <h1 class="fw-bold text-uppercase">Constantine Khamis</h1>
                     <p class="fs-4">Student intern</p>
                     <a href="https://www.linkedin.com/in/constantin-khamis/"><img th:src="@{/icons/LinkedIn.svg}" class="img-fluid" style="width:40px;"/></a>
