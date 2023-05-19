@@ -289,9 +289,6 @@
     $(document).ready(function(){
         checkGameStarted();
         $('.changing-text').text(subtitles[Math.floor(Math.random() * subtitles.length)]);
-        $('.banner-logo').animate({
-            width: '50%',
-            });
 
         let quickLinks = $("#quick-links").children();
         $(quickLinks[0]).delay(0).animate({opacity: '1',
