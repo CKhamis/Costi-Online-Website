@@ -2,6 +2,7 @@
 <html xml:th="https://www.thymeleaf.org">
 <head th:replace="Components :: head('Home')"></head>
 <body class="bg-1 text-1">
+<div th:replace="Components :: JS"></div>
 <div th:replace="Components :: main-navigation"></div>
 <div th:replace="Components :: timer-box"></div>
 <div th:replace="Components :: toast-box"></div>
@@ -29,7 +30,7 @@
         <div class="container-fluid p-0 overflow-hidden" style="height:300px;">
             <div class="position-relative px-5 text-white" style="z-index: 1;height:100%">
                 <div class="px-md-5" style="transform: translate(0%, -50%);position: relative; top:50%">
-                    <img src="/icons/CO White.svg" class="img-fluid mb-3" style="width:100%">
+                    <img src="/icons/CO White.svg" class="img-fluid mb-3" alt="costi online logo" style="width:100%">
                     <h3 class="fw-bold text-white changing-text text-center">📮😳😳😳</h3>
                     <p class="col-md-8 fs-4 text-white text-center w-100" th:text="|Version: ${version}|">Version X</p>
                 </div>
@@ -174,8 +175,8 @@
 
     <!-- Axcel Minigame -->
     <div class="container-fluid overflow-hidden px-0 pt-3" id="axcel-container">
-        <img id="axcel-running" th:src="@{images/games/axcel/running.gif}" class="position-relative" style="height: 0px; top:0px;left:0px;"/>
-        <img id="axcel-waiting" th:src="@{images/games/axcel/sitting.gif}" class="position-relative mx-auto" style="height: 0px; top:0px;left:50%;transform:translate(-50%, 0%);"/>
+        <img id="axcel-running" th:src="@{images/games/axcel/running.gif}" alt="axcel" class="position-relative" style="height: 0px; top:0px;left:0px;"/>
+        <img id="axcel-waiting" th:src="@{images/games/axcel/sitting.gif}" alt="axcel" class="position-relative mx-auto" style="height: 0px; top:0px;left:50%;transform:translate(-50%, 0%);"/>
     </div>
 
     <!-- Axcel Dialogue -->
@@ -237,7 +238,7 @@
     <div class="container-fluid p-0 mb-3" id="media">
         <div class="container-fluid">
             <div class="container py-5">
-                <img th:src="@{/icons/CM White.svg}" class="img-fluid mb-2"/>
+                <img th:src="@{/icons/CM White.svg}" alt="costi media logo" class="img-fluid mb-2"/>
                 <p class="fs-4 text-white">View various video, image, and flyer materials I made. This features projects I created since I was in sixth grade in chronological order.</p>
                 <a href="/Media" class="btn btn-primary" aria-current="page">Visit Costi Media</a>
             </div>

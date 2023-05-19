@@ -2,9 +2,11 @@
 <html xml:th="https://www.thymeleaf.org">
 <head th:replace="minecraft/MinecraftComponents :: head('Home')"></head>
 <body class="bg-1 text-1">
+<div th:replace="Components :: JS"></div>
 <div th:replace="minecraft/MinecraftComponents :: nav"></div>
 
 <div class="container mt-5 pt-5">
+
     <p class="fs-5"><a href="/Minecraft/vote">Return to previous screen ></a></p>
     <div class="p-5 mb-4 border-box">
         <div class="container-fluid py-5">
