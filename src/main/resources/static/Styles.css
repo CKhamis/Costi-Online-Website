@@ -13,6 +13,7 @@
 #education{
     background-image: url('/images/About/SJSU.jpg');
     background-position: right;
+    background-size: 100%;
     background-attachment: fixed;
 }
 /* Wiki */
@@ -55,6 +56,7 @@
 #wiki{
     background-image: url('/images/webpageImages/WikiBg.jpg');
     background-position: center;
+    background-size: 100%;
     background-attachment: fixed;
 }
 #wiki > div{
