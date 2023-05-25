@@ -7,33 +7,18 @@
 <div th:replace="Components :: timer-box"></div>
 <div th:replace="Components :: toast-box"></div>
 <script th:replace="Components :: axcel-game"></script>
-<!-- Desktop -->
+
 <div class="p-0 m-0 overflow-hidden">
-    <div class="container-fluid p-0 overflow-hidden d-none d-lg-block bg-black" style="height:400px">
-        <div class="position-absolute p-5" style="z-index:1;height:400px; width:100%">
-            <div class="container-fluid" style="padding-top:90px;">
-                <img th:src="@{icons/Constantine Logo.svg}" class="img-fluid mb-2" style="width:50%;"/>
+    <div class="container-fluid p-0 overflow-hidden bg-black" style="height:400px">
+        <div class="position-absolute px-5" style="z-index:1;height:400px; width:100%">
+            <div class="container-fluid" style="padding-top:130px;">
+                <img th:src="@{icons/Constantine Logo.svg}" class="img-fluid mb-2 banner-logo"/>
             </div>
         </div>
-        <video class="w-100" autoplay preload="true" loop="loop" style="margin-top:-150px;opacity:.5; " muted>
+        <video class="banner-video" autoplay preload="true" loop="loop" muted>
             <source th:src="@{/videos/banners/Costi Online About Banner.m4v}" type="video/mp4">
             video not supported
         </video>
-    </div>
-</div>
-
-<!-- Mobile -->
-<div class="container d-xs-block d-lg-none mt-3">
-    <div class="p-0 mb-4 border-box bg-black">
-        <div class="container-fluid p-0 overflow-hidden" style="height:200px;">
-            <div class="position-relative px-4 text-white" style="z-index: 1; height:100%">
-                <img th:src="@{icons/Constantine Logo.svg}" class="img-fluid mb-3" style="width:100%;transform:translate(0%, -60%);top:50%;position: relative;"/>
-            </div>
-            <video style="width:310%; opacity:.5; transform:translate(-50%, -50%);" autoplay preload="true" loop="loop" muted>
-                <source th:src="@{/videos/banners/Costi Online About Banner.m4v}" type="video/mp4">
-                video not supported
-            </video>
-        </div>
     </div>
 </div>
 
