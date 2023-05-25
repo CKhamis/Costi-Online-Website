@@ -2,7 +2,6 @@
 <html xml:th="https://www.thymeleaf.org">
 <head th:replace="Components :: head('Newsroom')"></head>
 <body class="bg-1 text-1">
-<div th:replace="Components :: JS"></div>
 <div th:replace="Components :: main-navigation"></div>
 
 <main class="container mt-3" id="top">
@@ -177,6 +176,7 @@
 </main>
 
 <div th:replace="Components :: footer"></div>
+<div th:replace="Components :: JS"></div>
 <div th:replace="Components :: scripts"></div>
 <script>
     $(document).ready(function(){
