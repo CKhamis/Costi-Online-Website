@@ -2,7 +2,6 @@
 <html xml:th="https://www.thymeleaf.org">
 <head th:replace="Components :: head('Home')"></head>
 <body class="bg-2 text-1">
-<div th:replace="Components :: JS"></div>
 <div th:replace="Components :: main-navigation"></div>
 
 <div class="container-fluid row px-4 py-5" id="about">
@@ -62,8 +61,9 @@
         </div>
     </div>
 </div>
-
+<div th:replace="Components :: JS"></div>
 <div th:replace="Components :: footer"></div>
 <div th:replace="Components :: scripts"></div>
+
 </body>
 </html>
