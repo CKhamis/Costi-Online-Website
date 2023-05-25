@@ -9,6 +9,19 @@
     object-fit:cover;
 }
 
+.banner-video{
+    width: 100%;
+    opacity:.5;
+}
+
+@media screen and (max-width: 1000px){
+    .banner-video{
+        height:100%;
+        width:auto;
+        margin-top: auto;
+    }
+}
+
 /* About */
 #education{
     background-image: url('/images/About/SJSU.jpg');
