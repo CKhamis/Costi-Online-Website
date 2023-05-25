@@ -13,12 +13,22 @@
     width: 100%;
     opacity:.5;
 }
+.banner-logo{
+    width: 50%;
+    transform: translate(-50%, 0%);
+    left: 50%; position: relative;
+    display: inline-block;
+}
 
 @media screen and (max-width: 1000px){
     .banner-video{
         height:100%;
         width:auto;
         margin-top: auto;
+    }
+
+    .banner-logo{
+        width: 100%;
     }
 }
 
