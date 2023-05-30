@@ -116,27 +116,63 @@ public class PostService {
                 throw new Exception("Original post could not be found. Id = " + post.getId());
             }
         }else {
-            // File is present
-            // Validate that the uploaded file is an image
-            try {
-                ImageIO.read(file.getInputStream()).toString();
-                //File is valid and not null:
+            // File is present, check if file type
+            String originalFilename = file.getOriginalFilename(), fileType = "";
+            if (originalFilename != null) {
+                int dotIndex = originalFilename.lastIndexOf(".");
+                if (dotIndex > 0 && dotIndex < originalFilename.length() - 1) {
+                    fileType = originalFilename.substring(dotIndex + 1).toLowerCase();
+                }
+            }
+
+            //Check if supported file type
+            if(fileType.toLowerCase().equals("png") ||
+                    fileType.toLowerCase().equals("jpg") ||
+                    fileType.toLowerCase().equals("jpeg") ||
+                    fileType.toLowerCase().equals("gif") ||
+                    fileType.toLowerCase().equals("bmp") ||
+                    fileType.toLowerCase().equals("wbmp") ||
+                    fileType.toLowerCase().equals("tiff") ||
+                    fileType.toLowerCase().equals("tif") ||
+                    fileType.toLowerCase().equals("ico") ||
+                    fileType.toLowerCase().equals("pnm")){
+
+                //file types that need validation
                 try {
-                    Attachment attachment = attachmentService.saveAttachment(file);
-                    post.setLastEdited(LocalDateTime.now());
-                    post.setImagePath(POST_IMAGE_PATH + attachment.getId());
-                    postRepository.save(post);
+                    System.out.println(file.getOriginalFilename());
+                    ImageIO.read(file.getInputStream()).toString();
+                    //File is valid and not null:
+                    try {
+                        savePostNoValidation(post, file);
+                    } catch (Exception e) {
+                        throw new IOException(e.getMessage());
+                    }
+
+                } catch (Exception e) {
+                    throw e;
+                }
+
+            }else if(fileType.toLowerCase().equals("webp") || fileType.toLowerCase().equals("avif")){
+                // Special file types that do not currently require validation
+                try {
+                    savePostNoValidation(post, file);
                 } catch (Exception e) {
                     throw new IOException(e.getMessage());
                 }
-
-            } catch (Exception e) {
-                throw e;
+            }else{
+                //unknown type
+                throw new Exception("Unsupported file type");
             }
         }
-
-
     }
+
+    private void savePostNoValidation(Post post, MultipartFile file) throws Exception {
+        Attachment attachment = attachmentService.saveAttachment(file);
+        post.setLastEdited(LocalDateTime.now());
+        post.setImagePath(POST_IMAGE_PATH + attachment.getId());
+        postRepository.save(post);
+    }
+
 
     public void enable(Long id, boolean enable, User user) throws Exception {
         // Check if user is owner
