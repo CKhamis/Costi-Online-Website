@@ -9,16 +9,16 @@
         <h2 class="fs-2">Development Eras</h2>
         <ul class="flex-column">
             <li class="nav-item">
-                <h4 class="fs-4"><a class="nav-link" href="#IDE">Interdimensional Era (current)</a></h4>
+                <h4 class="fs-4"><a class="nav-link" href="#interdimensional">Interdimensional Era (current)</a></h4>
             </li>
             <li class="nav-item">
-                <h4 class="fs-4"><a class="nav-link" href="#PSE">Pseudo-Industrial Era (17-19)</a></h4>
+                <h4 class="fs-4"><a class="nav-link" href="#pseudo-industrial">Pseudo-Industrial Era (17-19)</a></h4>
             </li>
             <li class="nav-item">
-                <h4 class="fs-4"><a class="nav-link" href="#HSE">High School Era (14-17)</a></h4>
+                <h4 class="fs-4"><a class="nav-link" href="#highschool">High School Era (14-17)</a></h4>
             </li>
             <li class="nav-item">
-                <h4 class="fs-4"><a class="nav-link" href="#CHE">Childhood Era (14-)</a></h4>
+                <h4 class="fs-4"><a class="nav-link" href="#childhood">Childhood Era (14-)</a></h4>
             </li>
         </ul>
 
@@ -259,7 +259,7 @@
         .then(response => response.json())
         .then(data => {
             // Process the retrieved data
-            console.log(data);
+            displayProjects(data)
         })
         .catch(error => {
             // error handling
@@ -276,6 +276,36 @@
         }
     }
 
+    //Render
+    function displayProjects(data){
+        let currentEra = ``;
+        let insertHTML = data.map(project => {
+            const links = project.repositoryLinks.map((link, index) => `<a href="${link}" class="btn btn-primary mb-3" style="margin-right:10px;">Repository ${index + 1}</a>`).join('');
+            let divider = ``;
+            let badge = ``;
+            if(!project.discontinued){
+                badge = `<span class="badge rounded-pill bg-success">Active</span>`
+            }
+
+            if(currentEra !== project.era){
+                divider = `<h3 id="${project.era}" class="fs-3 text-center fw-bold">${project.era.toUpperCase()} ERA</h3>`;
+                currentEra = project.era;
+            }
+            return `
+            ${divider}
+            <div class="card border-box my-5 ${project.type}" id="${project.id}">
+                <img src="${project.imagePath}" class="card-img-top" alt="${project.title}">
+                <div class="card-body px-lg-5 px-4 blue-v-gradient">
+                    <h5 class="card-title fw-bold fs-4">${project.title} ${badge}</h5>
+                    <p class="text-secondary">${project.subtitle}</p>
+                    <p class="card-text fs-5">${project.description}</p>
+                    ${links}
+                </div>
+            </div>
+            `;
+        });
+        container.append(insertHTML);
+    }
     $(document).ready(function(){
         $(".enable-toggle").css("display", "none");
 
