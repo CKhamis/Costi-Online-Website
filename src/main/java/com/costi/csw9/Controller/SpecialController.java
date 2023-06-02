@@ -1,7 +1,10 @@
 package com.costi.csw9.Controller;
 
+import com.costi.csw9.Model.Ajax.ProjectInfo;
 import com.costi.csw9.Model.Axcel.GameProgress;
+import com.costi.csw9.Util.InfoInitializer;
 import org.apache.tomcat.jni.Local;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,15 +14,64 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class SpecialController {
     private static final int requiredFinds = 7;
+    private List<ProjectInfo> projects = InfoInitializer.initializeProjects();
 
+    /*
+        JSON responses
+     */
+
+    @GetMapping("/get-projects")
+    public ResponseEntity<List<ProjectInfo>> getProjects() {
+        return ResponseEntity.ok(projects);
+    }
+
+    @GetMapping("/get-project-analytics")
+    @ResponseBody
+    public Map<String, Object> getProjectAnalytics() {
+        // Construct the JSON response
+        Map<String, Object> jsonResponse = new HashMap<>();
+        jsonResponse.put("totalProjects", projects.size());
+
+        int numActive = 0, numDiscontinued = 0, numJava = 0, numPython = 0, numOther = 0, numWeb = 0, numRepos = 0;
+        for(ProjectInfo project : projects){
+            if(project.isDiscontinued()){
+                numDiscontinued++;
+            }else{
+                numActive++;
+            }
+
+            if(project.getType().equals("java")){
+                numJava++;
+            }else if(project.getType().equals("web")){
+                numWeb++;
+            }else if(project.getType().equals("python")){
+                numPython++;
+            }else{
+                numOther++;
+            }
+
+            numRepos += project.getRepositoryLinks().length;
+        }
+
+        jsonResponse.put("active", numActive);
+        jsonResponse.put("discontinued", numDiscontinued);
+        jsonResponse.put("java", numJava);
+        jsonResponse.put("python", numPython);
+        jsonResponse.put("other", numOther);
+        jsonResponse.put("web", numWeb);
+        jsonResponse.put("repos", numRepos);
+
+        return jsonResponse;
+    }
+
+    /*
+        Axcel Game
+     */
     @PostMapping("/games/Axcel/start-game")
     @ResponseBody
     public Map<String, Object> startGame(HttpSession session) {
