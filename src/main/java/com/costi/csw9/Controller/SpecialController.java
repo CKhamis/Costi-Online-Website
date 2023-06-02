@@ -26,8 +26,47 @@ public class SpecialController {
      */
 
     @GetMapping("/get-projects")
-    public ResponseEntity<List<ProjectInfo>> getData() {
+    public ResponseEntity<List<ProjectInfo>> getProjects() {
         return ResponseEntity.ok(projects);
+    }
+
+    @GetMapping("/get-project-analytics")
+    @ResponseBody
+    public Map<String, Object> getProjectAnalytics() {
+        // Construct the JSON response
+        Map<String, Object> jsonResponse = new HashMap<>();
+        jsonResponse.put("totalProjects", projects.size());
+
+        int numActive = 0, numDiscontinued = 0, numJava = 0, numPython = 0, numOther = 0, numWeb = 0, numRepos = 0;
+        for(ProjectInfo project : projects){
+            if(project.isDiscontinued()){
+                numDiscontinued++;
+            }else{
+                numActive++;
+            }
+
+            if(project.getType().equals("java")){
+                numJava++;
+            }else if(project.getType().equals("web")){
+                numWeb++;
+            }else if(project.getType().equals("python")){
+                numPython++;
+            }else{
+                numOther++;
+            }
+
+            numRepos += project.getRepositoryLinks().length;
+        }
+
+        jsonResponse.put("active", numActive);
+        jsonResponse.put("discontinued", numDiscontinued);
+        jsonResponse.put("java", numJava);
+        jsonResponse.put("python", numPython);
+        jsonResponse.put("other", numOther);
+        jsonResponse.put("web", numWeb);
+        jsonResponse.put("repos", numRepos);
+
+        return jsonResponse;
     }
 
     /*
