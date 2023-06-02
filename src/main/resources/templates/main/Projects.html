@@ -39,12 +39,12 @@
         behind
     </div>
     <div class="col-xs-12 col-lg-9 px-0" style="padding-top:20px">
-        <div class="container-fluid">
+        <div class="container-fluid" id="main-content">
             <img th:src="@{/images/webpageImages/History.png}" class="img-fluid w-100" >
 
             <h3 id="IDE" class="fs-3 text-center fw-bold">Interdimentional Era (19+)</h3>
 
-            <div class="card border-box my-5 python">
+            <!--<div class="card border-box my-5 python">
                 <img th:src="@{/images/webpageImages/CS-122.png}" class="card-img-top" alt="Computer Science 122">
                 <div class="card-body px-lg-5 px-4 blue-v-gradient">
                     <h5 class="card-title fw-bold fs-4">Computer Science 122 Projects</h5>
@@ -238,7 +238,7 @@
                     <p class="card-text fs-5">I made this website when I was first learning web development in 2013. At the time, I was 12. This website featured a product page for a made up laptop of the made up brand "laptoop," which I came up with in third grade.</p>
                     <a href="https://github.com/CKhamis/Laptoop-Company-Website" class="btn btn-primary mb-3">See GitHub Page</a>
                 </div>
-            </div>
+            </div>-->
 
         </div>
         <div th:replace="Components :: footer"></div>
@@ -250,6 +250,32 @@
 <div th:replace="Components :: toast-box"></div>
 <script th:replace="Components :: axcel-game"></script>
 <script>
+    // Select parent element
+    const container = $("#main-content");
+
+    //fetch functions
+    fetch("/get-projects")
+        .then(checkStatus)
+        .then(response => response.json())
+        .then(data => {
+            // Process the retrieved data
+            console.log(data);
+        })
+        .catch(error => {
+            // error handling
+            container.append($("<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>"));
+            console.error('Error retrieving data:', error);
+        });
+
+    //helper functions
+    function checkStatus(response){
+        if(response.ok){
+            return Promise.resolve(response);
+        }else{
+            return Promise.reject(new Error(response.statusText));
+        }
+    }
+
     $(document).ready(function(){
         $(".enable-toggle").css("display", "none");
 
