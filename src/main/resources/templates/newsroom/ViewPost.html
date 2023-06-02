@@ -53,6 +53,8 @@
             <a class="btn btn-primary btn-sm d-inline" th:href="@{|/COMT/Newsroom/*{getId()}/edit|}" th:if="${isOwner}">Edit</a>
             <a class="btn btn-secondary btn-sm d-inline" href="/COMT/Newsroom" th:if="${isOwner}">COMT</a>
             <p th:text="|views: ${post.getViews()}|"></p>
+            <a href="/Newsroom" class="text-secondary d-block d-md-none">< Back to Newsroom</a>
+
         </div>
         <div class="d-none d-lg-block col-lg-3 px-lg-5">
             <h3 class="text-secondary fw-bold">Recent content</h3>
