@@ -40,17 +40,10 @@ public class InfoInitializer {
     public static List<MediaInfo> initializeMedia(){
         List<MediaInfo> media = new ArrayList<>();
 
-        media.add(new MediaInfo("", "", "", "<iframe src=\"https://www.youtube-nocookie.com/embed/LYXEK4cTHag\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" allowfullscreen></iframe>", "Flea Market Finds: Episode 2", "Adobe Premiere Pro | 2022", "Join Alex, Costi, Jack & Haydon in gathering the highest quality of finds at Capitol flea market! Although not perfect, this video uses enhanced editing techniques over the previous installment in the series.", "https://youtu.be/LYXEK4cTHag"));
-        media.add(new MediaInfo("", "", "", "", "", "", "", "https://youtu.be/5c5guItHIc4"));
-        media.add(new MediaInfo("", "", "", "", "", "", "", ""));
-        media.add(new MediaInfo("", "", "", "", "", "", "", ""));
-        media.add(new MediaInfo("", "", "", "", "", "", "", ""));
-        media.add(new MediaInfo("", "", "", "", "", "", "", ""));
-        media.add(new MediaInfo("", "", "", "", "", "", "", ""));
-        media.add(new MediaInfo("", "", "", "", "", "", "", ""));
-        media.add(new MediaInfo("", "", "", "", "", "", "", ""));
-        media.add(new MediaInfo("", "", "", "", "", "", "", ""));
-        media.add(new MediaInfo("", "", "", "", "", "", "", ""));
+        //TODO: add the rest
+        media.add(new MediaInfo("2022", "", "live-action", "<iframe src=\"https://www.youtube-nocookie.com/embed/LYXEK4cTHag\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" allowfullscreen></iframe>", "Flea Market Finds: Episode 2", "Adobe Premiere Pro | 2022", "Join Alex, Costi, Jack & Haydon in gathering the highest quality of finds at Capitol flea market! Although not perfect, this video uses enhanced editing techniques over the previous installment in the series.", "https://youtu.be/LYXEK4cTHag"));
+        media.add(new MediaInfo("2022", "", "live-action", "<iframe src=\"https://www.youtube-nocookie.com/embed/5c5guItHIc4\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" allowfullscreen></iframe>", "Flea Market Finds: Episode 1", "Adobe Premiere Pro | 2022", "Flea Market finds is the newest video series in my collection. Flea market finds is about what Haydon, me, and sometimes a special guest, find in flea markets. We both aim to collect electronics at cheap prices. In this episode, we go to Flea Market Capitol.", "https://youtu.be/5c5guItHIc4"));
+        media.add(new MediaInfo("2022", "", "live-action", "<img src=\"/images/webpageImages/JKCS TV RH.jpg\" class=\"card-img-top\" alt=\"JK CS Testimonial Video: Rose Herrera\">", "JK CS Testimonial Video: Rose Herrera", "Adobe Premiere Pro | 2022", "For my dad's political campaign, I was tasked with making testimonial videos with as many of his supporters as possible for their advertising campaign. I filmed and edited this video completely by myself at Rose Herrera's house. I made sure to use practical and clear animations.", ""));
 
         return media;
     }

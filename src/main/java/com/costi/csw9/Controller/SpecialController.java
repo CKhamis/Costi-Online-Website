@@ -1,5 +1,6 @@
 package com.costi.csw9.Controller;
 
+import com.costi.csw9.Model.Ajax.MediaInfo;
 import com.costi.csw9.Model.Ajax.ProjectInfo;
 import com.costi.csw9.Model.Axcel.GameProgress;
 import com.costi.csw9.Util.InfoInitializer;
@@ -20,10 +21,15 @@ import java.util.*;
 public class SpecialController {
     private static final int requiredFinds = 7;
     private List<ProjectInfo> projects = InfoInitializer.initializeProjects();
+    private List<MediaInfo> mediaProjects = InfoInitializer.initializeMedia();
 
     /*
         JSON responses
      */
+    @GetMapping("/get-media")
+    public ResponseEntity<List<MediaInfo>> getMedia() {
+        return ResponseEntity.ok(mediaProjects);
+    }
 
     @GetMapping("/get-projects")
     public ResponseEntity<List<ProjectInfo>> getProjects() {
