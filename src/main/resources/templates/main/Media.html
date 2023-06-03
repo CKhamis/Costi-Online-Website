@@ -245,38 +245,6 @@
         <div class="container mt-5">
             <div class="row" id="main-content">
 
-                <div class="col-12 p-0 mb-4 overflow-hidden">
-                    <div class="container-fluid p-0 overflow-hidden bg-black" style="height:100px">
-                        <div style="height:100px; width:100%" class="position-absolute5">
-                            <div class="container-fluid">
-                                <p class="fw-bold fs-1 text-center media-banner-logo" id="2022" style="z-index: 1;position: relative;">9️⃣: Costi Media 2022</p>
-                            </div>
-                        </div>
-                        <video class="media-banner-video" autoplay="" preload="true" loop="loop" muted="">
-                            <source src="/videos/banners/Costi Online About Banner.m4v" type="video/mp4">
-                            video not supported
-                        </video>
-                    </div>
-                </div>
-
-<!--                <div class="col-12 p-0 mb-4 mt-5 border-box bg-black">-->
-<!--                    <div class="container-fluid p-0 overflow-hidden" style="height:100px;">-->
-<!--                        <div class="position-absolute p-4 text-white" style="z-index:1;">-->
-<!--                            <h1 class="fw-bold" id="2022">9️⃣: Costi Media 2022</h1>-->
-<!--                        </div>-->
-<!--                        <video style="width:175%; opacity:.5; margin-left:-200px; margin-top: -200px" autoplay preload="true" loop="loop" muted>-->
-<!--                            video not supported-->
-<!--                        </video>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-                <div class="container border-bottom mb-5">
-                    <p class="fs-4">
-                        With stores and schools opening back up from Covid lockdowns in 2022, I was able to film more videos. Unfortunately during the lockdowns, all the people I made videos with grew apart in the past became disinterested in making more videos. I also was needed to work on my dad's next political campaign
-                    </p>
-                </div>
-
-
             </div>
         </div>
 
@@ -1857,6 +1825,55 @@
     const container = $("#main-content");
     //const analyticsContainer = $("#analyticsContainer");
 
+    // Headers
+    const headers = [
+        {
+            title: '9️⃣: Costi Media 2022',
+            videoLink: '/videos/banners/Costi Online About Banner.m4v',
+            description: 'With stores and schools opening back up from Covid lockdowns in 2022, I was able to film more videos. Unfortunately during the lockdowns, all the people I made videos with grew apart in the past became disinterested in making more videos. I also was needed to work on my dad\'s next political campaign '
+        },
+        {
+            title: '8️⃣: Costi Media 2021',
+            videoLink: '/videos/banners/Costi Online About Banner.m4v',
+            description: '2021 was the year of the lockdowns. With nobody to film with, my focus on media was shifted elsewhere. I was also busy helping my dad with his state senate political campaign during this time. '
+        },
+        {
+            title: '7️⃣: Costi Entertainment 2020',
+            videoLink: '/videos/banners/Intro 2020.m4v',
+            description: '2020 was a terrible year for almost everyone. I initially planned this year to be the revitalization of Amal+, the Ethan Show, and even making new shows. However, this idea was abruptly ended once the pandemic caused lockdown restrictions. The videos I made this year were mostly memory slideshows to highlight previous moments in my life. '
+        },
+        {
+            title: '6️⃣: Costi Entertainment 2019',
+            videoLink: '/videos/banners/2019 Drone Footage.m4v',
+            description: '2019 was a very different kind of year for me in terms of the videos I made. The Ethan Show was officially cancelled, Amal+ was long gone, and the Pioneer News got almost my full attention. I also got to make San Jose Tips videos with friends. I was so busy with projects, that I didn\'t even get to create an animated intro logo for Costi Entertainment. In fact, there was no mention of this alias at all for my videos in 2019. '
+        },
+        {
+            title: '5️⃣: Costi Entertainment 2018',
+            videoLink: '/videos/banners/Intro 2018.m4v',
+            description: '2018 was an important year for me. This was a transition period between the silly videos I was making previously and more presentable, more planned videos. This included more videos from San Jose Tips and the Ethan Show. '
+        },
+        {
+            title: '4️⃣: Costi Entertainment 2017',
+            videoLink: '/videos/banners/Intro 2017.m4v',
+            description: '2017 marked a shift in quality of the videos I make. It also marked the beginning of 2 new video series: San Jose Tips and The Ethan Show. The quality of my green screen effects, as well as video editing in general, were improved tremendously. '
+        },
+        {
+            title: '3️⃣: Costi Entertainment 2016',
+            videoLink: '/videos/banners/Intro 2016.m4v',
+            description: 'Starting with Costi Entertainment 2016, a golden era blossomed. I created a lot more videos of far higher quality than the last, I started getting better equipment, and I was basically only limited to my imagination. I also created a new render of my logo that I used for the next few years. '
+        },
+        {
+            title: '2️⃣: Costi Productions 2015',
+            videoLink: '/videos/banners/Costi-Logo3.m4v',
+            description: 'In 2015, I made a very large amount of videos. I have reached a reconnaissance of video production in a way. I got access to Adobe CS5 and CS4 software packs, and I was self-teaching based on what I had learned from school and just trying things out. Each video would try out a new technique or idea and the next video would utilize what I had learned from before and add further experimentation. 2015 was home to many iconic videos such as Amal+. '
+        },
+        {
+            title: '1️⃣: Costi Inc. Era',
+            videoLink: '/videos/banners/Costi-Logo2.m4v',
+            description: 'The Costi Inc. Era was the very first stage in Cost Media\'s evolution. Initially starting in 2011 and ending in 2015, I used to make simple Flash animations, vector artwork, and short movies with iMovie. I found myself a portable version of Flash 8 and Fireworks back when they were owned by Macromedia and begun my work. It was during this time when I found a passion for creating media. I also bought myself a simple video editor to tinker with. Along with making my first animated logo, I had made the Terency show, a flash-based school project, begun working on a Flash game, and made a trailer for it.'
+        }
+    ];
+
     //fetch functions
     fetch("/get-media")
         .then(checkStatus)
@@ -1891,8 +1908,32 @@
                 linkText = `<a href="${media.link}" class="btn btn-primary mb-3">See on YouTube</a>`;
             }
 
+            //Header checking and insertion
+            let header = ``;
+            if(media.era !== currentEra){
+                currentEra = media.era;
+                header = `
+                    <div class="p-0 mb-4 border-box bg-black" id="${media.era}">
+                        <div class="container-fluid p-0 overflow-hidden" style="height:100px;">
+                        <div class="position-absolute p-4 text-white" style="z-index:1;">
+                            <p class="fw-bold fs-1">${headers[currentEraCount].title}</p>
+                        </div>
+                            <video style="width:175%; opacity:.5; margin-left:-400px" autoplay="" preload="true" loop="loop" muted="">
+                            <source src="${headers[currentEraCount].videoLink}" type="video/mp4">
+                            video not supported
+                            </video>
+                        </div>
+                    </div>
+                    <div class="container border-bottom mb-3">
+                        <p class="fs-4">${headers[currentEraCount].description}</p>
+                    </div>
+                `;
+                currentEraCount++;
+            }
+
 
             return `
+            ${header}
             <div class="col-12 col-lg-6 mb-5 ${media.type}">
                 <div class="card border-box">
                     ${media.previewHTML}
@@ -1909,10 +1950,6 @@
             `;
         });
         container.append(insertHTML);
-    }
-
-    function getHeader(){
-        return `<h2>M</h2>`;
     }
 
     $(document).ready(function(){
