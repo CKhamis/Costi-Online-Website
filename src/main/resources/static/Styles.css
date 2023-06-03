@@ -104,6 +104,22 @@
     object-fit:cover;
 }
 
+.media-banner-video{
+    width: 100%;
+    opacity:.5;
+    transform:translate(0, -50%);
+}
+
+.media-banner-logo{
+    transform:translate(0, 30%);
+}
+
+@media screen and (max-width: 768px) {
+    .media-banner-logo{
+        transform:translate(0, 80%);
+    }
+}
+
 /* Moderator */
 .ac-grid-container {
   display: grid;

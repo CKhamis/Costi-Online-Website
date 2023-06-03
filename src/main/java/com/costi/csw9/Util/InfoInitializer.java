@@ -11,8 +11,6 @@ public class InfoInitializer {
     public static List<ProjectInfo> initializeProjects() {
         List<ProjectInfo> objects = new ArrayList<>();
 
-        //NOTE: One of Axcel's toys are here
-
         // Create objects
         objects.add(new ProjectInfo("interdimensional", "python", "", "/images/webpageImages/CS-122.png", "Computer Science 122 Projects", true, "School Collaborative Projects | 2022",  "These are a collection of Python projects I have made for my Python class in SJSU most of these are projects I have collaborated with. The GitHub repositories listed here may not contain the final code we used to turn in, as there were some syncing issues with our code. Some highlights of the class were using tkinter to make a matching game and a simple web server using django and flask.", new String[]{"https://github.com/CKhamis/CS-122-Homework-2", "https://github.com/CKhamis/CS-122-Homework-4", "https://github.com/CKhamis/CS-122-Homework-6", "https://github.com/CKhamis/CS-122-Homework-7", "https://github.com/CKhamis/CS-122-Homework-8"}));
         objects.add(new ProjectInfo("interdimensional", "java", "", "/images/webpageImages/CostiOnline.jpg", "Costi Online", false, "Personal Project | 2022", "Costi Online is a website that is designed to show off various projects, services, and media I made. This project initially began as a website that covers my 9th Minecraft survival world. It had links to participate in elections, polls, and the history of the previous worlds. After it was published on costionline.com, I decided to make it more general. The aforementioned feature has been moved to the <a href=\"/Minecraft\">Minecraft</a> section.", new String[]{"https://github.com/CKhamis/Costi-Online-Website"}));

@@ -211,7 +211,7 @@
     </div>
 
     <!-- Timeline -->
-    <div id="main-content" class="container-fluid">
+    <div class="container-fluid">
         <div class="container mt-5">
             <h2 class="text-center fw-bold">Costi Media Timeline</h2>
             <p class="text-center pb-2 border-bottom">This timeline shows the pieces of media I made separated by year along with a short description.</p>
@@ -243,6 +243,44 @@
         </div>
 
         <div class="container mt-5">
+            <div class="row" id="main-content">
+
+                <div class="col-12 p-0 mb-4 overflow-hidden">
+                    <div class="container-fluid p-0 overflow-hidden bg-black" style="height:100px">
+                        <div style="height:100px; width:100%" class="position-absolute5">
+                            <div class="container-fluid">
+                                <p class="fw-bold fs-1 text-center media-banner-logo" id="2022" style="z-index: 1;position: relative;">9️⃣: Costi Media 2022</p>
+                            </div>
+                        </div>
+                        <video class="media-banner-video" autoplay="" preload="true" loop="loop" muted="">
+                            <source src="/videos/banners/Costi Online About Banner.m4v" type="video/mp4">
+                            video not supported
+                        </video>
+                    </div>
+                </div>
+
+<!--                <div class="col-12 p-0 mb-4 mt-5 border-box bg-black">-->
+<!--                    <div class="container-fluid p-0 overflow-hidden" style="height:100px;">-->
+<!--                        <div class="position-absolute p-4 text-white" style="z-index:1;">-->
+<!--                            <h1 class="fw-bold" id="2022">9️⃣: Costi Media 2022</h1>-->
+<!--                        </div>-->
+<!--                        <video style="width:175%; opacity:.5; margin-left:-200px; margin-top: -200px" autoplay preload="true" loop="loop" muted>-->
+<!--                            video not supported-->
+<!--                        </video>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+                <div class="container border-bottom mb-5">
+                    <p class="fs-4">
+                        With stores and schools opening back up from Covid lockdowns in 2022, I was able to film more videos. Unfortunately during the lockdowns, all the people I made videos with grew apart in the past became disinterested in making more videos. I also was needed to work on my dad's next political campaign
+                    </p>
+                </div>
+
+
+            </div>
+        </div>
+
+        <!--<div class="container mt-5">
             <div class="p-0 mb-4 mt-5 border-box bg-black">
                 <div class="container-fluid p-0 overflow-hidden" style="height:100px;">
                     <div class="position-absolute p-4 text-white" style="z-index:1;">
@@ -1802,10 +1840,10 @@
 
                 </div>
             </div>
-        </div>
+        </div>-->
 
-        <a href="#" class="btn btn-secondary mb-3">Go to Top</a>
     </div>
+    <a href="#" class="btn btn-secondary mb-3">Go to Top</a>
 </main>
 <div th:replace="Components :: JS"></div>
 <div th:replace="Components :: footer"></div>
@@ -1845,23 +1883,36 @@
     //Render
     function displayProjects(data){
         let currentEra = "";
-        let insertHTML = data.map(project => {
+        let currentEraCount = 0;
+        let insertHTML = data.map(media => {
+            //Check if there is a link
+            let linkText = ``;
+            if(media.link !== ""){
+                linkText = `<a href="${media.link}" class="btn btn-primary mb-3">See on YouTube</a>`;
+            }
+
+
             return `
-            <div class="col-12 col-lg-6 mb-5 live-action">
+            <div class="col-12 col-lg-6 mb-5 ${media.type}">
                 <div class="card border-box">
-                <img src="/images/webpageImages/JKCS TV CM.jpg" class="card-img-top" alt="JK CS Testimonial Video: Carol Marques">
+                    ${media.previewHTML}
                     <div class="card-body px-4 px-lg-5 blue-v-gradient">
-                        <h5 class="card-title fw-bold fs-4">JK CS Testimonial Video: Carol Marques</h5>
-                        <p class="text-secondary">Adobe Premiere Pro | 2022</p>
+                        <h5 class="card-title fw-bold fs-4">${media.title}</h5>
+                        <p class="text-secondary">${media.subtitle}</p>
                         <p class="card-text fs-5">
-                        For my dad's political campaign, I was tasked with making testimonial videos with as many of his supporters as possible for their advertising campaign. I was sent the raw version of this video, so I only participated in editing. I made sure to use practical and clear animations. I as asked to make this video in a landscape orientation, so I added filled the background with a blurry and enlarged version of the original video
+                            ${media.description}
                         </p>
+                        ${linkText}
                     </div>
                 </div>
             </div>
             `;
         });
         container.append(insertHTML);
+    }
+
+    function getHeader(){
+        return `<h2>M</h2>`;
     }
 
     $(document).ready(function(){
