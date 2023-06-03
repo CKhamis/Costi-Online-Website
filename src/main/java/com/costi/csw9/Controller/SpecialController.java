@@ -172,7 +172,4 @@ public class SpecialController {
             return jsonResponse;
         }
     }
-
-
-
 }

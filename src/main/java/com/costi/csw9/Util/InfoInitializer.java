@@ -1,7 +1,9 @@
 package com.costi.csw9.Util;
 
+import com.costi.csw9.Model.Ajax.MediaInfo;
 import com.costi.csw9.Model.Ajax.ProjectInfo;
 
+import javax.print.attribute.standard.Media;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,5 +35,23 @@ public class InfoInitializer {
         objects.add(new ProjectInfo("childhood", "web", "", "/images/webpageImages/Birds.jpg", "Original Angry Birds Wiki", true, "Personal Project | 2014", "This project is a website dedicated to the topic of Angry Birds, a game I liked when I was little. I hand coded this entire website using HTML and CSS with no frameworks.", new String[]{"https://github.com/CKhamis/Angrybird-Wiki"}));
         objects.add(new ProjectInfo("childhood", "web", "", "/images/webpageImages/OriginalCostiWebsite.jpg", "Original Laptoop Website", true, "Personal Project | 2013", "I made this website when I was first learning web development in 2013. At the time, I was 12. This website featured a product page for a made up laptop of the made up brand \"laptoop,\" which I came up with in third grade.", new String[]{"https://github.com/CKhamis/Laptoop-Company-Website"}));
         return objects;
+    }
+
+    public static List<MediaInfo> initializeMedia(){
+        List<MediaInfo> media = new ArrayList<>();
+
+        media.add(new MediaInfo("", "", "", "<iframe src=\"https://www.youtube-nocookie.com/embed/LYXEK4cTHag\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" allowfullscreen></iframe>", "Flea Market Finds: Episode 2", "Adobe Premiere Pro | 2022", "Join Alex, Costi, Jack & Haydon in gathering the highest quality of finds at Capitol flea market! Although not perfect, this video uses enhanced editing techniques over the previous installment in the series.", "https://youtu.be/LYXEK4cTHag"));
+        media.add(new MediaInfo("", "", "", "", "", "", "", "https://youtu.be/5c5guItHIc4"));
+        media.add(new MediaInfo("", "", "", "", "", "", "", ""));
+        media.add(new MediaInfo("", "", "", "", "", "", "", ""));
+        media.add(new MediaInfo("", "", "", "", "", "", "", ""));
+        media.add(new MediaInfo("", "", "", "", "", "", "", ""));
+        media.add(new MediaInfo("", "", "", "", "", "", "", ""));
+        media.add(new MediaInfo("", "", "", "", "", "", "", ""));
+        media.add(new MediaInfo("", "", "", "", "", "", "", ""));
+        media.add(new MediaInfo("", "", "", "", "", "", "", ""));
+        media.add(new MediaInfo("", "", "", "", "", "", "", ""));
+
+        return media;
     }
 }
