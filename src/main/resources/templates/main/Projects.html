@@ -81,15 +81,6 @@
             displayAnalytics(data)
         });
 
-    //helper functions
-    function checkStatus(response){
-        if(response.ok){
-            return Promise.resolve(response);
-        }else{
-            return Promise.reject(new Error(response.statusText));
-        }
-    }
-
     //Render
     function displayProjects(data){
         let currentEra = ``;

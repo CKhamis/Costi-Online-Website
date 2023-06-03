@@ -211,7 +211,7 @@
     </div>
 
     <!-- Timeline -->
-    <div class="container-fluid">
+    <div id="main-content" class="container-fluid">
         <div class="container mt-5">
             <h2 class="text-center fw-bold">Costi Media Timeline</h2>
             <p class="text-center pb-2 border-bottom">This timeline shows the pieces of media I made separated by year along with a short description.</p>
@@ -1815,6 +1815,55 @@
 <script th:replace="Components :: axcel-game"></script>
 
 <script>
+    // Select parent element
+    const container = $("#main-content");
+    //const analyticsContainer = $("#analyticsContainer");
+
+    //fetch functions
+    fetch("/get-media")
+        .then(checkStatus)
+        .then(response => response.json())
+        .then(data => {
+            // Process the retrieved data
+            displayProjects(data)
+        })
+        .catch(error => {
+            // error handling
+            container.append($("<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>"));
+            console.error('Error retrieving data:', error);
+        })
+        .finally(() => $("#loading").hide());
+
+    // fetch("/get-project-analytics")
+    //     .then(checkStatus)
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         // Process the retrieved data
+    //         displayAnalytics(data)
+    //     });
+
+    //Render
+    function displayProjects(data){
+        let currentEra = "";
+        let insertHTML = data.map(project => {
+            return `
+            <div class="col-12 col-lg-6 mb-5 live-action">
+                <div class="card border-box">
+                <img src="/images/webpageImages/JKCS TV CM.jpg" class="card-img-top" alt="JK CS Testimonial Video: Carol Marques">
+                    <div class="card-body px-4 px-lg-5 blue-v-gradient">
+                        <h5 class="card-title fw-bold fs-4">JK CS Testimonial Video: Carol Marques</h5>
+                        <p class="text-secondary">Adobe Premiere Pro | 2022</p>
+                        <p class="card-text fs-5">
+                        For my dad's political campaign, I was tasked with making testimonial videos with as many of his supporters as possible for their advertising campaign. I was sent the raw version of this video, so I only participated in editing. I made sure to use practical and clear animations. I as asked to make this video in a landscape orientation, so I added filled the background with a blurry and enlarged version of the original video
+                        </p>
+                    </div>
+                </div>
+            </div>
+            `;
+        });
+        container.append(insertHTML);
+    }
+
     $(document).ready(function(){
         $(".enable-toggle").css("display", "none");
 
