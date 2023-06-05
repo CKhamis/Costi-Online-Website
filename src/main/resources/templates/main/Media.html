@@ -246,6 +246,7 @@
             <div class="row" id="main-content">
 
             </div>
+            <button onclick="displayProjects()">Load more</button>
         </div>
     </div>
     <a href="#" class="btn btn-secondary mb-3">Go to Top</a>
@@ -260,6 +261,7 @@
 <script>
     // Select parent element
     const container = $("#main-content");
+    let projectData;
     //const analyticsContainer = $("#analyticsContainer");
 
     // Headers
@@ -317,7 +319,7 @@
         .then(response => response.json())
         .then(data => {
             // Process the retrieved data
-            displayProjects(data)
+            projectData = data;
         })
         .catch(error => {
             // error handling
@@ -335,10 +337,10 @@
     //     });
 
     //Render
-    function displayProjects(data){
+    function displayProjects(){
         let currentEra = "";
         let currentEraCount = 0;
-        let insertHTML = data.map(media => {
+        let insertHTML = projectData.map(media => {
             //Check if there is a link
             let linkText = ``;
             if(media.link !== ""){
