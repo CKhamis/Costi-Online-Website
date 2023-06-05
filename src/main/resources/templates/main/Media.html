@@ -246,7 +246,6 @@
             <div class="row" id="main-content">
 
             </div>
-            <button onclick="displayProjects()">Load more</button>
         </div>
     </div>
     <a href="#" class="btn btn-secondary mb-3">Go to Top</a>
@@ -263,6 +262,23 @@
     const container = $("#main-content");
     let projectData;
     //const analyticsContainer = $("#analyticsContainer");
+
+    //Trigger loading
+
+    window.addEventListener('scroll', function() {
+        // Check if the user has reached the bottom of the page, accounting for the footer height
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - getFooterHeight()) {
+            // Call the displayProjects() function
+            displayProjects();
+        }
+    });
+
+    // Function to get the height of the footer element
+    function getFooterHeight() {
+        const footer = document.querySelector('footer');
+        return footer ? footer.offsetHeight : 0;
+    }
+
 
     // Headers
     const headers = [
@@ -320,6 +336,7 @@
         .then(data => {
             // Process the retrieved data
             projectData = data;
+            displayProjects();
         })
         .catch(error => {
             // error handling
@@ -337,59 +354,66 @@
     //     });
 
     //Render
-    function displayProjects(){
-        let currentEra = "";
-        let currentEraCount = 0;
-        let insertHTML = projectData.map(media => {
-            //Check if there is a link
-            let linkText = ``;
-            if(media.link !== ""){
+    let currentIndex = 0;
+    const elementsPerIteration = 10;
+    let currentEraCount = 0;
+    let currentEra = "";
+
+    function displayProjects() {
+        let insertHTML = "";
+
+        for (let i = currentIndex; i < projectData.length && i < currentIndex + elementsPerIteration; i++) {
+            const media = projectData[i];
+            // Check if there is a link
+            let linkText = "";
+            if (media.link !== "") {
                 linkText = `<a href="${media.link}" class="btn btn-primary mb-3">See on YouTube</a>`;
             }
 
-            //Header checking and insertion
-            let header = ``;
-            if(media.era !== currentEra){
+            // Header checking and insertion
+            let header = "";
+            if (media.era !== currentEra) {
                 currentEra = media.era;
                 header = `
                     <div class="p-0 mb-4 border-box bg-black" id="${media.era}">
-                        <div class="container-fluid p-0 overflow-hidden" style="height:100px;">
+                      <div class="container-fluid p-0 overflow-hidden" style="height:100px;">
                         <div class="position-absolute p-4 text-white" style="z-index:1;">
-                            <p class="fw-bold fs-1">${headers[currentEraCount].title}</p>
+                          <p class="fw-bold fs-1">${headers[currentEraCount].title}</p>
                         </div>
-                            <video style="width:175%; opacity:.5; margin-left:-400px" autoplay="" preload="true" loop="loop" muted="">
-                            <source src="${headers[currentEraCount].videoLink}" type="video/mp4">
-                            video not supported
-                            </video>
-                        </div>
+                        <video style="width:175%; opacity:.5; margin-left:-400px" autoplay="" preload="true" loop="loop" muted="">
+                          <source src="${headers[currentEraCount].videoLink}" type="video/mp4">
+                          video not supported
+                        </video>
+                      </div>
                     </div>
                     <div class="container border-bottom mb-3">
-                        <p class="fs-4">${headers[currentEraCount].description}</p>
+                      <p class="fs-4">${headers[currentEraCount].description}</p>
                     </div>
-                `;
+                  `;
                 currentEraCount++;
             }
 
-
-            return `
-            ${header}
-            <div class="col-12 col-lg-6 mb-5 ${media.type}">
+            insertHTML += `
+              ${header}
+              <div class="col-12 col-lg-6 mb-5 ${media.type}">
                 <div class="card border-box">
-                    ${media.previewHTML}
-                    <div class="card-body px-4 px-lg-5 blue-v-gradient">
-                        <h5 class="card-title fw-bold fs-4">${media.title}</h5>
-                        <p class="text-secondary">${media.subtitle}</p>
-                        <p class="card-text fs-5">
-                            ${media.description}
-                        </p>
-                        ${linkText}
-                    </div>
+                  ${media.previewHTML}
+                  <div class="card-body px-4 px-lg-5 blue-v-gradient">
+                    <h5 class="card-title fw-bold fs-4">${media.title}</h5>
+                    <p class="text-secondary">${media.subtitle}</p>
+                    <p class="card-text fs-5">
+                      ${media.description}
+                    </p>
+                    ${linkText}
+                  </div>
                 </div>
-            </div>
+              </div>
             `;
-        });
+        }
         container.append(insertHTML);
+        currentIndex += elementsPerIteration;
     }
+
 
     $(document).ready(function(){
         $(".enable-toggle").css("display", "none");
