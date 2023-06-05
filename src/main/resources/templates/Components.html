@@ -72,7 +72,16 @@
 </div>
 
 <script th:fragment="scripts">
-    // Universal assets for Axcel Game
+    // Universal assets
+    function checkStatus(response){
+        if(response.ok){
+            return Promise.resolve(response);
+        }else{
+            return Promise.reject(new Error(response.statusText));
+        }
+    }
+
+    //Axcel game
     let numFoundSprites = 0;
     let quota = 0;
     let timeNow, localTimeChecked;
