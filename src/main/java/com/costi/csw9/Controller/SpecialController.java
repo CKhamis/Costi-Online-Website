@@ -4,16 +4,21 @@ import com.costi.csw9.Model.Ajax.MediaInfo;
 import com.costi.csw9.Model.Ajax.ProjectInfo;
 import com.costi.csw9.Model.Axcel.GameProgress;
 import com.costi.csw9.Model.Post;
+import com.costi.csw9.Model.User;
+import com.costi.csw9.Model.UserRole;
 import com.costi.csw9.Service.PostService;
+import com.costi.csw9.Service.UserService;
 import com.costi.csw9.Util.InfoInitializer;
 import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -27,18 +32,38 @@ public class SpecialController {
         Services
      */
     private PostService postService;
+    private UserService userService;
 
-    public SpecialController(PostService postService){
+    public SpecialController(PostService postService, UserService userService){
         this.postService = postService;
+        this.userService = userService;
+    }
+
+    private User getCurrentUser(Principal principal) {
+        if (principal == null) {
+            return new User("NULL", "NULL", "Not Signed In", "error", UserRole.USER);
+        }
+        String username = principal.getName();
+        User u = userService.findByEmail(username);
+        return u;
     }
 
     /*
         JSON responses
      */
     @GetMapping("/api/v1/newsroom/post/{id}")
-    public ResponseEntity<Post> getNewsroomPost(@PathVariable Long id) {
+    public ResponseEntity<Post> getNewsroomPost(@PathVariable Long id, Principal principal) {
         try{
-            return ResponseEntity.ok(postService.loadById(id));
+            Post post = postService.loadById(id);
+            if(post.isEnabled()){
+                return ResponseEntity.ok(post);
+            }else{
+                if(getCurrentUser(principal).isOwner() || getCurrentUser(principal).isAdmin()){
+                    return ResponseEntity.ok(post);
+                }else{
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+                }
+            }
         }catch (Exception e){
             return ResponseEntity.notFound().build();
         }
