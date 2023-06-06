@@ -31,6 +31,28 @@ public class SpecialController {
         return ResponseEntity.ok(mediaProjects);
     }
 
+    @GetMapping("/get-media-analytics")
+    @ResponseBody
+    public Map<String, Object> getMediaAnalytics() {
+        // Construct the JSON response
+        Map<String, Object> jsonResponse = new HashMap<>();
+        jsonResponse.put("totalProjects", mediaProjects.size());
+
+        int numVideos = 0, numFlyers = 0, numLogos = 0, numLiveAction = 0, numAnimation = 0;
+        for(MediaInfo project : mediaProjects){
+            String type = project.getType();
+
+            if(type.equals("live-action")){
+                numVideos++;
+                numLiveAction++;
+            }else if(type.equals("flyer"))
+        }
+
+        jsonResponse.put("repos", );
+
+        return jsonResponse;
+    }
+
     @GetMapping("/get-projects")
     public ResponseEntity<List<ProjectInfo>> getProjects() {
         return ResponseEntity.ok(projects);
