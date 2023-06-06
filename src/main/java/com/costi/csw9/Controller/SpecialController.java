@@ -38,17 +38,47 @@ public class SpecialController {
         Map<String, Object> jsonResponse = new HashMap<>();
         jsonResponse.put("totalProjects", mediaProjects.size());
 
-        int numVideos = 0, numFlyers = 0, numLogos = 0, numLiveAction = 0, numAnimation = 0;
+        int numVideos = 0, numImages = 0, numFlyers = 0, numLogos = 0, numLiveAction = 0, numAnimation = 0, numEras = 0, numYoutube = 0;
+
+        String tempEra = "";
         for(MediaInfo project : mediaProjects){
             String type = project.getType();
+            String era = project.getEra();
 
+            // Assorted types
             if(type.equals("live-action")){
                 numVideos++;
                 numLiveAction++;
-            }else if(type.equals("flyer"))
+            }else if(type.equals("animation")){
+                numAnimation++;
+                numVideos++;
+            }else if(type.equals("logo-card")){
+                numLogos++;
+                numImages++;
+            }else if(type.equals("flyer")){
+                numFlyers++;
+                numImages++;
+            }
+
+            //Number of eras
+            if(!tempEra.equals(era)){
+                numEras++;
+            }
+
+            //YouTube Count
+            if(!project.getLink().equals("")){
+                numYoutube++;
+            }
         }
 
-        jsonResponse.put("repos", );
+        jsonResponse.put("videoCount", numVideos);
+        jsonResponse.put("imageCount", numImages);
+        jsonResponse.put("flyerCount", numFlyers);
+        jsonResponse.put("logoCount", numLogos);
+        jsonResponse.put("liveActionCount", numLiveAction);
+        jsonResponse.put("animationCount", numAnimation);
+        jsonResponse.put("eraCount", numEras);
+        jsonResponse.put("youtubeCount", numYoutube);
 
         return jsonResponse;
     }
