@@ -9,8 +9,7 @@
         <h1 class="pb-2 border-bottom mb-4 fw-bold text-center" th:text="${title}">Create a newsroom post</h1>
     </div>
     <div th:if="${isAllowed}" class="row">
-        <div class="d-none d-md-block col-md-1 col-lg-2 col-xl-3"></div>
-        <div class="pt-2 col-xs-12 col-md-10 col-lg-8 col-xl-6">
+        <div class="pt-2 col-xs-12 col-md-6">
             <div th:replace="Components :: flash" class="my-2"></div>
             <div class="p-5 mb-4 border-box">
                 <div id="post-menu">
@@ -25,15 +24,15 @@
                     <button type="button" class="btn btn-primary go-back">< Go Back</button>
                     <div class="form-row row">
                         <div class="col-12 mb-3">
-                            <label for="tit">Title</label>
-                            <input type="text" class="form-control" id="tit" th:field="*{title}"
+                            <label for="title1">Title</label>
+                            <input type="text" class="form-control" id="title1" th:field="*{title}"
                                    placeholder="Title here" required>
                         </div>
                     </div>
                     <div class="form-row row">
                         <div class="col-md-8 mb-3">
-                            <label for="subt">Subtitle</label>
-                            <input type="text" class="form-control" id="subt" th:field="*{subtitle}"
+                            <label for="sub1">Subtitle</label>
+                            <input type="text" class="form-control" id="sub1" th:field="*{subtitle}"
                                    placeholder="subtitle" required>
                         </div>
                         <div class="col-md-4 mb-3">
@@ -46,8 +45,8 @@
                     </div>
                     <div class="form-row row">
                         <div class="col-12 mb-3">
-                            <label for="bod">Content Body</label>
-                            <textarea type="text" class="form-control" id="bod" th:field="*{body}" placeholder="body content" required></textarea>
+                            <label for="input1">Content Body</label>
+                            <textarea type="text" class="form-control" id="input1" th:field="*{body}" placeholder="body content" required></textarea>
                         </div>
                     </div>
                     <div class="form-check mb-3">
@@ -70,15 +69,15 @@
 
                     <div class="form-row row">
                         <div class="col-12 mb-3">
-                            <label for="tit">Title</label>
-                            <input type="text" class="form-control" id="tit" th:field="*{title}"
+                            <label for="title2">Title</label>
+                            <input type="text" class="form-control" id="title2" th:field="*{title}"
                                    placeholder="Title here" required>
                         </div>
                     </div>
                     <div class="form-row row">
                         <div class="col-md-8 mb-3">
-                            <label for="subt">Subtitle</label>
-                            <input type="text" class="form-control" id="subt" th:field="*{subtitle}"
+                            <label for="sub2">Subtitle</label>
+                            <input type="text" class="form-control" id="sub2" th:field="*{subtitle}"
                                    placeholder="subtitle" required>
                         </div>
                         <div class="col-md-4 mb-3">
@@ -91,8 +90,8 @@
                     </div>
                     <div class="form-row row">
                         <div class="col-12 mb-3">
-                            <label for="bod">Content Body</label>
-                            <textarea type="text" class="form-control" id="bod" th:field="*{body}" placeholder="body content" required></textarea>
+                            <label for="input2">Content Body</label>
+                            <textarea type="text" class="form-control" id="input2" th:field="*{body}" placeholder="body content" required></textarea>
                         </div>
                     </div>
                     <div class="form-check mb-3">
@@ -106,7 +105,16 @@
                 </form>
             </div>
         </div>
-        <div class="d-none d-md-block col-md-1 col-lg-2 col-xl-3"></div>
+        <div class="d-none d-md-block col-md-6" id="preview-panel">
+            <img th:src="@{/images/default-posts/no-image.jpg}" alt="default image" class="newsroom-slide"/>
+
+            <h1 class="fw-bold mb-0" id="preview-title"></h1>
+            <h4 class="text-muted fw-bold" id="preview-sub"></h4>
+
+            <div id="contentBody">
+                <p class="fs-5" id="preview-text"></p>
+            </div>
+        </div>
     </div>
     <div th:unless="${isAllowed}" class="">
         <div class="p-3 p-lg-5 mb-4 border-box">
@@ -120,6 +128,54 @@
 <div th:replace="Components :: JS"></div>
 <div th:replace="Components :: scripts"></div>
 <script>
+    const container = document.querySelector("#preview-panel");
+
+    let title1 = document.querySelector("#title1");
+    let title2 = document.querySelector("#title2");
+
+
+    let subtitle1 = document.querySelector("#sub1");
+    let subtitle2 = document.querySelector("#sub2");
+
+    let textField1 = document.querySelector("#input1");
+    let textField2 = document.querySelector("#input2");
+
+    textField1.addEventListener('input', function (event) {
+        // Retrieve the current value of the text field
+        const inputValue = event.target.value;
+        document.querySelector("#preview-text").innerHTML = inputValue;
+    });
+
+    textField2.addEventListener('input', function(event) {
+        // Retrieve the current value of the text field
+        const inputValue = event.target.value;
+        document.querySelector("#preview-text").innerHTML = inputValue;
+    });
+
+    subtitle1.addEventListener('input', function (event) {
+        // Retrieve the current value of the text field
+        const inputValue = event.target.value;
+        document.querySelector("#preview-sub").innerHTML = inputValue;
+    });
+
+    title2.addEventListener('input', function(event) {
+        // Retrieve the current value of the text field
+        const inputValue = event.target.value;
+        document.querySelector("#preview-title").innerHTML = inputValue;
+    });
+
+    subtitle2.addEventListener('input', function(event) {
+        // Retrieve the current value of the text field
+        const inputValue = event.target.value;
+        document.querySelector("#preview-sub").innerHTML = inputValue;
+    });
+
+    title1.addEventListener('input', function (event) {
+        // Retrieve the current value of the text field
+        const inputValue = event.target.value;
+        document.querySelector("#preview-title").innerHTML = inputValue;
+    });
+
     $(document).ready(function(){
         hideForms();
 

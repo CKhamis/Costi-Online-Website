@@ -3,14 +3,14 @@ package com.costi.csw9.Controller;
 import com.costi.csw9.Model.Ajax.MediaInfo;
 import com.costi.csw9.Model.Ajax.ProjectInfo;
 import com.costi.csw9.Model.Axcel.GameProgress;
+import com.costi.csw9.Model.Post;
+import com.costi.csw9.Service.PostService;
 import com.costi.csw9.Util.InfoInitializer;
 import org.apache.tomcat.jni.Local;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -24,8 +24,26 @@ public class SpecialController {
     private List<MediaInfo> mediaProjects = InfoInitializer.initializeMedia();
 
     /*
+        Services
+     */
+    private PostService postService;
+
+    public SpecialController(PostService postService){
+        this.postService = postService;
+    }
+
+    /*
         JSON responses
      */
+    @GetMapping("/api/v1/newsroom/post/{id}")
+    public ResponseEntity<Post> getNewsroomPost(@PathVariable Long id) {
+        try{
+            return ResponseEntity.ok(postService.loadById(id));
+        }catch (Exception e){
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @GetMapping("/get-media")
     public ResponseEntity<List<MediaInfo>> getMedia() {
         return ResponseEntity.ok(mediaProjects);
