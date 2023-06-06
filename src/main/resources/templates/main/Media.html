@@ -330,7 +330,7 @@
     ];
 
     //fetch functions
-    fetch("/get-media")
+    fetch("/api/v1/Media/all")
         .then(checkStatus)
         .then(response => response.json())
         .then(data => {
