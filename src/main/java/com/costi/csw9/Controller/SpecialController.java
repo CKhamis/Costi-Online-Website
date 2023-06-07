@@ -126,12 +126,12 @@ public class SpecialController {
         return jsonResponse;
     }
 
-    @GetMapping("/Projects/all")
+    @GetMapping("/api/v1/Projects/all")
     public ResponseEntity<List<ProjectInfo>> getProjects() {
         return ResponseEntity.ok(projects);
     }
 
-    @GetMapping("/Projects/analytics")
+    @GetMapping("/api/v1/Projects/analytics")
     @ResponseBody
     public Map<String, Object> getProjectAnalytics() {
         // Construct the JSON response

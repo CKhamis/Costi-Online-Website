@@ -43,8 +43,6 @@ public class User implements UserDetails {
    private Boolean isLocked = false;
    private Boolean enabled =  false;
 
-   @OneToMany(fetch = FetchType.LAZY, mappedBy = "author")
-   private List<WikiPage> authoredPages = new ArrayList<>();
    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
    private List<AccountLog> logs = new ArrayList<>();
 
@@ -129,14 +127,6 @@ public class User implements UserDetails {
 
     public void setProfilePicture(int profilePicture) {
         this.profilePicture = profilePicture;
-    }
-
-    public List<WikiPage> getAuthoredPages() {
-        return authoredPages;
-    }
-
-    public void setAuthoredPages(List<WikiPage> authoredPages) {
-        this.authoredPages = authoredPages;
     }
 
     public List<AccountNotification> getNotifications() {
