@@ -69,6 +69,11 @@ public class SpecialController {
         }
     }
 
+    @GetMapping("/api/v1/Newsroom/post/all")
+    public ResponseEntity<List<Post>> getNewsroomPosts() {
+        return ResponseEntity.ok(postService.getByApproval(true));
+    }
+
     @GetMapping("/api/v1/Media/all")
     public ResponseEntity<List<MediaInfo>> getMedia() {
         return ResponseEntity.ok(mediaProjects);

@@ -146,30 +146,7 @@
             </h4>
         </div>
 
-        <th:block th:each="post : ${allPosts}">
-            <a th:href="|/Newsroom/${post.getId()}/view|">
-                <div class="row mt-3" th:classappend="|post-*{post.getCategory()}|">
-                    <div class="col-sm-4 grid-margin">
-                        <div class="position-relative">
-                            <div class="">
-                                <img th:src="${post.getImagePath() != null}? *{post.getImagePath()} : '/images/default-posts/no-image.jpg'" th:alt="|${post.getTitle()}|" class="img-fluid newsroom-slide">
-                            </div>
-                            <div class="badge-positioned">
-                                <span class="badge" th:classappend="${post.getCategory() == 'ACHIEVEMENT'} ? 'bg-primary' : (${post.getCategory() == 'NEWS'} ? 'bg-secondary' : (${post.getCategory() == 'JOURNAL'} ? 'bg-info' : (${post.getCategory() == 'EMERGENCY'} ? 'bg-danger' : (${post.getCategory() == 'ARTICLE'} ? 'bg-warning' : (${post.getCategory() == 'DISCOVERY'} ? 'bg-success' : (${post.getCategory() == 'UPDATE'} ? 'bg-dark' : (${post.getCategory() == 'EVENT'} ? 'bg-success' : 'bg-dark')))))))" th:text="${post.getCategory()}"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-8 mb-4">
-                        <h2 class="mb-1 fw-bold text-1" th:text="|${post.getTitle()}|"></h2>
-                        <h5 class="mb-2 fw-bold text-secondary" th:text="|${post.getSubtitle()}|"></h5>
-                        <div class="fs-13 mb-2 text-1">
-                            <p class="mr-2" th:text="|${post.getViews()} Views ∙ ${post.getTimeSinceEdited()}|"></p>
-                            <p class="text-truncate" th:text="*{post.getBody()}"></p>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </th:block>
+        <div id="main-content"></div>
         <br />
         <a href="#top" class="mt-4"><button type="button" class="btn btn-primary">Top</button></a>
     </div>
@@ -179,6 +156,91 @@
 <div th:replace="Components :: JS"></div>
 <div th:replace="Components :: scripts"></div>
 <script>
+    // Elements
+    const mainContent = document.querySelector("#main-content");
+    let newsroomContent;
+
+    // Fetch requests
+    fetch("/api/v1/Newsroom/post/all")
+        .then(checkStatus)
+        .then(response => response.json())
+        .then(data => {
+            // Process the retrieved data
+            newsroomContent = data;
+            renderNews();
+        })
+        .catch(error => {
+            // error handling
+            mainContent.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>";
+            console.error('Error retrieving data:', error);
+        })
+        .finally(() => $("#loading").hide());
+
+    //Trigger loading
+
+    window.addEventListener('scroll', function() {
+        // Check if the user has reached the bottom of the page, accounting for the footer height
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - getFooterHeight()) {
+            // Call the displayProjects() function
+            renderNews();
+        }
+    });
+
+    // Rendering function
+    const elementsPerIteration = 10;
+    let currentIndex = 0;
+    let currentMonthNumber = {"month" : -1, "year": -1};
+
+    function renderNews(){
+        const months = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        let insertHTML = ``;
+        for(let i = currentIndex; i < newsroomContent.length && i < currentIndex + elementsPerIteration; i++){
+            const post = newsroomContent[i];
+            let monthHeading = "";
+
+            if(parseDate(newsroomContent[i].dateEdited).month !== currentMonthNumber.month){
+                currentMonthNumber = parseDate(newsroomContent[i].dateEdited);
+                monthHeading = `<h4 id="${months[currentMonthNumber.month - 1]}${currentMonthNumber.year}">${months[currentMonthNumber.month - 1]} ${currentMonthNumber.year}</h4>`
+            }
+
+            insertHTML += `
+                ${monthHeading}
+            <a href="/Newsroom/${post.id}/view">
+                <div class="row mt-3 post-${post.category}">
+                    <div class="col-sm-4 grid-margin">
+                        <div class="position-relative">
+                            <div class="">
+                                <img src="${post.imagePath !== null ? post.imagePath : '/images/default-posts/no-image.jpg'}" alt="${post.title}" class="img-fluid newsroom-slide" loading="lazy">
+                            </div>
+                            <div class="badge-positioned">
+                                <span class="badge ${post.category === 'ACHIEVEMENT' ? 'bg-primary' : post.category === 'NEWS' ? 'bg-secondary' : post.category === 'JOURNAL' ? 'bg-info' : post.category === 'EMERGENCY' ? 'bg-danger' : post.category === 'ARTICLE' ? 'bg-warning' : post.category === 'DISCOVERY' ? 'bg-success' : post.category === 'UPDATE' ? 'bg-dark' : post.category === 'EVENT' ? 'bg-success' : 'bg-dark'}">${post.category}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-8 mb-4">
+                        <h2 class="mb-1 fw-bold text-1">${post.title}</h2>
+                        <h5 class="mb-2 fw-bold text-secondary">${post.subtitle}</h5>
+                        <div class="fs-13 mb-2 text-1">
+                            <p class="mr-2">${post.views} Views ∙ ${post.timeSinceEdited}</p>
+                            <p class="text-truncate d-none d-md-block">${post.body.replace(/<[^>]+>/g, '')}</p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            `;
+        }
+        currentIndex += elementsPerIteration;
+        mainContent.innerHTML += insertHTML;
+    }
+
+    function parseDate(date){
+        let splitDate = date.split("/");
+        return {"month" : parseInt(splitDate[0]), "year" : parseInt(splitDate[2])};
+    }
+
     $(document).ready(function(){
         $(".enable-toggle").css("display", "none");
 

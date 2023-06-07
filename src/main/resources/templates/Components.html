@@ -73,6 +73,10 @@
 
 <script th:fragment="scripts">
     // Universal assets
+    function getFooterHeight() {
+        const footer = document.querySelector('footer');
+        return footer ? footer.offsetHeight : 0;
+    }
     function checkStatus(response){
         if(response.ok){
             return Promise.resolve(response);
