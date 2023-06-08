@@ -1071,16 +1071,6 @@ public class FrontEndController {
     // Newsroom
     @GetMapping("/Newsroom")
     public String getNewsroomHome(Model model, Principal principal) {
-        // Newsroom posts
-        List<Post> allPosts = postService.getByApproval(true);
-        List<Post> recentNews = postService.getByCategory(PostCategory.NEWS.name());
-        List<Post> recentPosts = postService.getFixedAmount(6);
-
-        generateSlides(model, recentNews);
-
-        model.addAttribute("recentPosts", recentPosts);
-        model.addAttribute("allPosts", allPosts);
-
         //Announcements
         List<Announcement> announcements = announcementService.findByApproval(true);
         model.addAttribute("announcements", announcements);
