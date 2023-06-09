@@ -37,6 +37,8 @@ public class Light {
     @Column(nullable = false)
     private boolean isFavorite;
     @Column(nullable = false)
+    private boolean isPublic;
+    @Column(nullable = false)
     private boolean isEnabled;
     @OneToMany(mappedBy = "light", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<LightLog> logs = new ArrayList<>();
@@ -49,6 +51,7 @@ public class Light {
         this.pattern = pattern;
         this.isEnabled = false;
         this.isFavorite = false;
+        this.isPublic = false;
     }
 
     public String getlastModified(){
