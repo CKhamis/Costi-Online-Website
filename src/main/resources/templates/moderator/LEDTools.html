@@ -5,132 +5,146 @@
 <div th:replace="moderator/ModeratorComponents :: nav"></div>
 
 <main class="container mt-3">
-    <div class="container-fluid">
-        <h1 class="pb-2 border-bottom mb-4 fw-bold text-center">Create a Notification</h1>
+    <div class="mb-4 mt-2">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-2">
+            <div class="container-fluid">
+                <a class="navbar-brand fw-bold" href="/COMT/LED">LED Light Controller</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="/COMT/LED">Overview</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/COMT/LED/All">All Lights</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/COMT/LED/Logs">Logs</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Light Settings
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" id="light-list-dropdown">
+                                <li><a class="dropdown-item" href="#">Action</a></li>
+                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
     </div>
-    <div class="row">
-        <div class="d-none d-md-block col-md-1 col-lg-2 col-xl-3"></div>
-        <div class="pt-2 col-xs-12 col-md-10 col-lg-8 col-xl-6">
-<!--            <div th:replace="Components :: flash" class="my-2"></div>-->
-            <div class="p-5 mb-4 border-box">
-<!--                <form th:action="@{${action}}" method="post" th:object="${notification}">-->
-<!--                    <input type="hidden" th:field="*{id}"/>-->
-<!--                    <div class="form-row row">-->
-<!--                        <div class="col-12 mb-3">-->
-<!--                            <label for="tit">Title</label>-->
-<!--                            <input type="text" class="form-control" id="tit" th:field="*{title}"-->
-<!--                                   placeholder="Title here" required>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="form-row row">-->
-<!--                        <div class="col-md-6 mb-3">-->
-<!--                            <label for="type">Notification Type</label>-->
-<!--                            <select id="type" th:field="*{notificationType}"  class="form-control">-->
-<!--                                <option value="primary">Primary</option>-->
-<!--                                <option value="secondary">Secondary</option>-->
-<!--                                <option value="success">Success</option>-->
-<!--                                <option value="danger">Danger</option>-->
-<!--                                <option value="warning">Warning</option>-->
-<!--                                <option value="info">Info</option>-->
-<!--                                <option value="light">Light</option>-->
-<!--                                <option value="dark">Dark</option>-->
-<!--                            </select>-->
-<!--                        </div>-->
-<!--                        <div class="col-md-6 mb-3">-->
-<!--                            <label for="destination">Recipient</label>-->
-<!--                            <select id="destination" th:field="*{destination}"  class="form-control">-->
-<!--                                <option value="" disabled="disabled">Select a user</option>-->
-<!--                                <option value="All">Everyone</option>-->
-<!--                                <option th:each="dest : ${allUsers}" th:value="${dest.id}" th:text="${dest.firstName}">Error</option>-->
-<!--                            </select>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="form-row row">-->
-<!--                        <div class="col-12 mb-3">-->
-<!--                            <label for="bod">Content Body</label>-->
-<!--                            <textarea type="text" class="form-control" id="bod" th:field="*{body}" placeholder="body content" required></textarea>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="form-check">-->
-<!--                        <input class="form-check-input" type="checkbox" value="" id="disclaimerCheck1" required>-->
-<!--                        <label class="form-check-label" for="disclaimerCheck1">-->
-<!--                            I understand notifications cannot be edited/deleted once sent-->
-<!--                        </label>-->
-<!--                    </div>-->
 
-<!--                    <button type="submit" class="btn btn-primary">Submit</button>-->
-<!--                </form>-->
+    <div class="row">
+        <div class="col-12 col-md-7 h-100">
+            <div class="container-fluid bg-2" id="overview-container">
+                <h3 class="fw-bold">Actions</h3>
             </div>
         </div>
-        <div class="d-none d-md-block col-md-1 col-lg-2 col-xl-3"></div>
+        <div class="col-12 col-md-5 h-100">
+            <div class="container-fluid bg-2">
+                <h3 class="fw-bold">Actions</h3>
+                <div class="row">
+                    <div class="col" id="add-new-lights">
+                        <h5>hi</h5>
+                    </div>
+                    <div class="col" id="turn-off-all">
+                        <h5>hi</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid bg-2 mt-4" id="light-container">
+        <!-- lights here -->
+        <table class="table table-sm align-middle table-hover table-dark">
+            <thead>
+            <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Subtitle</th>
+                <th scope="col">Category</th>
+                <th scope="col">Author</th>
+                <th scope="col">Role</th>
+                <th scope="col">Last Edited</th>
+                <th scope="col">View</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Enable</th>
+                <th scope="col">Delete</th>
+            </tr>
+            </thead>
+            <tbody id="table-body">
+            </tbody>
+        </table>
     </div>
 </main>
 <div th:replace="Components :: JS"></div>
 <div th:replace="Components :: scripts"></div>
 <script>
-    const lightData = {
-        label: "Sample Light",
-        dateAdded: "2023-06-08T12:34:56",
-        lastModified: "2023-06-08T12:34:56",
-        lastConnected: "2023-06-08T12:34:56",
-        color: "red",
-        pattern: "solid",
-        isFavorite: false,
-        isPublic: false,
-        isEnabled: false,
-        logs: [
-            {
-                id: 1,
-                ip: "192.168.0.1",
-                color: "red",
-                pattern: "solid",
-                dateCreated: "2023-06-08T12:34:56"
-            },
-            {
-                id: 2,
-                ip: "192.168.0.2",
-                color: "green",
-                pattern: "blink",
-                dateCreated: "2023-06-08T12:35:00"
-            },
-            // Add more sample logs as needed
-        ]
-    };
+    //data
+    let responseData;
 
-    // You can use this sample data to test your fetch function
+    //Main elements
+    const dropdownContainer = document.querySelector("#light-list-dropdown");
+    const lightContainer = document.querySelector("#light-container");
+    const table = document.querySelector("#table-body");
 
+    //Action buttons
+    const globalShutdownButton = document.querySelector("#turn-off-all");
+    const addNewLights = document.querySelector("#add-new-lights");
 
-    postData("/update-light", lightData)
+    //GET functions
+    fetch("/api/v1/LED/all-lights")
+        .then(checkStatus)
+        .then(response => response.json())
+        .then(data => {
+            responseData = data;
+            renderAllLights();
+        })
+        .catch(error => {
+            // error handling
+            lightContainer.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>";
+            console.error('Error retrieving data:', error);
+        })
+        .finally(() => $("#loading").hide());
 
-    function postData(url, data) {
-        // Retrieve the CSRF token from the meta tags
-        var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-        var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+    //POST functions
+    // const lightData = {
+    //     "label": "Sample Light",
+    //     "dateAdded": "2023-06-08T12:34:56",
+    //     "lastModified": "2023-06-08T12:34:56",
+    //     "color": "red",
+    //     "pattern": "solid"
+    // };
+    //
+    // postData("/api/v1/LED/new", lightData)
+    //     .then(data => console.log(data));
 
-        // Create the fetch request headers and include the CSRF token
-        var headers = new Headers();
-        headers.append(csrfHeader, csrfToken);
-
-        // Create the fetch options
-        var options = {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify(data)
-        };
-
-        // Perform the fetch request
-        fetch(url, options)
-            .then(response => response.json())
-            .then(data => {
-                // Handle the response data
-                console.log(data);
-            })
-            .catch(error => {
-                // Handle any errors
-                console.error(error);
-            });
+    //Rendering functions
+    function renderAllLights(){
+        let innerHTML = ``;
+        for(let i = 0; i < responseData.length; i++){
+            let light = responseData[i];
+            innerHTML += `
+            <tr>
+                <td>${light.id}</td>
+                <td>${light.label}</td>
+                <td>${light.getTimeSinceModified}</td>
+                <td>${light.lastConnected}</td>
+                <td>${light.color}</td>
+                <td>${light.pattern}</td>
+                <td>${light.isFavorite}</td>
+                <td>${light.isPublic}</td>
+                <td>${light.isEnabled}</td>
+            </tr>
+            `;
+        }
+        table.innerHTML += innerHTML;
     }
-
 </script>
 </body>
 </html>

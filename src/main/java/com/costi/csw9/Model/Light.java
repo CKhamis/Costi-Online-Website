@@ -28,7 +28,6 @@ public class Light {
     private LocalDateTime dateAdded;
     @Column(nullable = false)
     private LocalDateTime lastModified;
-    @Column(nullable = false)
     private LocalDateTime lastConnected;
     @Column(nullable = false)
     private String color;

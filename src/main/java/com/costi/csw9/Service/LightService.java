@@ -20,6 +20,10 @@ public class LightService {
         return lightRepository.findByIsEnabledOrderByDateAddedDesc(isEnabled);
     }
 
+    public List<Light> getAllLights() {
+        return lightRepository.findAllByOrderByDateAddedDesc();
+    }
+
     public List<Light> getPublicLights(boolean isPublic) {
         return lightRepository.findByIsPublicOrderByDateAddedDesc(isPublic);
     }
