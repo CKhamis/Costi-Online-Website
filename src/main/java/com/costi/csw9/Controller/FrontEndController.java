@@ -205,6 +205,11 @@ public class FrontEndController {
         return "moderator/WikiTools";
     }
 
+    @GetMapping("/COMT/LED")
+    public String getCostiOnlineLEDTools(Model model, Principal principal, RedirectAttributes redirectAttributes) {
+        return "moderator/LEDTools";
+    }
+
     @GetMapping("/COMT/Accounts")
     public String getCostiOnlineAccountTools(Model model, Principal principal, RedirectAttributes redirectAttributes) {
         model.addAttribute("all", userService.loadAll());
@@ -1070,7 +1075,7 @@ public class FrontEndController {
 
     // Newsroom
     @GetMapping("/Newsroom")
-    public String getNewsroomHome(Model model, Principal principal) {
+    public String getNewsroomHome(Model model) {
         //Announcements
         List<Announcement> announcements = announcementService.findByApproval(true);
         model.addAttribute("announcements", announcements);
