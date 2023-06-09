@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface LightLogRepository extends JpaRepository<Light, Long> {
+public interface LightLogRepository extends JpaRepository<LightLog, Long> {
     List<LightLog> findAllByLightOrderByDateCreated(Light light);
     List<LightLog> findByIpOrderByDateCreated(String ip);
 }
