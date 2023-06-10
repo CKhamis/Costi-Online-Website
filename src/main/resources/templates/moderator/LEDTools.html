@@ -208,6 +208,17 @@
             .then(updateData);
     }
 
+    function favoriteLight(id, isFavorite) {
+        let url = `/api/v1/LED/${id}/Favorite`;
+        if(!isFavorite){
+            url = `/api/v1/LED/${id}/Disfavorite`
+        }
+
+        postData(url)
+            .catch(err => console.log(err))
+            .then(updateData);
+    }
+
     //Rendering functions
     function renderAllLights(){
         let tableContent = ``, dropdownList = ``;
@@ -226,6 +237,12 @@
                 enabledText = `Disabled`;
             }
 
+            let favoriteClass = `btn-warning`, favoriteText = `Favorite`;
+            if(!light.favorite){
+                favoriteClass = `btn-secondary`;
+                favoriteText = `Normal`;
+            }
+
             tableContent += `
             <tr>
                 <td>${light.id}</td>
@@ -234,7 +251,9 @@
                 <td>${light.lastConnected}</td>
                 <td>${light.color}</td>
                 <td>${light.pattern}</td>
-                <td>${light.isFavorite}</td>
+                <td>
+                    <button type="button" class="btn btn-sm ${favoriteClass}" onclick="favoriteLight(${light.id}, ${!light.favorite})">${favoriteText}</button>
+                </td>
                 <td>
                     <button type="button" class="btn btn-sm ${publicClass}" onclick="publishLight(${light.id}, ${!light.public})">${publicText}</button>
                 </td>

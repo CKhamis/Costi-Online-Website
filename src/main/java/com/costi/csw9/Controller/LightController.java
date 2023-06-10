@@ -183,4 +183,38 @@ public class LightController {
         }
     }
 
+    @PostMapping("/api/v1/LED/{id}/Favorite")
+    public ResponseEntity<String> favoriteLight(@PathVariable Long id, Principal principal) {
+        User user = getCurrentUser(principal);
+        if(user.getRole().equals(UserRole.ADMIN) || getCurrentUser(principal).getRole().equals(UserRole.OWNER)){
+            try {
+                Light light = lightService.getLightById(id);
+                light.setFavorite(true);
+                lightService.saveLight(light);
+                return ResponseEntity.ok("Light favorited successfully");
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error editing light: " + e.getMessage());
+            }
+        }else{
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+    }
+
+    @PostMapping("/api/v1/LED/{id}/Disfavorite")
+    public ResponseEntity<String> disfavoriteLight(@PathVariable Long id, Principal principal) {
+        User user = getCurrentUser(principal);
+        if(user.getRole().equals(UserRole.ADMIN) || getCurrentUser(principal).getRole().equals(UserRole.OWNER)){
+            try {
+                Light light = lightService.getLightById(id);
+                light.setFavorite(false);
+                lightService.saveLight(light);
+                return ResponseEntity.ok("Light disfavorited successfully");
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error editing light: " + e.getMessage());
+            }
+        }else{
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+    }
+
 }
