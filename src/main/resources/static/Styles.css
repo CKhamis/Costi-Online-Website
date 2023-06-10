@@ -112,6 +112,12 @@
   height:100%;
 }
 
+.action-button-container{
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+}
+
 .action-button > img{
     aspect-ratio: 1 / 1;
     object-fit: cover;

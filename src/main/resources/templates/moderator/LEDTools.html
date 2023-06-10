@@ -45,34 +45,34 @@
         <div class="col-12 col-md-5 h-100">
             <div class="container-fluid bg-2 py-3">
                 <h3 class="fw-bold mb-2">Actions</h3>
-                <div class="row">
-                    <div class="col action-button" data-bs-toggle="modal" data-bs-target="#new-light-modal">
+                <div class="action-button-container">
+                    <div class="action-button" data-bs-toggle="modal" data-bs-target="#new-light-modal">
                         <img th:src="@{/icons/Arrow.svg}" />
-                        <h5 class="text-center">New</h5>
+                        <p class="text-center">New</p>
                     </div>
-                    <div class="col action-button" id="refresh-button">
+                    <div class="action-button" id="refresh-button">
                         <img th:src="@{/icons/Arrow.svg}" />
-                        <h5 class="text-center">Refresh</h5>
+                        <p class="text-center">Refresh</p>
                     </div>
-                    <div class="col action-button" id="">
+                    <div class="action-button" id="">
                         <img th:src="@{/icons/Arrow.svg}" />
-                        <h5 class="text-center">f</h5>
+                        <p class="text-center">f</p>
                     </div>
-                    <div class="col action-button" id="">
+                    <div class="action-button" id="">
                         <img th:src="@{/icons/Arrow.svg}" />
-                        <h5 class="text-center">f</h5>
+                        <p class="text-center">f</p>
                     </div>
-                    <div class="col action-button" id="">
+                    <div class="action-button" id="">
                         <img th:src="@{/icons/Arrow.svg}" />
-                        <h5 class="text-center">f</h5>
+                        <p class="text-center">f</p>
                     </div>
-                    <div class="col action-button" id="">
+                    <div class="action-button" id="">
                         <img th:src="@{/icons/Arrow.svg}" />
-                        <h5 class="text-center">f</h5>
+                        <p class="text-center">f</p>
                     </div>
-                    <div class="col action-button" id="">
+                    <div class="action-button" id="">
                         <img th:src="@{/icons/Arrow.svg}" />
-                        <h5 class="text-center">f</h5>
+                        <p class="text-center">f</p>
                     </div>
                 </div>
             </div>
@@ -93,7 +93,8 @@
                 <th scope="col">Favorite</th>
                 <th scope="col">Public</th>
                 <th scope="col">Enabled</th>
-                <th scope="col">Settings</th>
+                <th scope="col">Delete</th>
+                <th scope="col">Edit</th>
             </tr>
             </thead>
             <tbody id="table-body">
@@ -173,7 +174,6 @@
         let lightData = {"label": labelInput.value, "color": colorInput.value, "pattern": patterInput.value};
 
         postData("/api/v1/LED/new", lightData)
-            .then(data => console.log(data))
             .then(updateData);
 
         // Reset the form
@@ -181,12 +181,51 @@
         colorInput.value= "";
         patterInput.value = "";
     }
+    function deleteLight(id) {
+        postData(`/api/v1/LED/${id}/Delete`)
+            .catch(err => console.log(err))
+            .then(updateData);
+    }
+    function publishLight(id, isPublic) {
+        let url = `/api/v1/LED/${id}/Publish`;
+        if(!isPublic){
+            url = `/api/v1/LED/${id}/Private`
+        }
+
+        postData(url)
+            .catch(err => console.log(err))
+            .then(updateData);
+    }
+
+    function enableLight(id, isEnabled) {
+        let url = `/api/v1/LED/${id}/Enable`;
+        if(!isEnabled){
+            url = `/api/v1/LED/${id}/Disable`
+        }
+
+        postData(url)
+            .catch(err => console.log(err))
+            .then(updateData);
+    }
 
     //Rendering functions
     function renderAllLights(){
         let tableContent = ``, dropdownList = ``;
         for(let i = 0; i < responseData.length; i++){
             let light = responseData[i];
+
+            let publicClass = `btn-primary`, publicText = `Published`;
+            if(!light.public){
+                publicClass = `btn-secondary`;
+                publicText = `Private`;
+            }
+
+            let enabledClass = `btn-success`, enabledText = `Enabled`;
+            if(!light.enabled){
+                enabledClass = `btn-secondary`;
+                enabledText = `Disabled`;
+            }
+
             tableContent += `
             <tr>
                 <td>${light.id}</td>
@@ -196,9 +235,16 @@
                 <td>${light.color}</td>
                 <td>${light.pattern}</td>
                 <td>${light.isFavorite}</td>
-                <td>${light.isPublic}</td>
-                <td>${light.isEnabled}</td>
-                <td><a href="/COMT/LED/${light.id}">View light ></a></td>
+                <td>
+                    <button type="button" class="btn btn-sm ${publicClass}" onclick="publishLight(${light.id}, ${!light.public})">${publicText}</button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-sm ${enabledClass}" onclick="enableLight(${light.id}, ${!light.enabled})">${enabledText}</button>
+                </td>
+                <td><a class="btn btn-sm btn-secondary" href="/COMT/LED/${light.id}">Edit</a></td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="deleteLight(${light.id})">Delete</button>
+                </td>
             </tr>
             `;
             dropdownList += `
@@ -211,7 +257,6 @@
 
     //Controls
     $("#refresh-button").click(updateData);
-
 </script>
 </body>
 </html>
