@@ -55,7 +55,19 @@ public class LightController {
     }
 
     @GetMapping("/api/v1/LED/{id}")
-    public ResponseEntity<Light> getLight(@PathVariable Long id, Principal principal) {
+    public ResponseEntity<LightRequest> getLight(@PathVariable Long id) {
+        try{
+            Light light = lightService.getLightById(id);
+            light.setLastConnected(LocalDateTime.now());
+            lightService.saveLight(light);
+            return ResponseEntity.ok(light.getRequest());
+        }catch (Exception e){
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/api/v1/LED/Status/{id}")
+    public ResponseEntity<Light> getLightStatus(@PathVariable Long id, Principal principal) {
         try{
             Light light = lightService.getLightById(id);
             if(light.isPublic()){

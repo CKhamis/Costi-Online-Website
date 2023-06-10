@@ -38,21 +38,21 @@
 
     <div class="row d-flex">
         <div class="col-12 col-md-7 h-100">
-            <div class="container-fluid bg-2" id="overview-container">
-                <h3 class="fw-bold">Overview</h3>
+            <div class="container-fluid bg-2 py-3" id="overview-container">
+                <h3 class="fw-bold mb-2">Overview</h3>
             </div>
         </div>
         <div class="col-12 col-md-5 h-100">
-            <div class="container-fluid bg-2">
-                <h3 class="fw-bold">Actions</h3>
+            <div class="container-fluid bg-2 py-3">
+                <h3 class="fw-bold mb-2">Actions</h3>
                 <div class="row">
-                    <div class="col action-button" id="add-new-lights" data-bs-toggle="modal" data-bs-target="#new-light-modal">
+                    <div class="col action-button" data-bs-toggle="modal" data-bs-target="#new-light-modal">
                         <img th:src="@{/icons/Arrow.svg}" />
                         <h5 class="text-center">New</h5>
                     </div>
-                    <div class="col action-button" id="">
+                    <div class="col action-button" id="refresh-button">
                         <img th:src="@{/icons/Arrow.svg}" />
-                        <h5 class="text-center">f</h5>
+                        <h5 class="text-center">Refresh</h5>
                     </div>
                     <div class="col action-button" id="">
                         <img th:src="@{/icons/Arrow.svg}" />
@@ -127,7 +127,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="saveLight()">Save</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="saveLight()">Save</button>
             </div>
         </div>
     </div>
@@ -143,24 +143,6 @@
     const dropdownContainer = document.querySelector("#light-list-dropdown");
     const lightContainer = document.querySelector("#light-container");
     const table = document.querySelector("#table-body");
-
-    //Event listeners
-    function saveLight() {
-        // Extract input values
-        let input1Value = document.getElementById('label-input').value;
-        let input2Value = document.getElementById('color-input').value;
-        let input3Value = document.getElementById('pattern-input').value;
-
-        // Execute submitNew() function with extracted values
-        submitNew(input1Value, input2Value, input3Value);
-
-        // Reset the form
-        document.getElementById('new-light-form').reset();
-
-        // Close the modal
-        let modal = new bootstrap.Modal(document.getElementById('new-light-modal'));
-        modal.hide();
-    }
 
     //GET functions
     function updateData(){
@@ -181,12 +163,23 @@
     updateData();
 
     //POST functions
-    function submitNew(label, color, pattern){
-        let lightData = {"label": label, "color": color, "pattern": pattern};
+    function saveLight() {
+        // Extract input values
+        let labelInput = document.getElementById('label-input');
+        let colorInput = document.getElementById('color-input');
+        let patterInput = document.getElementById('pattern-input');
+
+        // Execute submitNew() function with extracted values
+        let lightData = {"label": labelInput.value, "color": colorInput.value, "pattern": patterInput.value};
 
         postData("/api/v1/LED/new", lightData)
             .then(data => console.log(data))
             .then(updateData);
+
+        // Reset the form
+        labelInput.value = "";
+        colorInput.value= "";
+        patterInput.value = "";
     }
 
     //Rendering functions
@@ -215,6 +208,10 @@
         table.innerHTML = tableContent;
         dropdownContainer.innerHTML = dropdownList;
     }
+
+    //Controls
+    $("#refresh-button").click(updateData);
+
 </script>
 </body>
 </html>

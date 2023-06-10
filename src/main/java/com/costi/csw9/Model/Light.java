@@ -65,6 +65,10 @@ public class Light {
         this.isPublic = false;
     }
 
+    public LightRequest getRequest(){
+        return new LightRequest(label, color, pattern);
+    }
+
     public String getlastModified(){
         return lastModified.getMonthValue() + "/" + lastModified.getDayOfMonth() + "/" + lastModified.getYear();
     }
