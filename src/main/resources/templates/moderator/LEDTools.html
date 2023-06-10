@@ -46,7 +46,7 @@
             <div class="container-fluid bg-2">
                 <h3 class="fw-bold">Actions</h3>
                 <div class="row">
-                    <div class="col action-button" id="add-new-lights">
+                    <div class="col action-button" id="add-new-lights" data-bs-toggle="modal" data-bs-target="#new-light-modal">
                         <img th:src="@{/icons/Arrow.svg}" />
                         <h5 class="text-center">New</h5>
                     </div>
@@ -102,15 +102,36 @@
     </div>
 </main>
 
-<dialog id="new-light-form">
-    <form>
-        <input type="text" id="label-input" />
-        <input type="text" id="color-input"/>
-        <input type="text" id="pattern-input"/>
-        <button formmethod="dialog" type="button" id="new-light-form-cancel">Cancel</button>
-        <button type="submit">Submit</button>
-    </form>
-</dialog>
+<div class="modal fade" id="new-light-modal" tabindex="-1" aria-labelledby="newLightModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-box">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newLightModalLabel">Add New Light</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="new-light-form">
+                    <div class="mb-3">
+                        <label for="label-input" class="form-label">Label</label>
+                        <input type="text" class="form-control" id="label-input">
+                    </div>
+                    <div class="mb-3">
+                        <label for="color-input" class="form-label">Color</label>
+                        <input type="text" class="form-control" id="color-input">
+                    </div>
+                    <div class="mb-3">
+                        <label for="pattern-input" class="form-label">Pattern</label>
+                        <input type="text" class="form-control" id="pattern-input">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="saveLight()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div th:replace="Components :: JS"></div>
 <div th:replace="Components :: scripts"></div>
@@ -119,43 +140,26 @@
     let responseData;
 
     //Main elements
-    const newLightModal = document.querySelector("#new-light-form");
-    const newLightForm = document.querySelector("#new-light-form form");
-    const newLightClose = document.querySelector("#new-light-form-cancel");
-
     const dropdownContainer = document.querySelector("#light-list-dropdown");
     const lightContainer = document.querySelector("#light-container");
     const table = document.querySelector("#table-body");
 
-    //Action buttons
-    const globalShutdownButton = document.querySelector("#turn-off-all");
-    const addNewLights = document.querySelector("#add-new-lights");
-
     //Event listeners
-    addNewLights.addEventListener('click', () => {
-        newLightModal.showModal();
-    });
-    newLightForm.addEventListener('submit', submitLightForm);
-    newLightClose.addEventListener('click', () => {
-        newLightModal.close();
-    });
-
-    function submitLightForm(event) {
-        event.preventDefault(); // Prevent form submission and page reload
-
-        // Retrieve the input values
+    function saveLight() {
+        // Extract input values
         let input1Value = document.getElementById('label-input').value;
         let input2Value = document.getElementById('color-input').value;
         let input3Value = document.getElementById('pattern-input').value;
 
-        // Perform further actions with the input values
+        // Execute submitNew() function with extracted values
         submitNew(input1Value, input2Value, input3Value);
 
         // Reset the form
-        newLightForm.reset();
+        document.getElementById('new-light-form').reset();
 
-        // Close the dialog
-        newLightModal.close();
+        // Close the modal
+        let modal = new bootstrap.Modal(document.getElementById('new-light-modal'));
+        modal.hide();
     }
 
     //GET functions
