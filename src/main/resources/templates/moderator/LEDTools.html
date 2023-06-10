@@ -39,7 +39,6 @@
     <div class="row d-flex">
         <div class="col-12 col-md-7 h-100">
             <div class="container-fluid bg-2 py-3" id="overview-container">
-                <h3 class="fw-bold mb-2">Overview</h3>
             </div>
         </div>
         <div class="col-12 col-md-5 h-100">
@@ -61,18 +60,6 @@
                     <div class="action-button" id="">
                         <img th:src="@{/icons/Private.svg}" />
                         <p class="text-center">Private All</p>
-                    </div>
-                    <div class="action-button" id="">
-                        <img th:src="@{/icons/Arrow.svg}" />
-                        <p class="text-center">f</p>
-                    </div>
-                    <div class="action-button" id="">
-                        <img th:src="@{/icons/Arrow.svg}" />
-                        <p class="text-center">f</p>
-                    </div>
-                    <div class="action-button" id="">
-                        <img th:src="@{/icons/Arrow.svg}" />
-                        <p class="text-center">f</p>
                     </div>
                 </div>
             </div>
@@ -138,10 +125,11 @@
 <div th:replace="Components :: scripts"></div>
 <script>
     //data
-    let responseData;
+    let responseData, overviewData;
 
     //Main elements
     const dropdownContainer = document.querySelector("#light-list-dropdown");
+    const overviewContainer = document.querySelector("#overview-container");
     const lightContainer = document.querySelector("#light-container");
     const table = document.querySelector("#table-body");
 
@@ -160,6 +148,19 @@
                 console.error('Error retrieving data:', error);
             })
             .finally(() => $("#loading").hide());
+
+        fetch("/api/v1/LED/analytics")
+            .then(checkStatus)
+            .then(response => response.json())
+            .then(data => {
+                overviewData = data;
+                renderOverview();
+            })
+            .catch(error => {
+                // error handling
+                lightContainer.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>";
+                console.error('Error retrieving data:', error);
+            });
     }
     updateData();
 
@@ -272,6 +273,43 @@
         }
         table.innerHTML = tableContent;
         dropdownContainer.innerHTML = dropdownList;
+    }
+
+    function renderOverview(){
+        overviewContainer.innerHTML = `
+            <h3 class="fw-bold mb-2">Overview</h3>
+            <div id="stats-container">
+                <div class="action-button">
+                    <p class="fs-1 fw-bold  text-center">${overviewData["favoriteCount"]}</p>
+                    <p class="text-center">Favorites</p>
+                </div>
+                <div class="action-button">
+                    <p class="fs-1 fw-bold  text-center">${overviewData["enabledCount"]}</p>
+                    <p class="text-center">Enabled</p>
+                </div>
+                <div class="action-button">
+                    <p class="fs-1 fw-bold  text-center">${overviewData["publicCount"]}</p>
+                    <p class="text-center">Public</p>
+                </div>
+                <div class="action-button">
+                    <p class="fs-1 fw-bold  text-center">${overviewData["totalLights"]}</p>
+                    <p class="text-center">Lights</p>
+                </div>
+                <div class="action-button">
+                    <p class="fs-1 fw-bold  text-center">${overviewData["usedTodayCount"]}</p>
+                    <p class="text-center">Used Today</p>
+                </div>
+                <div class="action-button">
+                    <p class="fs-1 fw-bold  text-center">${overviewData["privateCount"]}</p>
+                    <p class="text-center">private</p>
+                </div>
+                <div class="action-button">
+                    <p class="fs-1 fw-bold  text-center">${overviewData["disabledCount"]}</p>
+                    <p class="text-center">Disabled</p>
+                </div>
+            </div>
+
+        `;
     }
 
     //Controls

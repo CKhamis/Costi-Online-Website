@@ -114,6 +114,12 @@
 
 .action-button-container{
     display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+#stats-container{
+    display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 10px;
 }
@@ -121,8 +127,11 @@
 .action-button > img{
     aspect-ratio: 1 / 1;
     object-fit: cover;
-    width: 100%;
-    padding: 10%;
+    margin: 0 25%;
+}
+
+.action-button > p{
+    margin-bottom: 0;
 }
 
 .action-button{
