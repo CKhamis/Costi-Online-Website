@@ -112,6 +112,16 @@
   height:100%;
 }
 
+.action-button > img{
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    width: 100%;
+}
+
+.action-button{
+    cursor: pointer;
+}
+
 .ac-grid-scroll-pane{
     height:calc(100vh - 7rem - 10px);
     overflow:scroll;

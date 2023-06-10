@@ -1,5 +1,6 @@
 package com.costi.csw9.Model;
 
+import com.costi.csw9.Model.Temp.LightRequest;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,12 +43,23 @@ public class Light {
     @OneToMany(mappedBy = "light", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<LightLog> logs = new ArrayList<>();
 
-    public Light(String label, LocalDateTime dateAdded, LocalDateTime lastModified, String color, String pattern) {
+    public Light(String label, String color, String pattern) {
         this.label = label;
         this.dateAdded = LocalDateTime.now();
         this.lastModified = LocalDateTime.now();
         this.color = color;
         this.pattern = pattern;
+        this.isEnabled = false;
+        this.isFavorite = false;
+        this.isPublic = false;
+    }
+
+    public Light(LightRequest request){
+        this.label = request.getLabel();
+        this.dateAdded = LocalDateTime.now();
+        this.lastModified = LocalDateTime.now();
+        this.color = request.getColor();
+        this.pattern = request.getPattern();
         this.isEnabled = false;
         this.isFavorite = false;
         this.isPublic = false;

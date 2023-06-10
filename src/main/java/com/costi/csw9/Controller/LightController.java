@@ -2,6 +2,7 @@ package com.costi.csw9.Controller;
 
 import com.costi.csw9.Model.Light;
 import com.costi.csw9.Model.Post;
+import com.costi.csw9.Model.Temp.LightRequest;
 import com.costi.csw9.Model.User;
 import com.costi.csw9.Model.UserRole;
 import com.costi.csw9.Service.LightService;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -70,13 +72,20 @@ public class LightController {
         }
     }
 
+
     @PostMapping("/api/v1/LED/new")
-    public ResponseEntity<String> addOrUpdateLight(@RequestBody Light light) {
-        try {
-            Light savedLight = lightService.saveLight(light);
-            return ResponseEntity.ok("Light added/updated successfully. Light ID: " + savedLight.getId());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding/updating light: " + e.getMessage());
+    public ResponseEntity<?> createNewLight(@RequestBody LightRequest lightRequest, Principal principal) {
+        if(getCurrentUser(principal).isOwner() || getCurrentUser(principal).isAdmin()){
+            try {
+                Light light = new Light(lightRequest);
+                Light savedLight = lightService.saveLight(light);
+                return ResponseEntity.ok("Light added/updated successfully. Light ID: " + savedLight.getId());
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding/updating light: " + e.getMessage());
+            }
+        }else{
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
+
 }

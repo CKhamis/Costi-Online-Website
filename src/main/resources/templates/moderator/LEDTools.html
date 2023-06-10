@@ -28,9 +28,6 @@
                                 Light Settings
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" id="light-list-dropdown">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -39,21 +36,43 @@
         </nav>
     </div>
 
-    <div class="row">
+    <div class="row d-flex">
         <div class="col-12 col-md-7 h-100">
             <div class="container-fluid bg-2" id="overview-container">
-                <h3 class="fw-bold">Actions</h3>
+                <h3 class="fw-bold">Overview</h3>
             </div>
         </div>
         <div class="col-12 col-md-5 h-100">
             <div class="container-fluid bg-2">
                 <h3 class="fw-bold">Actions</h3>
                 <div class="row">
-                    <div class="col" id="add-new-lights">
-                        <h5>hi</h5>
+                    <div class="col action-button" id="add-new-lights">
+                        <img th:src="@{/icons/Arrow.svg}" />
+                        <h5 class="text-center">New</h5>
                     </div>
-                    <div class="col" id="turn-off-all">
-                        <h5>hi</h5>
+                    <div class="col action-button" id="">
+                        <img th:src="@{/icons/Arrow.svg}" />
+                        <h5 class="text-center">f</h5>
+                    </div>
+                    <div class="col action-button" id="">
+                        <img th:src="@{/icons/Arrow.svg}" />
+                        <h5 class="text-center">f</h5>
+                    </div>
+                    <div class="col action-button" id="">
+                        <img th:src="@{/icons/Arrow.svg}" />
+                        <h5 class="text-center">f</h5>
+                    </div>
+                    <div class="col action-button" id="">
+                        <img th:src="@{/icons/Arrow.svg}" />
+                        <h5 class="text-center">f</h5>
+                    </div>
+                    <div class="col action-button" id="">
+                        <img th:src="@{/icons/Arrow.svg}" />
+                        <h5 class="text-center">f</h5>
+                    </div>
+                    <div class="col action-button" id="">
+                        <img th:src="@{/icons/Arrow.svg}" />
+                        <h5 class="text-center">f</h5>
                     </div>
                 </div>
             </div>
@@ -65,16 +84,16 @@
         <table class="table table-sm align-middle table-hover table-dark">
             <thead>
             <tr>
-                <th scope="col">Title</th>
-                <th scope="col">Subtitle</th>
-                <th scope="col">Category</th>
-                <th scope="col">Author</th>
-                <th scope="col">Role</th>
-                <th scope="col">Last Edited</th>
-                <th scope="col">View</th>
-                <th scope="col">Edit</th>
-                <th scope="col">Enable</th>
-                <th scope="col">Delete</th>
+                <th scope="col">ID</th>
+                <th scope="col">Label</th>
+                <th scope="col">Modified</th>
+                <th scope="col">Last Connected</th>
+                <th scope="col">Color</th>
+                <th scope="col">Pattern</th>
+                <th scope="col">Favorite</th>
+                <th scope="col">Public</th>
+                <th scope="col">Enabled</th>
+                <th scope="col">Settings</th>
             </tr>
             </thead>
             <tbody id="table-body">
@@ -82,6 +101,17 @@
         </table>
     </div>
 </main>
+
+<dialog id="new-light-form">
+    <form>
+        <input type="text" id="label-input" />
+        <input type="text" id="color-input"/>
+        <input type="text" id="pattern-input"/>
+        <button formmethod="dialog" type="button" id="new-light-form-cancel">Cancel</button>
+        <button type="submit">Submit</button>
+    </form>
+</dialog>
+
 <div th:replace="Components :: JS"></div>
 <div th:replace="Components :: scripts"></div>
 <script>
@@ -89,6 +119,10 @@
     let responseData;
 
     //Main elements
+    const newLightModal = document.querySelector("#new-light-form");
+    const newLightForm = document.querySelector("#new-light-form form");
+    const newLightClose = document.querySelector("#new-light-form-cancel");
+
     const dropdownContainer = document.querySelector("#light-list-dropdown");
     const lightContainer = document.querySelector("#light-container");
     const table = document.querySelector("#table-body");
@@ -97,39 +131,66 @@
     const globalShutdownButton = document.querySelector("#turn-off-all");
     const addNewLights = document.querySelector("#add-new-lights");
 
+    //Event listeners
+    addNewLights.addEventListener('click', () => {
+        newLightModal.showModal();
+    });
+    newLightForm.addEventListener('submit', submitLightForm);
+    newLightClose.addEventListener('click', () => {
+        newLightModal.close();
+    });
+
+    function submitLightForm(event) {
+        event.preventDefault(); // Prevent form submission and page reload
+
+        // Retrieve the input values
+        let input1Value = document.getElementById('label-input').value;
+        let input2Value = document.getElementById('color-input').value;
+        let input3Value = document.getElementById('pattern-input').value;
+
+        // Perform further actions with the input values
+        submitNew(input1Value, input2Value, input3Value);
+
+        // Reset the form
+        newLightForm.reset();
+
+        // Close the dialog
+        newLightModal.close();
+    }
+
     //GET functions
-    fetch("/api/v1/LED/all-lights")
-        .then(checkStatus)
-        .then(response => response.json())
-        .then(data => {
-            responseData = data;
-            renderAllLights();
-        })
-        .catch(error => {
-            // error handling
-            lightContainer.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>";
-            console.error('Error retrieving data:', error);
-        })
-        .finally(() => $("#loading").hide());
+    function updateData(){
+        fetch("/api/v1/LED/all-lights")
+            .then(checkStatus)
+            .then(response => response.json())
+            .then(data => {
+                responseData = data;
+                renderAllLights();
+            })
+            .catch(error => {
+                // error handling
+                lightContainer.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>";
+                console.error('Error retrieving data:', error);
+            })
+            .finally(() => $("#loading").hide());
+    }
+    updateData();
 
     //POST functions
-    // const lightData = {
-    //     "label": "Sample Light",
-    //     "dateAdded": "2023-06-08T12:34:56",
-    //     "lastModified": "2023-06-08T12:34:56",
-    //     "color": "red",
-    //     "pattern": "solid"
-    // };
-    //
-    // postData("/api/v1/LED/new", lightData)
-    //     .then(data => console.log(data));
+    function submitNew(label, color, pattern){
+        let lightData = {"label": label, "color": color, "pattern": pattern};
+
+        postData("/api/v1/LED/new", lightData)
+            .then(data => console.log(data))
+            .then(updateData);
+    }
 
     //Rendering functions
     function renderAllLights(){
-        let innerHTML = ``;
+        let tableContent = ``, dropdownList = ``;
         for(let i = 0; i < responseData.length; i++){
             let light = responseData[i];
-            innerHTML += `
+            tableContent += `
             <tr>
                 <td>${light.id}</td>
                 <td>${light.label}</td>
@@ -140,10 +201,15 @@
                 <td>${light.isFavorite}</td>
                 <td>${light.isPublic}</td>
                 <td>${light.isEnabled}</td>
+                <td><a href="/COMT/LED/${light.id}">View light ></a></td>
             </tr>
             `;
+            dropdownList += `
+                <li><a class="dropdown-item" href="/COMT/LED/${light.id}">${light.label}</a></li>
+            `;
         }
-        table.innerHTML += innerHTML;
+        table.innerHTML = tableContent;
+        dropdownContainer.innerHTML = dropdownList;
     }
 </script>
 </body>
