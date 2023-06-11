@@ -75,6 +75,12 @@ public class Light {
         return new LightRequest(label, color, pattern);
     }
 
+    public void setValues(LightRequest request){
+        this.label = request.getLabel();
+        this.color = request.getColor();
+        this.pattern = request.getPattern();
+    }
+
     public String getlastModified(){
         return lastModified.getMonthValue() + "/" + lastModified.getDayOfMonth() + "/" + lastModified.getYear();
     }

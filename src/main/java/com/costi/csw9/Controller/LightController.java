@@ -2,7 +2,7 @@ package com.costi.csw9.Controller;
 
 import com.costi.csw9.Model.Ajax.MediaInfo;
 import com.costi.csw9.Model.Light;
-import com.costi.csw9.Model.Post;
+import com.costi.csw9.Model.Temp.EditLightRequest;
 import com.costi.csw9.Model.Temp.LightRequest;
 import com.costi.csw9.Model.User;
 import com.costi.csw9.Model.UserRole;
@@ -101,6 +101,24 @@ public class LightController {
             }
         }else{
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+    }
+
+    @PostMapping("/api/v1/LED/Edit")
+    public ResponseEntity<?> editLight(@RequestBody EditLightRequest lightRequest, Principal principal) {
+        try {
+            Light light = lightService.getLightById(lightRequest.getId());
+            User user = getCurrentUser(principal);
+            if(user.isOwner() || user.isAdmin() || (light.isPublic() && light.isEnabled())){
+                light.setValues(lightRequest);
+                light.setLastModified(LocalDateTime.now());
+                Light savedLight = lightService.saveLight(light);
+                return ResponseEntity.ok("Light added/updated successfully. Light ID: " + savedLight.getId());
+            }else{
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding/updating light: " + e.getMessage());
         }
     }
 

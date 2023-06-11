@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xml:th="https://www.thymeleaf.org">
-<head th:replace="Components :: head('COMT Notifications')"></head>
+<head th:replace="Components :: head('COMT LED Overview')"></head>
 <body class="bg-1 text-1">
 <div th:replace="moderator/ModeratorComponents :: moderatorNav"></div>
 
@@ -37,6 +37,9 @@
         </div>
     </div>
 
+    <div class="container-fluid" id="error-container">
+
+    </div>
     <div class="container-fluid bg-2 mt-4" id="light-container">
         <!-- lights here -->
         <table class="table table-sm align-middle table-hover table-dark">
@@ -91,6 +94,43 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="edit-light-modal" tabindex="-1" aria-labelledby="editLightModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-box">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editLightModalLabel">Edit Light</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-light-form">
+                    <div class="mb-3">
+                        <label for="id-input" class="form-label">ID</label>
+                        <select class="form-select" id="id-input">
+                            <!-- Options for the light IDs go here -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="label-input-2" class="form-label">Label</label>
+                        <input type="text" class="form-control" id="label-input-2">
+                    </div>
+                    <div class="mb-3">
+                        <label for="color-input-2" class="form-label">Color</label>
+                        <input type="text" class="form-control" id="color-input-2">
+                    </div>
+                    <div class="mb-3">
+                        <label for="pattern-input-2" class="form-label">Pattern</label>
+                        <input type="text" class="form-control" id="pattern-input-2">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="editLight()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div th:replace="Components :: JS"></div>
 <!--<div th:replace="Components :: scripts"></div>-->
@@ -101,8 +141,9 @@
 
     //Main elements
     const overviewContainer = document.querySelector("#overview-container");
-    const lightContainer = document.querySelector("#light-container");
+    const errorContainer = document.querySelector("#light-container");
     const table = document.querySelector("#table-body");
+    const optionContainer = document.querySelector("#id-input");
 
     //GET functions
     function updateData(){
@@ -116,7 +157,7 @@
             })
             .catch(error => {
                 // error handling
-                lightContainer.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>";
+                errorContainer.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>";
                 console.error('Error retrieving data:', error);
             });
     }
@@ -139,6 +180,25 @@
         labelInput.value = "";
         colorInput.value= "";
         patterInput.value = "";
+    }
+    function editLight() {
+        // Extract input values
+        let idInput = document.getElementById('id-input');
+        let labelInput = document.getElementById('label-input-2');
+        let colorInput = document.getElementById('color-input-2');
+        let patterInput = document.getElementById('pattern-input-2');
+
+        // Execute submitNew() function with extracted values
+        let lightData = {"id": idInput.value, "label": labelInput.value, "color": colorInput.value, "pattern": patterInput.value};
+
+        postData("/api/v1/LED/Edit", lightData)
+            .then(updateData);
+
+        // Reset the form
+        labelInput.value = "";
+        colorInput.value= "";
+        patterInput.value = "";
+        idInput.value = "";
     }
     function deleteLight(id) {
         postData(`/api/v1/LED/${id}/Delete`)
@@ -188,8 +248,7 @@
 
     //Rendering functions
     function renderAllLights(){
-        renderDropdown();
-        let tableContent = ``;
+        let tableContent = ``, optionsContent = ``;
         for(let i = 0; i < responseData.length; i++){
             let light = responseData[i];
 
@@ -228,14 +287,16 @@
                 <td>
                     <button type="button" class="btn btn-sm ${enabledClass}" onclick="enableLight(${light.id}, ${!light.enabled})">${enabledText}</button>
                 </td>
-                <td><a class="btn btn-sm btn-secondary" href="/COMT/LED/${light.id}">Edit</a></td>
+                <td><button class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#edit-light-modal">Edit</button></td>
                 <td>
                     <button type="button" class="btn btn-sm btn-danger" onclick="deleteLight(${light.id})">Delete</button>
                 </td>
             </tr>
             `;
+            optionsContent += `<option value="${light.id}">${light.id}</option>`;
         }
         table.innerHTML = tableContent;
+        optionContainer.innerHTML = optionsContent;
     }
     function renderOverview(){
         overviewContainer.innerHTML = `
@@ -272,6 +333,11 @@
             </div>
 
         `;
+    }
+
+    // Exists as a connector for universal functions
+    function next(){
+        renderAllLights();
     }
 
     //Controls
