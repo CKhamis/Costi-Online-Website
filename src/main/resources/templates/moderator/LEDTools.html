@@ -2,39 +2,10 @@
 <html xml:th="https://www.thymeleaf.org">
 <head th:replace="Components :: head('COMT Notifications')"></head>
 <body class="bg-1 text-1">
-<div th:replace="moderator/ModeratorComponents :: nav"></div>
+<div th:replace="moderator/ModeratorComponents :: moderatorNav"></div>
 
 <main class="container mt-3">
-    <div class="mb-4 mt-2">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-2">
-            <div class="container-fluid">
-                <a class="navbar-brand fw-bold" href="/COMT/LED">LED Light Controller</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="/COMT/LED">Overview</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/COMT/LED/All">All Lights</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/COMT/LED/Logs">Logs</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Light Settings
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" id="light-list-dropdown">
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </div>
+    <div th:replace="moderator/ModeratorComponents :: lightNavigation"></div>
 
     <div class="row d-flex">
         <div class="col-12 col-md-7 h-100">
@@ -122,33 +93,20 @@
 </div>
 
 <div th:replace="Components :: JS"></div>
-<div th:replace="Components :: scripts"></div>
+<!--<div th:replace="Components :: scripts"></div>-->
+<script th:replace="moderator/ModeratorComponents :: led-scripts"></script>
 <script>
     //data
-    let responseData, overviewData;
+    let overviewData;
 
     //Main elements
-    const dropdownContainer = document.querySelector("#light-list-dropdown");
     const overviewContainer = document.querySelector("#overview-container");
     const lightContainer = document.querySelector("#light-container");
     const table = document.querySelector("#table-body");
 
     //GET functions
     function updateData(){
-        fetch("/api/v1/LED/all-lights")
-            .then(checkStatus)
-            .then(response => response.json())
-            .then(data => {
-                responseData = data;
-                renderAllLights();
-            })
-            .catch(error => {
-                // error handling
-                lightContainer.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>";
-                console.error('Error retrieving data:', error);
-            })
-            .finally(() => $("#loading").hide());
-
+        getAllLightData();
         fetch("/api/v1/LED/analytics")
             .then(checkStatus)
             .then(response => response.json())
@@ -197,7 +155,6 @@
             .catch(err => console.log(err))
             .then(updateData);
     }
-
     function enableLight(id, isEnabled) {
         let url = `/api/v1/LED/${id}/Enable`;
         if(!isEnabled){
@@ -208,7 +165,6 @@
             .catch(err => console.log(err))
             .then(updateData);
     }
-
     function favoriteLight(id, isFavorite) {
         let url = `/api/v1/LED/${id}/Favorite`;
         if(!isFavorite){
@@ -219,13 +175,11 @@
             .catch(err => console.log(err))
             .then(updateData);
     }
-
     function disableAll() {
         postData("/api/v1/LED/DisableAll")
             .catch(err => console.log(err))
             .then(updateData);
     }
-
     function privateAll() {
         postData("/api/v1/LED/PrivateAll")
             .catch(err => console.log(err))
@@ -234,7 +188,8 @@
 
     //Rendering functions
     function renderAllLights(){
-        let tableContent = ``, dropdownList = ``;
+        renderDropdown();
+        let tableContent = ``;
         for(let i = 0; i < responseData.length; i++){
             let light = responseData[i];
 
@@ -279,14 +234,9 @@
                 </td>
             </tr>
             `;
-            dropdownList += `
-                <li><a class="dropdown-item" href="/COMT/LED/${light.id}">${light.label}</a></li>
-            `;
         }
         table.innerHTML = tableContent;
-        dropdownContainer.innerHTML = dropdownList;
     }
-
     function renderOverview(){
         overviewContainer.innerHTML = `
             <h3 class="fw-bold mb-2">Overview</h3>
