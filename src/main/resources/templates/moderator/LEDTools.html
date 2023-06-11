@@ -53,11 +53,11 @@
                         <img th:src="@{/icons/Refresh.svg}" />
                         <p class="text-center">Refresh</p>
                     </div>
-                    <div class="action-button" id="">
+                    <div class="action-button" id="disable-all-button">
                         <img th:src="@{/icons/Disable.svg}" />
                         <p class="text-center">Disable All</p>
                     </div>
-                    <div class="action-button" id="">
+                    <div class="action-button" id="private-all-button">
                         <img th:src="@{/icons/Private.svg}" />
                         <p class="text-center">Private All</p>
                     </div>
@@ -80,8 +80,8 @@
                 <th scope="col">Favorite</th>
                 <th scope="col">Public</th>
                 <th scope="col">Enabled</th>
-                <th scope="col">Delete</th>
                 <th scope="col">Edit</th>
+                <th scope="col">Delete</th>
             </tr>
             </thead>
             <tbody id="table-body">
@@ -220,6 +220,18 @@
             .then(updateData);
     }
 
+    function disableAll() {
+        postData("/api/v1/LED/DisableAll")
+            .catch(err => console.log(err))
+            .then(updateData);
+    }
+
+    function privateAll() {
+        postData("/api/v1/LED/PrivateAll")
+            .catch(err => console.log(err))
+            .then(updateData);
+    }
+
     //Rendering functions
     function renderAllLights(){
         let tableContent = ``, dropdownList = ``;
@@ -248,8 +260,8 @@
             <tr>
                 <td>${light.id}</td>
                 <td>${light.label}</td>
-                <td>${light.getTimeSinceModified}</td>
-                <td>${light.lastConnected}</td>
+                <td>${light.formattedModified}</td>
+                <td>${light.timeSinceLastConnected}</td>
                 <td>${light.color}</td>
                 <td>${light.pattern}</td>
                 <td>
@@ -291,7 +303,7 @@
                     <p class="fs-1 fw-bold  text-center">${overviewData["publicCount"]}</p>
                     <p class="text-center">Public</p>
                 </div>
-                <div class="action-button">
+                <div class="action-button  d-none d-lg-block">
                     <p class="fs-1 fw-bold  text-center">${overviewData["totalLights"]}</p>
                     <p class="text-center">Lights</p>
                 </div>
@@ -299,11 +311,11 @@
                     <p class="fs-1 fw-bold  text-center">${overviewData["usedTodayCount"]}</p>
                     <p class="text-center">Used Today</p>
                 </div>
-                <div class="action-button">
+                <div class="action-button d-none d-lg-block">
                     <p class="fs-1 fw-bold  text-center">${overviewData["privateCount"]}</p>
                     <p class="text-center">private</p>
                 </div>
-                <div class="action-button">
+                <div class="action-button d-none d-lg-block">
                     <p class="fs-1 fw-bold  text-center">${overviewData["disabledCount"]}</p>
                     <p class="text-center">Disabled</p>
                 </div>
@@ -314,6 +326,8 @@
 
     //Controls
     $("#refresh-button").click(updateData);
+    $("#disable-all-button").click(disableAll);
+    $("#private-all-button").click(privateAll);
 </script>
 </body>
 </html>

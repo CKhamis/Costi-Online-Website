@@ -124,6 +124,12 @@
     gap: 10px;
 }
 
+@media (max-width: 992px) {
+    #stats-container {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
 .action-button > img{
     aspect-ratio: 1 / 1;
     object-fit: cover;

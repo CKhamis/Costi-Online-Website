@@ -5,9 +5,12 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.parameters.P;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +46,9 @@ public class Light {
     @OneToMany(mappedBy = "light", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<LightLog> logs = new ArrayList<>();
 
+    @Transient
+    static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/y hh:mm a");
+
     public Light(String label, String color, String pattern) {
         this.label = label;
         this.dateAdded = LocalDateTime.now();
@@ -74,45 +80,41 @@ public class Light {
     }
 
     @Transient
-    public String getTimeSinceModified() {
-        //return lastEdited.getMonthValue() + "/" + lastEdited.getDayOfMonth() + "/" + lastEdited.getYear();
-        String unit = "";
-        LocalDateTime now = LocalDateTime.now();
-        long diff;
-        if((diff = ChronoUnit.SECONDS.between(lastModified,now)) < 60){
-            unit = "seconds ago";
-        } else if ((diff = ChronoUnit.MINUTES.between(lastModified,now)) < 60) {
-            unit = "minutes ago";
-        } else if ((diff = ChronoUnit.HOURS.between(lastModified,now)) < 24) {
-            unit = "hours ago";
-        } else if ((diff = ChronoUnit.DAYS.between(lastModified,now)) < 30) {
-            unit = "days ago";
-        } else if ((diff = ChronoUnit.MONTHS.between(lastModified,now)) < 12) {
-            unit = "month ago";
-        } else{
-            diff = ChronoUnit.YEARS.between(lastModified,now);
-        }
-        return String.format("%d %s",diff,unit);
+    public String getFormattedLastConnected(){
+        return (lastConnected != null) ? lastConnected.format(formatter) : LocalDateTime.MIN.format(formatter);
     }
 
     @Transient
-    public String getTimeSinceModifiedShort() {
-        //return lastEdited.getMonthValue() + "/" + lastEdited.getDayOfMonth() + "/" + lastEdited.getYear();
+    public String getFormattedModified(){
+        return (lastModified != null) ? lastModified.format(formatter) : LocalDateTime.MIN.format(formatter);
+    }
+
+    @Transient
+    public String getFormattedAdded(){
+        return (dateAdded != null) ? dateAdded.format(formatter) : LocalDateTime.MIN.format(formatter);
+    }
+
+    @Transient
+    public String getTimeSinceLastConnected() {
+        if(lastConnected == null){
+            return "never used";
+        }
+
         String unit = "";
         LocalDateTime now = LocalDateTime.now();
         long diff;
-        if((diff = ChronoUnit.SECONDS.between(lastModified,now)) < 60){
-            unit = "s";
-        } else if ((diff = ChronoUnit.MINUTES.between(lastModified,now)) < 60) {
-            unit = "m";
-        } else if ((diff = ChronoUnit.HOURS.between(lastModified,now)) < 24) {
-            unit = "h";
-        } else if ((diff = ChronoUnit.DAYS.between(lastModified,now)) < 30) {
-            unit = "d";
-        } else if ((diff = ChronoUnit.MONTHS.between(lastModified,now)) < 12) {
-            unit = "mo";
+        if((diff = ChronoUnit.SECONDS.between(lastConnected,now)) < 60){
+            unit = "seconds";
+        } else if ((diff = ChronoUnit.MINUTES.between(lastConnected,now)) < 60) {
+            unit = "minutes";
+        } else if ((diff = ChronoUnit.HOURS.between(lastConnected,now)) < 24) {
+            unit = "hours";
+        } else if ((diff = ChronoUnit.DAYS.between(lastConnected,now)) < 30) {
+            unit = "days";
+        } else if ((diff = ChronoUnit.MONTHS.between(lastConnected,now)) < 12) {
+            unit = "months";
         } else{
-            diff = ChronoUnit.YEARS.between(lastModified,now);
+            diff = ChronoUnit.YEARS.between(lastConnected,now);
         }
         return String.format("%d %s",diff,unit);
     }

@@ -265,4 +265,39 @@ public class LightController {
         return jsonResponse;
     }
 
+    @PostMapping("/api/v1/LED/DisableAll")
+    public ResponseEntity<String> disableAll(Principal principal) {
+        User user = getCurrentUser(principal);
+        if(user.getRole().equals(UserRole.ADMIN) || getCurrentUser(principal).getRole().equals(UserRole.OWNER)){
+            try {
+                for(Light light : lightService.getEnabledLights(true)){
+                    light.setEnabled(false);
+                    lightService.saveLight(light);
+                }
+                return ResponseEntity.ok("Lights disabled successfully");
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error editing lights: " + e.getMessage());
+            }
+        }else{
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+    }
+
+    @PostMapping("/api/v1/LED/PrivateAll")
+    public ResponseEntity<String> privateAll(Principal principal) {
+        User user = getCurrentUser(principal);
+        if(user.getRole().equals(UserRole.ADMIN) || getCurrentUser(principal).getRole().equals(UserRole.OWNER)){
+            try {
+                for(Light light : lightService.getPublicLights(true)){
+                    light.setPublic(false);
+                    lightService.saveLight(light);
+                }
+                return ResponseEntity.ok("Lights privated successfully");
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error editing lights: " + e.getMessage());
+            }
+        }else{
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+    }
 }
