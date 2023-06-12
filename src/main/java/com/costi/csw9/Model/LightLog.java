@@ -19,26 +19,20 @@ public class LightLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "user_sequence")
     private Long id;
     @Column(nullable = false, unique = true)
-    private String ip;
-    @Column(nullable = false, unique = true)
-    private String color;
-    @Column(nullable = false, unique = true)
-    private String pattern;
+    private String message;
     @Column(nullable = false)
     private LocalDateTime dateCreated;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "light_id", nullable = false)
     private Light light;
 
-    public LightLog(Light light, String ip, String color, String pattern) {
+    public LightLog(Light light, String message) {
         this.light = light;
-        this.ip = ip;
-        this.color = color;
-        this.pattern = pattern;
+        this.message = message;
         this.dateCreated = LocalDateTime.now();
     }
 
-    public String getlastModified(){
+    public String getDateCreated(){
         return dateCreated.getMonthValue() + "/" + dateCreated.getDayOfMonth() + "/" + dateCreated.getYear();
     }
 }

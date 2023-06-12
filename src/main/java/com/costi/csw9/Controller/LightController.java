@@ -38,16 +38,6 @@ public class LightController {
         User u = userService.findByEmail(username);
         return u;
     }
-    @PostMapping("/update-light")
-    @ResponseBody
-    public String handlePostRequest(@RequestBody String requestData, Principal principal) {
-        // Process the received data
-        System.out.println("Received data: " + requestData);
-
-        // Perform necessary operations and return a response
-        String response = "Data received successfully";
-        return response;
-    }
 
     @GetMapping("/api/v1/LED/all-lights")
     public ResponseEntity<List<Light>> getAllLights(Principal principal) {
@@ -56,6 +46,50 @@ public class LightController {
             return ResponseEntity.ok(lightService.getAllLights());
         }
         return ResponseEntity.ok(lightService.getEnabledLights(true));
+    }
+
+    @GetMapping("/api/v1/LED/analytics")
+    @ResponseBody
+    public Map<String, Object> getLEDAnalytics() {
+        // Construct the JSON response
+        Map<String, Object> jsonResponse = new HashMap<>();
+        List<Light> lightList = lightService.getAllLights();
+        jsonResponse.put("totalLights", lightList.size());
+
+
+        int numFavorite = 0, numPublic = 0, numPrivate = 0, numEnabled = 0, numDisabled = 0, numUsedToday = 0;
+        for(Light light : lightList){
+            LocalDate currentDate = LocalDate.now();
+            LocalDate lightDate = (light.getLastConnected() != null) ? light.getLastConnected().toLocalDate() : LocalDate.MIN;
+            if(currentDate.equals(lightDate)){
+                numUsedToday++;
+            }
+
+            if(light.isFavorite()){
+                numFavorite++;
+            }
+
+            if(light.isEnabled()){
+                numEnabled++;
+            }else{
+                numDisabled++;
+            }
+
+            if(light.isPublic()){
+                numPublic++;
+            }else{
+                numPrivate++;
+            }
+        }
+
+        jsonResponse.put("favoriteCount", numFavorite);
+        jsonResponse.put("publicCount", numPublic);
+        jsonResponse.put("privateCount", numPrivate);
+        jsonResponse.put("enabledCount", numEnabled);
+        jsonResponse.put("disabledCount", numDisabled);
+        jsonResponse.put("usedTodayCount", numUsedToday);
+
+        return jsonResponse;
     }
 
     @GetMapping("/api/v1/LED/{id}")
@@ -88,6 +122,28 @@ public class LightController {
         }
     }
 
+    /*
+        Light Connection
+     */
+    @GetMapping("/api/v1/LED/{id}/Establish-Connection")
+    public ResponseEntity<String> testConnection(@PathVariable Long id){
+        try {
+            Light light = lightService.getLightById(id);
+            try {
+                //TODO: fully implement
+                return ResponseEntity.ok("Current status retrieved successfully");
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error Checking Light: " + e.getMessage());
+            }
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
+    /*
+        Light Database Operations
+     */
 
     @PostMapping("/api/v1/LED/new")
     public ResponseEntity<?> createNewLight(@RequestBody LightRequest lightRequest, Principal principal) {
@@ -237,50 +293,6 @@ public class LightController {
         }else{
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-    }
-
-    @GetMapping("/api/v1/LED/analytics")
-    @ResponseBody
-    public Map<String, Object> getLEDAnalytics() {
-        // Construct the JSON response
-        Map<String, Object> jsonResponse = new HashMap<>();
-        List<Light> lightList = lightService.getAllLights();
-        jsonResponse.put("totalLights", lightList.size());
-
-
-        int numFavorite = 0, numPublic = 0, numPrivate = 0, numEnabled = 0, numDisabled = 0, numUsedToday = 0;
-        for(Light light : lightList){
-            LocalDate currentDate = LocalDate.now();
-            LocalDate lightDate = (light.getLastConnected() != null) ? light.getLastConnected().toLocalDate() : LocalDate.MIN;
-            if(currentDate.equals(lightDate)){
-                numUsedToday++;
-            }
-
-            if(light.isFavorite()){
-                numFavorite++;
-            }
-
-            if(light.isEnabled()){
-                numEnabled++;
-            }else{
-                numDisabled++;
-            }
-
-            if(light.isPublic()){
-                numPublic++;
-            }else{
-                numPrivate++;
-            }
-        }
-
-        jsonResponse.put("favoriteCount", numFavorite);
-        jsonResponse.put("publicCount", numPublic);
-        jsonResponse.put("privateCount", numPrivate);
-        jsonResponse.put("enabledCount", numEnabled);
-        jsonResponse.put("disabledCount", numDisabled);
-        jsonResponse.put("usedTodayCount", numUsedToday);
-
-        return jsonResponse;
     }
 
     @PostMapping("/api/v1/LED/DisableAll")

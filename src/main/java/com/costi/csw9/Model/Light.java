@@ -5,10 +5,11 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.core.parameters.P;
+import org.springframework.http.*;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -28,6 +29,8 @@ public class Light {
     private Long id;
     @Column(nullable = false, unique = true)
     private String label;
+    @Column(nullable = false, unique = true)
+    private String address;
     @Column(nullable = false)
     private LocalDateTime dateAdded;
     @Column(nullable = false)
@@ -35,6 +38,8 @@ public class Light {
     private LocalDateTime lastConnected;
     @Column(nullable = false)
     private String color;
+    @Column(nullable = false)
+    private String status;
     @Column(nullable = false)
     private String pattern;
     @Column(nullable = false)
@@ -49,10 +54,12 @@ public class Light {
     @Transient
     static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/y hh:mm a");
 
-    public Light(String label, String color, String pattern) {
+    public Light(String address, String label, String color, String pattern) {
+        this.address = address;
         this.label = label;
         this.dateAdded = LocalDateTime.now();
         this.lastModified = LocalDateTime.now();
+        this.status = "New";
         this.color = color;
         this.pattern = pattern;
         this.isEnabled = false;
@@ -69,16 +76,19 @@ public class Light {
         this.isEnabled = false;
         this.isFavorite = false;
         this.isPublic = false;
+        this.status = "New";
     }
 
     public LightRequest getRequest(){
-        return new LightRequest(label, color, pattern);
+        return new LightRequest(address, label, color, pattern);
     }
 
     public void setValues(LightRequest request){
         this.label = request.getLabel();
         this.color = request.getColor();
         this.pattern = request.getPattern();
+        this.address = address;
+        this.status = "Recently Edited";
     }
 
     public String getlastModified(){
@@ -123,5 +133,23 @@ public class Light {
             diff = ChronoUnit.YEARS.between(lastConnected,now);
         }
         return String.format("%d %s",diff,unit);
+    }
+
+    public String getCurrentStatus() {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = address + "/api/status";
+
+        try {
+            ResponseEntity<LightRequest> response = restTemplate.exchange(url, HttpMethod.GET, null, LightRequest.class);
+            LightRequest lightRequest = response.getBody();
+            lastConnected = LocalDateTime.now();
+            status = "Active";
+            setValues(lightRequest);
+            return "Connection Successful: " + lightRequest.toString();
+        } catch (RestClientException e) {
+            e.printStackTrace();
+            status = "Error";
+            return "Error updating status of light: " + e.getMessage();
+        }
     }
 }
