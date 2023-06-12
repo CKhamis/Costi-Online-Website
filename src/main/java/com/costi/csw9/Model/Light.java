@@ -1,6 +1,7 @@
 package com.costi.csw9.Model;
 
 import com.costi.csw9.Model.Temp.LightRequest;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -68,6 +69,7 @@ public class Light {
     }
 
     public Light(LightRequest request){
+        this.address = request.getAddress();
         this.label = request.getLabel();
         this.dateAdded = LocalDateTime.now();
         this.lastModified = LocalDateTime.now();
@@ -87,7 +89,7 @@ public class Light {
         this.label = request.getLabel();
         this.color = request.getColor();
         this.pattern = request.getPattern();
-        this.address = address;
+        this.address = request.getAddress();
         this.status = "Recently Edited";
     }
 
@@ -135,6 +137,8 @@ public class Light {
         return String.format("%d %s",diff,unit);
     }
 
+    @Transient
+    @JsonIgnore
     public String getCurrentStatus() {
         RestTemplate restTemplate = new RestTemplate();
         String url = address + "/api/status";
@@ -145,7 +149,7 @@ public class Light {
             lastConnected = LocalDateTime.now();
             status = "Active";
             setValues(lightRequest);
-            return "Connection Successful: " + lightRequest.toString();
+            return "Connection Successful: " + lightRequest;
         } catch (RestClientException e) {
             e.printStackTrace();
             status = "Error";

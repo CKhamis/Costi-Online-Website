@@ -2,6 +2,7 @@ package com.costi.csw9.Service;
 
 import com.costi.csw9.Model.Light;
 import com.costi.csw9.Model.LightLog;
+import com.costi.csw9.Model.Temp.LightRequest;
 import com.costi.csw9.Repository.LightLogRepository;
 import com.costi.csw9.Repository.LightRepository;
 import com.costi.csw9.Util.LogicTools;
@@ -31,16 +32,22 @@ public class LightService {
     }
 
     @Scheduled(fixedRate = INTERVAL)
-    public void updateCurrentStatus() {
+    public void updateAllStatus() {
         List<Light> lights = lightRepository.findAll();
         for (Light light : lights) {
-            String currentStatus = light.getCurrentStatus();
-            LightLog log = new LightLog(light, currentStatus);
-            light.getLogs().add(log);
-
-            lightLogRepository.save(log);
-            lightRepository.save(light);
+            updateCurrentStatus(light);
         }
+    }
+
+    public LightRequest updateCurrentStatus(Light light){
+        String currentStatus = light.getCurrentStatus();
+        LightLog log = new LightLog(light, currentStatus);
+        light.getLogs().add(log);
+
+        lightLogRepository.save(log);
+        lightRepository.save(light);
+
+        return light.getRequest();
     }
 
     public List<Light> getPublicLights(boolean isPublic) {

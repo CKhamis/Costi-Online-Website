@@ -125,13 +125,12 @@ public class LightController {
     /*
         Light Connection
      */
-    @GetMapping("/api/v1/LED/{id}/Establish-Connection")
-    public ResponseEntity<String> testConnection(@PathVariable Long id){
+    @GetMapping("/api/v1/LED/{id}/Check-Status")
+    public ResponseEntity<?> getStatus(@PathVariable Long id){
         try {
             Light light = lightService.getLightById(id);
             try {
-                //TODO: fully implement
-                return ResponseEntity.ok("Current status retrieved successfully");
+                return ResponseEntity.ok(lightService.updateCurrentStatus(light));
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error Checking Light: " + e.getMessage());
             }
