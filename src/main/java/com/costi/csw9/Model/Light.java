@@ -49,6 +49,7 @@ public class Light {
     private boolean isPublic;
     @Column(nullable = false)
     private boolean isEnabled;
+    @JsonIgnore
     @OneToMany(mappedBy = "light", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<LightLog> logs = new ArrayList<>();
 
@@ -141,7 +142,7 @@ public class Light {
     @JsonIgnore
     public String getCurrentStatus() {
         RestTemplate restTemplate = new RestTemplate();
-        String url = address + "/api/status";
+        String url = "http://" + address + "/api/status";
 
         try {
             ResponseEntity<LightRequest> response = restTemplate.exchange(url, HttpMethod.GET, null, LightRequest.class);
@@ -150,7 +151,7 @@ public class Light {
             status = "Active";
             setValues(lightRequest);
             return "Connection Successful: " + lightRequest;
-        } catch (RestClientException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             status = "Error";
             return "Error updating status of light: " + e.getMessage();

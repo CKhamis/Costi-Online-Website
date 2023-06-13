@@ -141,7 +141,13 @@
         </div>
     </div>
 </div>
-
+<div class="modal fade" id="view-ping-modal" tabindex="-1" aria-labelledby="view-ping-modal" aria-hidden="true">
+    <h3 class="fw-bold">Ping Status:</h3>
+    <p id="ping-status"></p>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    </div>
+</div>
 
 <div th:replace="Components :: JS"></div>
 <!--<div th:replace="Components :: scripts"></div>-->
@@ -175,16 +181,18 @@
     updateData();
 
     function testConnection(id){
+        const pElement = document.getElementById("ping-status");
+
+        pElement.innerText = "Sending ping. Please wait...";
         fetch(`/api/v1/LED/${id}/Check-Status`)
             .then(checkStatus)
-            .then(response => response.json())
             .then(data => {
-                console.log(data);
+                pElement.innerText = "Device successfully responded";
             })
             .catch(error => {
-                // error handling
-                console.log(error);
-            });
+                pElement.innerText = "Device successfully responded";
+            })
+            .finally(updateData);
     }
 
     //POST functions
@@ -316,7 +324,7 @@
                     <button type="button" class="btn btn-sm ${enabledClass}" onclick="enableLight(${light.id}, ${!light.enabled})">${enabledText}</button>
                 </td>
                 <td>
-                    <button class="btn btn-sm btn-info" data-bs-toggle="modal" onclick="testConnection(${light.id})">Ping</button>
+                    <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#view-ping-modal" onclick="testConnection(${light.id})">Ping</button>
                 </td>
                 <td>
                     <button class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#edit-light-modal">Edit</button>

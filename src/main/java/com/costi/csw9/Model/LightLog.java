@@ -18,7 +18,7 @@ public class LightLog {
     @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "user_sequence")
     private Long id;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String message;
     @Column(nullable = false)
     private LocalDateTime dateCreated;
