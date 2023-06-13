@@ -6,6 +6,7 @@ import com.costi.csw9.Model.Temp.LightRequest;
 import com.costi.csw9.Repository.LightLogRepository;
 import com.costi.csw9.Repository.LightRepository;
 import com.costi.csw9.Util.LogicTools;
+import org.hibernate.Hibernate;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ import java.util.List;
 public class LightService {
     private final LightRepository lightRepository;
     private final LightLogRepository lightLogRepository;
-    private final int INTERVAL = 50000;
+    private final int INTERVAL = 500000;
     public LightService(LightRepository lightRepository, LightLogRepository lightLogRepository) {
         this.lightRepository = lightRepository;
         this.lightLogRepository = lightLogRepository;
@@ -33,13 +34,14 @@ public class LightService {
 
     @Scheduled(fixedRate = INTERVAL)
     public void updateAllStatus() {
-        List<Light> lights = lightRepository.findAll();
+        List<Light> lights = lightRepository.findAllByOrderByDateAddedDesc();
         for (Light light : lights) {
+            Hibernate.initialize(light.getLogs());
             updateCurrentStatus(light);
         }
     }
 
-    public LightRequest updateCurrentStatus(Light light){
+    public String updateCurrentStatus(Light light){
         String currentStatus = light.getCurrentStatus();
         LightLog log = new LightLog(light, currentStatus);
         light.getLogs().add(log);
@@ -47,7 +49,7 @@ public class LightService {
         lightLogRepository.save(log);
         lightRepository.save(light);
 
-        return light.getRequest();
+        return currentStatus;
     }
 
     public List<Light> getPublicLights(boolean isPublic) {

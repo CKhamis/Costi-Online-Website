@@ -129,10 +129,12 @@ public class LightController {
     public ResponseEntity<?> getStatus(@PathVariable Long id){
         try {
             Light light = lightService.getLightById(id);
-            try {
-                return ResponseEntity.ok(lightService.updateCurrentStatus(light));
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error Checking Light: " + e.getMessage());
+            String status = lightService.updateCurrentStatus(light);
+
+            if(status.charAt(0) == 'C'){
+                return ResponseEntity.ok(status);
+            }else{
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error Checking Light: " + status);
             }
         } catch (Exception e) {
             return ResponseEntity.notFound().build();

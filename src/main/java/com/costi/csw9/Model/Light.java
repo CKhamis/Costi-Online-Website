@@ -50,7 +50,7 @@ public class Light {
     @Column(nullable = false)
     private boolean isEnabled;
     @JsonIgnore
-    @OneToMany(mappedBy = "light", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "light", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<LightLog> logs = new ArrayList<>();
 
     @Transient
@@ -142,7 +142,8 @@ public class Light {
     @JsonIgnore
     public String getCurrentStatus() {
         RestTemplate restTemplate = new RestTemplate();
-        String url = "http://" + address + "/api/status";
+        //String url = "http://" + address + "/api/status";
+        String url = "http://" + address;
 
         try {
             ResponseEntity<LightRequest> response = restTemplate.exchange(url, HttpMethod.GET, null, LightRequest.class);
@@ -150,9 +151,9 @@ public class Light {
             lastConnected = LocalDateTime.now();
             status = "Active";
             setValues(lightRequest);
-            return "Connection Successful: " + lightRequest;
+            return "Connection Successful: " + lightRequest; //First letter of output is used in controller
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             status = "Error";
             return "Error updating status of light: " + e.getMessage();
         }
