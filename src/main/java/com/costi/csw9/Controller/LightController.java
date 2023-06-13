@@ -1,6 +1,5 @@
 package com.costi.csw9.Controller;
 
-import com.costi.csw9.Model.Ajax.MediaInfo;
 import com.costi.csw9.Model.Light;
 import com.costi.csw9.Model.Temp.EditLightRequest;
 import com.costi.csw9.Model.Temp.LightRequest;
@@ -125,16 +124,32 @@ public class LightController {
     /*
         Light Connection
      */
-    @GetMapping("/api/v1/LED/{id}/Check-Status")
-    public ResponseEntity<?> getStatus(@PathVariable Long id){
+    @GetMapping("/api/v1/LED/{id}/Sync-Up")
+    public ResponseEntity<?> syncUp(@PathVariable Long id){
         try {
             Light light = lightService.getLightById(id);
-            String status = lightService.updateCurrentStatus(light);
+            String status = lightService.syncDown(light);
 
             if(status.charAt(0) == 'C'){
                 return ResponseEntity.ok(status);
             }else{
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error Checking Light: " + status);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error sending data: " + status);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/api/v1/LED/{id}/Sync-Down")
+    public ResponseEntity<?> syncDown(@PathVariable Long id){
+        try {
+            Light light = lightService.getLightById(id);
+            String status = lightService.syncDown(light);
+
+            if(status.charAt(0) == 'C'){
+                return ResponseEntity.ok(status);
+            }else{
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error receiving data: " + status);
             }
         } catch (Exception e) {
             return ResponseEntity.notFound().build();

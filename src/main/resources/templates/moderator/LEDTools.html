@@ -190,22 +190,44 @@
     }
     updateData();
 
-    function testConnection(id){
+    function syncDown(id){
         const pElement = document.getElementById("ping-status");
         const titleElement = document.getElementById("ping-title");
 
         pElement.innerText = "Please wait...";
         titleElement.innerText = "Connecting to light";
-        fetch(`/api/v1/LED/${id}/Check-Status`)
+        fetch(`/api/v1/LED/${id}/Sync-Down`)
             .then(checkStatus)
             .then(data => {
-                pElement.innerText = "Device successfully responded. Data updated.";
+                titleElement.innerText = "Sync Complete";
+                pElement.innerText = "Device successfully responded. Data downloaded from device.";
             })
             .catch(error => {
+                titleElement.innerText = "Sync Failed";
                 pElement.innerText = `Error connecting to light: ${error}`;
             })
             .finally(() => {
+                updateData();
+            });
+    }
+
+    function syncUp(id){
+        const pElement = document.getElementById("ping-status");
+        const titleElement = document.getElementById("ping-title");
+
+        pElement.innerText = "Please wait...";
+        titleElement.innerText = "Connecting to light";
+        fetch(`/api/v1/LED/${id}/Sync-Up`)
+            .then(checkStatus)
+            .then(data => {
                 titleElement.innerText = "Sync Complete";
+                pElement.innerText = "Device successfully responded. Data sent to device.";
+            })
+            .catch(error => {
+                titleElement.innerText = "Sync Failed";
+                pElement.innerText = `Error connecting to light: ${error}`;
+            })
+            .finally(() => {
                 updateData();
             });
     }
@@ -339,10 +361,10 @@
                     <button type="button" class="btn btn-sm ${enabledClass}" onclick="enableLight(${light.id}, ${!light.enabled})">${enabledText}</button>
                 </td>
                 <td>
-                    <button class="btn btn-sm btn-dark" data-bs-toggle="modal" data-bs-target="#view-ping-modal" onclick="testConnection(${light.id})">
+                    <button class="btn btn-sm btn-dark" data-bs-toggle="modal" data-bs-target="#view-ping-modal" onclick="syncDown(${light.id})">
                         <img src="/icons/Arrow.svg" alt="Arrow" width="20">
                     </button>
-                    <button class="btn btn-sm btn-dark" data-bs-toggle="modal" data-bs-target="#view-ping-modal" onclick="testConnection(${light.id})">
+                    <button class="btn btn-sm btn-dark" data-bs-toggle="modal" data-bs-target="#view-ping-modal" onclick="syncUp(${light.id})">
                         <img src="/icons/Arrow.svg" alt="Arrow" width="20" style="transform: rotate(180deg);">
                     </button>
                 </td>

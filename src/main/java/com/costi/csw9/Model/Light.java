@@ -158,4 +158,30 @@ public class Light {
             return "Error updating status of light: " + e.getMessage();
         }
     }
+
+    @Transient
+    @JsonIgnore
+    public String sendLightRequest() {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://" + address;
+
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
+            LightRequest lightRequest = this.getRequest();
+
+            HttpEntity<LightRequest> request = new HttpEntity<>(lightRequest, headers);
+
+            ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
+            lastConnected = LocalDateTime.now();
+            status = "Active";
+            return "Connection Successful: " + response.getBody(); // Return the response body
+        } catch (Exception e) {
+            //e.printStackTrace();
+            status = "Error";
+            return "Error sending light request: " + e.getMessage();
+        }
+    }
+
 }

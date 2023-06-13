@@ -2,12 +2,10 @@ package com.costi.csw9.Service;
 
 import com.costi.csw9.Model.Light;
 import com.costi.csw9.Model.LightLog;
-import com.costi.csw9.Model.Temp.LightRequest;
 import com.costi.csw9.Repository.LightLogRepository;
 import com.costi.csw9.Repository.LightRepository;
 import com.costi.csw9.Util.LogicTools;
 import org.hibernate.Hibernate;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -37,12 +35,23 @@ public class LightService {
         List<Light> lights = lightRepository.findAllByOrderByDateAddedDesc();
         for (Light light : lights) {
             Hibernate.initialize(light.getLogs());
-            updateCurrentStatus(light);
+            syncDown(light);
         }
     }
 
-    public String updateCurrentStatus(Light light){
+    public String syncDown(Light light){
         String currentStatus = light.getCurrentStatus();
+        LightLog log = new LightLog(light, currentStatus);
+        light.getLogs().add(log);
+
+        lightLogRepository.save(log);
+        lightRepository.save(light);
+
+        return currentStatus;
+    }
+
+    public String syncUp(Light light){
+        String currentStatus = light.sendLightRequest();
         LightLog log = new LightLog(light, currentStatus);
         light.getLogs().add(log);
 
