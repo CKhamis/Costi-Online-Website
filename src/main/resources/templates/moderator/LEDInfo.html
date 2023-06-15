@@ -19,13 +19,26 @@
                         <div class="row" id="led-quick-stats">
 
                         </div>
-                        <a href="https://github.com/CKhamis" class="btn btn-info" aria-current="page">See Github page</a>
+                        <a href="/COMT/LED" class="btn btn-info" aria-current="page">See All LEDs</a>
+                        <button class="btn btn-info" onclick="updateData()">
+                            <img src="/icons/Refresh.svg" alt="Arrow" width="20" style="transform: rotate(-90deg);">
+                        </button>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="container-fluid mt-3" id="logs-container"></div>
+    <table class="table table-sm align-middle table-hover table-dark mt-4">
+        <thead>
+        <tr>
+            <th scope="col">Time</th>
+            <th scope="col">Message</th>
+        </tr>
+        </thead>
+        <tbody id="table-body">
+        </tbody>
+    </table>
 </main>
 
 <div th:replace="Components :: JS"></div>
@@ -77,25 +90,29 @@
                 <p>Pattern: ${light["pattern"]}</p>
             </div>
             <div class="col-lg-4 col-sm-6 col-xs-6">
-                <p>public: ${light["public"]}</p>
+                <p>Public: ${light["public"]}</p>
+            </div>
+            <div class="col-lg-4 col-sm-6 col-xs-6">
+                <p>Enabled: ${light["enabled"]}</p>
+            </div>
+            <div class="col-lg-4 col-sm-6 col-xs-6">
+                <p>Favorite: ${light["favorite"]}</p>
             </div>
         `;
 
         //Logs
-        const logsContainer = document.querySelector('#logs-container');
+        const logsContainer = document.querySelector('#table-body');
         let logContent = ``;
         for(let i = 0; i < logs.length; i++){
+            let log = logs[i];
             logContent += `
-                <div class="container-fluid bg-2 mt-1 row">
-                    <div class="col-1">
-                        <p>${logs[i]["formattedDateCreated"]}</p>
-                    </div>
-                    <div class="col-11">
-                        ${logs[i]["message"]}
-                    </div>
-                </div>
+                <tr>
+                <td>${log["formattedDateCreated"]}</td>
+                <td>${log["message"]}</td>
+            </tr>
             `;
         }
+        // Just make this a normal table, but onclick, it brings up a modal with all the relevant information
         logsContainer.innerHTML = logContent;
     }
 
