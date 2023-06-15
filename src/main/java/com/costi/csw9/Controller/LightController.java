@@ -128,7 +128,7 @@ public class LightController {
     public ResponseEntity<?> syncUp(@PathVariable Long id){
         try {
             Light light = lightService.getLightById(id);
-            String status = lightService.syncDown(light);
+            String status = lightService.syncUp(light);
 
             if(status.charAt(0) == 'C'){
                 return ResponseEntity.ok(status);

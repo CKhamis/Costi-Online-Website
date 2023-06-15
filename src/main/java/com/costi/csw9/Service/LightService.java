@@ -44,6 +44,7 @@ public class LightService {
         LightLog log = new LightLog(light, currentStatus);
         light.getLogs().add(log);
 
+        System.out.println(currentStatus);
         lightLogRepository.save(log);
         lightRepository.save(light);
 

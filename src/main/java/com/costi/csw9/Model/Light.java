@@ -1,6 +1,7 @@
 package com.costi.csw9.Model;
 
 import com.costi.csw9.Model.Temp.LightRequest;
+import com.costi.csw9.Model.Temp.LightResponse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -16,7 +17,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 @Getter
 @Setter
 @EqualsAndHashCode
@@ -142,7 +143,6 @@ public class Light {
     @JsonIgnore
     public String getCurrentStatus() {
         RestTemplate restTemplate = new RestTemplate();
-        //String url = "http://" + address + "/api/status";
         String url = "http://" + address;
 
         try {
@@ -178,10 +178,9 @@ public class Light {
             status = "Active";
             return "Connection Successful: " + response.getBody(); // Return the response body
         } catch (Exception e) {
-            //e.printStackTrace();
+            e.printStackTrace();
             status = "Error";
             return "Error sending light request: " + e.getMessage();
         }
     }
-
 }

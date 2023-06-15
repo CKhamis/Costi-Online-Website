@@ -55,13 +55,13 @@
           <li class="nav-item">
             <a class="nav-link" href="/COMT/LED/Logs">Logs</a>
           </li>
-<!--          <li class="nav-item dropdown">-->
-<!--            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
-<!--              Light Settings-->
-<!--            </a>-->
-<!--            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" id="light-list-dropdown">-->
-<!--            </ul>-->
-<!--          </li>-->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Detail View
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" id="light-list-dropdown">
+            </ul>
+          </li>
         </ul>
       </div>
     </div>
@@ -79,7 +79,7 @@
             .then(response => response.json())
             .then(data => {
               responseData = data;
-              // renderDropdown();
+              renderDropdown();
               next();
             })
             .catch(error => {
@@ -91,16 +91,16 @@
   }
 
   // Rendering functions
-  // function renderDropdown(){
-  //   let dropdownList = ``;
-  //   for(let i = 0; i < responseData.length; i++){
-  //     let light = responseData[i];
-  //     dropdownList += `
-  //               <li><a class="dropdown-item" href="/COMT/LED/${light.id}">${light.label}</a></li>
-  //     `;
-  //   }
-  //   dropdownContainer.innerHTML = dropdownList;
-  // }
+  function renderDropdown(){
+    let dropdownList = ``;
+    for(let i = 0; i < responseData.length; i++){
+      let light = responseData[i];
+      dropdownList += `
+                <li><a class="dropdown-item" href="/COMT/LED/${light.id}">${light.label}</a></li>
+      `;
+    }
+    dropdownContainer.innerHTML = dropdownList;
+  }
 
   // Fetch tools
   function checkStatus(response) {
