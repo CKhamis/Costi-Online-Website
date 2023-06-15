@@ -112,6 +112,13 @@
   height:100%;
 }
 
+.LED-background{
+    background-image: url('/images/About/SJSU.jpg');
+    background-position: right;
+    background-size: 100%;
+    background-attachment: fixed;
+}
+
 .action-button-container{
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -136,7 +143,7 @@
     margin: 0 25%;
 }
 
-.action-button > p{
+.action-button > p, #stats-container p{
     margin-bottom: 0;
 }
 

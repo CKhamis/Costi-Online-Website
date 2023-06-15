@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xml:th="https://www.thymeleaf.org">
+<head th:replace="Components :: head('COMT LED Overview')"></head>
+<body class="bg-1 text-1">
+<div th:replace="moderator/ModeratorComponents :: moderatorNav"></div>
+<input id="id-selector" type="hidden" th:value="${id}"/>
+<main class="container mt-3">
+    <div th:replace="moderator/ModeratorComponents :: lightNavigation"></div>
+
+    <div class="container-fluid p-0 gradient mt-3 LED-background" id="error-container">
+        <div class="container-fluid">
+            <div class="container py-3">
+                <div class="row">
+                    <div class="col-lg-6 col-md-8 col-xs-12">
+                        <h2 class="fw-bold" id="led-label"></h2>
+                        <p class="text-secondary" id="led-last-connected"></p>
+                        <p class="fs-4" id="led-description"></p>
+                        <h5 class="fw-bold">Quick Stats</h5>
+                        <div class="row" id="led-quick-stats">
+
+                        </div>
+                        <a href="https://github.com/CKhamis" class="btn btn-info" aria-current="page">See Github page</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid mt-3" id="logs-container"></div>
+</main>
+
+<div th:replace="Components :: JS"></div>
+<!--<div th:replace="Components :: scripts"></div>-->
+<script th:replace="moderator/ModeratorComponents :: led-scripts"></script>
+<script>
+    //data
+    let logs;
+    let id = document.querySelector('#id-selector').value;
+    //Main elements
+    const errorContainer = document.querySelector('#error-container');
+
+    //GET functions
+    function updateData(){
+        getAllLightData();
+        fetch(`/api/v1/LED/${id}/Logs`)
+            .then(checkStatus)
+            .then(response => response.json())
+            .then(data => {
+                logs = data;
+                renderAllInfo();
+            })
+            .catch(error => {
+                // error handling
+                errorContainer.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>";
+                console.error('Error retrieving data:', error);
+            });
+    }
+    updateData();
+
+    //Rendering functions
+    function renderAllInfo(){
+        //Light overview
+        const light = getObjectById(id);
+        document.querySelector('#led-label').innerText = "LED Light: " + light["label"];
+        document.querySelector('#led-last-connected').innerText = "Last connected: " + light["formattedLastConnected"];
+        document.querySelector('#led-description').innerText = `This is a light added on ${light["formattedAdded"]}. Its currently set to ${light["color"]} with the pattern ${light["pattern"]}.`;
+        document.querySelector('#led-quick-stats').innerHTML = `
+            <div class="col-lg-4 col-sm-6 col-xs-6">
+                <p>Modified: ${light["lastModified"]}</p>
+            </div>
+            <div class="col-lg-4 col-sm-6 col-xs-6">
+                <p>Address: ${light["address"]}</p>
+            </div>
+            <div class="col-lg-4 col-sm-6 col-xs-6">
+                <p>Color: ${light["color"]}</p>
+            </div>
+            <div class="col-lg-4 col-sm-6 col-xs-6">
+                <p>Pattern: ${light["pattern"]}</p>
+            </div>
+            <div class="col-lg-4 col-sm-6 col-xs-6">
+                <p>public: ${light["public"]}</p>
+            </div>
+        `;
+
+        //Logs
+        const logsContainer = document.querySelector('#logs-container');
+        let logContent = ``;
+        for(let i = 0; i < logs.length; i++){
+            logContent += `
+                <div class="container-fluid bg-2 mt-1 row">
+                    <div class="col-1">
+                        <p>${logs[i]["formattedDateCreated"]}</p>
+                    </div>
+                    <div class="col-11">
+                        ${logs[i]["message"]}
+                    </div>
+                </div>
+            `;
+        }
+        logsContainer.innerHTML = logContent;
+    }
+
+    // Exists as a connector for universal functions
+    function next(){
+        //updateData();
+    }
+
+</script>
+</body>
+</html>

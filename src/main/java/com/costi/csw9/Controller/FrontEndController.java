@@ -206,8 +206,14 @@ public class FrontEndController {
     }
 
     @GetMapping("/COMT/LED")
-    public String getCostiOnlineLEDTools(Model model, Principal principal, RedirectAttributes redirectAttributes) {
+    public String getCostiOnlineLEDTools() {
         return "moderator/LEDTools";
+    }
+
+    @GetMapping("/COMT/LED/{id}")
+    public String getCostiOnlineLEDInfo(@PathVariable Long id, Model model) {
+        model.addAttribute("id", id);
+        return "moderator/LEDInfo";
     }
 
     @GetMapping("/COMT/Accounts")

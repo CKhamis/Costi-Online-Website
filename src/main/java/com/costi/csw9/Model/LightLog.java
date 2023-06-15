@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
@@ -26,13 +27,17 @@ public class LightLog {
     @JoinColumn(name = "light_id", nullable = false)
     private Light light;
 
+    @Transient
+    static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/y hh:mm a");
+
     public LightLog(Light light, String message) {
         this.light = light;
         this.message = message;
         this.dateCreated = LocalDateTime.now();
     }
 
-    public String getDateCreated(){
-        return dateCreated.getMonthValue() + "/" + dateCreated.getDayOfMonth() + "/" + dateCreated.getYear();
+    @Transient
+    public String getFormattedDateCreated(){
+        return (dateCreated != null) ? dateCreated.format(formatter) : LocalDateTime.MIN.format(formatter);
     }
 }

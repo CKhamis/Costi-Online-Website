@@ -1,6 +1,7 @@
 package com.costi.csw9.Controller;
 
 import com.costi.csw9.Model.Light;
+import com.costi.csw9.Model.LightLog;
 import com.costi.csw9.Model.Temp.EditLightRequest;
 import com.costi.csw9.Model.Temp.LightRequest;
 import com.costi.csw9.Model.User;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,30 +93,14 @@ public class LightController {
         return jsonResponse;
     }
 
-    @GetMapping("/api/v1/LED/{id}")
-    public ResponseEntity<LightRequest> getLight(@PathVariable Long id) {
+    @GetMapping("/api/v1/LED/{id}/Logs")
+    public ResponseEntity<List<LightLog>> getLightStatus(@PathVariable Long id, Principal principal) {
         try{
             Light light = lightService.getLightById(id);
-            light.setLastConnected(LocalDateTime.now());
-            lightService.saveLight(light);
-            return ResponseEntity.ok(light.getRequest());
-        }catch (Exception e){
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @GetMapping("/api/v1/LED/Status/{id}")
-    public ResponseEntity<Light> getLightStatus(@PathVariable Long id, Principal principal) {
-        try{
-            Light light = lightService.getLightById(id);
-            if(light.isPublic()){
-                return ResponseEntity.ok(light);
+            if(light.isPublic() || getCurrentUser(principal).isOwner() || getCurrentUser(principal).isAdmin()){
+                return ResponseEntity.ok(light.getLogs());
             }else{
-                if(getCurrentUser(principal).isOwner() || getCurrentUser(principal).isAdmin()){
-                    return ResponseEntity.ok(light);
-                }else{
-                    return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-                }
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
         }catch (Exception e){
             return ResponseEntity.notFound().build();
