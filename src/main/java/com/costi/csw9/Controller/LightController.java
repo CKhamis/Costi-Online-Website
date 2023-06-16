@@ -171,7 +171,15 @@ public class LightController {
                 light.setValues(lightRequest);
                 light.setLastModified(LocalDateTime.now());
                 Light savedLight = lightService.saveLight(light);
-                return ResponseEntity.ok("Light added/updated successfully. Light ID: " + savedLight.getId());
+
+                //Upload data to light
+                String status = lightService.syncUp(savedLight);
+
+                if(status.charAt(0) == 'C'){
+                    return ResponseEntity.ok("Light added/updated successfully. Light ID: " + savedLight.getId());
+                }else{
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error sending data: " + status);
+                }
             }else{
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }

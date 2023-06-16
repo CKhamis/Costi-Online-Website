@@ -32,6 +32,22 @@
     }
 }
 
+/* Labs */
+.light-controller-container{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    gap: 20px;
+}
+
+.light-controller-container > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 1 / 1;
+    cursor: pointer;
+}
+
 /* About */
 #education{
     background-image: url('/images/About/SJSU.jpg');

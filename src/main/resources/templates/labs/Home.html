@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xml:th="https://www.thymeleaf.org">
+<head th:replace="Components :: head('COMT Notifications')"></head>
+<body class="bg-1 text-1">
+<div th:replace="labs/LabComponents :: labNav"></div>
+
+<main class="container mt-3">
+    <div class="container-fluid">
+        <h1 class="pb-2 border-bottom mb-4 fw-bold text-center">Costi Labs</h1>
+    </div>
+    <div class="row">
+        <div class="d-none d-md-block col-md-1 col-lg-2 col-xl-3"></div>
+        <div class="pt-2 col-xs-12 col-md-10 col-lg-8 col-xl-6">
+            <div th:replace="Components :: flash" class="my-2"></div>
+            <div class="p-5 mb-4 border-box">
+                test
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-1 col-lg-2 col-xl-3"></div>
+    </div>
+</main>
+<div th:replace="Components :: JS"></div>
+<div th:replace="Components :: scripts"></div>
+</body>
+</html>

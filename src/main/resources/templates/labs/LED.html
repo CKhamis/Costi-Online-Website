@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xml:th="https://www.thymeleaf.org">
+<head th:replace="Components :: head('COMT Notifications')"></head>
+<body class="bg-1 text-1">
+<div th:replace="labs/LabComponents :: labNav"></div>
+
+<main class="container mt-3">
+    <div class="container-fluid">
+        <h1 class="pb-2 border-bottom mb-4 fw-bold text-center">Costi Labs</h1>
+    </div>
+    <div class="row" id="error-container">
+        <div class="d-none d-md-block col-md-1 col-lg-2 col-xl-3"></div>
+        <div class="pt-2 col-xs-12 col-md-10 col-lg-8 col-xl-6">
+            <div th:replace="Components :: flash" class="my-2"></div>
+            <select class="form-select" aria-label="Light Select" id="light-select">
+
+            </select>
+            <div class="p-3 mt-4 border-box light-controller-container">
+                <div>
+
+                </div>
+                <div>
+
+                </div>
+                <div>
+
+                </div>
+                <div>
+                    on/off
+                </div>
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-1 col-lg-2 col-xl-3"></div>
+    </div>
+</main>
+<div th:replace="Components :: JS"></div>
+<div th:replace="labs/LabComponents :: led-scripts"></div>
+<script>
+    const controller = document.querySelector('.light-controller-container');
+    const dropDown = document.querySelector('#light-select');
+    const errorContainer = document.querySelector('#error-container');
+    const colors = [
+        'rgb(255, 0, 0)',
+        'rgb(0, 255, 0)',
+        'rgb(0, 0, 255)',
+        'rgb(255, 255, 0)',
+        'rgb(255, 0, 255)',
+        'rgb(0, 255, 255)',
+        'rgb(100, 200, 300)',
+        'rgb(300, 200, 100)',
+        'rgb(300, 100, 200)',
+        'rgb(200, 49, 120)',
+    ];
+    let availableLights;
+
+    //Start
+    getAllLights();
+
+    // Render
+    function renderColors(id){
+        let buttons = ``;
+        for(let i = 0; i < colors.length; i++){
+            buttons += `
+            <div style="background-color: ${colors[i]}" class="text-center" onclick="submitColor('${colors[i]}', ${id})">
+                ${colors[i]}
+            </div>
+        `;
+        }
+        controller.insertAdjacentHTML("beforeend", buttons);
+    }
+    function renderDropdown(){
+        let options = ``;
+        for(let i = 0; i < availableLights.length; i++){
+            options += `<option value="${availableLights[i]["id"]}">${availableLights[i]["label"]}</option>`;
+        }
+        dropDown.innerHTML = options;
+    }
+    //GET
+    function getAllLights(){
+        fetch("/api/v1/LED/all-lights")
+            .then(checkStatus)
+            .then(response => response.json())
+            .then(data => {
+                availableLights = data;
+                renderDropdown();
+                renderColors(availableLights[0]["id"]);
+            })
+            .catch(error => {
+                // error handling
+                errorContainer.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Or there are no lights available</p>";
+                console.error('Error retrieving data:', error);
+            })
+            .finally(() => $("#loading").hide());
+    }
+
+    //POST
+    function submitColor(color, id){
+        const light = getObjectById(id);
+        let lightData = {"address": light["address"], "id": id, "label": light["label"], "color": color, "pattern": light["pattern"]};
+        postData("/api/v1/LED/Edit", lightData)
+            .then(getAllLights);
+    }
+
+</script>
+</body>
+</html>

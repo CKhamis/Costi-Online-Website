@@ -1079,6 +1079,16 @@ public class FrontEndController {
         return "main/Axcel";
     }
 
+    // Costi Labs
+    @GetMapping("/Labs")
+    public String getLabs(Model model, Principal principal) {
+        return "labs/Home";
+    }
+    @GetMapping("/Labs/LED")
+    public String getLED(Model model, Principal principal) {
+        return "labs/LED";
+    }
+
     // Newsroom
     @GetMapping("/Newsroom")
     public String getNewsroomHome(Model model) {
