@@ -46,6 +46,7 @@
     align-items: center;
     aspect-ratio: 1 / 1;
     cursor: pointer;
+    border-radius: 100px;
 }
 
 /* About */
@@ -129,7 +130,7 @@
 }
 
 .LED-background{
-    background-image: url('/images/About/SJSU.jpg');
+    background-image: url('/images/webpageImages/LED Banner.webp');
     background-position: right;
     background-size: 100%;
     background-attachment: fixed;

@@ -6,16 +6,25 @@
 
 <main class="container mt-3">
     <div class="container-fluid">
-        <h1 class="pb-2 border-bottom mb-4 fw-bold text-center">Costi Labs</h1>
+        <h1 class="pb-2 border-bottom mb-4 fw-bold text-center">LED Light Controller</h1>
     </div>
     <div class="row" id="error-container">
         <div class="d-none d-md-block col-md-1 col-lg-2 col-xl-3"></div>
         <div class="pt-2 col-xs-12 col-md-10 col-lg-8 col-xl-6">
             <div th:replace="Components :: flash" class="my-2"></div>
-            <select class="form-select" aria-label="Light Select" id="light-select">
 
-            </select>
-            <div class="p-3 mt-4 border-box light-controller-container">
+            <div class="d-flex align-items-center">
+                <p class="fs-4 mb-0">Select light:</p>
+                <div class="me-2">
+                    <select class="form-select" id="light-select"></select>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="renderColors()">Select</button>
+                <img src="/icons/Arrow.svg" alt="Arrow" width="20" id="sending" style="transform: rotate(180deg);">
+                <img src="/icons/Refresh.svg" alt="loading" width="20" id="loading">
+                <img src="/icons/Disable.svg" alt="error" width="20" id="error">
+            </div>
+            <p class="text-center mb-0 mt-2 fs-4" id="mode-label"></p>
+            <div class="p-4 mt-4 border-box light-controller-container">
             </div>
         </div>
         <div class="d-none d-md-block col-md-1 col-lg-2 col-xl-3"></div>
@@ -28,29 +37,32 @@
     const dropDown = document.querySelector('#light-select');
     const errorContainer = document.querySelector('#error-container');
     const colors = [
-        'rgb(255, 0, 0)',
-        'rgb(0, 255, 0)',
-        'rgb(0, 0, 255)',
-        'rgb(255, 255, 0)',
-        'rgb(255, 0, 255)',
-        'rgb(0, 255, 255)',
-        'rgb(100, 200, 300)',
-        'rgb(300, 200, 100)',
-        'rgb(300, 100, 200)',
-        'rgb(200, 49, 120)',
+        { name: 'Red', color: 'rgb(255, 0, 0)' },
+        { name: 'Green', color: 'rgb(0, 255, 0)' },
+        { name: 'Blue', color: 'rgb(0, 0, 255)' },
+        { name: 'Yellow', color: 'rgb(255, 255, 0)' },
+        { name: 'Magenta', color: 'rgb(255, 0, 255)' },
+        { name: 'Cyan', color: 'rgb(0, 255, 255)' },
+        { name: 'Custom1', color: 'rgb(100, 200, 300)' },
+        { name: 'Custom2', color: 'rgb(300, 200, 100)' },
+        { name: 'Custom3', color: 'rgb(300, 100, 200)' },
+        { name: 'Custom4', color: 'rgb(200, 49, 120)' },
     ];
+
     let availableLights;
 
     //Start
     getAllLights();
 
     // Render
-    function renderColors(id){
+    function renderColors(){
+        const id = document.querySelector('#light-select').value;
+        document.querySelector('#mode-label').innerHTML = `Currently Selected: ${getObjectById(id)["label"]}`;
         let buttons = ``;
         for(let i = 0; i < colors.length; i++){
             buttons += `
-            <div style="background-color: ${colors[i]}" class="text-center" onclick="submitColor('${colors[i]}', ${id})">
-                ${colors[i]}
+            <div style="background-color: ${colors[i].color}" class="text-center" onclick="submitColor('${colors[i].color}', ${id})">
+                ${colors[i].name}
             </div>
         `;
         }
@@ -65,13 +77,14 @@
     }
     //GET
     function getAllLights(){
+        $("#loading").show();
         fetch("/api/v1/LED/all-lights")
             .then(checkStatus)
             .then(response => response.json())
             .then(data => {
                 availableLights = data;
                 renderDropdown();
-                renderColors(availableLights[0]["id"]);
+                renderColors();
             })
             .catch(error => {
                 // error handling
@@ -82,11 +95,17 @@
     }
 
     //POST
+    $("#sending").hide();
+    $("#error").hide();
     function submitColor(color, id){
+        $("#sending").show();
         const light = getObjectById(id);
         let lightData = {"address": light["address"], "id": id, "label": light["label"], "color": color, "pattern": light["pattern"]};
         postData("/api/v1/LED/Edit", lightData)
-            .then(getAllLights);
+            .then(checkStatus)
+            .then(() => $("#error").hide())
+            .catch(() => $("#error").show())
+            .finally(() => $("#sending").hide());
     }
 
 </script>
