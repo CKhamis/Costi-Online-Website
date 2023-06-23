@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface LightLogRepository extends JpaRepository<LightLog, Long> {
-    List<LightLog> findAllByLightOrderByDateCreated(Light light);
+    List<LightLog> findAllByLightOrderByDateCreatedDesc(Light light);
 }

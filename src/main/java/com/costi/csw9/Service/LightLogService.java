@@ -16,6 +16,6 @@ public class LightLogService {
     }
 
     public List<LightLog> findAllByLightOrderByDateCreated(Light light) {
-        return lightLogRepository.findAllByLightOrderByDateCreated(light);
+        return lightLogRepository.findAllByLightOrderByDateCreatedDesc(light);
     }
 }

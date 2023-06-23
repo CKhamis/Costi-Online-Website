@@ -16,6 +16,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import com.fasterxml.jackson.databind.ObjectMapper;
 @Getter
@@ -93,6 +95,12 @@ public class Light {
         this.pattern = request.getPattern();
         this.address = request.getAddress();
         this.status = "Recently Edited";
+    }
+
+    public List<LightLog> getLogs() {
+        Collections.sort(logs, Comparator.comparing(LightLog::getDateCreated));
+        Collections.reverse(logs);
+        return logs;
     }
 
     public String getlastModified(){
