@@ -10,26 +10,31 @@
             <p class="text-secondary fw-bold fs-4 mb-0">Introducing</p>
             <h1 class="fw-bold">Costi Online Dynamic Lighting</h1>
             <img class="newsroom-slide" src="/icons/Refresh.svg" alt="LED Strip">
-            <p class="fs-4">Costi Online Dynamic Lighting is an exciting feature that allows website visitors to control the colors of an LED strip located in a room of my house. This interactive lighting experience adds a touch of creativity and fun to my home environment, while also serving as a demonstration of my coding skills.</p>
+            <p class="fs-5">Costi Online Dynamic Lighting is an exciting feature that allows website visitors to control the colors of an LED strip located in a room of my house. This interactive lighting experience adds a touch of creativity and fun to my home environment, while also serving as a demonstration of my coding skills.</p>
             <br />
-            <p class="fs-4">Powered by a Raspberry Pi Pico microcontroller running custom MicroPython code, the LED strip is seamlessly interacts with Costi Online Services. Even users without a Costi Online account are able to modify light colors.</p>
+            <p class="fs-5">Powered by a Raspberry Pi Pico microcontroller running custom MicroPython code, the LED strip is seamlessly interacts with Costi Online Services. Even users without a Costi Online account are able to modify light colors.</p>
             <br />
-            <p class="fs-4">Special thanks to Cody for assisting me in the wiring/ electricity aspect of this project and Cory for helping me write some of the MicroPython code for the Raspberry Pi Pico.</p>
+            <p class="fs-5">Special thanks to Cody for assisting me in the wiring/ electricity aspect of this project and Cory for helping me write some of the MicroPython code for the Raspberry Pi Pico.</p>
         </div>
         <div class="col col-12 col-md-6 col-lg-7">
-            <div th:replace="Components :: flash" class="my-2"></div>
-
-            <div class="d-flex align-items-center">
-                <p class="fs-4 mb-0">Select light:</p>
-                <div class="me-2">
-                    <select class="form-select" id="light-select"></select>
+            <div class="bg-2 px-4 py-3">
+                <div class="row px-3">
+                    <p class="col-12 mb-2 fs-4 fw-bold float-start px-0" id="mode-label"></p>
+                    <div class="col-8 px-0" style="margin-left: 15px;">
+                        <select class="form-select" id="light-select"></select>
+                    </div>
+                    <div class="col-4 d-grid px-0">
+                        <button type="button" class="btn btn-primary" onclick="renderColors()">Select</button>
+                    </div>
+                    <div class="col-12 mt-2" id="color-preview">
+                        Color
+                    </div>
                 </div>
-                <button type="button" class="btn btn-primary" onclick="renderColors()">Select</button>
+
                 <img src="/icons/Arrow.svg" alt="Arrow" width="20" id="sending" style="transform: rotate(180deg);">
                 <img src="/icons/Refresh.svg" alt="loading" width="20" id="loading">
                 <img src="/icons/Disable.svg" alt="error" width="20" id="error">
             </div>
-            <p class="text-center mb-0 mt-2 fs-4" id="mode-label"></p>
             <div class="p-4 mt-4 border-box light-controller-container">
             </div>
         </div>
@@ -82,6 +87,7 @@
     function renderColors(){
         const id = document.querySelector('#light-select').value;
         document.querySelector('#mode-label').innerHTML = `Currently Selected: ${getObjectById(id)["label"]}`;
+        document.querySelector('#color-preview').style.backgroundColor = getObjectById(id)["color"];
         let buttons = ``;
         for(let i = 0; i < colors.length; i++){
             buttons += `
