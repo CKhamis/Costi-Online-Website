@@ -5,12 +5,18 @@
 <div th:replace="labs/LabComponents :: labNav"></div>
 
 <main class="container mt-3">
-    <div class="container-fluid">
-        <h1 class="pb-2 border-bottom mb-4 fw-bold text-center">LED Light Controller</h1>
-    </div>
     <div class="row" id="error-container">
-        <div class="d-none d-md-block col-md-1 col-lg-2 col-xl-3"></div>
-        <div class="pt-2 col-xs-12 col-md-10 col-lg-8 col-xl-6">
+        <div class="col col-12 col-md-6 col-lg-5">
+            <p class="text-secondary fw-bold fs-4 mb-0">Introducing</p>
+            <h1 class="fw-bold">Costi Online Dynamic Lighting</h1>
+            <img class="newsroom-slide" src="/icons/Refresh.svg" alt="LED Strip">
+            <p class="fs-4">Costi Online Dynamic Lighting is an exciting feature that allows website visitors to control the colors of an LED strip located in a room of my house. This interactive lighting experience adds a touch of creativity and fun to my home environment, while also serving as a demonstration of my coding skills.</p>
+            <br />
+            <p class="fs-4">Powered by a Raspberry Pi Pico microcontroller running custom MicroPython code, the LED strip is seamlessly interacts with Costi Online Services. Even users without a Costi Online account are able to modify light colors.</p>
+            <br />
+            <p class="fs-4">Special thanks to Cody for assisting me in the wiring/ electricity aspect of this project and Cory for helping me write some of the MicroPython code for the Raspberry Pi Pico.</p>
+        </div>
+        <div class="col col-12 col-md-6 col-lg-7">
             <div th:replace="Components :: flash" class="my-2"></div>
 
             <div class="d-flex align-items-center">
@@ -27,7 +33,6 @@
             <div class="p-4 mt-4 border-box light-controller-container">
             </div>
         </div>
-        <div class="d-none d-md-block col-md-1 col-lg-2 col-xl-3"></div>
     </div>
 </main>
 <div th:replace="Components :: footer"></div>
@@ -47,7 +52,7 @@
         { name: 'Royal Muskan', color: 'rgb(255, 0, 255)' },
         { name: 'Rat tears', color: 'rgb(0, 255, 255)' },
         { name: 'Rosalina', color: 'rgb(100, 200, 300)' },
-        { name: 'Mirage Oasis', color: 'rgb(300, 200, 100)' },
+        { name: 'Mirage Oasis', color: 'rgb(255, 200, 100)' },
         { name: 'We watched Tangled', color: 'rgb(200, 49, 120)' },
         { name: 'Muskan\'s shoe', color: 'rgb(128, 0, 128)' },
         { name: 'Skipped Breakfast', color: 'rgb(255, 165, 0)' },
