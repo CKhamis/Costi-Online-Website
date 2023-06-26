@@ -89,6 +89,12 @@
 
     //Start
     getAllLights();
+    $('#brightness-slider').on('change', () => {
+        const id = document.querySelector('#light-select').value;
+        const light = getObjectById(id);
+        let brightness = $('#brightness-slider').val();
+        submitColor(light["color"], brightness, id)
+    });
 
     // Render
     function renderColors(){
@@ -154,7 +160,10 @@
             .then(checkStatus)
             .then(() => $("#error").hide())
             .catch(() => $("#error").show())
-            .finally(() => $("#sending").hide());
+            .finally(() => {
+                getAllLights();
+                $("#sending").hide();
+            });
     }
 
 </script>
