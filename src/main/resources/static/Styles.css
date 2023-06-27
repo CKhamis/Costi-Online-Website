@@ -35,8 +35,7 @@
 /* Labs */
 .light-controller-container{
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(6, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
 }
 
@@ -44,9 +43,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    aspect-ratio: 1 / 1;
-    cursor: pointer;
-    border-radius: 100px;
 }
 
 /* About */

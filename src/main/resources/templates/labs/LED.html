@@ -38,7 +38,7 @@
                 <input type="range" class="form-range" min="0" max="100" id="brightness-slider">
             </div>
 
-            <div class="p-4 mt-4 border-box light-controller-container">
+            <div class="p-4 mt-4 bg-2 light-controller-container">
             </div>
 
             <div class="p-4 mt-4 bg-2" id="custom-color-maker">
@@ -168,7 +168,7 @@
             let buttons = ``;
             for(let i = 0; i < colors.length; i++){
                 buttons += `
-                    <div style="background-color: ${colors[i].color}" class="text-center" onclick="submitColor('${colors[i].color}', '${light["pattern"]}', ${id})">
+                    <div style="background-color: ${colors[i].color}" class="text-center p-3" onclick="submitColor('${colors[i].color}', '${light["pattern"]}', ${id})">
                         ${colors[i].name}
                     </div>
                 `;
