@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html xml:th="https://www.thymeleaf.org">
+<head th:replace="Components :: head('COMT Notifications')"></head>
+<body class="bg-1 text-1">
+<div th:replace="labs/LabComponents :: labNav"></div>
+
+<main class="container mt-3">
+    <div class="row">
+        <div class="col col-12 col-md-6 col-lg-5">
+            <p class="text-secondary fw-bold fs-4 mb-0">Introducing</p>
+            <h1 class="fw-bold">Costi Online Dynamic Lighting</h1>
+            <p class="fs-5">Costi Online Dynamic Lighting is an exciting feature that allows website visitors to control the colors of an LED strip located in a room of my house. This interactive lighting experience adds a touch of creativity and fun to my home environment, while also serving as a demonstration of my coding skills.</p>
+            <br />
+            <p class="fs-5">Powered by a Raspberry Pi Pico microcontroller running custom MicroPython code, the LED strip is seamlessly interacts with Costi Online Services. Even users without a Costi Online account are able to modify light colors.</p>
+            <br />
+            <p class="fs-5 mb-4">Special thanks to Cody for assisting me in the wiring/ electricity aspect of this project and Cory for helping me write some of the MicroPython code for the Raspberry Pi Pico.</p>
+        </div>
+        <div class="col col-12 col-md-6 col-lg-7" id="error-container">
+            <input type="hidden" value="-1" id="id-marker"/>
+            <div class="bg-2 px-4 py-3">
+                <div class="row px-3">
+                    <p class="col-12 mb-2 fs-4 fw-bold px-0" id="mode-label"></p>
+                    <div class="col-8 px-0">
+                        <select class="form-select" id="light-select"></select>
+                    </div>
+                    <div class="col-4 d-grid px-0">
+                        <button type="button" class="btn btn-primary" style="margin-left: 15px;" onclick="switchLight()">Select</button>
+                    </div>
+                    <div class="col-12 mt-3 mb-3" id="color-preview" style="height: 30px;">
+                    </div>
+                </div>
+            </div>
+            <div class="bg-2 px-4 py-3 mt-3">
+                <p class="mb-2 fs-4 fw-bold px-0">Brightness</p>
+                <img src="/icons/Dim.svg" class="float-start" alt="dim" width="30">
+                <img src="/icons/Bright.svg" class="float-end" alt="bright" width="30">
+                <br clear="all" />
+                <input type="range" class="form-range" min="0" max="100" id="brightness-slider">
+            </div>
+
+            <div class="p-4 mt-4 bg-2 light-controller-container">
+            </div>
+
+            <div class="p-4 mt-4 bg-2" id="custom-color-maker">
+                <p class="mb-2 fs-4 fw-bold px-0">Custom Color</p>
+                <div class="col-12 mt-3 mb-3" id="custom-color-preview" style="height: 30px;"></div>
+                <p class="text-secondary">Red</p>
+                <input type="range" class="form-range" min="0" max="255" id="red-slider">
+                <p class="text-secondary">Green</p>
+                <input type="range" class="form-range" min="0" max="255" id="green-slider">
+                <p class="text-secondary">Blue</p>
+                <input type="range" class="form-range" min="0" max="255" id="blue-slider">
+                <button type="button" class="btn btn-primary" onclick="submitCustomColor()">Submit</button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div class="position-fixed bottom-0 end-0" id="sending">
+    <div class="spinner-grow m-3" role="status" style="width:75px; height:75px; z-index: 99">
+        <span class="visually-hidden">Sending...</span>
+    </div>
+</div>
+
+<div class="position-fixed bottom-0 end-0" id="loading">
+    <img src="/icons/Refresh.svg" class="m-3" alt="Arrow" width="75">
+</div>
+
+<div class="position-fixed bottom-0 end-0" id="error">
+    <img src="/icons/Error.svg" class="m-3" alt="error" width="75">
+</div>
+
+<div th:replace="Components :: footer"></div>
+<div th:replace="Components :: JS"></div>
+<div th:replace="labs/LabComponents :: led-scripts"></div>
+<script>
+    const controller = document.querySelector('.light-controller-container');
+    const dropDown = document.querySelector('#light-select');
+    const errorContainer = document.querySelector('#error-container');
+    const colors = [
+        { name: 'Monday Hangout', color: 'rgb(0, 0, 0)' },
+        { name: 'White', color: 'rgb(255, 255, 255)' },
+        { name: '\"Smash Pink\"', color: 'rgb(255, 0, 0)' },
+        { name: 'Ferb', color: 'rgb(0, 255, 0)' },
+        { name: 'Pikmin Blooe', color: 'rgb(0, 0, 255)' },
+        { name: 'Jerempiss', color: 'rgb(255, 255, 0)' },
+        { name: 'Royal Muskan', color: 'rgb(255, 0, 255)' },
+        { name: 'Rat tears', color: 'rgb(0, 255, 255)' },
+        { name: 'Rosalina', color: 'rgb(100, 200, 300)' },
+        { name: 'Mirage Oasis', color: 'rgb(255, 200, 100)' },
+        { name: 'We watched Tangled', color: 'rgb(200, 49, 120)' },
+        { name: 'Muskan\'s shoe', color: 'rgb(128, 0, 128)' },
+        { name: 'Skipped Breakfast', color: 'rgb(255, 165, 0)' },
+        { name: 'Gene Green', color: 'rgb(0, 255, 0)' },
+        { name: 'Sunny San Diego', color: 'rgb(0, 128, 128)' },
+        { name: 'Pink Sauce', color: 'rgb(255, 192, 203)' },
+        { name: 'Costi\'s Birthday', color: 'rgb(0, 0, 128)' },
+        { name: '"Default"', color: 'rgb(0, 255, 255)' },
+        { name: 'Leprechaun', color: 'rgb(128, 128, 0)' },
+        { name: 'China Ann Mcclain', color: 'rgb(128, 0, 0)' },
+        { name: 'Royal Purple Muskan', color: 'rgb(75, 0, 130)' },
+        { name: 'Pink sauce', color: 'rgb(255, 127, 80)' },
+        { name: 'Hal', color: 'rgb(0, 100, 0)' },
+        { name: 'Butterfly Clips', color: 'rgb(255, 99, 71)' },
+        { name: 'Blue Raspberry', color: 'rgb(70, 130, 180)' },
+        { name: 'White washed', color: 'rgb(160, 82, 45)' },
+        { name: 'Fluorescent Nathan', color: 'rgb(230, 230, 250)' },
+        { name: 'Perry', color: 'rgb(0, 139, 139)' }
+    ];
+
+    let availableLights;
+
+    // Custom Color
+    $('#red-slider').on('input', previewCustomColor);
+    $('#green-slider').on('input', previewCustomColor);
+    $('#blue-slider').on('input', previewCustomColor);
+
+    function previewCustomColor(){
+        const red = document.querySelector("#red-slider").value;
+        const green = document.querySelector("#green-slider").value;
+        const blue = document.querySelector("#blue-slider").value;
+        document.querySelector("#custom-color-preview").style.backgroundColor = `rgb(${red}, ${green}, ${blue})`;
+    }
+    function submitCustomColor(){
+        const red = document.querySelector("#red-slider").value;
+        const green = document.querySelector("#green-slider").value;
+        const blue = document.querySelector("#blue-slider").value;
+
+        const id = document.querySelector("#id-marker").value;
+        const light = getObjectById(id);
+
+        submitColor(`rgb(${red}, ${green}, ${blue})`, light["pattern"], id);
+    }
+
+    function switchLight(){
+        document.querySelector("#id-marker").value = document.querySelector("#light-select").value;
+        renderColors();
+    }
+
+    //Start
+    getAllLights();
+    $('#brightness-slider').on('change', () => {
+        const id = document.querySelector("#id-marker").value;
+        const light = getObjectById(id);
+        let brightness = $('#brightness-slider').val();
+        submitColor(light["color"], brightness, id);
+    });
+
+    // Render
+    function renderColors(){
+        let id = document.querySelector("#id-marker").value;
+        if(id == -1){
+            id = document.querySelector("#light-select").value;
+            document.querySelector("#id-marker").value = id;
+        }
+
+        const light = getObjectById(id);
+        document.querySelector('#mode-label').innerHTML = `Currently Selected: ${light["label"]}`;
+        document.querySelector('#color-preview').style.backgroundColor = light["color"];
+        controller.innerHTML = "";
+
+        // Slider
+        if(!isNaN(light["pattern"])){
+            // Solid colors, pattern used for brightness
+            document.querySelector("#brightness-slider").parentElement.style.display = "block";
+            document.querySelector("#brightness-slider").value = light["pattern"];
+
+            let buttons = ``;
+            for(let i = 0; i < colors.length; i++){
+                buttons += `
+                    <div style="background-color: ${colors[i].color}" class="text-center p-3" onclick="submitColor('${colors[i].color}', '${light["pattern"]}', ${id})">
+                        ${colors[i].name}
+                    </div>
+                `;
+            }
+            controller.innerHTML = buttons;
+        }else{
+            // pattern is string, so assume it is in pattern mode
+            document.querySelector("#brightness-slider").parentElement.style.display = "none";
+        }
+    }
+    function renderDropdown(){
+        let options = ``;
+        for(let i = 0; i < availableLights.length; i++){
+            options += `<option value="${availableLights[i]["id"]}">${availableLights[i]["label"]}</option>`;
+        }
+        dropDown.innerHTML = options;
+    }
+    //GET
+    function getAllLights(){
+        $("#loading").show();
+        fetch("/api/v1/LED/all-lights")
+            .then(checkStatus)
+            .then(response => response.json())
+            .then(data => {
+                availableLights = data;
+                renderDropdown();
+                renderColors();
+            })
+            .catch(error => {
+                // error handling
+                errorContainer.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Or there are no lights available</p>";
+                console.error('Error retrieving data:', error);
+            })
+            .finally(() => $("#loading").hide());
+    }
+
+    //POST
+    $("#sending").hide();
+    $("#error").hide();
+    function submitColor(color, brightness, id){
+        document.querySelector("#sending > div").style.color = color;
+        $("#sending").show();
+        const light = getObjectById(id);
+        let lightData = {"address": light["address"], "id": id, "label": light["label"], "color": color, "pattern": brightness};
+        postData("/api/v1/LED/Edit", lightData)
+            .then(checkStatus)
+            .then(() => $("#error").hide())
+            .catch(() => $("#error").show())
+            .finally(() => {
+                getAllLights();
+                $("#sending").hide();
+            });
+    }
+
+</script>
+</body>
+</html>

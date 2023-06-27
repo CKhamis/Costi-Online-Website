@@ -32,7 +32,6 @@ public class PostService {
         }catch (Exception e){
             throw new Exception("Post" + LogicTools.NOT_FOUND_MESSAGE);
         }
-
     }
 
     public List<Post> getByCategory(String category){

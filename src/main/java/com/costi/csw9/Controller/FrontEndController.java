@@ -205,6 +205,17 @@ public class FrontEndController {
         return "moderator/WikiTools";
     }
 
+    @GetMapping("/COMT/LED")
+    public String getCostiOnlineLEDTools() {
+        return "moderator/LEDTools";
+    }
+
+    @GetMapping("/COMT/LED/{id}")
+    public String getCostiOnlineLEDInfo(@PathVariable Long id, Model model) {
+        model.addAttribute("id", id);
+        return "moderator/LEDInfo";
+    }
+
     @GetMapping("/COMT/Accounts")
     public String getCostiOnlineAccountTools(Model model, Principal principal, RedirectAttributes redirectAttributes) {
         model.addAttribute("all", userService.loadAll());
@@ -1068,9 +1079,19 @@ public class FrontEndController {
         return "main/Axcel";
     }
 
+    // Costi Labs
+    @GetMapping("/Labs")
+    public String getLabs(Model model, Principal principal) {
+        return "labs/Home";
+    }
+    @GetMapping("/Labs/LED")
+    public String getLED(Model model, Principal principal) {
+        return "labs/LED";
+    }
+
     // Newsroom
     @GetMapping("/Newsroom")
-    public String getNewsroomHome(Model model, Principal principal) {
+    public String getNewsroomHome(Model model) {
         //Announcements
         List<Announcement> announcements = announcementService.findByApproval(true);
         model.addAttribute("announcements", announcements);
