@@ -13,18 +13,18 @@
             <br />
             <p class="fs-5">Powered by a Raspberry Pi Pico microcontroller running custom MicroPython code, the LED strip is seamlessly interacts with Costi Online Services. Even users without a Costi Online account are able to modify light colors.</p>
             <br />
-            <p class="fs-5">Special thanks to Cody for assisting me in the wiring/ electricity aspect of this project and Cory for helping me write some of the MicroPython code for the Raspberry Pi Pico.</p>
+            <p class="fs-5 mb-4">Special thanks to Cody for assisting me in the wiring/ electricity aspect of this project and Cory for helping me write some of the MicroPython code for the Raspberry Pi Pico.</p>
         </div>
         <div class="col col-12 col-md-6 col-lg-7" id="error-container">
+            <input type="hidden" value="-1" id="id-marker"/>
             <div class="bg-2 px-4 py-3">
                 <div class="row px-3">
                     <p class="col-12 mb-2 fs-4 fw-bold px-0" id="mode-label"></p>
-                    <img src="/icons/Error.svg" alt="error" width="20" id="error">
                     <div class="col-8 px-0">
                         <select class="form-select" id="light-select"></select>
                     </div>
                     <div class="col-4 d-grid px-0">
-                        <button type="button" class="btn btn-primary" style="margin-left: 15px;" onclick="renderColors()">Select</button>
+                        <button type="button" class="btn btn-primary" style="margin-left: 15px;" onclick="switchLight()">Select</button>
                     </div>
                     <div class="col-12 mt-3 mb-3" id="color-preview" style="height: 30px;">
                     </div>
@@ -37,7 +37,20 @@
                 <br clear="all" />
                 <input type="range" class="form-range" min="0" max="100" id="brightness-slider">
             </div>
+
             <div class="p-4 mt-4 border-box light-controller-container">
+            </div>
+
+            <div class="p-4 mt-4 bg-2" id="custom-color-maker">
+                <p class="mb-2 fs-4 fw-bold px-0">Custom Color</p>
+                <div class="col-12 mt-3 mb-3" id="custom-color-preview" style="height: 30px;"></div>
+                <p class="text-secondary">Red</p>
+                <input type="range" class="form-range" min="0" max="255" id="red-slider">
+                <p class="text-secondary">Green</p>
+                <input type="range" class="form-range" min="0" max="255" id="green-slider">
+                <p class="text-secondary">Blue</p>
+                <input type="range" class="form-range" min="0" max="255" id="blue-slider">
+                <button type="button" class="btn btn-primary" onclick="submitCustomColor()">Submit</button>
             </div>
         </div>
     </div>
@@ -50,10 +63,11 @@
 </div>
 
 <div class="position-fixed bottom-0 end-0" id="loading">
-<!--    <div class="spinner-border text-primary me-3 mt-5" role="status" style="width:75px; height:75px; z-index: 99">-->
-<!--        <span class="visually-hidden">Loading...</span>-->
-<!--    </div>-->
     <img src="/icons/Refresh.svg" class="m-3" alt="Arrow" width="75">
+</div>
+
+<div class="position-fixed bottom-0 end-0" id="error">
+    <img src="/icons/Error.svg" class="m-3" alt="error" width="75">
 </div>
 
 <div th:replace="Components :: footer"></div>
@@ -96,21 +110,54 @@
 
     let availableLights;
 
+    // Custom Color
+    $('#red-slider').on('input', previewCustomColor);
+    $('#green-slider').on('input', previewCustomColor);
+    $('#blue-slider').on('input', previewCustomColor);
+
+    function previewCustomColor(){
+        const red = document.querySelector("#red-slider").value;
+        const green = document.querySelector("#green-slider").value;
+        const blue = document.querySelector("#blue-slider").value;
+        document.querySelector("#custom-color-preview").style.backgroundColor = `rgb(${red}, ${green}, ${blue})`;
+    }
+    function submitCustomColor(){
+        const red = document.querySelector("#red-slider").value;
+        const green = document.querySelector("#green-slider").value;
+        const blue = document.querySelector("#blue-slider").value;
+
+        const id = document.querySelector("#id-marker").value;
+        const light = getObjectById(id);
+
+        submitColor(`rgb(${red}, ${green}, ${blue})`, light["pattern"], id);
+    }
+
+    function switchLight(){
+        document.querySelector("#id-marker").value = document.querySelector("#light-select").value;
+        renderColors();
+    }
+
     //Start
     getAllLights();
     $('#brightness-slider').on('change', () => {
-        const id = document.querySelector('#light-select').value;
+        const id = document.querySelector("#id-marker").value;
         const light = getObjectById(id);
         let brightness = $('#brightness-slider').val();
-        submitColor(light["color"], brightness, id)
+        submitColor(light["color"], brightness, id);
     });
 
     // Render
     function renderColors(){
-        const id = document.querySelector('#light-select').value;
+        let id = document.querySelector("#id-marker").value;
+        if(id == -1){
+            id = document.querySelector("#light-select").value;
+            document.querySelector("#id-marker").value = id;
+        }
+
         const light = getObjectById(id);
         document.querySelector('#mode-label').innerHTML = `Currently Selected: ${light["label"]}`;
         document.querySelector('#color-preview').style.backgroundColor = light["color"];
+        controller.innerHTML = "";
 
         // Slider
         if(!isNaN(light["pattern"])){
