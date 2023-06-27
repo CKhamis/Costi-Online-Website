@@ -5,7 +5,7 @@
 <div th:replace="labs/LabComponents :: labNav"></div>
 
 <main class="container mt-3">
-    <div class="row" id="error-container">
+    <div class="row">
         <div class="col col-12 col-md-6 col-lg-5">
             <p class="text-secondary fw-bold fs-4 mb-0">Introducing</p>
             <h1 class="fw-bold">Costi Online Dynamic Lighting</h1>
@@ -15,24 +15,20 @@
             <br />
             <p class="fs-5">Special thanks to Cody for assisting me in the wiring/ electricity aspect of this project and Cory for helping me write some of the MicroPython code for the Raspberry Pi Pico.</p>
         </div>
-        <div class="col col-12 col-md-6 col-lg-7">
+        <div class="col col-12 col-md-6 col-lg-7" id="error-container">
             <div class="bg-2 px-4 py-3">
                 <div class="row px-3">
                     <p class="col-12 mb-2 fs-4 fw-bold px-0" id="mode-label"></p>
+                    <img src="/icons/Error.svg" alt="error" width="20" id="error">
                     <div class="col-8 px-0">
                         <select class="form-select" id="light-select"></select>
                     </div>
                     <div class="col-4 d-grid px-0">
                         <button type="button" class="btn btn-primary" style="margin-left: 15px;" onclick="renderColors()">Select</button>
                     </div>
-                    <div class="col-12 mt-2" id="color-preview">
-                        Color
+                    <div class="col-12 mt-3 mb-3" id="color-preview" style="height: 30px;">
                     </div>
                 </div>
-
-                <img src="/icons/Arrow.svg" alt="Arrow" width="20" id="sending" style="transform: rotate(180deg);">
-                <img src="/icons/Refresh.svg" alt="loading" width="20" id="loading">
-                <img src="/icons/Error.svg" alt="error" width="20" id="error">
             </div>
             <div class="bg-2 px-4 py-3 mt-3">
                 <p class="mb-2 fs-4 fw-bold px-0">Brightness</p>
@@ -46,6 +42,19 @@
         </div>
     </div>
 </main>
+
+<div class="position-fixed bottom-0 end-0" id="sending">
+    <div class="spinner-grow m-3" role="status" style="width:75px; height:75px; z-index: 99">
+        <span class="visually-hidden">Sending...</span>
+    </div>
+</div>
+
+<div class="position-fixed bottom-0 end-0" id="loading">
+<!--    <div class="spinner-border text-primary me-3 mt-5" role="status" style="width:75px; height:75px; z-index: 99">-->
+<!--        <span class="visually-hidden">Loading...</span>-->
+<!--    </div>-->
+    <img src="/icons/Refresh.svg" class="m-3" alt="Arrow" width="75">
+</div>
 
 <div th:replace="Components :: footer"></div>
 <div th:replace="Components :: JS"></div>
@@ -153,6 +162,7 @@
     $("#sending").hide();
     $("#error").hide();
     function submitColor(color, brightness, id){
+        document.querySelector("#sending > div").style.color = color;
         $("#sending").show();
         const light = getObjectById(id);
         let lightData = {"address": light["address"], "id": id, "label": light["label"], "color": color, "pattern": brightness};
