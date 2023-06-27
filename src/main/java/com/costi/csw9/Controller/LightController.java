@@ -46,7 +46,7 @@ public class LightController {
         if (user.getRole().equals(UserRole.ADMIN) || getCurrentUser(principal).getRole().equals(UserRole.OWNER)) {
             return ResponseEntity.ok(lightService.getAllLights());
         }
-        return ResponseEntity.ok(lightService.getEnabledLights(true));
+        return ResponseEntity.ok(lightService.getPublicLights(true));
     }
 
     @GetMapping("/api/v1/LED/analytics")
