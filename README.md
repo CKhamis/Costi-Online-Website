@@ -2,6 +2,8 @@
 
 Costi Online is a website I designed and built using Java Spring and Hibernate. It is currently being hosted on [costionline.com](costionline.com). Costi Online is a centralized publicly-facing informative website that is centered around me, my friends, my projects, and more. The backend of the website is based on Java Spring and Java Hibernate with an H2 databse. I use both Hibernate and JPA queries for CRUD operations. The front end of the website uses Bootstrap 5 as well as its JavaScript dependencies. This website uses many of the skills I have built up over my 10+ years of experience in Java, HTML, CSS, and JavaScript.
 
+## Costi Labs
+Costi Labs is a feature that showcases select projects that visitors can directly interact with. The first experiment added into Costi Labs is an LED Light controller that allows Costi Online visitors to remotely change the colors of LED light strips located on the same wifi network.
 ## Axcel Minigame
 Costi Online features my pet dog, Axcel. When clicked, Axcel will ask you if you can help him find his lost toys. If you accept, small toys will appear inside various pages of the website that the user must click on. When all toys are found, the user must return them to Axcel back on the home screen to reveal the newly made About Axcel page.
 ## Costi Newsroom
