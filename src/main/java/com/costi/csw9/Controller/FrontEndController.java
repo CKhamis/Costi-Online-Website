@@ -32,7 +32,7 @@ public class FrontEndController {
     private AccountLogService accountLogService;
     private AccountNotificationService accountNotificationService;
     private PostService postService;
-    private static final String VERSION = "7.0.1";
+    private static final String VERSION = "7.1.1";
 
     @Autowired
     public FrontEndController(UserService userService, RegistrationService registrationService, WikiService wikiService, AnnouncementService announcementService, AccountLogService accountLogService, AccountNotificationService accountNotificationService, PostService postService) {
