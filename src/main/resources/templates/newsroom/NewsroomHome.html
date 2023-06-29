@@ -71,6 +71,26 @@
         .then(data => {
             // Process the retrieved data
             newsroomContent = data;
+
+            if(newsroomContent.length == 0){
+                newsroomContent[0] = {
+                    "id":-1,
+                    "title":"No Posts Found",
+                    "lastEdited":"2023-01-01T19:03:46",
+                    "subtitle":"",
+                    "enabled":true,
+                    "category":"NEWS",
+                    "body":"No body content",
+                    "imagePath":"images/default-posts/no-image.jpg",
+                    "views":0,
+                    "dateEdited":"1/1/2023",
+                    "timeSinceEdited":"?",
+                    "timeSinceEditedShort":"?",
+                    "pinned":false,
+                    "featured":false,
+                    "favorite":false}
+            }
+
             renderSlides(10);
             renderNews();
             renderRecent(6);

@@ -14,6 +14,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByCategoryOrderByLastEditedDesc(String category);
     List<Post> findByCategoryAndIdNotOrderByLastEditedDesc(String category, Long exception);
     List<Post> findByEnabledOrderByLastEditedDesc(boolean enabled);
+    List<Post> findByEnabledAndIsPublicOrderByLastEditedDesc(boolean enabled, boolean isPublic);
     List<Post> findByEnabledAndIdNotOrderByLastEditedDesc(boolean enabled, Long exception);
     @Modifying
     @Transactional

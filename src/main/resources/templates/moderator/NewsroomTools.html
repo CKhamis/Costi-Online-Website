@@ -22,6 +22,7 @@
                 <th scope="col">Image</th>
                 <th scope="col">Last Edited</th>
                 <th scope="col">View</th>
+                <th scope="col">Public</th>
                 <th scope="col">Edit</th>
                 <th scope="col">Enable</th>
                 <th scope="col">Delete</th>
@@ -40,6 +41,16 @@
                 <td th:text="*{post.dateEdited}">Last Edited</td>
                 <td>
                     <a th:href="'/Newsroom/' + *{post.Id} + '/view'" class="card-link">View Post ></a>
+                </td>
+                <td>
+                    <form th:action="@{|/Newsroom/${post.id}/toggle-visibility|}" method="post">
+                        <th:block th:if="${post.isPublic}">
+                            <button type="submit" class="btn btn-primary btn-sm">Public</button>
+                        </th:block>
+                        <th:block th:unless="${post.isPublic}">
+                            <button type="submit" class="btn btn-secondary btn-sm">Unlisted</button>
+                        </th:block>
+                    </form>
                 </td>
                 <td>
                     <a th:href="@{|/COMT/Newsroom/${post.id}/edit|}" class="btn btn-secondary btn-sm" role="button" aria-pressed="true">Edit</a>
@@ -68,6 +79,7 @@
             <th scope="col">Image</th>
             <th scope="col">Last Edited</th>
             <th scope="col">View</th>
+            <th scope="col">Public</th>
             <th scope="col">Edit</th>
             <th scope="col">Enable</th>
             <th scope="col">Delete</th>
@@ -86,6 +98,16 @@
             <td th:text="*{post.dateEdited}">Last Edited</td>
             <td>
                 <a th:href="'/Newsroom/' + *{post.Id} + '/view'" class="card-link">View Post ></a>
+            </td>
+            <td>
+                <form th:action="@{|/Newsroom/${post.id}/toggle-visibility|}" method="post">
+                    <th:block th:if="${post.isPublic}">
+                        <button type="submit" class="btn btn-primary btn-sm">Public</button>
+                    </th:block>
+                    <th:block th:unless="${post.isPublic}">
+                        <button type="submit" class="btn btn-secondary btn-sm">Unlisted</button>
+                    </th:block>
+                </form>
             </td>
             <td>
                 <a th:href="@{|/COMT/Newsroom/${post.id}/edit|}" class="btn btn-secondary btn-sm" role="button" aria-pressed="true">Edit</a>
