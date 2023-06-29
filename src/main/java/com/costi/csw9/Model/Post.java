@@ -47,6 +47,9 @@ public class Post {
     @Column(nullable = false)
     private boolean isFeatured;
 
+    @Column(nullable = false)
+    private boolean isPublic;
+
     public Post(String title, String subtitle, String category, String body) {
         this.title = title;
         this.subtitle = subtitle;

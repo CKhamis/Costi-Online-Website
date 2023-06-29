@@ -440,6 +440,18 @@ public class FrontEndController {
         return "redirect:/COMT/Newsroom";
     }
 
+    @PostMapping(value = "/Newsroom/{postId}/toggle-visibility")
+    public String changePostVisibility(@PathVariable Long postId, Principal principal, RedirectAttributes redirectAttributes) {
+        try{
+            postService.toggleVisibility(postId, getCurrentUser(principal));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Post Published!", "Post visibility is changed", FlashMessage.Status.SUCCESS));
+        }catch (Exception e){
+            // Invalid id, permission denial, or database error
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Post could not be changed", e.getMessage(), FlashMessage.Status.DANGER));
+        }
+        return "redirect:/COMT/Newsroom";
+    }
+
     @PostMapping(value = "/Newsroom/{PostId}/enable")
     public String enablePost(@PathVariable Long PostId, Principal principal, RedirectAttributes redirectAttributes) {
         try{
