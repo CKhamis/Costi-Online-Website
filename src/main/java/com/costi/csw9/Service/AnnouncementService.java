@@ -36,10 +36,6 @@ public class AnnouncementService {
         return announcementRepository.findByEnable(enabled);
     }
 
-    public List<Announcement> findAll(){
-        return announcementRepository.findAll();
-    }
-
     public void save(Announcement announcement, User current) throws Exception {
         //Check if right permissions
         if(current.isAdmin() || current.isOwner()){

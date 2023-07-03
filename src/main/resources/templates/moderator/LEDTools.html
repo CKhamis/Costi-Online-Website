@@ -196,7 +196,7 @@
 
         pElement.innerText = "Please wait...";
         titleElement.innerText = "Connecting to light";
-        fetch(`/api/v1/LED/${id}/Sync-Down`)
+        fetch(`/api/v1/LED/${id}/sync-down`)
             .then(checkStatus)
             .then(data => {
                 titleElement.innerText = "Sync Complete";
@@ -217,7 +217,7 @@
 
         pElement.innerText = "Please wait...";
         titleElement.innerText = "Connecting to light";
-        fetch(`/api/v1/LED/${id}/Sync-Up`)
+        fetch(`/api/v1/LED/${id}/sync-up`)
             .then(checkStatus)
             .then(data => {
                 titleElement.innerText = "Sync Complete";
@@ -262,7 +262,7 @@
         // Execute submitNew() function with extracted values
         let lightData = {"address": addressInput.value, "id": idInput.value, "label": labelInput.value, "color": colorInput.value, "pattern": patterInput.value};
 
-        postData("/api/v1/LED/Edit", lightData)
+        postData("/api/v1/LED/edit", lightData)
             .then(updateData);
 
         // Reset the form
@@ -272,14 +272,14 @@
         idInput.value = "";
     }
     function deleteLight(id) {
-        postData(`/api/v1/LED/${id}/Delete`)
+        postData(`/api/v1/LED/${id}/delete`)
             .catch(err => console.log(err))
             .then(updateData);
     }
     function publishLight(id, isPublic) {
-        let url = `/api/v1/LED/${id}/Publish`;
+        let url = `/api/v1/LED/${id}/publish`;
         if(!isPublic){
-            url = `/api/v1/LED/${id}/Private`
+            url = `/api/v1/LED/${id}/private`
         }
 
         postData(url)
@@ -287,9 +287,9 @@
             .then(updateData);
     }
     function enableLight(id, isEnabled) {
-        let url = `/api/v1/LED/${id}/Enable`;
+        let url = `/api/v1/LED/${id}/enable`;
         if(!isEnabled){
-            url = `/api/v1/LED/${id}/Disable`
+            url = `/api/v1/LED/${id}/disable`
         }
 
         postData(url)
@@ -297,9 +297,9 @@
             .then(updateData);
     }
     function favoriteLight(id, isFavorite) {
-        let url = `/api/v1/LED/${id}/Favorite`;
+        let url = `/api/v1/LED/${id}/favorite`;
         if(!isFavorite){
-            url = `/api/v1/LED/${id}/Disfavorite`
+            url = `/api/v1/LED/${id}/disfavorite`
         }
 
         postData(url)
@@ -307,12 +307,12 @@
             .then(updateData);
     }
     function disableAll() {
-        postData("/api/v1/LED/DisableAll")
+        postData("/api/v1/LED/disable-all")
             .catch(err => console.log(err))
             .then(updateData);
     }
     function privateAll() {
-        postData("/api/v1/LED/PrivateAll")
+        postData("/api/v1/LED/private-all")
             .catch(err => console.log(err))
             .then(updateData);
     }

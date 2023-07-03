@@ -93,6 +93,7 @@ public class FrontEndController {
         Page Mappings
      ******************/
 
+    //FIXME: THE GREAT REFACTOR of 2023: All database data must come from an AJAX request
     @RequestMapping("/Account")
     public String editUser(Model model, Principal principal, RedirectAttributes redirectAttributes) {
         User user = getCurrentUser(principal);

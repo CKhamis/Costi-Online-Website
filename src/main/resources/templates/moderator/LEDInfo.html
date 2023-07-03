@@ -54,7 +54,7 @@
     //GET functions
     function updateData(){
         getAllLightData();
-        fetch(`/api/v1/LED/${id}/Logs`)
+        fetch(`/api/v1/LED/${id}/logs`)
             .then(checkStatus)
             .then(response => response.json())
             .then(data => {

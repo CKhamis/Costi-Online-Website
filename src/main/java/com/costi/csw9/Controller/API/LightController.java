@@ -1,4 +1,4 @@
-package com.costi.csw9.Controller;
+package com.costi.csw9.Controller.API;
 
 import com.costi.csw9.Model.Light;
 import com.costi.csw9.Model.LightLog;
@@ -93,7 +93,7 @@ public class LightController {
         return jsonResponse;
     }
 
-    @GetMapping("/api/v1/LED/{id}/Logs")
+    @GetMapping("/api/v1/LED/{id}/logs")
     public ResponseEntity<List<LightLog>> getLightStatus(@PathVariable Long id, Principal principal) {
         try{
             Light light = lightService.getLightById(id);
@@ -110,7 +110,7 @@ public class LightController {
     /*
         Light Connection
      */
-    @GetMapping("/api/v1/LED/{id}/Sync-Up")
+    @GetMapping("/api/v1/LED/{id}/sync-up")
     public ResponseEntity<?> syncUp(@PathVariable Long id){
         try {
             Light light = lightService.getLightById(id);
@@ -126,7 +126,7 @@ public class LightController {
         }
     }
 
-    @GetMapping("/api/v1/LED/{id}/Sync-Down")
+    @GetMapping("/api/v1/LED/{id}/sync-down")
     public ResponseEntity<?> syncDown(@PathVariable Long id){
         try {
             Light light = lightService.getLightById(id);
@@ -141,7 +141,6 @@ public class LightController {
             return ResponseEntity.notFound().build();
         }
     }
-
 
     /*
         Light Database Operations
@@ -162,7 +161,7 @@ public class LightController {
         }
     }
 
-    @PostMapping("/api/v1/LED/Edit")
+    @PostMapping("/api/v1/LED/edit")
     public ResponseEntity<?> editLight(@RequestBody EditLightRequest lightRequest, Principal principal) {
         try {
             Light light = lightService.getLightById(lightRequest.getId());
@@ -188,7 +187,7 @@ public class LightController {
         }
     }
 
-    @PostMapping("/api/v1/LED/{id}/Delete")
+    @PostMapping("/api/v1/LED/{id}/delete")
     public ResponseEntity<String> deleteLight(@PathVariable Long id, Principal principal) {
         User user = getCurrentUser(principal);
         if(user.getRole().equals(UserRole.ADMIN) || getCurrentUser(principal).getRole().equals(UserRole.OWNER)){
@@ -203,7 +202,7 @@ public class LightController {
         }
     }
 
-    @PostMapping("/api/v1/LED/{id}/Enable")
+    @PostMapping("/api/v1/LED/{id}/enable")
     public ResponseEntity<String> enableLight(@PathVariable Long id, Principal principal) {
         User user = getCurrentUser(principal);
         if(user.getRole().equals(UserRole.ADMIN) || getCurrentUser(principal).getRole().equals(UserRole.OWNER)){
@@ -220,7 +219,7 @@ public class LightController {
         }
     }
 
-    @PostMapping("/api/v1/LED/{id}/Disable")
+    @PostMapping("/api/v1/LED/{id}/disable")
     public ResponseEntity<String> disableLight(@PathVariable Long id, Principal principal) {
         User user = getCurrentUser(principal);
         if(user.getRole().equals(UserRole.ADMIN) || getCurrentUser(principal).getRole().equals(UserRole.OWNER)){
@@ -237,7 +236,7 @@ public class LightController {
         }
     }
 
-    @PostMapping("/api/v1/LED/{id}/Publish")
+    @PostMapping("/api/v1/LED/{id}/publish")
     public ResponseEntity<String> publishLight(@PathVariable Long id, Principal principal) {
         User user = getCurrentUser(principal);
         if(user.getRole().equals(UserRole.ADMIN) || getCurrentUser(principal).getRole().equals(UserRole.OWNER)){
@@ -254,7 +253,7 @@ public class LightController {
         }
     }
 
-    @PostMapping("/api/v1/LED/{id}/Private")
+    @PostMapping("/api/v1/LED/{id}/private")
     public ResponseEntity<String> privateLight(@PathVariable Long id, Principal principal) {
         User user = getCurrentUser(principal);
         if(user.getRole().equals(UserRole.ADMIN) || getCurrentUser(principal).getRole().equals(UserRole.OWNER)){
@@ -271,7 +270,7 @@ public class LightController {
         }
     }
 
-    @PostMapping("/api/v1/LED/{id}/Favorite")
+    @PostMapping("/api/v1/LED/{id}/favorite")
     public ResponseEntity<String> favoriteLight(@PathVariable Long id, Principal principal) {
         User user = getCurrentUser(principal);
         if(user.getRole().equals(UserRole.ADMIN) || getCurrentUser(principal).getRole().equals(UserRole.OWNER)){
@@ -288,7 +287,7 @@ public class LightController {
         }
     }
 
-    @PostMapping("/api/v1/LED/{id}/Disfavorite")
+    @PostMapping("/api/v1/LED/{id}/disfavorite")
     public ResponseEntity<String> disfavoriteLight(@PathVariable Long id, Principal principal) {
         User user = getCurrentUser(principal);
         if(user.getRole().equals(UserRole.ADMIN) || getCurrentUser(principal).getRole().equals(UserRole.OWNER)){
@@ -305,7 +304,7 @@ public class LightController {
         }
     }
 
-    @PostMapping("/api/v1/LED/DisableAll")
+    @PostMapping("/api/v1/LED/disable-all")
     public ResponseEntity<String> disableAll(Principal principal) {
         User user = getCurrentUser(principal);
         if(user.getRole().equals(UserRole.ADMIN) || getCurrentUser(principal).getRole().equals(UserRole.OWNER)){
@@ -323,7 +322,7 @@ public class LightController {
         }
     }
 
-    @PostMapping("/api/v1/LED/PrivateAll")
+    @PostMapping("/api/v1/LED/private-all")
     public ResponseEntity<String> privateAll(Principal principal) {
         User user = getCurrentUser(principal);
         if(user.getRole().equals(UserRole.ADMIN) || getCurrentUser(principal).getRole().equals(UserRole.OWNER)){
