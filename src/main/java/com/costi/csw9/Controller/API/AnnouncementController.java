@@ -3,6 +3,7 @@ package com.costi.csw9.Controller.API;
 import com.costi.csw9.Model.Announcement;
 import com.costi.csw9.Service.AnnouncementService;
 import com.costi.csw9.Service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,7 +50,7 @@ public class AnnouncementController {
             if (announcement.isEnable()) {
                 return ResponseEntity.ok(announcement);
             } else {
-                return ResponseEntity.notFound().build();
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
