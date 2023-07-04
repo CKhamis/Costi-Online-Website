@@ -576,9 +576,7 @@ public class FrontEndController {
     }
 
     @GetMapping("/COMT/Announcements")
-    public String getCostiOnlineAnnouncementTools(Model model, Principal principal, RedirectAttributes redirectAttributes) {
-        model.addAttribute("enabled", announcementService.legacyFindByApproval(true));
-        model.addAttribute("disabled", announcementService.legacyFindByApproval(false));
+    public String getCostiOnlineAnnouncementTools() {
         return "moderator/AnnouncementTools";
     }
 
@@ -591,53 +589,6 @@ public class FrontEndController {
         model.addAttribute("title", "Create New Announcement");
 
         return "moderator/AnnouncementMaker";
-    }
-
-    @PostMapping(value = "/COMT/Announcements/Create")
-    public String addNewAnnouncement(@Valid Announcement announcement, BindingResult result, Principal principal, RedirectAttributes redirectAttributes) {
-        if(result.hasErrors()) {
-            // If there are validation errors, re-populate the form with the submitted data and error messages
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.announcement", result);
-            redirectAttributes.addFlashAttribute("announcement", announcement);
-
-            String errors = getErrorString(result);
-
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating announcement", errors, FlashMessage.Status.DANGER));
-
-            return "redirect:/COMT/Announcements/Create";
-        }
-
-        try {
-            announcementService.legacySave(announcement, getCurrentUser(principal));
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Announcement has been created", "To publish it, please press enable", FlashMessage.Status.SUCCESS));
-            return "redirect:/COMT/Announcements";
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating announcement", e.getMessage(), FlashMessage.Status.DANGER));
-            return "redirect:/COMT/Announcements/Create";
-        }
-    }
-
-    @RequestMapping(value = "/COMT/Announcements/{id}/enable", method = RequestMethod.POST)
-    public String enableAnnouncement(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes) {
-        try{
-            announcementService.legacyEnable(id, true, getCurrentUser(principal));
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Announcement Published!", "Announcement is publicly visible", FlashMessage.Status.SUCCESS));
-        }catch (Exception e){
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error enabling announcement", e.getMessage(), FlashMessage.Status.DANGER));
-        }
-        return "redirect:/COMT/Announcements";
-    }
-
-    @RequestMapping(value = "/COMT/Announcements/{id}/disable", method = RequestMethod.POST)
-    public String disableAnnouncement(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes) {
-        try{
-            announcementService.legacyEnable(id, false, getCurrentUser(principal));
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Announcement Disabled!", "Announcement is publicly visible", FlashMessage.Status.SUCCESS));
-        }catch (Exception e){
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error disabling announcement", e.getMessage(), FlashMessage.Status.DANGER));
-        }
-
-        return "redirect:/COMT/Announcements";
     }
 
     @RequestMapping("/COMT/Announcements/{id}/edit")
@@ -654,29 +605,6 @@ public class FrontEndController {
         }
     }
 
-    @PostMapping(value = "/COMT/Announcements/{id}/edit")
-    public String editAnnouncement(@PathVariable Long id, @Valid Announcement announcement, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) {
-        if(result.hasErrors()) {
-            // If there are validation errors, re-populate the form with the submitted data and error messages
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.announcement", result);
-            redirectAttributes.addFlashAttribute("announcement", announcement);
-
-            String errors = getErrorString(result);
-
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing announcement", errors, FlashMessage.Status.DANGER));
-
-            return "redirect:/COMT/Announcements/edit";
-        }
-
-        try {
-            announcementService.legacySave(announcement, getCurrentUser(principal));
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Announcement has been modified", "To publish it, please press enable", FlashMessage.Status.SUCCESS));
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing announcement", e.getMessage(), FlashMessage.Status.DANGER));
-        }
-        return "redirect:/COMT/Announcements";
-    }
-
     private static String getErrorString(BindingResult result) {
         String errors = "";
         if(result.getAllErrors().size() > 1){
@@ -688,19 +616,6 @@ public class FrontEndController {
             errors = result.getAllErrors().get(0).getDefaultMessage();
         }
         return errors;
-    }
-
-    @RequestMapping(value = "/COMT/Announcements/{id}/delete", method = RequestMethod.POST)
-    public String deleteAnnouncement(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes) {
-        try{
-            announcementService.legacyDelete(id, getCurrentUser(principal));
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Announcement Deleted!", "Announcement was permanently removed from database", FlashMessage.Status.SUCCESS));
-
-        }catch (Exception e){
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error deleting announcement", e.getMessage(), FlashMessage.Status.DANGER));
-        }
-
-        return "redirect:/COMT/Announcements";
     }
 
     @PostMapping(value = "/Accounts/{accountId}/lock")
@@ -793,9 +708,6 @@ public class FrontEndController {
     @GetMapping("/")
     public String getHome(Model model, Principal principal, RedirectAttributes redirectAttributes) {
         model.addAttribute("version", VERSION);
-        List<Announcement> announcements = announcementService.legacyFindByApproval(true);
-        model.addAttribute("announcements", announcements);
-        model.addAttribute("isAnnouncement", announcements.size() > 0);
 
         List<WikiPage> random = wikiService.getByApproval(true);
         Collections.shuffle(random);
@@ -1105,11 +1017,6 @@ public class FrontEndController {
     // Newsroom
     @GetMapping("/Newsroom")
     public String getNewsroomHome(Model model) {
-        //Announcements
-        List<Announcement> announcements = announcementService.legacyFindByApproval(true);
-        model.addAttribute("announcements", announcements);
-        model.addAttribute("isAnnouncement", announcements.size() > 0);
-
         return "newsroom/NewsroomHome";
     }
 

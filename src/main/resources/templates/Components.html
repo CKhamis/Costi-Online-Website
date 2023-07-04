@@ -276,6 +276,46 @@
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 
+<th:block th:fragment="announcements">
+    <div id="announcementContainer" class="container mt-3"></div>
+</th:block>
+
+<script th:fragment="announcementScript">
+    const announcementContainer = document.querySelector("#announcementContainer");
+    let announcements = fetch("/api/announcements/all")
+        .then(checkStatus)
+        .then(response => response.json())
+        .then(data => {
+            announcements = data;
+            renderAnnouncements();
+        })
+        .catch(error => {
+            announcementContainer.innerHTML = `
+                <h3 class="text-center fw-bold">Error getting announcements</h3>
+                <p class="text-secondary text-center">${error}</p>
+            `;
+            console.error(error);
+        });
+    function renderAnnouncements(){
+        let content = ``;
+
+        if(announcements.length > 0){
+            content += "<h3>📢Announcements</h3>"
+        }
+        for(let announcement of announcements){
+            content += `
+                <div class="alert alert-dismissible fade show" style="background-color:rgba(0,0,0,.1); border: 1px black solid;">
+                    <div class="fw-bold d-inline">${announcement.title}</div>
+                    <div class="d-inline">${announcement.body}</div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+        }
+        announcementContainer.innerHTML = content;
+    }
+
+</script>
+
 <div th:fragment="notification" th:each="notification : ${notifications}" th:class="|alert alert-${notification.notificationType} alert-dismissible fade show|" role="alert">
     <p class="fw-bold d-inline" th:text="|${notification.title} • |"></p>
     <p class="d-inline" th:text="${notification.dateCreated}"></p>

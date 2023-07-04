@@ -33,44 +33,7 @@ public class AnnouncementService {
         }
     }
 
-    public List<Announcement> legacyFindByApproval(boolean enabled){
-        return announcementRepository.findByEnable(enabled);
-    }
-
-    public void legacySave(Announcement announcement, User current) throws Exception {
-        //Check if right permissions
-        if(current.isAdmin() || current.isOwner()){
-            announcement.setDate(LocalDateTime.now());
-            announcementRepository.save(announcement);
-        }else{
-            throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
-        }
-    }
-
-    public void legacyDelete(Long id, User current) throws Exception{
-        //Check if right permissions
-        if(current.isAdmin() || current.isOwner()){
-            announcementRepository.deleteById(id);
-        }else{
-            throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
-        }
-    }
-
-    public void legacyEnable(Long id, boolean enable, User current) throws Exception{
-        Optional<Announcement> optionalAnnouncement = announcementRepository.findById(id);
-        // Check if announcement exists
-        if(optionalAnnouncement.isPresent()){
-            Announcement announcement = optionalAnnouncement.get();
-
-            //Check if right permissions
-            if(current.isAdmin() || current.isOwner()){
-                announcementRepository.setEnableById(announcement.getId(), enable);
-            }else{
-                throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
-            }
-
-        }else {
-            throw new Exception("Announcement" + LogicTools.NOT_FOUND_MESSAGE);
-        }
+    public List<Announcement> findAllAnnouncements(){
+        return announcementRepository.findByEnable(true);
     }
 }

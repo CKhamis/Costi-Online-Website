@@ -32,8 +32,8 @@ public class COMTService {
         }
     }
 
-    public List<Announcement> findAnnouncementByApproval(boolean enabled){
-        return announcementRepository.findByEnable(enabled);
+    public List<Announcement> findAllAnnouncements(){
+        return announcementRepository.findAll();
     }
 
     public void saveAnnouncement(Announcement announcement){

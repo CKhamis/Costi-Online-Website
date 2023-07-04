@@ -20,12 +20,7 @@
 </div>
 
 <main>
-    <div class="container mt-3">
-        <h3 th:if="${isAnnouncement}">📢Announcements</h3>
-        <div th:each="message : ${announcements}">
-            <div th:replace="Components :: message" class="mt-2"></div>
-        </div>
-    </div>
+    <div th:replace="Components :: announcements" class="container mt-3"></div>
 
     <!-- Quick Links-->
     <div class="container mt-3">
@@ -261,6 +256,7 @@
 <div th:replace="Components :: toast-box"></div>
 <div th:replace="Components :: JS"></div>
 <div th:replace="Components :: scripts"></div>
+<div th:replace="Components :: announcementScript"></div>
 <script>
     let subtitles = ["Costi's favorite website", "I haven't seen you in a BILLION years!", "Jedi Terence", "Chelsea Stacie Ingrid Marla Darla", "MAAAAARRIOOOOO!", "A project by Costi", "An interdimensional project",
     "'Ello", "📮😳😳😳", "What's puopping", "Death, Dying, Religion", "ur mum", "Free Taiwan 🇹🇼 ", "🥩🇯🇲🥞"]

@@ -16,12 +16,7 @@
             <!-- Content added here -->
         </div>
     </div>
-    <div class="mt-3">
-        <h3 th:if="${isAnnouncement}">📢Announcements</h3>
-        <div th:each="message : ${announcements}">
-            <div th:replace="Components :: message" class="mt-2"></div>
-        </div>
-    </div>
+    <div th:replace="Components :: announcements" class="container mt-3"></div>
 
     <div class="container mt-4">
         <h2 class="text-center fw-bold border-bottom pb-2">All Posts</h2>
@@ -56,6 +51,7 @@
 <div th:replace="Components :: footer"></div>
 <div th:replace="Components :: JS"></div>
 <div th:replace="Components :: scripts"></div>
+<div th:replace="Components :: announcementScript"></div>
 <script>
     // Elements
     const mainContent = document.querySelector("#main-content");

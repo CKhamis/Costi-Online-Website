@@ -34,10 +34,9 @@ public class COMTController {
         }
     }
 
-    @GetMapping("/announcement/get-announcements")
-    public ResponseEntity<List<Announcement>> getAnnouncementsByApproval(@RequestParam("enabled") boolean enabled) {
-        // To get all enabled announcements: GET /api/management/announcement/get-announcements?enabled=true
-        List<Announcement> announcements = comtService.findAnnouncementByApproval(enabled);
+    @GetMapping("/announcement/all")
+    public ResponseEntity<List<Announcement>> getAnnouncementsByApproval() {
+        List<Announcement> announcements = comtService.findAllAnnouncements();
         return ResponseEntity.ok(announcements);
     }
 
