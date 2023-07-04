@@ -1,20 +1,36 @@
 <!DOCTYPE html>
 <html xml:th="https://www.thymeleaf.org">
-<head th:replace="Components :: head('COMT Wiki')"></head>
+<head th:replace="Components :: head('COMT Announcements')"></head>
 <body class="bg-1 text-1">
 <div th:replace="moderator/ModeratorComponents :: moderatorNav"></div>
 <main class="container mt-5">
-    <div class="p-5 mb-4 mt-5 border-box">
-        <div class="container-fluid py-5">
-            <h1 class="display-5 fw-bold">Costi Online Management Terminal</h1>
-            <p class="col-md-8 fs-4">Create & Edit Announcements</p>
-            <a href="/COMT/Announcements/Create" class="btn btn-primary">Create new Announcement</a>
+    <div class="row d-flex">
+        <div class="col-12 col-md-7 h-100">
+            <div class="container-fluid bg-2 py-3" id="overview-container">
+            </div>
+        </div>
+        <div class="col-12 col-md-5 h-100">
+            <div class="container-fluid bg-2 py-3">
+                <h3 class="fw-bold mb-2">Actions</h3>
+                <div class="action-button-container">
+                    <div class="action-button" data-bs-toggle="modal" data-bs-target="#new-light-modal">
+                        <img th:src="@{/icons/New.svg}" />
+                        <p class="text-center">New</p>
+                    </div>
+                    <div class="action-button" onclick="getData()">
+                        <img th:src="@{/icons/Refresh.svg}" />
+                        <p class="text-center">Refresh</p>
+                    </div>
+                    <div class="action-button" id="private-all-button">
+                        <img th:src="@{/icons/Private.svg}" />
+                        <p class="text-center">Disable All</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div th:replace="Components :: flash" class="mt-2"></div>
 
-    <h2 class="fs-2 mb-3">Active Announcements</h2>
-    <table class="table table-bordered table-sm align-middle table-hover table-dark">
+    <table class="table table-bordered table-sm align-middle table-hover table-dark mt-4" id="error-container">
         <thead>
         <tr>
             <th scope="col">Id</th>
@@ -27,76 +43,116 @@
             <th scope="col">Delete</th>
         </tr>
         </thead>
-        <tbody>
-        <tr th:each="message : ${enabled}">
-            <td scope="row" th:text="*{message.id}">id</td>
-            <td scope="row" th:text="*{message.title}">Title</td>
-            <td th:text="*{message.body}">body</td>
-            <td th:text="*{message.dateEdited}">date</td>
-            <td>
-                <p th:if="*{message.enable}">✅ Enabled</p>
-                <p th:unless="*{message.enable}">❌ Disabled</p>
-            </td>
-            <td>
-                <a th:href="@{|/COMT/Announcements/${message.id}/edit|}" class="btn btn-secondary btn-sm" role="button" aria-pressed="true">Edit</a>
-            </td>
-            <td>
-                <form th:action="@{|/COMT/Announcements/${message.id}/disable|}" method="post">
-                    <button type="submit" class="btn btn-warning btn-sm">Disable</button>
-                </form>
-            </td>
-            <td>
-                <form th:action="@{|/COMT/Announcements/${message.id}/delete|}" method="post">
-                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                </form>
-            </td>
-        </tr>
+        <tbody id="table-body">
+
         </tbody>
     </table>
 
-    <h2 class="fs-2 mb-3">Disabled Announcements</h2>
-    <table class="table table-bordered table-sm align-middle table-hover table-dark">
-        <thead>
-        <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Title</th>
-            <th scope="col">Body</th>
-            <th scope="col">Date</th>
-            <th scope="col">Enable</th>
-            <th scope="col">Edit</th>
-            <th scope="col">Disable</th>
-            <th scope="col">Delete</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="message : ${disabled}">
-            <td scope="row" th:text="*{message.id}">id</td>
-            <td scope="row" th:text="*{message.title}">Title</td>
-            <td th:text="*{message.body}">body</td>
-            <td th:text="*{message.dateEdited}">date</td>
-            <td>
-                <p th:if="*{message.enable}">✅ Enabled</p>
-                <p th:unless="*{message.enable}">❌ Disabled</p>
-            </td>
-            <td>
-                <a th:href="@{|/COMT/Announcements/${message.id}/edit|}" class="btn btn-secondary btn-sm" role="button" aria-pressed="true">Edit</a>
-            </td>
-            <td>
-                <form th:action="@{|/COMT/Announcements/${message.id}/enable|}" method="post">
-                    <button type="submit" class="btn btn-success btn-sm">Enable</button>
-                </form>
-            </td>
-            <td>
-                <form th:action="@{|/COMT/Announcements/${message.id}/delete|}" method="post">
-                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
 </main>
 <div th:replace="Components :: footer"></div>
 <div th:replace="Components :: JS"></div>
 <div th:replace="Components :: scripts"></div>
+<script>
+    //elements
+    let errorContainer = document.getElementById("error-container");
+    let overviewContainer = document.getElementById("overview-container");
+
+    //data
+    let overviewData;
+    let allAnnouncements;
+
+    //Data retrieval
+    function getData(){
+        fetch("/api/management/announcement/all")
+            .then(checkStatus)
+            .then(response => response.json())
+            .then(data => {
+                allAnnouncements = data;
+                renderTable();
+            })
+            .catch(error => {
+                // error handling
+                errorContainer.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>";
+                console.error('Error retrieving data:', error);
+            })
+            .finally(() => $("#loading").hide());
+
+        fetch("/api/management/announcement/analytics")
+            .then(checkStatus)
+            .then(response => response.json())
+            .then(data => {
+                overviewData = data;
+                renderOverview();
+            })
+            .catch(error => {
+                // error handling
+                errorContainer.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>";
+                console.error('Error retrieving data:', error);
+            });
+    }
+
+    //render functions
+    function renderTable(){
+        let tableContent = ``;
+        for(let announcement of allAnnouncements){
+            tableContent += `
+            <tr>
+                <td>${announcement.id}</td>
+                <td>${announcement.title}</td>
+                <td>${announcement.body}</td>
+                <td>${announcement.dateEdited}</td>
+                <td>${announcement.enable ? '✅ Visible' : '❌ Invisible'}</td>
+                <td>
+                    <a th:href="@{|/COMT/Announcemenedit|}" class="btn btn-secondary btn-sm" role="button" aria-pressed="true">Edit</a>
+                </td>
+                <td>
+                    <form th:action="@{|/COMT/Announcementssable|}" method="post">
+                        <button type="submit" class="btn btn-warning btn-sm">Disable</button>
+                    </form>
+                </td>
+                <td>
+                    <form th:action="@{|/COMT/Announcementdelete|}" method="post">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            `;
+        }
+        document.querySelector("#table-body").innerHTML = tableContent;
+    }
+
+    function renderOverview(){
+        overviewContainer.innerHTML = `
+            <h3 class="fw-bold mb-2">Overview</h3>
+            <div id="stats-container">
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${overviewData["totalAnnouncements"]}</p>
+                    <p class="text-center">Posts</p>
+                </div>
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${overviewData["enabledCount"]}</p>
+                    <p class="text-center">Enabled</p>
+                </div>
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${overviewData["disabledCount"]}</p>
+                    <p class="text-center">Disabled</p>
+                </div>
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${overviewData["averageBodyLength"]}</p>
+                    <p class="text-center">μ Length</p>
+                </div>
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${overviewData["oldestAnnouncement"]}</p>
+                    <p class="text-center">Oldest</p>
+                </div>
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${overviewData["newestAnnouncement"]}</p>
+                    <p class="text-center">Newest</p>
+                </div>
+            </div>
+
+        `;
+    }
+</script>
 </body>
 </html>

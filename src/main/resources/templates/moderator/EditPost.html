@@ -178,6 +178,7 @@
         });
 
     // Render
+    //FIXME: This displays incorrectly because it doesnt replace individual tags, just adds onto the ones there already
     function displayPreview(data){
         container.innerHTML = `
             <img src="${data.imagePath}" alt="${data.title}" class="newsroom-slide"/>
