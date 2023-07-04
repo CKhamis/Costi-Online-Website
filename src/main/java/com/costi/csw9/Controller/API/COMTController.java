@@ -1,7 +1,8 @@
 package com.costi.csw9.Controller.API;
 
 import com.costi.csw9.Model.Announcement;
-import com.costi.csw9.Service.AnnouncementService;
+import com.costi.csw9.Service.COMTService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -13,18 +14,20 @@ import java.util.List;
 @RequestMapping("/api/management")
 @PreAuthorize("hasAnyAuthority('ADMIN', 'OWNER')")
 public class COMTController {
-    private AnnouncementService announcementService;
+    private final COMTService comtService;
 
-    public COMTController(AnnouncementService announcementService) {
-        this.announcementService = announcementService;
+    public COMTController(COMTService comtService) {
+        this.comtService = comtService;
     }
 
-    // Announcements
+    /*
+        Announcements
+     */
 
-    @GetMapping("/announcement/{id}")
-    public ResponseEntity<Announcement> getAnnouncementById(@PathVariable Long id) {
+    @GetMapping("/announcement/view")
+    public ResponseEntity<Announcement> getAnnouncementById(@RequestParam("id") Long id) {
         try {
-            Announcement announcement = announcementService.findById(id);
+            Announcement announcement = comtService.findAnnouncementById(id);
             return ResponseEntity.ok(announcement);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
@@ -32,14 +35,29 @@ public class COMTController {
     }
 
     @GetMapping("/announcement/get-announcements")
-    public ResponseEntity<List<Announcement>> findByApproval(@RequestParam("enabled") boolean enabled) {
-        // To get all enabled announcements: GET /api/announcements/announcement?enabled=true
-        List<Announcement> announcements = announcementService.findByApproval(enabled);
+    public ResponseEntity<List<Announcement>> getAnnouncementsByApproval(@RequestParam("enabled") boolean enabled) {
+        // To get all enabled announcements: GET /api/management/announcement/get-announcements?enabled=true
+        List<Announcement> announcements = comtService.findAnnouncementByApproval(enabled);
         return ResponseEntity.ok(announcements);
     }
 
-//    @PostMapping("announcement/enable")
-//    public ResponseEntity<?> editAnnouncement(@RequestBody Announcement announcement){
-//        announcementService.save(announcement);
-//    }
+    @PostMapping("/announcement/save")
+    public ResponseEntity<String> saveAnnouncement(@RequestBody Announcement announcement) {
+        try {
+            comtService.saveAnnouncement(announcement);
+            return ResponseEntity.ok("Announcement saved successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving announcement: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/announcement/delete")
+    public ResponseEntity<String> deleteAnnouncement(@RequestParam("id") Long id) {
+        try {
+            comtService.deleteAnnouncement(id);
+            return ResponseEntity.ok("Announcement deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting announcement: " + e.getMessage());
+        }
+    }
 }

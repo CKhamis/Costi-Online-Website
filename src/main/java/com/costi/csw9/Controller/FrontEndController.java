@@ -577,8 +577,8 @@ public class FrontEndController {
 
     @GetMapping("/COMT/Announcements")
     public String getCostiOnlineAnnouncementTools(Model model, Principal principal, RedirectAttributes redirectAttributes) {
-        model.addAttribute("enabled", announcementService.findByApproval(true));
-        model.addAttribute("disabled", announcementService.findByApproval(false));
+        model.addAttribute("enabled", announcementService.legacyFindByApproval(true));
+        model.addAttribute("disabled", announcementService.legacyFindByApproval(false));
         return "moderator/AnnouncementTools";
     }
 
@@ -608,7 +608,7 @@ public class FrontEndController {
         }
 
         try {
-            announcementService.save(announcement, getCurrentUser(principal));
+            announcementService.legacySave(announcement, getCurrentUser(principal));
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Announcement has been created", "To publish it, please press enable", FlashMessage.Status.SUCCESS));
             return "redirect:/COMT/Announcements";
         } catch (Exception e) {
@@ -620,7 +620,7 @@ public class FrontEndController {
     @RequestMapping(value = "/COMT/Announcements/{id}/enable", method = RequestMethod.POST)
     public String enableAnnouncement(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes) {
         try{
-            announcementService.enable(id, true, getCurrentUser(principal));
+            announcementService.legacyEnable(id, true, getCurrentUser(principal));
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Announcement Published!", "Announcement is publicly visible", FlashMessage.Status.SUCCESS));
         }catch (Exception e){
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error enabling announcement", e.getMessage(), FlashMessage.Status.DANGER));
@@ -631,7 +631,7 @@ public class FrontEndController {
     @RequestMapping(value = "/COMT/Announcements/{id}/disable", method = RequestMethod.POST)
     public String disableAnnouncement(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes) {
         try{
-            announcementService.enable(id, false, getCurrentUser(principal));
+            announcementService.legacyEnable(id, false, getCurrentUser(principal));
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Announcement Disabled!", "Announcement is publicly visible", FlashMessage.Status.SUCCESS));
         }catch (Exception e){
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error disabling announcement", e.getMessage(), FlashMessage.Status.DANGER));
@@ -669,7 +669,7 @@ public class FrontEndController {
         }
 
         try {
-            announcementService.save(announcement, getCurrentUser(principal));
+            announcementService.legacySave(announcement, getCurrentUser(principal));
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Announcement has been modified", "To publish it, please press enable", FlashMessage.Status.SUCCESS));
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing announcement", e.getMessage(), FlashMessage.Status.DANGER));
@@ -693,7 +693,7 @@ public class FrontEndController {
     @RequestMapping(value = "/COMT/Announcements/{id}/delete", method = RequestMethod.POST)
     public String deleteAnnouncement(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes) {
         try{
-            announcementService.delete(id, getCurrentUser(principal));
+            announcementService.legacyDelete(id, getCurrentUser(principal));
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Announcement Deleted!", "Announcement was permanently removed from database", FlashMessage.Status.SUCCESS));
 
         }catch (Exception e){
@@ -793,7 +793,7 @@ public class FrontEndController {
     @GetMapping("/")
     public String getHome(Model model, Principal principal, RedirectAttributes redirectAttributes) {
         model.addAttribute("version", VERSION);
-        List<Announcement> announcements = announcementService.findByApproval(true);
+        List<Announcement> announcements = announcementService.legacyFindByApproval(true);
         model.addAttribute("announcements", announcements);
         model.addAttribute("isAnnouncement", announcements.size() > 0);
 
@@ -1106,7 +1106,7 @@ public class FrontEndController {
     @GetMapping("/Newsroom")
     public String getNewsroomHome(Model model) {
         //Announcements
-        List<Announcement> announcements = announcementService.findByApproval(true);
+        List<Announcement> announcements = announcementService.legacyFindByApproval(true);
         model.addAttribute("announcements", announcements);
         model.addAttribute("isAnnouncement", announcements.size() > 0);
 

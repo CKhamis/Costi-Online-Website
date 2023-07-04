@@ -4,7 +4,6 @@ import com.costi.csw9.Model.Announcement;
 import com.costi.csw9.Model.User;
 import com.costi.csw9.Repository.AnnouncementRepository;
 import com.costi.csw9.Util.LogicTools;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,21 +21,23 @@ public class AnnouncementService {
 
     public Announcement findById(Long id) throws Exception{
         Optional<Announcement> optionalAnnouncement = announcementRepository.findById(id);
-
-        // Check if announcement exists
         if(optionalAnnouncement.isPresent()){
-            return optionalAnnouncement.get();
+            Announcement announcement = optionalAnnouncement.get();
+            if(announcement.isEnable()){
+                return announcement;
+            }
+            throw new Exception("Announcement" + LogicTools.INVALID_PERMISSIONS_MESSAGE);
 
         }else{
             throw new Exception("Announcement" + LogicTools.NOT_FOUND_MESSAGE);
         }
     }
 
-    public List<Announcement> findByApproval(boolean enabled){
+    public List<Announcement> legacyFindByApproval(boolean enabled){
         return announcementRepository.findByEnable(enabled);
     }
 
-    public void save(Announcement announcement, User current) throws Exception {
+    public void legacySave(Announcement announcement, User current) throws Exception {
         //Check if right permissions
         if(current.isAdmin() || current.isOwner()){
             announcement.setDate(LocalDateTime.now());
@@ -46,7 +47,7 @@ public class AnnouncementService {
         }
     }
 
-    public void delete(Long id, User current) throws Exception{
+    public void legacyDelete(Long id, User current) throws Exception{
         //Check if right permissions
         if(current.isAdmin() || current.isOwner()){
             announcementRepository.deleteById(id);
@@ -55,7 +56,7 @@ public class AnnouncementService {
         }
     }
 
-    public void enable(Long id, boolean enable, User current) throws Exception{
+    public void legacyEnable(Long id, boolean enable, User current) throws Exception{
         Optional<Announcement> optionalAnnouncement = announcementRepository.findById(id);
         // Check if announcement exists
         if(optionalAnnouncement.isPresent()){
