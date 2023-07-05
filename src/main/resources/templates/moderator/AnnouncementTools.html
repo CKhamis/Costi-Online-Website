@@ -36,7 +36,7 @@
             <th scope="col">Id</th>
             <th scope="col">Title</th>
             <th scope="col">Body</th>
-            <th scope="col">Date</th>
+            <th scope="col">Edited</th>
             <th scope="col">Enable</th>
             <th scope="col">Edit</th>
             <th scope="col">Disable</th>
@@ -95,6 +95,7 @@
     function renderTable(){
         let tableContent = ``;
         for(let announcement of allAnnouncements){
+            let enableToggle = announcement.enable ?`<button onclick="toggleEnable(${announcement.id})" class="btn btn-success btn-sm">Enable</button>` : `<button onclick="toggleEnable(${announcement.id})" class="btn btn-warning btn-sm">Disable</button>`;
             tableContent += `
             <tr>
                 <td>${announcement.id}</td>
@@ -105,22 +106,15 @@
                 <td>
                     <a th:href="@{|/COMT/Announcemenedit|}" class="btn btn-secondary btn-sm" role="button" aria-pressed="true">Edit</a>
                 </td>
+                <td>${enableToggle}</td>
                 <td>
-                    <form th:action="@{|/COMT/Announcementssable|}" method="post">
-                        <button type="submit" class="btn btn-warning btn-sm">Disable</button>
-                    </form>
-                </td>
-                <td>
-                    <form th:action="@{|/COMT/Announcementdelete|}" method="post">
-                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                    </form>
+                    <button onclick="deleteAnnouncement(${announcement.id})" class="btn btn-danger btn-sm">Delete</button>
                 </td>
             </tr>
             `;
         }
         document.querySelector("#table-body").innerHTML = tableContent;
     }
-
     function renderOverview(){
         overviewContainer.innerHTML = `
             <h3 class="fw-bold mb-2">Overview</h3>
@@ -152,6 +146,25 @@
             </div>
 
         `;
+    }
+
+    //Data Manipulation
+    function deleteAnnouncement(id){
+        postData("/api/management/announcement/delete", id)
+            .catch(err => {
+                console.log(err);
+            })
+            .then(getData);
+    }
+
+    function toggleEnable(id){
+        let announcement = allAnnouncements.find(announcement => announcement.id === id);
+        announcement.enable = !announcement.enable;
+        postData("/api/management/announcement/save", announcement)
+            .catch(err => {
+                console.log(err);
+            })
+            .then(getData);
     }
 </script>
 </body>

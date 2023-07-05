@@ -90,8 +90,8 @@ public class COMTController {
         }
     }
 
-    @GetMapping("/announcement/delete")
-    public ResponseEntity<String> deleteAnnouncement(@RequestParam("id") Long id) {
+    @PostMapping("/announcement/delete")
+    public ResponseEntity<String> deleteAnnouncement(@RequestBody Long id) {
         try {
             comtService.deleteAnnouncement(id);
             return ResponseEntity.ok("Announcement deleted successfully");
