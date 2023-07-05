@@ -38,6 +38,7 @@ public class COMTController {
         }
     }
 
+    //FIXME: the newest date thing doesn't work
     @GetMapping("/announcement/analytics")
     @ResponseBody
     public Map<String, Object> getAnnouncementAnalytics(){
@@ -69,7 +70,13 @@ public class COMTController {
         jsonResponse.put("disabledCount", numDisabled);
         jsonResponse.put("oldestAnnouncement", ChronoUnit.DAYS.between(oldest, LocalDateTime.now()) + "d");
         jsonResponse.put("newestAnnouncement", ChronoUnit.DAYS.between(newest, LocalDateTime.now()) + "d");
-        jsonResponse.put("averageBodyLength", numBodyCharacters / allAnnouncements.size());
+
+        if(allAnnouncements.size() == 0){
+            jsonResponse.put("averageBodyLength", "?");
+        }else{
+            jsonResponse.put("averageBodyLength", numBodyCharacters / allAnnouncements.size());
+        }
+
 
         return jsonResponse;
     }
@@ -83,8 +90,13 @@ public class COMTController {
     @PostMapping("/announcement/save")
     public ResponseEntity<String> saveAnnouncement(@RequestBody Announcement announcement) {
         try {
-            comtService.saveAnnouncement(announcement);
+            if(announcement.getId() > 0){
+                comtService.saveAnnouncement(announcement);
+            }else{
+                comtService.saveAnnouncement(new Announcement(announcement));
+            }
             return ResponseEntity.ok("Announcement saved successfully");
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving announcement: " + e.getMessage());
         }
