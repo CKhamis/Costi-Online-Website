@@ -68,15 +68,17 @@ public class COMTController {
 
         jsonResponse.put("enabledCount", numEnabled);
         jsonResponse.put("disabledCount", numDisabled);
-        jsonResponse.put("oldestAnnouncement", ChronoUnit.DAYS.between(oldest, LocalDateTime.now()) + "d");
-        jsonResponse.put("newestAnnouncement", ChronoUnit.DAYS.between(newest, LocalDateTime.now()) + "d");
+
 
         if(allAnnouncements.size() == 0){
             jsonResponse.put("averageBodyLength", "?");
+            jsonResponse.put("oldestAnnouncement", "?");
+            jsonResponse.put("newestAnnouncement", "?");
         }else{
             jsonResponse.put("averageBodyLength", numBodyCharacters / allAnnouncements.size());
+            jsonResponse.put("oldestAnnouncement", ChronoUnit.DAYS.between(oldest, LocalDateTime.now()) + "d");
+            jsonResponse.put("newestAnnouncement", ChronoUnit.DAYS.between(newest, LocalDateTime.now()) + "d");
         }
-
 
         return jsonResponse;
     }
