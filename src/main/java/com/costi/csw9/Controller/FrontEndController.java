@@ -580,31 +580,6 @@ public class FrontEndController {
         return "moderator/AnnouncementTools";
     }
 
-    @GetMapping("/COMT/Announcements/Create")
-    public String getCreateAnnouncement(Model model, Principal principal, RedirectAttributes redirectAttributes) {
-        if (!model.containsAttribute("announcement")) {
-            model.addAttribute("announcement", new Announcement());
-        }
-        model.addAttribute("action", "/COMT/Announcements/Create");
-        model.addAttribute("title", "Create New Announcement");
-
-        return "moderator/AnnouncementMaker";
-    }
-
-    @RequestMapping("/COMT/Announcements/{id}/edit")
-    public String getEditAnnouncement(@PathVariable Long id, Model model, Principal principal, RedirectAttributes redirectAttributes) {
-        try{
-            Announcement announcement = announcementService.findById(id);
-            model.addAttribute("announcement", announcement);
-            model.addAttribute("action", "/COMT/Announcements/" + id + "/edit");
-            model.addAttribute("title", "Edit Announcement");
-            return "moderator/AnnouncementMaker";
-        }catch (Exception e){
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error loading announcement", e.getMessage(), FlashMessage.Status.DANGER));
-            return "redirect:/COMT/Announcements";
-        }
-    }
-
     private static String getErrorString(BindingResult result) {
         String errors = "";
         if(result.getAllErrors().size() > 1){
