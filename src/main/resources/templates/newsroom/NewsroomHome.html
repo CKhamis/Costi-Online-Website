@@ -61,7 +61,7 @@
     let newsroomContent;
 
     // Fetch requests
-    fetch("/api/v1/Newsroom/post/all")
+    fetch("/api/newsroom/all")
         .then(checkStatus)
         .then(response => response.json())
         .then(data => {
