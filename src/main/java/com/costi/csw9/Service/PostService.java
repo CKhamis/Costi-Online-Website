@@ -1,10 +1,8 @@
 package com.costi.csw9.Service;
 
-import ch.qos.logback.core.encoder.EchoEncoder;
 import com.costi.csw9.Model.*;
 import com.costi.csw9.Repository.PostRepository;
 import com.costi.csw9.Util.LogicTools;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,6 +11,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.costi.csw9.Util.LogicTools.POST_IMAGE_PATH;
 
@@ -26,6 +25,26 @@ public class PostService {
         this.postRepository = postRepository;
         this.attachmentService = attachmentService;
     }
+
+    public Post findById(Long id) throws Exception{
+        Optional<Post> optionalPost = postRepository.findById(id);
+        if(optionalPost.isPresent()){
+            Post post = optionalPost.get();
+            if(post.isEnabled()){
+                return post;
+            }
+            throw new Exception("Post" + LogicTools.INVALID_PERMISSIONS_MESSAGE);
+
+        }else{
+            throw new Exception("Post" + LogicTools.NOT_FOUND_MESSAGE);
+        }
+    }
+
+    public List<Post> findAll(){
+        return postRepository.findByEnabledAndIsPublicOrderByLastEditedDesc(true, true);
+    }
+
+    //Legacy methods
 
     public Post loadById(Long id) throws Exception {
         try{

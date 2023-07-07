@@ -37,9 +37,9 @@
             <th scope="col">Title</th>
             <th scope="col">Body</th>
             <th scope="col">Edited</th>
-            <th scope="col">Public</th>
+            <th scope="col">Visibility</th>
             <th scope="col">Edit</th>
-            <th scope="col">Disable</th>
+            <th scope="col">Status</th>
             <th scope="col">Delete</th>
         </tr>
         </thead>
@@ -130,7 +130,7 @@
     function renderTable(){
         let tableContent = ``;
         for(let announcement of allAnnouncements){
-            let enableToggle = announcement.enable ?`<button onclick="toggleEnable(${announcement.id})" class="btn btn-success btn-sm">Enable</button>` : `<button onclick="toggleEnable(${announcement.id})" class="btn btn-warning btn-sm">Disable</button>`;
+            let enableToggle = announcement.enable ?`<button onclick="toggleEnable(${announcement.id})" class="btn btn-success btn-sm">Enabled</button>` : `<button onclick="toggleEnable(${announcement.id})" class="btn btn-warning btn-sm">Disabled</button>`;
             tableContent += `
             <tr>
                 <td>${announcement.id}</td>
