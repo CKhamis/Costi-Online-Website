@@ -1,6 +1,7 @@
 package com.costi.csw9.Controller.API;
 
 import com.costi.csw9.Model.Announcement;
+import com.costi.csw9.Model.Post;
 import com.costi.csw9.Service.COMTService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,6 @@ public class COMTController {
         }
     }
 
-    //FIXME: the newest date thing doesn't work
     @GetMapping("/announcement/analytics")
     @ResponseBody
     public Map<String, Object> getAnnouncementAnalytics(){
@@ -112,5 +112,56 @@ public class COMTController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting announcement: " + e.getMessage());
         }
+    }
+
+    /*
+        Newsroom
+     */
+
+    @PostMapping("/newsroom/view")
+    public ResponseEntity<Post> getPostById(@RequestParam("id") Long id){
+        try {
+            Post post = comtService.findPostById(id);
+            return ResponseEntity.ok(post);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/v/analytics")
+    @ResponseBody
+    public Map<String, Object> getPostAnalytics(){
+        Map<String, Object> jsonResponse = new HashMap<>();
+        List<Post> allPosts = comtService.findAllPosts();
+        jsonResponse.put("totalPosts", allPosts.size());
+
+        int numViews = 0, numEnabled = 0, numDisabled = 0, numPublic = 0, bodyLength = 0;
+        for(Post post : allPosts){
+            numViews += post.getViews();
+            bodyLength += post.getBody().length();
+
+            if(post.isEnabled()){
+                numEnabled ++;
+            }else{
+                numDisabled ++;
+            }
+
+            if(post.isPublic()){
+                numPublic ++;
+            }
+        }
+
+        jsonResponse.put("totalViews", numViews);
+        jsonResponse.put("totalEnabled", numEnabled);
+        jsonResponse.put("totalDisabled", numDisabled);
+        jsonResponse.put("totalPublic", numPublic);
+
+        if(allPosts.size() == 0){
+            jsonResponse.put("averageBodyLength", "?");
+        }else{
+            jsonResponse.put("totalPublic", bodyLength / allPosts.size());
+        }
+
+        return jsonResponse;
     }
 }

@@ -54,10 +54,6 @@ public class PostService {
         }
     }
 
-    public List<Post> getByCategory(String category){
-        return postRepository.findByCategoryOrderByLastEditedDesc(category);
-    }
-
     public List<Post> getByCategoryFixedAmountWithException(String category, Long exception, int entries){
         List<Post> original = postRepository.findByCategoryAndIdNotOrderByLastEditedDesc(category, exception), outputList = new ArrayList<>();
         for (int i = 0; i < entries && i < original.size(); i++) {
