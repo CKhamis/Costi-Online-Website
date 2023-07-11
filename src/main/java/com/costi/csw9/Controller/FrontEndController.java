@@ -969,7 +969,7 @@ public class FrontEndController {
     }
 
     @GetMapping("/Minecraft/vote/results")
-    public String getResults(Model model, Principal principal) {
+    public String getResults(Model model) {
         return "minecraft/ElectionResults";
     }
 
@@ -981,42 +981,25 @@ public class FrontEndController {
 
     // Costi Labs
     @GetMapping("/Labs")
-    public String getLabs(Model model, Principal principal) {
+    public String getLabs() {
         return "labs/Home";
     }
     @GetMapping("/Labs/LED")
-    public String getLED(Model model, Principal principal) {
+    public String getLED() {
         return "labs/LED";
     }
 
     // Newsroom
     @GetMapping("/Newsroom")
-    public String getNewsroomHome(Model model) {
+    public String getNewsroomHome() {
         return "newsroom/NewsroomHome";
     }
 
     @GetMapping("/Newsroom/{PageId}/view")
-    public String getNewsroomView(@PathVariable Long PageId, Model model, Principal principal, HttpSession session) {
-        try{
-            Post post = postService.loadById(PageId);
-            User user = getCurrentUser(principal);
-
-            List<Post> recent = postService.getByApprovalFixedAmountWithException(true, post.getId(), 5), related = postService.getByCategoryFixedAmountWithException(post.getCategory(), post.getId(), 5);
-            model.addAttribute("post", post);
-            model.addAttribute("isViewable", post.isEnabled() || user.getRole() == UserRole.OWNER);
-            model.addAttribute("isOwner",user.getRole() == UserRole.OWNER);
-            model.addAttribute("relatedPosts", related);
-            model.addAttribute("recentPosts", recent);
-
-            if (session.getAttribute("noViewIncrement" + post.getId()) == null) {
-                postService.addView(post);
-                session.setAttribute("noViewIncrement" + post.getId(), true);
-            }
-            return "newsroom/ViewPost";
-        }catch (Exception e){
-            // Post not found
-            return "redirect:/Account";
-        }
+    public String getNewsroomView(@PathVariable Long PageId, Model model, Principal principal) {
+        model.addAttribute("id", PageId);
+        model.addAttribute("isOwner", getCurrentUser(principal).isOwner());
+        return "newsroom/ViewPost";
     }
 
     public void broadcastEmergencyPostNotification(User current) throws Exception{

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -26,10 +27,16 @@ public class PostController {
     }
 
     @GetMapping("/view")
-    public ResponseEntity<Post> getAnnouncementById(@RequestParam("id") Long id) {
+    public ResponseEntity<Post> getAnnouncementById(@RequestParam("id") Long id, HttpSession session) {
         try {
             Post post = postService.findById(id);
             if (post.isEnabled()) {
+
+                if (session.getAttribute("noViewIncrement" + post.getId()) == null) {
+                    postService.addView(post);
+                    session.setAttribute("noViewIncrement" + post.getId(), true);
+                }
+
                 return ResponseEntity.ok(post);
             } else {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
