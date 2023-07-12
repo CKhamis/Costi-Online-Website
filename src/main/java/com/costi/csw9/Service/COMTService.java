@@ -78,14 +78,14 @@ public class COMTService {
         postRepository.deleteById(id);
     }
 
-    public void save(Post post){
+    public void savePost(Post post){
         post.setLastEdited(LocalDateTime.now());
         post.setImagePath("/images/default-posts/" + post.getCategory() + ".jpg");
         postRepository.save(post);
     }
 
     //TODO: low priority, optimize this more
-    public void save(Post post, MultipartFile file) throws Exception{
+    public void savePost(Post post, MultipartFile file) throws Exception{
         if(file.isEmpty()){
             // File is not present. Check to see if there is an existing post to edit
             try{

@@ -1,14 +1,19 @@
 package com.costi.csw9.Controller.API;
 
 import com.costi.csw9.Model.Announcement;
+import com.costi.csw9.Model.FlashMessage;
 import com.costi.csw9.Model.Post;
 import com.costi.csw9.Service.COMTService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
@@ -84,7 +89,7 @@ public class COMTController {
     }
 
     @GetMapping("/announcement/all")
-    public ResponseEntity<List<Announcement>> getAnnouncementsByApproval() {
+    public ResponseEntity<List<Announcement>> getAnnouncements() {
         List<Announcement> announcements = comtService.findAllAnnouncements();
         return ResponseEntity.ok(announcements);
     }
@@ -128,7 +133,13 @@ public class COMTController {
         }
     }
 
-    @GetMapping("/v/analytics")
+    @GetMapping("/newsroom/all")
+    public ResponseEntity<List<Post>> getPosts(){
+        List<Post> posts = comtService.findAllPosts();
+        return ResponseEntity.ok(posts);
+    }
+
+    @GetMapping("/newsroom/analytics")
     @ResponseBody
     public Map<String, Object> getPostAnalytics(){
         Map<String, Object> jsonResponse = new HashMap<>();
@@ -164,4 +175,36 @@ public class COMTController {
 
         return jsonResponse;
     }
+
+    @PostMapping("/newsroom/delete")
+    public ResponseEntity<String> deletePost(@RequestBody Long id) {
+        try {
+            comtService.deletePost(id);
+            return ResponseEntity.ok("Post deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting post: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/newsroom/save")
+    public ResponseEntity<?> savePost(@Valid @RequestBody Post post, @RequestParam(value = "image", required = false) MultipartFile file) {
+        // Check if the file parameter is present
+        if (file != null) {
+            // File is present, handle it accordingly
+            try{
+                comtService.savePost(post, file);
+                return ResponseEntity.status(HttpStatus.OK).body("Post Saved");
+            }catch (Exception e){
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving post: " + e.getMessage());
+            }
+        }
+
+        try{
+            comtService.savePost(post);
+            return ResponseEntity.status(HttpStatus.OK).body("Post Saved");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving post: " + e.getMessage());
+        }
+    }
+
 }

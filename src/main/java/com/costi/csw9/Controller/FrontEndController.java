@@ -580,7 +580,7 @@ public class FrontEndController {
         return "moderator/AnnouncementTools";
     }
 
-    private static String getErrorString(BindingResult result) {
+    public static String getErrorString(BindingResult result) {
         String errors = "";
         if(result.getAllErrors().size() > 1){
 
