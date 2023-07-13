@@ -8,7 +8,7 @@
     <input id="id-selector" type="hidden" th:value="${id}"/>
     <div class="row">
         <div class="d-none d-md-block col-md-3 px-5">
-            <h3 class="text-secondary fw-bold" id="left-category">Category</h3>
+            <h3 class="text-1 fw-bold" id="left-category">Category</h3>
 <!--            <th:block th:each="related : ${relatedPosts}">-->
 <!--                <a th:href="|/Newsroom/*{related.getId()}/view|">-->
 <!--                    <img th:src="@{*{related.getImagePath()}}" style="aspect-ratio: 16 / 9; object-fit:cover;width: 100%;"/>-->
@@ -29,13 +29,13 @@
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="/" class="text-1">Costi Online</a></li>
                             <li class="breadcrumb-item"><a href="/Newsroom" class="text-1">Newsroom Home</a></li>
-                            <li class="breadcrumb-item active text-1" aria-current="page" id="breadcrumb-title"></li>
+                            <li class="breadcrumb-item text-1" aria-current="page" id="breadcrumb-title"></li>
                         </ol>
                     </nav>
                 </div>
-                <a href="/Newsroom" class="text-secondary d-block d-md-none">< Back to Newsroom</a>
+                <a href="/Newsroom" class="text-1 d-block d-md-none">< Back to Newsroom</a>
                 <div class="col col-md-4 d-none d-md-block">
-                    <p id="header-last-edited" class="text-end text-secondary"></p>
+                    <p id="header-last-edited" class="text-end text-1"></p>
                 </div>
             </div>
             <img id="body-image" class="newsroom-slide"/>
@@ -56,7 +56,7 @@
 
         </div>
         <div class="d-none d-lg-block col-lg-3 px-lg-5">
-            <h3 class="text-secondary fw-bold">Recent content</h3>
+            <h3 class="text-1 fw-bold">Recent content</h3>
 <!--            <th:block th:each="recent : ${recentPosts}">-->
 <!--                <a th:href="|/Newsroom/*{recent.getId()}/view|">-->
 <!--                    <img th:src="@{*{recent.getImagePath()}}" style="aspect-ratio: 16 / 9; object-fit:cover;width: 100%;"/>-->
@@ -118,7 +118,7 @@
         document.getElementById("breadcrumb-title").textContent = post.title;
         document.getElementById("body-title").textContent = post.title;
         document.getElementById("body-subtitle").textContent = post.subtitle;
-        document.getElementById("header-last-edited").textContent = `Last Edited: ${post.lastEdited}`;
+        document.getElementById("header-last-edited").textContent = `Last Edited: ${post.dateEdited}`;
         document.getElementById("body-views").textContent = `Views: ${post.views}`;
         document.getElementById("body-image").src = post.imagePath;
         document.getElementById("body-body").innerHTML = post.body;
