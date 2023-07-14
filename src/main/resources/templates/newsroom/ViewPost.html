@@ -9,7 +9,7 @@
     <div class="row">
         <div class="d-none d-md-block col-md-3 px-5" id="left-panel">
             <h3 class="text-1 fw-bold">Category</h3>
-                <h3>No Posts :(</h3>
+                <h4>No Posts :(</h4>
         </div>
         <div class="col-12 col-md-8 col-lg-6" id="body-content">
             <div class="row">
@@ -46,7 +46,7 @@
         </div>
         <div class="d-none d-lg-block col-lg-3 px-lg-5" id="right-panel">
             <h3 class="text-1 fw-bold">Recent content</h3>
-                <h3>No Posts :(</h3>
+                <h4>No Posts :(</h4>
         </div>
     </div>
 </main>
@@ -72,9 +72,14 @@
             return Promise.all([response1, response2]);
         })
         .then(data => {
-            post = data[0].json();
-            allNews = data[1].json();
+            let postDownload = data[0].json();
+            let recommendationDownload = data[1].json();
 
+            return Promise.all([postDownload, recommendationDownload]);
+        })
+        .then(data => {
+            post = data[0]; // post data
+            allNews = data[1]; // recommendation data
             renderNews();
             renderRecommendations();
         })
@@ -82,7 +87,6 @@
             bodyContent.innerHTML = `<h3 class="text-center fw-bold">There was an error receiving data from Costi Online Services</h3><p class="text-center">${error}</p>`;
             console.error('Error retrieving data:', error);
         });
-
 
 
     function renderNews(){
@@ -99,43 +103,43 @@
         //Render left panel
         let leftTitle = "Other Posts"
         if(post.category == "NEWS"){
-            leftTitle.innerText = "Other News";
+            leftTitle = "Other News";
         }else if(post.category == "ACHIEVEMENT"){
-            leftTitle.innerText = "Other Achievements";
+            leftTitle = "Other Achievements";
         }else if(post.category == "JOURNAL"){
-            leftTitle.innerText = "Other Journals";
+            leftTitle = "Other Journals";
         }else if(post.category == "EMERGENCY"){
-            leftTitle.innerText = "Other Emergencies";
+            leftTitle = "Other Emergencies";
         }else if(post.category == "ARTICLE"){
-            leftTitle.innerText = "Other Articles";
+            leftTitle = "Other Articles";
         }else if(post.category == "DISCOVERY"){
-            leftTitle.innerText = "Other Discoveries";
+            leftTitle = "Other Discoveries";
         }else if(post.category == "UPDATE"){
-            leftTitle.innerText = "Other Updates";
+            leftTitle = "Other Updates";
         }else if(post.category == "EVENT" || post.category == "INVITATION"){
-            leftTitle.innerText = "Other Events";
+            leftTitle = "Other Events";
         }
 
         let leftPanel = `<h3 class="text-1 fw-bold">${leftTitle}</h3>`;
         let rightPanel = `<h3 class="text-1 fw-bold">Recent Posts</h3>`;
         for(let otherPost of allNews){
-            if(post.category === otherPost.category){
+            if(post.category === otherPost.category && post.id != otherPost.id){
                 leftPanel += `
                     <a href="/Newsroom/${otherPost.id}/view">
                        <img src="${otherPost.imagePath}" style="aspect-ratio: 16 / 9; object-fit:cover;width: 100%;"/>
                         <div class="mb-5">
-                            <h4 class="fw-bold text-1 text-decoration-none">${post.title}</h4>
-                            <p class="text-secondary mb-5">${post.timeSinceEdited}</p>
+                            <h4 class="fw-bold text-1 text-decoration-none">${otherPost.title}</h4>
+                            <p class="text-secondary mb-5">${otherPost.timeSinceEdited}</p>
                         </div>
                     </a>
                 `;
-            }else{
+            }else if(post.id != otherPost.id){
                 rightPanel += `
                     <a href="/Newsroom/${otherPost.id}/view">
                        <img src="${otherPost.imagePath}" style="aspect-ratio: 16 / 9; object-fit:cover;width: 100%;"/>
                         <div class="mb-5">
-                            <h4 class="fw-bold text-1 text-decoration-none">${post.title}</h4>
-                            <p class="text-secondary mb-5">${post.timeSinceEdited}</p>
+                            <h4 class="fw-bold text-1 text-decoration-none">${otherPost.title}</h4>
+                            <p class="text-secondary mb-5">${otherPost.timeSinceEdited}</p>
                         </div>
                     </a>
                 `;
