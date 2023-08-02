@@ -252,19 +252,7 @@ public class FrontEndController {
         return "moderator/AdminAccountView";
     }
 
-    @GetMapping("/COMT/Newsroom/Create")
-    public String getNewsroomPostMaker(Model model, Principal principal, RedirectAttributes redirectAttributes) {
-        User user = getCurrentUser(principal);
-        model.addAttribute("isAllowed", user.getRole() == UserRole.OWNER);
-        model.addAttribute("categories", PostCategory.values());
-        model.addAttribute("title", "Create Newsroom Post");
-        if (!model.containsAttribute("post")) {
-            model.addAttribute("post", new Post());
-        }
-        model.addAttribute("action", "/COMT/Newsroom/Create");
 
-        return "moderator/NewPost";
-    }
     @GetMapping("/COMT/Notifications/Create")
     public String getCostiOnlineNotificationSettings(Model model, Principal principal, RedirectAttributes redirectAttributes) {
         // TODO: add a nicer way to enable/disable, lock/unlock accounts
