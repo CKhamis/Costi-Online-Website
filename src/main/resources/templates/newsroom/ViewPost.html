@@ -122,6 +122,8 @@
 
         let leftPanel = `<h3 class="text-1 fw-bold">${leftTitle}</h3>`;
         let rightPanel = `<h3 class="text-1 fw-bold">Recent Posts</h3>`;
+        let leftCount = 0, rightCount = 0;
+
         for(let otherPost of allNews){
             if(post.category === otherPost.category && post.id != otherPost.id){
                 leftPanel += `
@@ -133,6 +135,7 @@
                         </div>
                     </a>
                 `;
+                leftCount++;
             }else if(post.id != otherPost.id){
                 rightPanel += `
                     <a href="/Newsroom/${otherPost.id}/view">
@@ -143,9 +146,17 @@
                         </div>
                     </a>
                 `;
+                rightCount++;
             }
         }
 
+        if(leftCount == 0){
+            leftPanel += "<p>No Posts :(</p>";
+        }
+
+        if(rightCount == 0){
+            rightPanel += "<p>No Posts :(</p>";
+        }
         document.querySelector("#left-panel").innerHTML = leftPanel;
         document.querySelector("#right-panel").innerHTML = rightPanel;
     }
