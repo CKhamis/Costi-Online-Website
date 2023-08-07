@@ -170,7 +170,7 @@ public class COMTController {
         if(allPosts.size() == 0){
             jsonResponse.put("averageBodyLength", "?");
         }else{
-            jsonResponse.put("totalPublic", bodyLength / allPosts.size());
+            jsonResponse.put("averageBodyLength", bodyLength / allPosts.size());
         }
 
         return jsonResponse;
