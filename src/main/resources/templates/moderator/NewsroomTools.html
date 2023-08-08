@@ -5,8 +5,6 @@
 <div th:replace="moderator/ModeratorComponents :: moderatorNav"></div>
 
 <main class="container mt-3">
-    <div th:replace="moderator/ModeratorComponents :: lightNavigation"></div>
-
     <div class="row d-flex">
         <div class="col-12 col-md-7 h-100">
             <div class="container-fluid bg-2 py-3" id="overview-container">
@@ -40,23 +38,20 @@
     <div class="container-fluid" id="error-container">
 
     </div>
-    <div class="container-fluid bg-2 mt-4" id="news-container">
-        <!-- lights here -->
+    <div class="container-fluid bg-2 mt-4 p-0" id="news-container">
         <table class="table table-sm align-middle table-hover table-dark">
             <thead>
             <tr>
-                <th scope="col">Address</th>
                 <th scope="col">ID</th>
-                <th scope="col">Label</th>
-                <th scope="col">Modified</th>
-                <th scope="col">Status</th>
-                <th scope="col">Last Connected</th>
-                <th scope="col">Color</th>
-                <th scope="col">Pattern</th>
-                <th scope="col">Favorite</th>
+                <th scope="col">Image</th>
+                <th scope="col">Title</th>
+                <th scope="col">Subtitle</th>
+                <th scope="col">Category</th>
+                <th scope="col">Last Edited</th>
+                <th scope="col">Views</th>
+                <th scope="col">View</th>
                 <th scope="col">Public</th>
-                <th scope="col">Enabled</th>
-                <th scope="col">Sync</th>
+                <th scope="col">Enable</th>
                 <th scope="col">Edit</th>
                 <th scope="col">Delete</th>
             </tr>
@@ -107,10 +102,11 @@
 <div th:replace="Components :: scripts"></div>
 <script>
     //data
-    let overviewData;
+    let overviewData, postList;
 
     const overviewContainer = document.querySelector("#overview-container");
     const errorContainer = document.querySelector("#news-container");
+    const table = document.querySelector("#table-body");
 
     //GET functions
     function updateAnalytics(){
@@ -127,8 +123,22 @@
                 console.error('Error retrieving data:', error);
             });
     }
+    function updatePosts(){
+        fetch("/api/management/newsroom/all")
+            .then(checkStatus)
+            .then(response => response.json())
+            .then(data => {
+                postList = data;
+                renderAllPosts();
+            })
+            .catch(error => {
+                // error handling
+                errorContainer.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>";
+                console.error('Error retrieving data:', error);
+            });
+    }
     updateAnalytics();
-
+    updatePosts();
 
     //Render
     function renderAnalytics(){
@@ -138,6 +148,10 @@
                 <div>
                     <p class="fs-1 fw-bold  text-center">${overviewData["totalViews"]}</p>
                     <p class="text-center">All Views</p>
+                </div>
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${overviewData["totalPosts"]}</p>
+                    <p class="text-center">Posts</p>
                 </div>
                 <div>
                     <p class="fs-1 fw-bold  text-center">${overviewData["totalEnabled"]}</p>
@@ -155,11 +169,52 @@
                     <p class="fs-1 fw-bold  text-center">${overviewData["averageBodyLength"]}</p>
                     <p class="text-center">μ Length</p>
                 </div>
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${overviewData["oldestPost"]}</p>
+                    <p class="text-center">Oldest</p>
+                </div>
             </div>
 
         `;
     }
+    function renderAllPosts(){
+        let tableContent = ``;
+        for(let i = 0; i < postList.length; i++){
+            let post = postList[i];
 
+            tableContent += `
+            <tr>
+                <td>${post.id}</td>
+                <td>
+                    <img src="${post.imagePath}" class="newsroom-slide" style="height:40px">
+                </td>
+                <td>${post.title}</td>
+                <td>${post.subtitle}</td>
+                <td>
+                    <span class="badge ${post.category === 'ACHIEVEMENT' ? 'bg-primary' : post.category === 'NEWS' ? 'bg-secondary' : post.category === 'JOURNAL' ? 'bg-info' : post.category === 'EMERGENCY' ? 'bg-danger' : post.category === 'ARTICLE' ? 'bg-warning' : post.category === 'DISCOVERY' ? 'bg-success' : post.category === 'UPDATE' ? 'bg-dark' : post.category === 'EVENT' ? 'bg-success' : 'bg-dark'}">${post.category}</span>
+                </td>
+                <td>${post.dateEdited}</td>
+                <td>${post.views}</td>
+                <td>
+                    <a class="btn btn-sm btn-primary" href="/Newsroom/${post.id}/view" role="button">View</a>
+                </td>
+                <td>
+                    <button class="btn btn-sm ${post.enable === true ? 'btn-primary' : 'btn-secondary'}" onclick="toggleEnable(${post.id})">${post.enable === true ? 'Disable' : 'Enable'}</button>
+                </td>
+                <td>
+                    <button class="btn btn-sm ${post.public === true ? 'btn-secondary' : 'btn-primary'}" onclick="toggleVisibility(${post.id})">${post.public === true ? 'Private' : 'Public'}</button>
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-secondary" href="/Newsroom/${post.id}/edit" role="button">Edit</a>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="deletePost(${post.id})">Delete</button>
+                </td>
+            </tr>
+            `;
+        }
+        table.innerHTML = tableContent;
+    }
 </script>
 </body>
 </html>

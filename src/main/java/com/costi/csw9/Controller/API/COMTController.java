@@ -147,6 +147,8 @@ public class COMTController {
         jsonResponse.put("totalPosts", allPosts.size());
 
         int numViews = 0, numEnabled = 0, numDisabled = 0, numPublic = 0, bodyLength = 0;
+        LocalDateTime oldestPost = oldestPost = LocalDateTime.MAX;
+
         for(Post post : allPosts){
             numViews += post.getViews();
             bodyLength += post.getBody().length();
@@ -160,6 +162,16 @@ public class COMTController {
             if(post.isPublic()){
                 numPublic ++;
             }
+
+            if(post.getLastEdited().isBefore(oldestPost)){
+                oldestPost = post.getLastEdited();
+            }
+        }
+
+        if(allPosts.size() == 0){
+            jsonResponse.put("oldestPost", "?");
+        }else{
+            jsonResponse.put("oldestPost", ChronoUnit.DAYS.between(oldestPost, LocalDateTime.now()) + "d");
         }
 
         jsonResponse.put("totalViews", numViews);
