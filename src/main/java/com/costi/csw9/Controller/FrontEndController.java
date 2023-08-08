@@ -218,13 +218,14 @@ public class FrontEndController {
     }
 
     @GetMapping("/COMT/Accounts")
-    public String getCostiOnlineAccountTools(Model model, Principal principal, RedirectAttributes redirectAttributes) {
+    public String getCostiOnlineAccountTools(Model model) {
         model.addAttribute("all", userService.loadAll());
         return "moderator/AccountTools";
     }
 
     @GetMapping("/COMT/Newsroom")
-    public String getNewsroomTools() {
+    public String getNewsroomTools(Model model) {
+        model.addAttribute("categories", PostCategory.values());
         return "moderator/NewsroomTools";
     }
 
@@ -780,6 +781,7 @@ public class FrontEndController {
 
     @RequestMapping("/COMT/Newsroom/{PostId}/edit")
     public String getEditPost(@PathVariable Long PostId, Model model) {
+        model.addAttribute("categories", PostCategory.values());
         model.addAttribute("id", PostId);
         return "moderator/EditPost";
     }

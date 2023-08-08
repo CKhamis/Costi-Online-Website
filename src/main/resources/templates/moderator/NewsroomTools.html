@@ -66,27 +66,50 @@
     <div class="modal-dialog">
         <div class="modal-content border-box">
             <div class="modal-header">
-                <h5 class="modal-title" id="newLightModalLabel">Add New Light</h5>
+                <h5 class="modal-title" id="newLightModalLabel">Create New Newsroom Post</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="new-light-form">
                     <div class="mb-3">
-                        <label for="address-input" class="form-label">IP Address</label>
-                        <input type="text" class="form-control" id="address-input">
+                        <label for="file" class="form-label">Upload image (optional)</label>
+                        <input class="form-control" type="file" id="file" name="image" accept="image/png, image/jpeg">
                     </div>
-                    <div class="mb-3">
-                        <label for="label-input" class="form-label">Label</label>
-                        <input type="text" class="form-control" id="label-input">
+
+                    <div class="form-row row">
+                        <div class="col-12 mb-3">
+                            <label for="title2">Title</label>
+                            <input type="text" class="form-control" id="title2"
+                                   placeholder="Title here" required>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="color-input" class="form-label">Color</label>
-                        <input type="text" class="form-control" id="color-input">
+                    <div class="form-row row">
+                        <div class="col-md-8 mb-3">
+                            <label for="sub2">Subtitle</label>
+                            <input type="text" class="form-control" id="sub2"
+                                   placeholder="subtitle" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="cat">Post Category</label>
+                            <select id="cat"  class="form-control">
+                                <option value="" disabled="disabled">Select a category</option>
+                                <option th:each="cat : ${categories}" th:value="${cat.name}" th:text="${cat.name}">Error</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="pattern-input" class="form-label">Pattern</label>
-                        <input type="text" class="form-control" id="pattern-input">
+                    <div class="form-row row">
+                        <div class="col-12 mb-3">
+                            <label for="input2">Content Body</label>
+                            <textarea type="text" rows="10" class="form-control" id="input2" placeholder="body content" required></textarea>
+                        </div>
                     </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" value="" id="disclaimerCheck2" required>
+                        <label class="form-check-label" for="disclaimerCheck2">
+                            There is no personally identifying content in my submission
+                        </label>
+                    </div>
+                    <input type="hidden" value=""/>
                 </form>
             </div>
             <div class="modal-footer">
