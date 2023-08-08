@@ -22,11 +22,11 @@
                         <img th:src="@{/icons/Refresh.svg}" />
                         <p class="text-center">Refresh</p>
                     </div>
-                    <div class="action-button" id="disable-all-button">
+                    <div class="action-button" onclick="disableAll()">
                         <img th:src="@{/icons/Disable.svg}" />
                         <p class="text-center">Disable All</p>
                     </div>
-                    <div class="action-button" id="private-all-button">
+                    <div class="action-button" onclick="privateAll()">
                         <img th:src="@{/icons/Private.svg}" />
                         <p class="text-center">Private All</p>
                     </div>
@@ -242,6 +242,24 @@
     function deletePost(id){
         postData("/api/management/newsroom/delete", id)
             .then(refresh);
+    }
+
+    function disableAll(){
+        for(let i = 0; i < postList.length; i++) {
+            let post = postList[i];
+            post.enabled = false;
+            postData("/api/management/newsroom/save", post)
+                .then(refresh);
+        }
+    }
+
+    function privateAll(){
+        for(let i = 0; i < postList.length; i++) {
+            let post = postList[i];
+            post.public = false;
+            postData("/api/management/newsroom/save", post)
+                .then(refresh);
+        }
     }
 
     //Helper functions
