@@ -778,6 +778,12 @@ public class FrontEndController {
         return "newsroom/ViewPost";
     }
 
+    @RequestMapping("/COMT/Newsroom/{PostId}/edit")
+    public String getEditPost(@PathVariable Long PostId, Model model) {
+        model.addAttribute("id", PostId);
+        return "moderator/EditPost";
+    }
+
     public void broadcastEmergencyPostNotification(User current) throws Exception{
         for(User user : userService.loadAll()){
             AccountNotification notification = new AccountNotification();

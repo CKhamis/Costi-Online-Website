@@ -18,7 +18,7 @@
                         <img th:src="@{/icons/New.svg}" />
                         <p class="text-center">New</p>
                     </div>
-                    <div class="action-button" id="refresh-button">
+                    <div class="action-button" onclick="refresh()">
                         <img th:src="@{/icons/Refresh.svg}" />
                         <p class="text-center">Refresh</p>
                     </div>
@@ -100,6 +100,7 @@
 
 <div th:replace="Components :: JS"></div>
 <div th:replace="Components :: scripts"></div>
+<div th:replace="moderator/ModeratorComponents :: network-util"></div>
 <script>
     //data
     let overviewData, postList;
@@ -107,6 +108,12 @@
     const overviewContainer = document.querySelector("#overview-container");
     const errorContainer = document.querySelector("#news-container");
     const table = document.querySelector("#table-body");
+
+    function refresh(){
+        updateAnalytics();
+        updatePosts();
+    }
+    refresh();
 
     //GET functions
     function updateAnalytics(){
@@ -137,8 +144,7 @@
                 console.error('Error retrieving data:', error);
             });
     }
-    updateAnalytics();
-    updatePosts();
+
 
     //Render
     function renderAnalytics(){
@@ -165,7 +171,7 @@
                     <p class="fs-1 fw-bold  text-center">${overviewData["totalPublic"]}</p>
                     <p class="text-center">Public</p>
                 </div>
-                <div>
+                <div class="d-none d-lg-block">
                     <p class="fs-1 fw-bold  text-center">${overviewData["averageBodyLength"]}</p>
                     <p class="text-center">μ Length</p>
                 </div>
@@ -190,22 +196,22 @@
                 </td>
                 <td>${post.title}</td>
                 <td>${post.subtitle}</td>
-                <td>
+                <td class="text-center">
                     <span class="badge ${post.category === 'ACHIEVEMENT' ? 'bg-primary' : post.category === 'NEWS' ? 'bg-secondary' : post.category === 'JOURNAL' ? 'bg-info' : post.category === 'EMERGENCY' ? 'bg-danger' : post.category === 'ARTICLE' ? 'bg-warning' : post.category === 'DISCOVERY' ? 'bg-success' : post.category === 'UPDATE' ? 'bg-dark' : post.category === 'EVENT' ? 'bg-success' : 'bg-dark'}">${post.category}</span>
                 </td>
                 <td>${post.dateEdited}</td>
-                <td>${post.views}</td>
+                <td><p class="text-center fw-bold">${post.views}</p></td>
                 <td>
-                    <a class="btn btn-sm btn-primary" href="/Newsroom/${post.id}/view" role="button">View</a>
+                    <a class="btn btn-sm btn-primary ${post.enabled === true ? '' : 'disabled'}" href="/Newsroom/${post.id}/view" role="button">View</a>
                 </td>
                 <td>
-                    <button class="btn btn-sm ${post.enable === true ? 'btn-primary' : 'btn-secondary'}" onclick="toggleEnable(${post.id})">${post.enable === true ? 'Disable' : 'Enable'}</button>
+                    <button class="btn btn-sm ${post.enabled === true ? 'btn-secondary' : 'btn-primary'}" onclick="toggleEnable(${post.id})">${post.enabled === true ? 'Disable' : 'Enable'}</button>
                 </td>
                 <td>
                     <button class="btn btn-sm ${post.public === true ? 'btn-secondary' : 'btn-primary'}" onclick="toggleVisibility(${post.id})">${post.public === true ? 'Private' : 'Public'}</button>
                 </td>
                 <td>
-                    <a class="btn btn-sm btn-secondary" href="/Newsroom/${post.id}/edit" role="button">Edit</a>
+                    <a class="btn btn-sm btn-secondary" href="/COMT/Newsroom/${post.id}/edit" role="button">Edit</a>
                 </td>
                 <td>
                     <button type="button" class="btn btn-sm btn-danger" onclick="deletePost(${post.id})">Delete</button>
@@ -214,6 +220,33 @@
             `;
         }
         table.innerHTML = tableContent;
+    }
+
+    //POST functions
+    function toggleEnable(id){
+        let post = getObjectById(id);
+
+        post.enabled = !post.enabled;
+        postData("/api/management/newsroom/save", post)
+            .then(refresh);
+    }
+
+    function toggleVisibility(id){
+        let post = getObjectById(id);
+
+        post.public = !post.public;
+        postData("/api/management/newsroom/save", post)
+            .then(refresh);
+    }
+
+    function deletePost(id){
+        postData("/api/management/newsroom/delete", id)
+            .then(refresh);
+    }
+
+    //Helper functions
+    function getObjectById(id) {
+        return postList.find(obj => obj["id"] == id);
     }
 </script>
 </body>

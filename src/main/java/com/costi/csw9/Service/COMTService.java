@@ -80,8 +80,13 @@ public class COMTService {
 
     public void savePost(Post post){
         post.setLastEdited(LocalDateTime.now());
-        post.setImagePath("/images/default-posts/" + post.getCategory() + ".jpg");
-        postRepository.save(post);
+        if (post.getId() == null || !postRepository.existsById(post.getId())) {
+            post.setImagePath("/images/default-posts/" + post.getCategory() + ".jpg");
+            postRepository.save(post);
+        } else {
+            //Post already Exists
+            postRepository.save(post);
+        }
     }
 
     //TODO: low priority, optimize this more
