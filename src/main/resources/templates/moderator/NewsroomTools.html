@@ -283,8 +283,7 @@
         formData.append('content', content);
         formData.append('image', imageFile);
 
-        // Call the postData function to send the data
-        postData("/api/management/newsroom/save", formData)
+        postDataWithFile("/api/management/newsroom/save", formData)
             .then(response => {
                 // Handle the response if needed
                 console.log(response);
@@ -294,6 +293,33 @@
                 console.error(error);
             });
     }
+
+    function postDataWithFile(url, formData) {
+        // Retrieve the CSRF token from the meta tags
+        let csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+        let csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+        // Create the fetch request headers and include the CSRF token
+        let headers = new Headers();
+        headers.append(csrfHeader, csrfToken);
+
+        // Create the fetch options
+        let options = {
+            method: 'POST',
+            headers: headers,
+            body: formData
+        };
+
+        // Perform the fetch request
+        return fetch(url, options)
+            .then(checkStatus)
+            .then(response => response.json())
+            .catch(error => {
+                // Handle any errors
+                console.error(error);
+            });
+    }
+
 
 
     function disableAll(){

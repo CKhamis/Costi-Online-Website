@@ -199,22 +199,22 @@ public class COMTController {
     }
 
     @PostMapping("/newsroom/save")
-    public ResponseEntity<?> savePost(@Valid @RequestBody Post post, @RequestParam(value = "image", required = false) MultipartFile file) {
+    public ResponseEntity<?> savePost(@ModelAttribute Post post, @RequestParam(value = "image", required = false) MultipartFile file) {
         // Check if the file parameter is present
-        if (file != null) {
+        if (file != null && !file.isEmpty()) {
             // File is present, handle it accordingly
-            try{
+            try {
                 comtService.savePost(post, file);
                 return ResponseEntity.status(HttpStatus.OK).body("Post Saved");
-            }catch (Exception e){
+            } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving post: " + e.getMessage());
             }
         }
 
-        try{
+        try {
             comtService.savePost(post);
             return ResponseEntity.status(HttpStatus.OK).body("Post Saved");
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving post: " + e.getMessage());
         }
     }
