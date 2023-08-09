@@ -50,8 +50,8 @@
                 <th scope="col">Last Edited</th>
                 <th scope="col">Views</th>
                 <th scope="col">View</th>
-                <th scope="col">Public</th>
                 <th scope="col">Enable</th>
+                <th scope="col">Public</th>
                 <th scope="col">Edit</th>
                 <th scope="col">Delete</th>
             </tr>
@@ -99,8 +99,8 @@
                     </div>
                     <div class="form-row row">
                         <div class="col-12 mb-3">
-                            <label for="input">Content Body</label>
-                            <textarea type="text" rows="10" class="form-control" id="input" placeholder="body content" required></textarea>
+                            <label for="body">Content Body</label>
+                            <textarea type="text" rows="10" class="form-control" id="body" placeholder="body content" required></textarea>
                         </div>
                     </div>
                     <div class="form-check mb-3">
@@ -124,6 +124,7 @@
 <div th:replace="Components :: JS"></div>
 <div th:replace="Components :: scripts"></div>
 <div th:replace="moderator/ModeratorComponents :: network-util"></div>
+<div th:replace="moderator/ModeratorComponents :: form-data-script"></div>
 <script>
     //data
     let overviewData, postList;
@@ -228,10 +229,10 @@
                     <a class="btn btn-sm btn-primary ${post.enabled === true ? '' : 'disabled'}" href="/Newsroom/${post.id}/view" role="button">View</a>
                 </td>
                 <td>
-                    <button class="btn btn-sm ${post.enabled === true ? 'btn-secondary' : 'btn-primary'}" onclick="toggleEnable(${post.id})">${post.enabled === true ? 'Disable' : 'Enable'}</button>
+                    <button class="btn btn-sm ${post.enabled === true ? 'btn-primary' : 'btn-secondary'}" onclick="toggleEnable(${post.id})">${post.enabled === true ? 'Enabled' : 'Disabled'}</button>
                 </td>
                 <td>
-                    <button class="btn btn-sm ${post.public === true ? 'btn-secondary' : 'btn-primary'}" onclick="toggleVisibility(${post.id})">${post.public === true ? 'Private' : 'Public'}</button>
+                    <button class="btn btn-sm ${post.public === true ? 'btn-primary' : 'btn-secondary'}" onclick="toggleVisibility(${post.id})">${post.public === true ? 'Public' : 'Private'}</button>
                 </td>
                 <td>
                     <a class="btn btn-sm btn-secondary" href="/COMT/Newsroom/${post.id}/edit" role="button">Edit</a>
@@ -248,17 +249,15 @@
     //POST functions
     function toggleEnable(id){
         let post = getObjectById(id);
-
         post.enabled = !post.enabled;
-        postData("/api/management/newsroom/save", post)
+        postDataWithFile("/api/management/newsroom/save", convertToFormData(post))
             .then(refresh);
     }
 
     function toggleVisibility(id){
         let post = getObjectById(id);
-
         post.public = !post.public;
-        postData("/api/management/newsroom/save", post)
+        postDataWithFile("/api/management/newsroom/save", convertToFormData(post))
             .then(refresh);
     }
 
@@ -272,7 +271,7 @@
         const title = document.getElementById('title').value;
         const subtitle = document.getElementById('sub').value;
         const category = document.getElementById('cat').value;
-        const content = document.getElementById('input').value;
+        const body = document.getElementById('body').value;
         const imageFile = document.getElementById('file').files[0];
 
         // Construct the FormData object
@@ -280,53 +279,22 @@
         formData.append('title', title);
         formData.append('subtitle', subtitle);
         formData.append('category', category);
-        formData.append('content', content);
+        formData.append('body', body);
         formData.append('image', imageFile);
 
         postDataWithFile("/api/management/newsroom/save", formData)
-            .then(response => {
-                // Handle the response if needed
-                console.log(response);
-            })
+            .then(refresh)
             .catch(error => {
                 // Handle any errors
                 console.error(error);
+                refresh();
             });
     }
-
-    function postDataWithFile(url, formData) {
-        // Retrieve the CSRF token from the meta tags
-        let csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-        let csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-
-        // Create the fetch request headers and include the CSRF token
-        let headers = new Headers();
-        headers.append(csrfHeader, csrfToken);
-
-        // Create the fetch options
-        let options = {
-            method: 'POST',
-            headers: headers,
-            body: formData
-        };
-
-        // Perform the fetch request
-        return fetch(url, options)
-            .then(checkStatus)
-            .then(response => response.json())
-            .catch(error => {
-                // Handle any errors
-                console.error(error);
-            });
-    }
-
-
-
     function disableAll(){
         for(let i = 0; i < postList.length; i++) {
             let post = postList[i];
             post.enabled = false;
-            postData("/api/management/newsroom/save", post)
+            postDataWithFile("/api/management/newsroom/save", convertToFormData(post))
                 .then(refresh);
         }
     }
@@ -335,7 +303,8 @@
         for(let i = 0; i < postList.length; i++) {
             let post = postList[i];
             post.public = false;
-            postData("/api/management/newsroom/save", post)
+
+            postDataWithFile("/api/management/newsroom/save", convertToFormData(post))
                 .then(refresh);
         }
     }
@@ -343,6 +312,19 @@
     //Helper functions
     function getObjectById(id) {
         return postList.find(obj => obj["id"] == id);
+    }
+
+    function convertToFormData(post){
+        const formData = new FormData();
+        formData.append('id', post.id);
+        formData.append('title', post.title);
+        formData.append('subtitle', post.subtitle);
+        formData.append('category', post.category);
+        formData.append('body', post.body);
+        formData.append('public', post.public);
+        formData.append('enabled', post.enabled);
+
+        return formData;
     }
 </script>
 </body>

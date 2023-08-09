@@ -2,6 +2,7 @@ package com.costi.csw9.Validation;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.regex.Pattern;
 
 public class FileValidator {
@@ -21,5 +22,17 @@ public class FileValidator {
         }
 
         return true;
+    }
+
+    public static String generateValidFilename(String originalFilename) {
+        // Generate a new filename based on your desired logic
+        // For example, you can replace spaces with underscores
+        String cleanedFilename = originalFilename.replaceAll("\\s+", "_");
+
+        // Append a timestamp or a random value to make it unique
+        String timestamp = LocalDateTime.now().toString().replace(":", "-");
+        String newFilename = timestamp + "_" + cleanedFilename;
+
+        return newFilename;
     }
 }

@@ -80,11 +80,17 @@ public class COMTService {
 
     public void savePost(Post post){
         post.setLastEdited(LocalDateTime.now());
-        if (post.getId() == null || !postRepository.existsById(post.getId())) {
+        if(post.getId() == null){
+            post.setId(-1L);
+        }
+        Optional<Post> optionalPost = postRepository.findById(post.getId());
+
+        if (!optionalPost.isPresent()) {
             post.setImagePath("/images/default-posts/" + post.getCategory() + ".jpg");
             postRepository.save(post);
         } else {
             //Post already Exists
+            post.setImagePath(optionalPost.get().getImagePath());
             postRepository.save(post);
         }
     }
@@ -104,13 +110,25 @@ public class COMTService {
                 // The file is not present and there is no existing post to edit
                 throw new Exception("Original post could not be found. Id = " + post.getId());
             }
-        }else if(FileValidator.isValidFileName(file)){
-            // File is present, check if file type
-            String originalFilename = file.getOriginalFilename(), fileType = "";
-            if (originalFilename != null) {
-                int dotIndex = originalFilename.lastIndexOf(".");
-                if (dotIndex > 0 && dotIndex < originalFilename.length() - 1) {
-                    fileType = originalFilename.substring(dotIndex + 1).toLowerCase();
+        }else{
+            // File is present, check if valid file name
+
+            String validFilename = file.getOriginalFilename();
+            if (!FileValidator.isValidFileName(file)) {
+                // If the filename is not valid, generate a new filename
+                String newFilename = FileValidator.generateValidFilename(validFilename);
+                if (newFilename == null) {
+                    throw new Exception("Failed to generate a valid filename");
+                }
+
+                validFilename = newFilename;
+            }
+
+            String fileType = "";
+            if (validFilename != null) {
+                int dotIndex = validFilename.lastIndexOf(".");
+                if (dotIndex > 0 && dotIndex < validFilename.length() - 1) {
+                    fileType = validFilename.substring(dotIndex + 1).toLowerCase();
                 }
             }
 
@@ -150,9 +168,6 @@ public class COMTService {
                 //unknown type
                 throw new Exception("Unsupported file type");
             }
-        }else{
-            // A filename has a malicious filename
-            throw new Exception("Invalid file name");
         }
     }
 

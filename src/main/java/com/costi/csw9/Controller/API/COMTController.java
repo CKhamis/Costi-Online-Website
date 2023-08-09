@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -19,6 +20,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/api/management")
@@ -199,24 +201,29 @@ public class COMTController {
     }
 
     @PostMapping("/newsroom/save")
-    public ResponseEntity<?> savePost(@ModelAttribute Post post, @RequestParam(value = "image", required = false) MultipartFile file) {
-        // Check if the file parameter is present
-        if (file != null && !file.isEmpty()) {
-            // File is present, handle it accordingly
-            try {
-                comtService.savePost(post, file);
-                return ResponseEntity.status(HttpStatus.OK).body("Post Saved");
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving post: " + e.getMessage());
-            }
+    public ResponseEntity<?> savePost(@Valid @ModelAttribute Post post, BindingResult bindingResult, @RequestParam(value = "image", required = false) MultipartFile file) {
+        // Check for validation errors
+        if (bindingResult.hasErrors()) {
+            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+            String errorMessages = fieldErrors.stream()
+                    .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
+                    .collect(Collectors.joining(", "));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Validation errors: " + errorMessages);
         }
 
+        // Rest of your code to handle file and post saving
+
         try {
-            comtService.savePost(post);
+            if (file != null && !file.isEmpty()) {
+                comtService.savePost(post, file);
+            } else {
+                comtService.savePost(post);
+            }
             return ResponseEntity.status(HttpStatus.OK).body("Post Saved");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving post: " + e.getMessage());
         }
     }
+
 
 }
