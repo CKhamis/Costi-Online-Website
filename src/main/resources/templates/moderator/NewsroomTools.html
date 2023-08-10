@@ -51,7 +51,7 @@
                 <th scope="col">Views</th>
                 <th scope="col">View</th>
                 <th scope="col">Enable</th>
-                <th scope="col">Public</th>
+                <th scope="col">Visibility</th>
                 <th scope="col">Edit</th>
                 <th scope="col">Delete</th>
             </tr>
@@ -73,7 +73,7 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="file" class="form-label">Upload image (optional)</label>
-                        <input class="form-control" type="file" id="file" name="image" accept="image/png, image/jpeg">
+                        <input class="form-control" type="file" id="file" name="image" accept="image/webp">
                     </div>
 
                     <div class="form-row row">
@@ -103,12 +103,6 @@
                             <textarea type="text" rows="10" class="form-control" id="body" placeholder="body content" required></textarea>
                         </div>
                     </div>
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" value="" id="disclaimerCheck" required>
-                        <label class="form-check-label" for="disclaimerCheck">
-                            There is no personally identifying content in my submission
-                        </label>
-                    </div>
                     <input type="hidden" value=""/>
                 </div>
                 <div class="modal-footer">
@@ -120,9 +114,12 @@
     </div>
 </div>
 
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 99" id="toast-container">
+</div>
 
 <div th:replace="Components :: JS"></div>
 <div th:replace="Components :: scripts"></div>
+<div th:replace="moderator/ModeratorComponents :: toast-scripts"></div>
 <div th:replace="moderator/ModeratorComponents :: network-util"></div>
 <div th:replace="moderator/ModeratorComponents :: form-data-script"></div>
 <script>
@@ -248,25 +245,60 @@
 
     //POST functions
     function toggleEnable(id){
+        let toastId = createToast("Toggling Publishing");
         let post = getObjectById(id);
         post.enabled = !post.enabled;
         postDataWithFile("/api/management/newsroom/save", convertToFormData(post))
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ Publish Status Toggled";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch(err => {
+                console.log(err);
+
+                document.getElementById(`${toastId}-body`).innerText = "❌ Procedure unsuccessful";
+                document.getElementById(`${toastId}-loading`).style.color = "red";
+            })
             .then(refresh);
     }
 
     function toggleVisibility(id){
+        let toastId = createToast("Toggling Visibility");
         let post = getObjectById(id);
         post.public = !post.public;
         postDataWithFile("/api/management/newsroom/save", convertToFormData(post))
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ Visibility Status Toggled";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch(err => {
+                console.log(err);
+
+                document.getElementById(`${toastId}-body`).innerText = "❌ Procedure unsuccessful";
+                document.getElementById(`${toastId}-loading`).style.color = "red";
+            })
             .then(refresh);
     }
 
     function deletePost(id){
+        let toastId = createToast("Deleting Post");
         postData("/api/management/newsroom/delete", id)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ Post Deleted";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch(err => {
+                console.log(err);
+
+                document.getElementById(`${toastId}-body`).innerText = "❌ Procedure unsuccessful";
+                document.getElementById(`${toastId}-loading`).style.color = "red";
+            })
             .then(refresh);
     }
 
     function saveNews() {
+        let toastId = createToast("Saving New Post");
+
         // Get form elements
         const title = document.getElementById('title').value;
         const subtitle = document.getElementById('sub').value;
@@ -283,12 +315,17 @@
         formData.append('image', imageFile);
 
         postDataWithFile("/api/management/newsroom/save", formData)
-            .then(refresh)
-            .catch(error => {
-                // Handle any errors
-                console.error(error);
-                refresh();
-            });
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ Newsroom Post Created";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch(err => {
+                console.log(err);
+
+                document.getElementById(`${toastId}-body`).innerText = "❌ Procedure unsuccessful";
+                document.getElementById(`${toastId}-loading`).style.color = "red";
+            })
+            .then(refresh);
     }
     function disableAll(){
         for(let i = 0; i < postList.length; i++) {
@@ -321,6 +358,7 @@
         formData.append('subtitle', post.subtitle);
         formData.append('category', post.category);
         formData.append('body', post.body);
+        formData.append('views', post.views);
         formData.append('public', post.public);
         formData.append('enabled', post.enabled);
 

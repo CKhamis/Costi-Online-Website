@@ -211,8 +211,6 @@ public class COMTController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Validation errors: " + errorMessages);
         }
 
-        // Rest of your code to handle file and post saving
-
         try {
             if (file != null && !file.isEmpty()) {
                 comtService.savePost(post, file);
