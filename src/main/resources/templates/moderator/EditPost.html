@@ -84,9 +84,16 @@
         </div>
     </div>
 </main>
+
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 99" id="toast-container">
+</div>
+
+
 <div th:replace="Components :: JS"></div>
 <div th:replace="Components :: scripts"></div>
+<div th:replace="moderator/ModeratorComponents :: toast-scripts"></div>
 <div th:replace="moderator/ModeratorComponents :: network-util"></div>
+<div th:replace="moderator/ModeratorComponents :: form-data-script"></div>
 <script>
     let postList;
 
@@ -160,6 +167,44 @@
                 <p class="fs-5" id="preview-text">${data.body}</p>
             </div>
             `;
+    }
+
+    // Save
+    function saveNews(){
+        let toastId = createToast("Saving Edited Post");
+
+        const formData = new FormData();
+        const imageFile = document.getElementById('file').files[0];
+        formData.append('image', imageFile);
+        formData.append('id', id);
+        formData.append('title', title.value);
+        formData.append('subtitle', subtitle.value);
+        formData.append('category', category.value);
+        formData.append('body', body.value);
+        formData.append('enabled', enabledInput.checked);
+        formData.append('public', publicInput.checked);
+        formData.append('pinned', pinnedInput.checked);
+        formData.append('favorite', favoriteInput.checked);
+        formData.append('featured', featuredInput.checked);
+
+        console.log(formData);
+
+        postDataWithFile("/api/management/newsroom/save", formData)
+            .then(() => {
+                if(imageFile){
+                    document.getElementById(`${toastId}-body`).innerText = "✅ Newsroom Post Edited. Refresh page to see new image";
+                }else{
+                    document.getElementById(`${toastId}-body`).innerText = "✅ Newsroom Post Edited";
+                }
+
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch(err => {
+                console.log(err);
+
+                document.getElementById(`${toastId}-body`).innerText = "❌ Procedure unsuccessful";
+                document.getElementById(`${toastId}-loading`).style.color = "red";
+            });
     }
 </script>
 </body>
