@@ -1,5 +1,6 @@
 package com.costi.csw9.Controller.API;
 
+import com.costi.csw9.Model.AccountNotification;
 import com.costi.csw9.Model.Announcement;
 import com.costi.csw9.Model.FlashMessage;
 import com.costi.csw9.Model.Post;
@@ -125,8 +126,8 @@ public class COMTController {
         Newsroom
      */
 
-    @PostMapping("/newsroom/view")
-    public ResponseEntity<Post> getPostById(@RequestParam("id") Long id){
+    @GetMapping("/newsroom/view/{id}")
+    public ResponseEntity<Post> getPostById(@PathVariable("id") Long id) {
         try {
             Post post = comtService.findPostById(id);
             return ResponseEntity.ok(post);
@@ -223,5 +224,26 @@ public class COMTController {
         }
     }
 
+    /*
+        Notifications
+     */
 
+    @PostMapping("/notifications/save")
+    public ResponseEntity<?> saveNotification(@Valid @ModelAttribute AccountNotification notification, BindingResult bindingResult) {
+        // Check for validation errors
+        if (bindingResult.hasErrors()) {
+            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+            String errorMessages = fieldErrors.stream()
+                    .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
+                    .collect(Collectors.joining(", "));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Validation errors: " + errorMessages);
+        }
+
+        try {
+
+            return ResponseEntity.status(HttpStatus.OK).body("Post Saved");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving post: " + e.getMessage());
+        }
+    }
 }

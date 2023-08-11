@@ -6,7 +6,7 @@
 
 <main class="container">
     <div class="container-fluid">
-        <h1 class="pb-2 border-bottom mb-4 fw-bold text-center">Edit newsroom post</h1>
+        <h1 class="pb-2 border-bottom mb-4 fw-bold text-center">Edit Newsroom Post</h1>
     </div>
     <div class="row">
         <div class="col-xs-12 col-md-6">
@@ -95,7 +95,7 @@
 <div th:replace="moderator/ModeratorComponents :: network-util"></div>
 <div th:replace="moderator/ModeratorComponents :: form-data-script"></div>
 <script>
-    let postList;
+    let post;
 
     // Elements
     const container = document.querySelector("#preview-panel");
@@ -132,11 +132,11 @@
     });
 
     // fetch
-    fetch("/api/management/newsroom/all")
+    fetch("/api/management/newsroom/view/" + id)
         .then(checkStatus)
         .then(response => response.json())
         .then(data => {
-            postList = data;
+            post = data;
             displayPreview(id)
         })
         .catch(error => {
@@ -146,25 +146,24 @@
 
     // Render
     function displayPreview(id){
-        let data = postList.find(obj => obj["id"] == id);
-        image.setAttribute('src', data.imagePath);
-        title.value = data.title;
-        subtitle.value = data.subtitle;
-        body.value = data.body;
-        category.value = data.category;
+        image.setAttribute('src', post.imagePath);
+        title.value = post.title;
+        subtitle.value = post.subtitle;
+        body.value = post.body;
+        category.value = post.category;
 
-        enabledInput.checked = data.enabled;
-        publicInput.checked = data.public;
-        pinnedInput.checked = data.pinned;
-        favoriteInput.checked = data.favorite;
-        featuredInput.checked = data.featured;
+        enabledInput.checked = post.enabled;
+        publicInput.checked = post.public;
+        pinnedInput.checked = post.pinned;
+        favoriteInput.checked = post.favorite;
+        featuredInput.checked = post.featured;
 
         container.innerHTML = `
-            <h1 class="fw-bold mb-0" id="preview-title">${data.title}</h1>
-            <h4 class="text-muted fw-bold" id="preview-sub">${data.subtitle}</h4>
+            <h1 class="fw-bold mb-0" id="preview-title">${post.title}</h1>
+            <h4 class="text-muted fw-bold" id="preview-sub">${post.subtitle}</h4>
 
             <div id="contentBody">
-                <p class="fs-5" id="preview-text">${data.body}</p>
+                <p class="fs-5" id="preview-text">${post.body}</p>
             </div>
             `;
     }

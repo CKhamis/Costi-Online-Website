@@ -1,8 +1,10 @@
 package com.costi.csw9.Service;
 
+import com.costi.csw9.Model.AccountNotification;
 import com.costi.csw9.Model.Announcement;
 import com.costi.csw9.Model.Attachment;
 import com.costi.csw9.Model.Post;
+import com.costi.csw9.Repository.AccountNotificationRepository;
 import com.costi.csw9.Repository.AnnouncementRepository;
 import com.costi.csw9.Repository.PostRepository;
 import com.costi.csw9.Util.LogicTools;
@@ -25,11 +27,13 @@ public class COMTService {
     private final AnnouncementRepository announcementRepository;
     private final PostRepository postRepository;
     private final AttachmentService attachmentService;
+    private final AccountNotificationRepository accountNotificationRepository;
 
-    public COMTService(AnnouncementRepository announcementRepository, PostRepository postRepository, AttachmentService attachmentService) {
+    public COMTService(AnnouncementRepository announcementRepository, PostRepository postRepository, AttachmentService attachmentService, AccountNotificationRepository accountNotificationRepository) {
         this.announcementRepository = announcementRepository;
         this.postRepository = postRepository;
         this.attachmentService = attachmentService;
+        this.accountNotificationRepository = accountNotificationRepository;
     }
 
     /*
@@ -95,7 +99,6 @@ public class COMTService {
         }
     }
 
-    //TODO: low priority, optimize this more
     public void savePost(Post post, MultipartFile file) throws Exception{
         if(file.isEmpty()){
             // File is not present. Check to see if there is an existing post to edit
@@ -176,5 +179,13 @@ public class COMTService {
         post.setLastEdited(LocalDateTime.now());
         post.setImagePath(POST_IMAGE_PATH + attachment.getId());
         postRepository.save(post);
+    }
+
+    /*
+        Notifications
+     */
+
+    public void saveNotification(AccountNotification notification){
+        accountNotificationRepository.save(notification);
     }
 }
