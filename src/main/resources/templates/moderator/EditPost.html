@@ -10,7 +10,7 @@
     </div>
     <div class="row">
         <div class="col-xs-12 col-md-6">
-            <div class="p-4 mb-4 border-box">
+            <div class="p-4 mb-4 bg-2">
                 <form id="edit-news-form" enctype="multipart/form-data">
                     <div class="modal-body">
                         <div class="mb-3">
@@ -45,9 +45,34 @@
                                 <textarea type="text" rows="10" class="form-control" id="body" placeholder="body content" required></textarea>
                             </div>
                         </div>
+                        <div class="form-row row">
+                            <div class="col-12 mb-3">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="enabled-input">
+                                    <label class="form-check-label" for="enabled-input">Enabled</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="listed-input">
+                                    <label class="form-check-label" for="listed-input">Public</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="pinned-input">
+                                    <label class="form-check-label" for="pinned-input">Pinned (unused)</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="favorite-input">
+                                    <label class="form-check-label" for="favorite-input">Favorite (unused)</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="featured-input">
+                                    <label class="form-check-label" for="featured-input">Featured (unused)</label>
+                                </div>
+                            </div>
+                        </div>
                         <input type="hidden" th:value="${id}" id="id"/>
                     </div>
                     <button type="button" class="btn btn-primary" onclick="saveNews()">Save</button>
+                    <p class="text-secondary">Note: View count will be reset once edited</p>
                 </form>
             </div>
         </div>
@@ -73,6 +98,12 @@
     let title = document.querySelector("#title");
     let subtitle = document.querySelector("#sub");
     let body = document.querySelector("#body");
+
+    let enabledInput = document.querySelector("#enabled-input");
+    let publicInput = document.querySelector("#listed-input");
+    let pinnedInput = document.querySelector("#pinned-input");
+    let favoriteInput = document.querySelector("#favorite-input");
+    let featuredInput = document.querySelector("#featured-input");
 
     // Live Preview
     body.addEventListener('input', function (event) {
@@ -107,7 +138,6 @@
         });
 
     // Render
-    //FIXME: This displays incorrectly because it doesnt replace individual tags, just adds onto the ones there already
     function displayPreview(id){
         let data = postList.find(obj => obj["id"] == id);
         image.setAttribute('src', data.imagePath);
@@ -115,6 +145,13 @@
         subtitle.value = data.subtitle;
         body.value = data.body;
         category.value = data.category;
+
+        enabledInput.checked = data.enabled;
+        publicInput.checked = data.public;
+        pinnedInput.checked = data.pinned;
+        favoriteInput.checked = data.favorite;
+        featuredInput.checked = data.featured;
+
         container.innerHTML = `
             <h1 class="fw-bold mb-0" id="preview-title">${data.title}</h1>
             <h4 class="text-muted fw-bold" id="preview-sub">${data.subtitle}</h4>
