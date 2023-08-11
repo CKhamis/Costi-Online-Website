@@ -9,132 +9,113 @@
         <h1 class="pb-2 border-bottom mb-4 fw-bold text-center">Edit newsroom post</h1>
     </div>
     <div class="row">
-        <div class="pt-2 col-xs-12 col-md-6">
+        <div class="col-xs-12 col-md-6">
             <div class="p-4 mb-4 border-box">
-                <form method="post" enctype="multipart/form-data">
-                    <h2>Post with Image</h2>
-                    <hr/>
-                    <div class="mb-3">
-                        <label for="file" class="form-label">Upload image</label>
-                        <input class="form-control" type="file" id="file" name="image" accept="image/png, image/jpeg">
-                    </div>
+                <form id="edit-news-form" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="file" class="form-label">Upload image (optional)</label>
+                            <input class="form-control" type="file" id="file" name="image" accept="image/webp">
+                        </div>
 
-                    <div class="form-row row">
-                        <div class="col-12 mb-3">
-                            <label for="title2">Title</label>
-                            <input type="text" class="form-control" id="title2"
-                                   placeholder="Title here" required>
+                        <div class="form-row row">
+                            <div class="col-12 mb-3">
+                                <label for="title">Title</label>
+                                <input type="text" class="form-control" id="title"
+                                       placeholder="Title here" required>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-row row">
-                        <div class="col-md-8 mb-3">
-                            <label for="sub2">Subtitle</label>
-                            <input type="text" class="form-control" id="sub2"
-                                   placeholder="subtitle" required>
+                        <div class="form-row row">
+                            <div class="col-md-8 mb-3">
+                                <label for="sub">Subtitle</label>
+                                <input type="text" class="form-control" id="sub"
+                                       placeholder="subtitle" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="cat">Post Category</label>
+                                <select id="cat"  class="form-control">
+                                    <option value="" disabled="disabled">Select a category</option>
+                                    <option th:each="cat : ${categories}" th:value="${cat.name}" th:text="${cat.name}">Error</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="cat">Post Category</label>
-                            <select id="cat"  class="form-control">
-                                <option value="" disabled="disabled">Select a category</option>
-                                <option th:each="cat : ${categories}" th:value="${cat.name}" th:text="${cat.name}">Error</option>
-                            </select>
+                        <div class="form-row row">
+                            <div class="col-12 mb-3">
+                                <label for="body">Content Body</label>
+                                <textarea type="text" rows="10" class="form-control" id="body" placeholder="body content" required></textarea>
+                            </div>
                         </div>
+                        <input type="hidden" th:value="${id}" id="id"/>
                     </div>
-                    <div class="form-row row">
-                        <div class="col-12 mb-3">
-                            <label for="input2">Content Body</label>
-                            <textarea type="text" rows="10" class="form-control" id="input2" placeholder="body content" required></textarea>
-                        </div>
-                    </div>
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" value="" id="disclaimerCheck2" required>
-                        <label class="form-check-label" for="disclaimerCheck2">
-                            There is no personally identifying content in my submission
-                        </label>
-                    </div>
-                    <input type="hidden" th:field="${id}" id="id-field"/>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-primary" onclick="saveNews()">Save</button>
                 </form>
             </div>
         </div>
-        <div class="d-none d-md-block col-md-6" id="preview-panel"></div>
+        <div class="d-none d-md-block col-md-6">
+            <img id="image" class="newsroom-slide"/>
+            <div class="m-0" id="preview-panel">
+
+            </div>
+        </div>
     </div>
 </main>
 <div th:replace="Components :: JS"></div>
 <div th:replace="Components :: scripts"></div>
+<div th:replace="moderator/ModeratorComponents :: network-util"></div>
 <script>
+    let postList;
+
     // Elements
     const container = document.querySelector("#preview-panel");
+    const image = document.querySelector("#image");
+    const category = document.querySelector("#cat");
     const id = document.querySelector("#id").value;
+    let title = document.querySelector("#title");
+    let subtitle = document.querySelector("#sub");
+    let body = document.querySelector("#body");
 
-    let title1 = document.querySelector("#title1");
-    let title2 = document.querySelector("#title2");
+    // Live Preview
+    body.addEventListener('input', function (event) {
+        // Retrieve the current value of the text field
+        const inputValue = event.target.value;
+        document.querySelector("#preview-text").innerHTML = inputValue;
+    });
 
+    subtitle.addEventListener('input', function (event) {
+        // Retrieve the current value of the text field
+        const inputValue = event.target.value;
+        document.querySelector("#preview-sub").innerHTML = inputValue;
+    });
 
-    let subtitle1 = document.querySelector("#sub1");
-    let subtitle2 = document.querySelector("#sub2");
-
-    let textField1 = document.querySelector("#input1");
-    let textField2 = document.querySelector("#input2");
-
-    // Triggers
-    if(textField1) {
-        textField1.addEventListener('input', function (event) {
-            // Retrieve the current value of the text field
-            const inputValue = event.target.value;
-            document.querySelector("#preview-text").innerHTML = inputValue;
-        });
-    }else if(textField2){
-        textField2.addEventListener('input', function(event) {
-            // Retrieve the current value of the text field
-            const inputValue = event.target.value;
-            document.querySelector("#preview-text").innerHTML = inputValue;
-        });
-    }
-
-    if(subtitle1) {
-        subtitle1.addEventListener('input', function (event) {
-            // Retrieve the current value of the text field
-            const inputValue = event.target.value;
-            document.querySelector("#preview-sub").innerHTML = inputValue;
-        });
-    }else if(subtitle2){
-        subtitle2.addEventListener('input', function(event) {
-            // Retrieve the current value of the text field
-            const inputValue = event.target.value;
-            document.querySelector("#preview-sub").innerHTML = inputValue;
-        });
-    }
-
-    if(title1) {
-        title1.addEventListener('input', function (event) {
-            // Retrieve the current value of the text field
-            const inputValue = event.target.value;
-            document.querySelector("#preview-title").innerHTML = inputValue;
-        });
-    }else if(title2){
-        title2.addEventListener('input', function(event) {
-            // Retrieve the current value of the text field
-            const inputValue = event.target.value;
-            document.querySelector("#preview-title").innerHTML = inputValue;
-        });
-    }
+    title.addEventListener('input', function (event) {
+        // Retrieve the current value of the text field
+        const inputValue = event.target.value;
+        document.querySelector("#preview-title").innerHTML = inputValue;
+    });
 
     // fetch
-    fetch("/api/v1/newsroom/post/" + id)
+    fetch("/api/management/newsroom/all")
         .then(checkStatus)
         .then(response => response.json())
         .then(data => {
-            // Process the retrieved data
-            displayPreview(data)
+            postList = data;
+            displayPreview(id)
+        })
+        .catch(error => {
+            // error handling
+            console.error('Error retrieving data:', error);
         });
 
     // Render
     //FIXME: This displays incorrectly because it doesnt replace individual tags, just adds onto the ones there already
-    function displayPreview(data){
+    function displayPreview(id){
+        let data = postList.find(obj => obj["id"] == id);
+        image.setAttribute('src', data.imagePath);
+        title.value = data.title;
+        subtitle.value = data.subtitle;
+        body.value = data.body;
+        category.value = data.category;
         container.innerHTML = `
-            <img src="${data.imagePath}" alt="${data.title}" class="newsroom-slide"/>
-
             <h1 class="fw-bold mb-0" id="preview-title">${data.title}</h1>
             <h4 class="text-muted fw-bold" id="preview-sub">${data.subtitle}</h4>
 

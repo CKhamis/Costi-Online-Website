@@ -138,11 +138,6 @@
               console.error(error);
             });
   }
-
-  function getObjectById(id) {
-    return responseData.find(obj => obj["id"] == id);
-  }
-
 </script>
 
 <script th:fragment="network-util">
@@ -180,6 +175,10 @@
               // Handle any errors
               console.error(error);
             });
+  }
+
+  function getObjectById(id) {
+    return responseData.find(obj => obj["id"] == id);
   }
 </script>
 
