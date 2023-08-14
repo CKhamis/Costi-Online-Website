@@ -12,7 +12,7 @@
             <p class="text-center pb-0">Costi Network ID</p>
         </div>
         <div class="p-3 border-box mb-3">
-            <h3 class="text-center mb-2">Notifications <span class="badge bg-primary rounded-pill" id="notification-count">Primary</span></h3>
+            <h3 class="text-center mb-2">Notifications <span class="badge bg-primary rounded-pill" id="notification-count">?</span></h3>
             <div id="notification-container"></div>
         </div>
     </div>
@@ -143,17 +143,28 @@
     let notifications;
 
     // fetch
-    fetch("/api/notifications/all")
-        .then(checkStatus)
-        .then(response => response.json())
-        .then(data => {
-            notifications = data;
-            renderNotifications()
-        })
-        .catch(error => {
-            // error handling
-            console.error('Error retrieving data:', error);
-        });
+    function refresh(){
+        fetch("/api/notifications/all")
+            .then(checkStatus)
+            .then(response => response.json())
+            .then(data => {
+                notifications = data;
+                renderNotifications()
+            })
+            .catch(error => {
+                // error handling
+                console.error('Error retrieving data:', error);
+            });
+    }
+    refresh();
+
+    function deleteNotification(id){
+        postData("/api/notifications/delete", id)
+            .catch(err => {
+                console.log(err);
+            })
+            .then(refresh);
+    }
 
     // Render
     function renderNotifications(){
