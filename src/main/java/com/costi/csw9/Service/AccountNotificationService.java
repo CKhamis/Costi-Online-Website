@@ -13,29 +13,13 @@ import java.util.Optional;
 
 @Service
 public class AccountNotificationService {
-    //TODO: This needs to be revamped
-
     private final AccountNotificationRepository accountNotificationRepository;
 
     public AccountNotificationService(AccountNotificationRepository accountNotificationRepository){
         this.accountNotificationRepository = accountNotificationRepository;
     }
-
-    public Optional<AccountNotification> findById(Long id){
-        return accountNotificationRepository.findById(id);
-    }
-
     public List<AccountNotification> findByUser(User user){
         return accountNotificationRepository.findByUser(user);
-    }
-
-    public void save(AccountNotification notification, User currentUser) throws Exception{
-        // Check if right permissions
-        if(currentUser.isAdmin() || notification.getUser().getId() == currentUser.getId() || currentUser.isOwner()){
-            accountNotificationRepository.save(notification);
-        }else{
-            throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
-        }
     }
 
     public void delete(Long id, User currentUser) throws Exception{

@@ -2,6 +2,7 @@ package com.costi.csw9.Service;
 
 import com.costi.csw9.Model.*;
 import com.costi.csw9.Model.Temp.ConfirmationToken;
+import com.costi.csw9.Repository.AccountNotificationRepository;
 import com.costi.csw9.Repository.UserRepository;
 import com.costi.csw9.Util.LogicTools;
 import lombok.AllArgsConstructor;
@@ -22,9 +23,8 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
-    private final AccountNotificationService accountNotificationService;
-
     private final AccountLogService accountLogService;
+    private final AccountNotificationRepository accountNotificationRepository;
 
     public User findByEmail(String email) throws UsernameNotFoundException {
         Optional<User> optionalUser = userRepository.findByEmail(email);
@@ -96,7 +96,7 @@ public class UserService implements UserDetailsService {
             //Add welcome message
             AccountNotification welcome = new AccountNotification("Welcome!", "<p>Welcome to your Costi Network ID, here you will see various details regarding your account. Try changing your profile picture!</p>", "primary", user);
             try {
-                accountNotificationService.save(welcome, user);
+                accountNotificationRepository.save(welcome);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

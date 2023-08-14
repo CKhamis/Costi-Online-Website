@@ -35,16 +35,6 @@ public class COMTController {
         Announcements
      */
 
-    @GetMapping("/announcement/view")
-    public ResponseEntity<Announcement> getAnnouncementById(@RequestParam("id") Long id) {
-        try {
-            Announcement announcement = comtService.findAnnouncementById(id);
-            return ResponseEntity.ok(announcement);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
     @GetMapping("/announcement/analytics")
     @ResponseBody
     public Map<String, Object> getAnnouncementAnalytics(){

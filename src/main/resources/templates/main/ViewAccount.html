@@ -12,8 +12,8 @@
             <p class="text-center pb-0">Costi Network ID</p>
         </div>
         <div class="p-3 border-box mb-3">
-            <h3 class="text-center mb-2">Notifications <span class="badge bg-primary rounded-pill" th:text="${notificationCount}">Primary</span></h3>
-            <div th:replace="Components :: notification"></div>
+            <h3 class="text-center mb-2">Notifications <span class="badge bg-primary rounded-pill" id="notification-count">Primary</span></h3>
+            <div id="notification-container"></div>
         </div>
     </div>
     <div class="col-lg-9 col-md-7 col-xs-12">
@@ -134,5 +134,49 @@
 <div th:replace="Components :: footer"></div>
 <div th:replace="Components :: JS"></div>
 <div th:replace="Components :: scripts"></div>
+<script>
+    // Elements
+    let count = document.querySelector("#notification-count");
+    let container = document.querySelector("#notification-container");
+
+    // Data
+    let notifications;
+
+    // fetch
+    fetch("/api/notifications/all")
+        .then(checkStatus)
+        .then(response => response.json())
+        .then(data => {
+            notifications = data;
+            renderNotifications()
+        })
+        .catch(error => {
+            // error handling
+            console.error('Error retrieving data:', error);
+        });
+
+    // Render
+    function renderNotifications(){
+        count.innerText = notifications.length;
+        if(notifications.length > 0){
+            let content = ``;
+            for(let i = notifications.length-1; i >= 0; i--){
+                let notification = notifications[i];
+
+                content += `
+                    <div class="alert alert-${notification.notificationType} alert-dismissible fade show" role="alert">
+                        <p class="fw-bold d-inline">${notification.title} • </p>
+                        <p class="d-inline">${notification.timeSinceCreated}</p>
+                        <a class="btn-close" onclick="deleteNotification(${notification.id})"></a>
+                        <p>${notification.body}</p>
+                    </div>
+                `;
+            }
+            container.innerHTML = content;
+        }else{
+            container.innerHTML = "<p class='text-center'>No Notifications</p>";
+        }
+    }
+</script>
 </body>
 </html>

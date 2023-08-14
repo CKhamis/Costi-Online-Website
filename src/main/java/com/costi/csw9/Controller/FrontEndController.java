@@ -719,15 +719,4 @@ public class FrontEndController {
         model.addAttribute("id", PostId);
         return "moderator/EditPost";
     }
-
-    public void broadcastEmergencyPostNotification(User current) throws Exception{
-        for(User user : userService.loadAll()){
-            AccountNotification notification = new AccountNotification();
-            notification.setNotificationType("danger");
-            notification.setUser(user);
-            notification.setTitle("EMERGENCY");
-            notification.setBody("An emergency post was made. View it in Newsroom");
-            accountNotificationService.save(notification, current);
-        }
-    }
 }

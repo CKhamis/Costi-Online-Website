@@ -2,7 +2,6 @@ package com.costi.csw9.Controller.API;
 
 import com.costi.csw9.Model.Announcement;
 import com.costi.csw9.Service.AnnouncementService;
-import com.costi.csw9.Service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,7 +16,7 @@ import java.util.List;
 public class AnnouncementController {
     private AnnouncementService announcementService;
 
-    public AnnouncementController(AnnouncementService announcementService, UserService userService) {
+    public AnnouncementController(AnnouncementService announcementService) {
         this.announcementService = announcementService;
     }
 
