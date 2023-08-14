@@ -1,6 +1,7 @@
 package com.costi.csw9.Controller.API;
 
 import com.costi.csw9.Model.*;
+import com.costi.csw9.Model.Temp.AccountNotificationRequest;
 import com.costi.csw9.Service.COMTService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -232,21 +233,22 @@ public class COMTController {
     }
 
     @PostMapping("/notifications/save")
-    public ResponseEntity<?> saveNotification(@Valid @ModelAttribute AccountNotification notification, BindingResult bindingResult) {
-        // Check for validation errors
-        if (bindingResult.hasErrors()) {
-            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-            String errorMessages = fieldErrors.stream()
-                    .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
-                    .collect(Collectors.joining(", "));
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Validation errors: " + errorMessages);
-        }
-
-        try {
-
-            return ResponseEntity.status(HttpStatus.OK).body("Post Saved");
+    public ResponseEntity<String> saveNotification(@RequestBody AccountNotificationRequest request) {
+        try{
+            comtService.saveNotification(request);
+            return ResponseEntity.ok("Notification saved successfully");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving post: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving notification: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/notifications/delete")
+    public ResponseEntity<String> deleteNotification(@RequestBody Long id) {
+        try {
+            comtService.deleteNotification(id);
+            return ResponseEntity.ok("Notification deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting notification: " + e.getMessage());
         }
     }
 

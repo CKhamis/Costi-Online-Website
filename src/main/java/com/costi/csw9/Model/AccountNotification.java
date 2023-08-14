@@ -30,14 +30,6 @@ public class AccountNotification {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public AccountNotification(AccountNotificationRequest request){
-        // PLEASE NOTE: DOES NOT SET USER
-        this.body = request.getBody();
-        this.notificationType = request.getNotificationType();
-        this.id = request.getId();
-        this.title = request.getTitle();
-    }
-
     public AccountNotification() {
     }
 
@@ -52,6 +44,13 @@ public class AccountNotification {
         this.title = title;
         this.body = body;
         this.notificationType = notificationType;
+        this.user = user;
+    }
+
+    public AccountNotification(AccountNotificationRequest request, User user){
+        this.title = request.getTitle();
+        this.body = request.getBody();
+        this.notificationType = request.getNotificationType();
         this.user = user;
     }
 
@@ -91,8 +90,7 @@ public class AccountNotification {
         this.body = body;
     }
 
-    public String getDateCreated() {
-        //return dateCreated.getMonthValue() + "/" + dateCreated.getDayOfMonth() + "/" + dateCreated.getYear();
+    public String getTimeSinceCreated() {
         String unit = "";
         LocalDateTime now = LocalDateTime.now();
         long diff;
@@ -110,6 +108,10 @@ public class AccountNotification {
             diff = ChronoUnit.YEARS.between(dateCreated,now);
         }
         return String.format("%d %s",diff,unit);
+    }
+
+    public String getDateCreated(){
+        return dateCreated.getMonthValue() + "/" + dateCreated.getDayOfMonth() + "/" + dateCreated.getYear();
     }
 
     public void setDateCreated(LocalDateTime dateCreated) {

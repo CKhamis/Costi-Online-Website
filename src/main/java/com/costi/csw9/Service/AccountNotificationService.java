@@ -13,6 +13,8 @@ import java.util.Optional;
 
 @Service
 public class AccountNotificationService {
+    //TODO: This needs to be revamped
+
     private final AccountNotificationRepository accountNotificationRepository;
 
     public AccountNotificationService(AccountNotificationRepository accountNotificationRepository){

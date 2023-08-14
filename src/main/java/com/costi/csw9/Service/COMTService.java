@@ -1,6 +1,7 @@
 package com.costi.csw9.Service;
 
 import com.costi.csw9.Model.*;
+import com.costi.csw9.Model.Temp.AccountNotificationRequest;
 import com.costi.csw9.Repository.AccountNotificationRepository;
 import com.costi.csw9.Repository.AnnouncementRepository;
 import com.costi.csw9.Repository.PostRepository;
@@ -188,8 +189,33 @@ public class COMTService {
     public List<AccountNotification> findAllNotifications(){
         return accountNotificationRepository.findAll();
     }
-    public void saveNotification(AccountNotification notification){
-        accountNotificationRepository.save(notification);
+    public void saveNotification(AccountNotificationRequest notification) throws Exception{
+        // Check if user exists
+        if(notification.getDestination().equals("All")) {
+            List<User> allUsers = findAllUsers();
+            for (User user : allUsers) {
+                // Convert to notification
+                AccountNotification accountNotification = new AccountNotification(notification, user);
+                // Save
+                accountNotificationRepository.save(accountNotification);
+            }
+        }else{
+            // Find associated user
+            Optional<User> optionalUser = userRepository.findById(Long.parseLong(notification.getDestination()));
+
+            if(optionalUser.isPresent()){
+                // Convert to notification
+                AccountNotification accountNotification = new AccountNotification(notification, optionalUser.get());
+                // Save
+                accountNotificationRepository.save(accountNotification);
+            }else{
+                throw new Exception("User" + LogicTools.NOT_FOUND_MESSAGE);
+            }
+        }
+    }
+
+    public void deleteNotification(Long id) {
+        accountNotificationRepository.deleteById(id);
     }
 
     /*
@@ -198,5 +224,8 @@ public class COMTService {
 
     public List<User> findAllUsers(){
         return userRepository.findAll();
+    }
+    public User findUserById(Long id){
+        return userRepository.getById(id);
     }
 }

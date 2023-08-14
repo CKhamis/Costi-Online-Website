@@ -1,7 +1,6 @@
 package com.costi.csw9.Controller;
 
 import com.costi.csw9.Model.*;
-import com.costi.csw9.Model.Temp.AccountNotificationRequest;
 import com.costi.csw9.Service.*;
 import com.costi.csw9.Util.LogicTools;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +9,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.time.LocalDate;

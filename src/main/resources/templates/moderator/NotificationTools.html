@@ -22,14 +22,6 @@
                         <img th:src="@{/icons/Refresh.svg}" />
                         <p class="text-center">Refresh</p>
                     </div>
-                    <div class="action-button" onclick="disableAll()">
-                        <img th:src="@{/icons/Disable.svg}" />
-                        <p class="text-center">Disable All</p>
-                    </div>
-                    <div class="action-button" onclick="privateAll()">
-                        <img th:src="@{/icons/Private.svg}" />
-                        <p class="text-center">Private All</p>
-                    </div>
                 </div>
             </div>
         </div>
@@ -102,7 +94,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="saveNotification()">Save</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="submitForm()">Save</button>
                     </div>
                 </form>
             </div>
@@ -160,6 +152,46 @@
     }
     refresh();
 
+    function saveNotification(notification){
+        let toastId = createToast("Saving Notification");
+        postData("/api/management/notifications/save", notification)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ Notification Created";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch(err => {
+                console.log(err);
+                document.getElementById(`${toastId}-body`).innerText = "❌ Connection unsuccessful";
+                document.getElementById(`${toastId}-loading`).style.color = "red";
+            })
+            .then(refresh);
+    }
+
+    function deleteNotification(id){
+        let toastId = createToast("Deleting Notification");
+        postData("/api/management/notifications/delete", id)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ Notification Deleted";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch(err => {
+                console.log(err);
+                document.getElementById(`${toastId}-body`).innerText = "❌ Connection unsuccessful";
+                document.getElementById(`${toastId}-loading`).style.color = "red";
+            })
+            .then(refresh);
+    }
+
+    function submitForm(){
+        let notification = {
+            "title":title.value,
+            "body":body.value,
+            "destination": destination.value,
+            "notificationType": type.value
+        }
+        saveNotification(notification);
+    }
+
     // Render functions
     function renderDropdown(){
         let content = `<option value="All">Everyone</option>`;
@@ -178,7 +210,7 @@
             tableContent += `
             <tr>
                 <td>${notification.id}</td>
-                <td><a class="text-white" href="/COMT/Accounts/${notification.destinationId}">${user.firstName} ${user.lastName}</a></td>
+                <td><a class="text-white text-decoration-underline" href="/COMT/Accounts/${notification.destinationId}">${user.firstName} ${user.lastName}</a></td>
                 <td>${notification.title}</td>
                 <td>${notification.body}</td>
                 <td class="text-center">
