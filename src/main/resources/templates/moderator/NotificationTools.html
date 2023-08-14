@@ -118,6 +118,7 @@
     
     // Elements
     const errorContainer = document.querySelector("#notifications-container");
+    const overviewContainer = document.querySelector("#overview-container");
     const table = document.querySelector("#table-body");
 
     // Data
@@ -143,7 +144,7 @@
                 notificationList = data[1];
 
                 renderDropdown();
-                renderTable();
+                renderTableAndAnalytics();
             })
             .catch(error => {
                 errorContainer.innerHTML = `<h3 class="text-center fw-bold">There was an error receiving data from Costi Online Services</h3><p class="text-center">${error}</p>`;
@@ -200,11 +201,29 @@
         }
         destination.innerHTML = content;
     }
-    function renderTable(){
+    function renderTableAndAnalytics(){
+        let numTotal = notificationList.length, bodyLengthSum = 0, numDanger = 0, numInfo = 0, numSuccess = 0, numWarning = 0, numPrimary = 0;
+
         let tableContent = ``;
         for(let i = 0; i < notificationList.length; i++){
             let notification = notificationList[i];
 
+            // Analytics
+            bodyLengthSum += notification.body.length;
+
+            if(notification.notificationType === "danger"){
+                numDanger++;
+            }else if(notification.notificationType === "info"){
+                numInfo++;
+            }else if(notification.notificationType === "success"){
+                numSuccess++;
+            }else if(notification.notificationType === "warning"){
+                numWarning++;
+            }else if(notification.notificationType === "primary"){
+                numPrimary++;
+            }
+
+            // Table
             let user = userList.find(obj => obj["id"] == notification.destinationId);
 
             tableContent += `
@@ -224,6 +243,42 @@
             `;
         }
         table.innerHTML = tableContent;
+
+        // Analytics
+        overviewContainer.innerHTML = `
+            <h3 class="fw-bold mb-2">Overview</h3>
+            <div id="stats-container">
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${numTotal}</p>
+                    <p class="text-center">Notifications</p>
+                </div>
+                <div class="d-none d-lg-block">
+                    <p class="fs-1 fw-bold  text-center">${(numTotal > 0) ? Math.round(bodyLengthSum / numTotal) : 0}</p>
+                    <p class="text-center">μ Length</p>
+                </div>
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${numPrimary}</p>
+                    <p class="text-center">Primary</p>
+                </div>
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${numWarning}</p>
+                    <p class="text-center">Warning</p>
+                </div>
+                <div class="d-none d-lg-block">
+                    <p class="fs-1 fw-bold  text-center">${numDanger}</p>
+                    <p class="text-center">Danger</p>
+                </div>
+                <div class="d-none d-lg-block">
+                    <p class="fs-1 fw-bold  text-center">${numInfo}</p>
+                    <p class="text-center">Info</p>
+                </div>
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${numSuccess}</p>
+                    <p class="text-center">Success</p>
+                </div>
+            </div>
+
+        `;
     }
 </script>
 </body>

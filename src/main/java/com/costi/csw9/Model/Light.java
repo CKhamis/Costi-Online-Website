@@ -1,7 +1,6 @@
 package com.costi.csw9.Model;
 
 import com.costi.csw9.Model.Temp.LightRequest;
-import com.costi.csw9.Model.Temp.LightResponse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
