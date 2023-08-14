@@ -1,12 +1,10 @@
 package com.costi.csw9.Service;
 
-import com.costi.csw9.Model.AccountNotification;
-import com.costi.csw9.Model.Announcement;
-import com.costi.csw9.Model.Attachment;
-import com.costi.csw9.Model.Post;
+import com.costi.csw9.Model.*;
 import com.costi.csw9.Repository.AccountNotificationRepository;
 import com.costi.csw9.Repository.AnnouncementRepository;
 import com.costi.csw9.Repository.PostRepository;
+import com.costi.csw9.Repository.UserRepository;
 import com.costi.csw9.Util.LogicTools;
 import com.costi.csw9.Validation.FileValidator;
 import org.springframework.stereotype.Service;
@@ -28,12 +26,14 @@ public class COMTService {
     private final PostRepository postRepository;
     private final AttachmentService attachmentService;
     private final AccountNotificationRepository accountNotificationRepository;
+    private final UserRepository userRepository;
 
-    public COMTService(AnnouncementRepository announcementRepository, PostRepository postRepository, AttachmentService attachmentService, AccountNotificationRepository accountNotificationRepository) {
+    public COMTService(AnnouncementRepository announcementRepository, PostRepository postRepository, AttachmentService attachmentService, AccountNotificationRepository accountNotificationRepository, UserRepository userRepository) {
         this.announcementRepository = announcementRepository;
         this.postRepository = postRepository;
         this.attachmentService = attachmentService;
         this.accountNotificationRepository = accountNotificationRepository;
+        this.userRepository = userRepository;
     }
 
     /*
@@ -185,7 +185,18 @@ public class COMTService {
         Notifications
      */
 
+    public List<AccountNotification> findAllNotifications(){
+        return accountNotificationRepository.findAll();
+    }
     public void saveNotification(AccountNotification notification){
         accountNotificationRepository.save(notification);
+    }
+
+    /*
+        Users
+     */
+
+    public List<User> findAllUsers(){
+        return userRepository.findAll();
     }
 }

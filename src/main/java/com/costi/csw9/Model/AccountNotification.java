@@ -1,6 +1,7 @@
 package com.costi.csw9.Model;
 
 import com.costi.csw9.Model.Temp.AccountNotificationRequest;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -25,6 +26,7 @@ public class AccountNotification {
     private LocalDateTime dateCreated = LocalDateTime.now();
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -51,6 +53,10 @@ public class AccountNotification {
         this.body = body;
         this.notificationType = notificationType;
         this.user = user;
+    }
+
+    public Long getDestinationId(){
+        return this.user.getId();
     }
 
     public String getNotificationType() {

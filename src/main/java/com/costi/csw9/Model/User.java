@@ -1,5 +1,6 @@
 package com.costi.csw9.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,11 +44,13 @@ public class User implements UserDetails {
    private Boolean isLocked = false;
    private Boolean enabled =  false;
 
+   @JsonIgnore
    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
    private List<AccountLog> logs = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<AccountNotification> notifications = new ArrayList<>();
+   @JsonIgnore
+   @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+   private List<AccountNotification> notifications = new ArrayList<>();
 
     public User(String firstName, String lastName, String email, String password, UserRole role) {
         this.firstName = firstName;

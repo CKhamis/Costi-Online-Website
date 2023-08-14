@@ -1,9 +1,6 @@
 package com.costi.csw9.Controller.API;
 
-import com.costi.csw9.Model.AccountNotification;
-import com.costi.csw9.Model.Announcement;
-import com.costi.csw9.Model.FlashMessage;
-import com.costi.csw9.Model.Post;
+import com.costi.csw9.Model.*;
 import com.costi.csw9.Service.COMTService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -228,6 +225,12 @@ public class COMTController {
         Notifications
      */
 
+    @GetMapping("/notifications/all")
+    public ResponseEntity<List<AccountNotification>> getNotifications(){
+        List<AccountNotification> notifications = comtService.findAllNotifications();
+        return ResponseEntity.ok(notifications);
+    }
+
     @PostMapping("/notifications/save")
     public ResponseEntity<?> saveNotification(@Valid @ModelAttribute AccountNotification notification, BindingResult bindingResult) {
         // Check for validation errors
@@ -245,5 +248,15 @@ public class COMTController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving post: " + e.getMessage());
         }
+    }
+
+    /*
+        Users
+     */
+
+    @GetMapping("/users/all")
+    public ResponseEntity<List<User>> getUsers(){
+        List<User> users = comtService.findAllUsers();
+        return ResponseEntity.ok(users);
     }
 }

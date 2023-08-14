@@ -254,72 +254,9 @@ public class FrontEndController {
     }
 
 
-    @GetMapping("/COMT/Notifications/Create")
-    public String getCostiOnlineNotificationSettings(Model model, Principal principal, RedirectAttributes redirectAttributes) {
-        // TODO: add a nicer way to enable/disable, lock/unlock accounts
-        model.addAttribute("loggedIn", true);
-
-        if (!model.containsAttribute("notification")) {
-            model.addAttribute("notification", new AccountNotificationRequest());
-        }
-        model.addAttribute("allUsers", userService.loadAll());
-        model.addAttribute("action", "/COMT/Notifications/Create/post");
-
+    @GetMapping("/COMT/Notifications")
+    public String getCostiOnlineNotificationSettings(Model model) {
         return "moderator/NotificationTools";
-    }
-
-    @RequestMapping(value = "/COMT/Notifications/Create/post", method = RequestMethod.POST)
-    public String createNewNotification(@Valid AccountNotificationRequest notificationRequest, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) {
-            // Include validation errors upon redirect
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category", result);
-
-            // Re populate credentials in form
-            redirectAttributes.addFlashAttribute("notification", notificationRequest);
-
-            String errors = getErrorString(result);
-
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating notification", errors, FlashMessage.Status.DANGER));
-
-
-            // Redirect back to the form
-            return "redirect:/COMT/Notifications/Create";
-        }
-
-
-        if(notificationRequest.getDestination().equals("All")){
-            AccountNotification notification = null;
-            for(User user : userService.loadAll()){
-                notification = new AccountNotification(notificationRequest);
-                notification.setUser(user);
-                try {
-                    accountNotificationService.save(notification, getCurrentUser(principal));
-                    redirectAttributes.addFlashAttribute("flash", new FlashMessage("Notification Batch Sent", "Notification was sent to all accounts on Costi Online", FlashMessage.Status.SUCCESS));
-                } catch (Exception e) {
-                    redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error saving notification.", e.getMessage(), FlashMessage.Status.DANGER));
-                }
-            }
-        }else{
-            AccountNotification notification = new AccountNotification(notificationRequest);
-            notification.setUser(userService.findById(Long.parseLong(notificationRequest.getDestination())));
-            try {
-                accountNotificationService.save(notification, getCurrentUser(principal));
-                redirectAttributes.addFlashAttribute("flash", new FlashMessage("Notification Sent", "Notification was sent to user with ID of " + notificationRequest.getDestination(), FlashMessage.Status.SUCCESS));
-            } catch (Exception e) {
-                redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error saving notification.", e.getMessage(), FlashMessage.Status.DANGER));
-            }
-        }
-        return "redirect:/COMT/Notifications/Create";
-    }
-
-    @RequestMapping(value = "/COMT/Accounts/{userId}/Notification/{id}/delete", method = RequestMethod.GET)
-    public String adminDeleteNotification(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes, @PathVariable Long userId) {
-        try{
-            accountNotificationService.delete(id, getCurrentUser(principal));
-        }catch (Exception e){
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error deleting notification", e.getMessage(), FlashMessage.Status.DANGER));
-        }
-        return "redirect:/COMT/Accounts/" + userId;
     }
 
     @PostMapping("/COMT/Accounts/{id}/edit")

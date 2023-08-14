@@ -68,7 +68,6 @@
             const response1 = checkStatus(responses[0]);
             const response2 = checkStatus(responses[1]);
 
-            // Convert response data to JSON
             return Promise.all([response1, response2]);
         })
         .then(data => {
