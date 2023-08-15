@@ -42,7 +42,6 @@
 </main>
 
 <div th:replace="Components :: JS"></div>
-<!--<div th:replace="Components :: scripts"></div>-->
 <script th:replace="moderator/ModeratorComponents :: led-scripts"></script>
 <script>
     //data
@@ -119,6 +118,10 @@
     // Exists as a connector for universal functions
     function next(){
         //updateData();
+    }
+
+    function getObjectById(id) {
+        return responseData.find(obj => obj["id"] == id);
     }
 
 </script>

@@ -133,7 +133,6 @@
 
 <div th:replace="Components :: footer"></div>
 <div th:replace="Components :: JS"></div>
-<div th:replace="Components :: scripts"></div>
 <script>
     // Elements
     let count = document.querySelector("#notification-count");
@@ -157,6 +156,7 @@
             });
     }
     refresh();
+    const interval = setInterval(refresh, 5000);
 
     function deleteNotification(id){
         postData("/api/notifications/delete", id)

@@ -24,6 +24,7 @@
 
 <div th:fragment="main-navigation" class="position-sticky" style="z-index:99; width:100%;top:0;opacity:95%">
     <nav th:fragment="topNav" class="navbar navbar-expand-lg navbar-dark nav">
+        <script th:replace="Components :: network-util"></script>
         <div class="container-fluid">
             <a class="navbar-brand" href="/">
                 <img th:src="@{/icons/Logo.svg}" alt="costi online logo" width="30" height="30" class="d-inline-block align-text-top">
@@ -56,7 +57,7 @@
 
                         <ul th:if="${loggedIn}" class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item fw-bold" href="/Account" th:text="|${user.firstName} ${user.lastName}|">Action</a></li>
-                            <li><a class="dropdown-item" href="/Account" th:text="|Notifications: ${notificationCount}|">Notifications</a></li>
+                            <li id="nav-notification-container"></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="/Account">Account Settings</a></li>
                             <li class="dropdown-item">
@@ -65,18 +66,73 @@
                                     <button type="submit" class="btn btn-link p-0 text-1 text-decoration-none">Logout</button>
                                 </form>
                             </li>
+                            <div th:replace="Components :: nav-logic"></div>
                         </ul>
                     </li>
-
                 </div>
             </div>
-
         </div>
     </nav>
 </div>
 
-<script th:fragment="scripts">
-    // Universal assets
+<script th:fragment="nav-logic">
+    //Requires network-util & nav to function
+
+    // Elements
+    let navContainer = document.querySelector("#nav-notification-container");
+
+    // Data
+    let navNotifications;
+
+    // fetch
+    function navRefresh(){
+        fetch("/api/notifications/all")
+            .then(checkStatus)
+            .then(response => response.json())
+            .then(data => {
+                navNotifications = data;
+                renderNavNotifications()
+            })
+            .catch(error => {
+                // error handling
+                console.error('Error retrieving data:', error);
+            });
+    }
+    navRefresh();
+    setInterval(navRefresh, 60000);
+
+    function deleteNotification(id){
+        postData("/api/notifications/delete", id)
+            .catch(err => {
+                console.log(err);
+            })
+            .then(navRefresh);
+    }
+
+    // Render
+    function renderNavNotifications(){
+        if(navNotifications.length > 0){
+            let content = ``;
+            for(let i = navNotifications.length-1; i >= 0; i--){
+                let notification = navNotifications[i];
+
+                content += `
+                    <div class="alert alert-${notification.notificationType} alert-dismissible fade show" role="alert">
+                        <p class="fw-bold d-inline">${notification.title} • </p>
+                        <p class="d-inline">${notification.timeSinceCreated}</p>
+                        <a class="btn-close" onclick="deleteNotification(${notification.id})"></a>
+                        <p>${notification.body}</p>
+                    </div>
+                `;
+            }
+            navContainer.innerHTML = content;
+        }else{
+            navContainer.innerHTML = "<p class='text-center'>No Notifications</p>";
+        }
+    }
+</script>
+
+<script th:fragment="network-util">
     function postData(url, data) {
         // Retrieve the CSRF token from the meta tags
         let csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
@@ -103,11 +159,6 @@
                 console.error(error);
             });
     }
-
-    function getFooterHeight() {
-        const footer = document.querySelector('footer');
-        return footer ? footer.offsetHeight : 0;
-    }
     function checkStatus(response){
         if(response.ok){
             return Promise.resolve(response);
@@ -115,7 +166,16 @@
             return Promise.reject(new Error(response.statusText));
         }
     }
+</script>
 
+<script th:fragment="lazy-loading">
+    function getFooterHeight() {
+        const footer = document.querySelector('footer');
+        return footer ? footer.offsetHeight : 0;
+    }
+</script>
+
+<script th:fragment="axcel-sprite-logic">
     //Axcel game
     let numFoundSprites = 0;
     let quota = 0;
