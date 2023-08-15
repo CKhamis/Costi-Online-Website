@@ -16,7 +16,6 @@ import java.util.List;
 public class LightService {
     private final LightRepository lightRepository;
     private final LightLogRepository lightLogRepository;
-    private final int INTERVAL = 500000;
     public LightService(LightRepository lightRepository, LightLogRepository lightLogRepository) {
         this.lightRepository = lightRepository;
         this.lightLogRepository = lightLogRepository;
@@ -28,27 +27,6 @@ public class LightService {
 
     public List<Light> getAllLights() {
         return lightRepository.findAllByOrderByDateAddedDesc();
-    }
-
-    @Scheduled(fixedRate = INTERVAL)
-    public void updateAllStatus() {
-        List<Light> lights = lightRepository.findAllByOrderByDateAddedDesc();
-        for (Light light : lights) {
-            Hibernate.initialize(light.getLogs());
-            syncDown(light);
-        }
-    }
-
-    public String syncDown(Light light){
-        String currentStatus = light.getCurrentStatus();
-        LightLog log = new LightLog(light, currentStatus);
-        light.getLogs().add(log);
-
-        System.out.println(currentStatus);
-        lightLogRepository.save(log);
-        lightRepository.save(light);
-
-        return currentStatus;
     }
 
     public String syncUp(Light light){

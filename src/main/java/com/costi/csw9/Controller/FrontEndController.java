@@ -74,11 +74,6 @@ public class FrontEndController {
         if (principal != null) {
             User user = getCurrentUser(principal);
             model.addAttribute("user", user);
-            List<AccountNotification> notifications = accountNotificationService.findByUser(user);
-            model.addAttribute("notificationCount", notifications.size());
-        }else{
-            // If user is logged out
-            model.addAttribute("notificationCount", 0);
         }
         
         // User is logged in or out
@@ -96,8 +91,6 @@ public class FrontEndController {
         User user = getCurrentUser(principal);
         model.addAttribute("action", "/Account/edit");
         model.addAttribute("logs", accountLogService.findByUser(user));
-        List<AccountNotification> notifications = accountNotificationService.findByUser(user);
-        model.addAttribute("notifications", notifications);
         return "main/ViewAccount";
     }
 
@@ -133,17 +126,6 @@ public class FrontEndController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing account", e.getMessage(), FlashMessage.Status.DANGER));
         }
-        return "redirect:/Account";
-    }
-
-    @RequestMapping(value = "/Account/Notification/{id}/delete")
-    public String deleteNotification(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes) {
-        try{
-            accountNotificationService.delete(id, getCurrentUser(principal));
-        }catch (Exception e){
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error deleting notification", e.getMessage(), FlashMessage.Status.DANGER));
-        }
-
         return "redirect:/Account";
     }
 

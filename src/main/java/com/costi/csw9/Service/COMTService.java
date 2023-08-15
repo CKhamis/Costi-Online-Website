@@ -2,12 +2,11 @@ package com.costi.csw9.Service;
 
 import com.costi.csw9.Model.*;
 import com.costi.csw9.Model.Temp.AccountNotificationRequest;
-import com.costi.csw9.Repository.AccountNotificationRepository;
-import com.costi.csw9.Repository.AnnouncementRepository;
-import com.costi.csw9.Repository.PostRepository;
-import com.costi.csw9.Repository.UserRepository;
+import com.costi.csw9.Repository.*;
 import com.costi.csw9.Util.LogicTools;
 import com.costi.csw9.Validation.FileValidator;
+import org.hibernate.Hibernate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,13 +27,19 @@ public class COMTService {
     private final AttachmentService attachmentService;
     private final AccountNotificationRepository accountNotificationRepository;
     private final UserRepository userRepository;
+    private final LightRepository lightRepository;
+    private final LightLogRepository lightLogRepository;
+    private final LightService lightService;
 
-    public COMTService(AnnouncementRepository announcementRepository, PostRepository postRepository, AttachmentService attachmentService, AccountNotificationRepository accountNotificationRepository, UserRepository userRepository) {
+    public COMTService(AnnouncementRepository announcementRepository, PostRepository postRepository, AttachmentService attachmentService, AccountNotificationRepository accountNotificationRepository, UserRepository userRepository, LightRepository lightRepository, LightLogRepository lightLogRepository, LightService lightService) {
         this.announcementRepository = announcementRepository;
         this.postRepository = postRepository;
         this.attachmentService = attachmentService;
         this.accountNotificationRepository = accountNotificationRepository;
         this.userRepository = userRepository;
+        this.lightRepository = lightRepository;
+        this.lightService = lightService;
+        this.lightLogRepository = lightLogRepository;
     }
 
     /*
@@ -216,6 +221,61 @@ public class COMTService {
 
     public void deleteNotification(Long id) {
         accountNotificationRepository.deleteById(id);
+    }
+
+    /*
+        Lights
+     */
+    private final int INTERVAL = 500000;
+
+    public List<Light> findAllLights(){
+        return lightRepository.findAll();
+    }
+
+    public void saveLight(Light light) throws Exception{
+        // Update dates
+        if(light.getId() == null){
+            light.setDateAdded(LocalDateTime.now());
+        }
+        light.setLastModified(LocalDateTime.now());
+
+        try{
+            // Save light
+            Light savedLight = lightRepository.save(light);
+            // Test light
+            String message = lightService.syncUp(savedLight);
+
+            if(message.charAt(0) != 'C'){
+                throw new Exception("Light saved to database, but encountered a connection error: " + message);
+            }
+        }catch(Exception e){
+            throw e;
+        }
+    }
+
+    public void deleteLight(Long id) {
+        lightRepository.deleteById(id);
+    }
+
+    @Scheduled(fixedRate = INTERVAL)
+    public void updateAllStatus() {
+        List<Light> lights = lightRepository.findAllByOrderByDateAddedDesc();
+        for (Light light : lights) {
+            Hibernate.initialize(light.getLogs());
+            syncDown(light);
+        }
+    }
+
+    public String syncDown(Light light){
+        String currentStatus = light.getCurrentStatus();
+        LightLog log = new LightLog(light, currentStatus);
+        light.getLogs().add(log);
+
+        System.out.println(currentStatus);
+        lightLogRepository.save(log);
+        lightRepository.save(light);
+
+        return currentStatus;
     }
 
     /*

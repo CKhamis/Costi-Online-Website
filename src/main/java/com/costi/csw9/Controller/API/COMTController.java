@@ -243,6 +243,26 @@ public class COMTController {
     }
 
     /*
+        Lights
+     */
+
+    @GetMapping("/light/all")
+    public ResponseEntity<List<Light>> getLights(){
+        List<Light> lights = comtService.findAllLights();
+        return ResponseEntity.ok(lights);
+    }
+
+    @PostMapping("/light/save")
+    public ResponseEntity<String> saveLight(@RequestBody Light light) {
+        try{
+            comtService.saveLight(light);
+            return ResponseEntity.ok("Light saved successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving light: " + e.getMessage());
+        }
+    }
+
+    /*
         Users
      */
 

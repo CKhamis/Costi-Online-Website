@@ -40,15 +40,6 @@ public class LightController {
         return u;
     }
 
-    @GetMapping("/api/v1/LED/all-lights")
-    public ResponseEntity<List<Light>> getAllLights(Principal principal) {
-        User user = getCurrentUser(principal);
-        if (user.getRole().equals(UserRole.ADMIN) || getCurrentUser(principal).getRole().equals(UserRole.OWNER)) {
-            return ResponseEntity.ok(lightService.getAllLights());
-        }
-        return ResponseEntity.ok(lightService.getPublicLights(true));
-    }
-
     @GetMapping("/api/v1/LED/analytics")
     @ResponseBody
     public Map<String, Object> getLEDAnalytics() {
@@ -126,40 +117,9 @@ public class LightController {
         }
     }
 
-    @GetMapping("/api/v1/LED/{id}/sync-down")
-    public ResponseEntity<?> syncDown(@PathVariable Long id){
-        try {
-            Light light = lightService.getLightById(id);
-            String status = lightService.syncDown(light);
-
-            if(status.charAt(0) == 'C'){
-                return ResponseEntity.ok(status);
-            }else{
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error receiving data: " + status);
-            }
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
     /*
         Light Database Operations
      */
-
-    @PostMapping("/api/v1/LED/new")
-    public ResponseEntity<?> createNewLight(@RequestBody LightRequest lightRequest, Principal principal) {
-        if(getCurrentUser(principal).isOwner() || getCurrentUser(principal).isAdmin()){
-            try {
-                Light light = new Light(lightRequest);
-                Light savedLight = lightService.saveLight(light);
-                return ResponseEntity.ok("Light added/updated successfully. Light ID: " + savedLight.getId());
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding/updating light: " + e.getMessage());
-            }
-        }else{
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-    }
 
     @PostMapping("/api/v1/LED/edit")
     public ResponseEntity<?> editLight(@RequestBody EditLightRequest lightRequest, Principal principal) {
@@ -184,159 +144,6 @@ public class LightController {
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding/updating light: " + e.getMessage());
-        }
-    }
-
-    @PostMapping("/api/v1/LED/{id}/delete")
-    public ResponseEntity<String> deleteLight(@PathVariable Long id, Principal principal) {
-        User user = getCurrentUser(principal);
-        if(user.getRole().equals(UserRole.ADMIN) || getCurrentUser(principal).getRole().equals(UserRole.OWNER)){
-            try {
-                lightService.deleteLightById(id);
-                return ResponseEntity.ok("Light deleted successfully");
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting light: " + e.getMessage());
-            }
-        }else{
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-    }
-
-    @PostMapping("/api/v1/LED/{id}/enable")
-    public ResponseEntity<String> enableLight(@PathVariable Long id, Principal principal) {
-        User user = getCurrentUser(principal);
-        if(user.getRole().equals(UserRole.ADMIN) || getCurrentUser(principal).getRole().equals(UserRole.OWNER)){
-            try {
-                Light light = lightService.getLightById(id);
-                light.setEnabled(true);
-                lightService.saveLight(light);
-                return ResponseEntity.ok("Light enabled successfully");
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error enabling light: " + e.getMessage());
-            }
-        }else{
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-    }
-
-    @PostMapping("/api/v1/LED/{id}/disable")
-    public ResponseEntity<String> disableLight(@PathVariable Long id, Principal principal) {
-        User user = getCurrentUser(principal);
-        if(user.getRole().equals(UserRole.ADMIN) || getCurrentUser(principal).getRole().equals(UserRole.OWNER)){
-            try {
-                Light light = lightService.getLightById(id);
-                light.setEnabled(false);
-                lightService.saveLight(light);
-                return ResponseEntity.ok("Light disabled successfully");
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error disabling light: " + e.getMessage());
-            }
-        }else{
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-    }
-
-    @PostMapping("/api/v1/LED/{id}/publish")
-    public ResponseEntity<String> publishLight(@PathVariable Long id, Principal principal) {
-        User user = getCurrentUser(principal);
-        if(user.getRole().equals(UserRole.ADMIN) || getCurrentUser(principal).getRole().equals(UserRole.OWNER)){
-            try {
-                Light light = lightService.getLightById(id);
-                light.setPublic(true);
-                lightService.saveLight(light);
-                return ResponseEntity.ok("Light published successfully");
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error publishing light: " + e.getMessage());
-            }
-        }else{
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-    }
-
-    @PostMapping("/api/v1/LED/{id}/private")
-    public ResponseEntity<String> privateLight(@PathVariable Long id, Principal principal) {
-        User user = getCurrentUser(principal);
-        if(user.getRole().equals(UserRole.ADMIN) || getCurrentUser(principal).getRole().equals(UserRole.OWNER)){
-            try {
-                Light light = lightService.getLightById(id);
-                light.setPublic(false);
-                lightService.saveLight(light);
-                return ResponseEntity.ok("Light privated successfully");
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error privating light: " + e.getMessage());
-            }
-        }else{
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-    }
-
-    @PostMapping("/api/v1/LED/{id}/favorite")
-    public ResponseEntity<String> favoriteLight(@PathVariable Long id, Principal principal) {
-        User user = getCurrentUser(principal);
-        if(user.getRole().equals(UserRole.ADMIN) || getCurrentUser(principal).getRole().equals(UserRole.OWNER)){
-            try {
-                Light light = lightService.getLightById(id);
-                light.setFavorite(true);
-                lightService.saveLight(light);
-                return ResponseEntity.ok("Light favorited successfully");
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error editing light: " + e.getMessage());
-            }
-        }else{
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-    }
-
-    @PostMapping("/api/v1/LED/{id}/disfavorite")
-    public ResponseEntity<String> disfavoriteLight(@PathVariable Long id, Principal principal) {
-        User user = getCurrentUser(principal);
-        if(user.getRole().equals(UserRole.ADMIN) || getCurrentUser(principal).getRole().equals(UserRole.OWNER)){
-            try {
-                Light light = lightService.getLightById(id);
-                light.setFavorite(false);
-                lightService.saveLight(light);
-                return ResponseEntity.ok("Light disfavorited successfully");
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error editing light: " + e.getMessage());
-            }
-        }else{
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-    }
-
-    @PostMapping("/api/v1/LED/disable-all")
-    public ResponseEntity<String> disableAll(Principal principal) {
-        User user = getCurrentUser(principal);
-        if(user.getRole().equals(UserRole.ADMIN) || getCurrentUser(principal).getRole().equals(UserRole.OWNER)){
-            try {
-                for(Light light : lightService.getEnabledLights(true)){
-                    light.setEnabled(false);
-                    lightService.saveLight(light);
-                }
-                return ResponseEntity.ok("Lights disabled successfully");
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error editing lights: " + e.getMessage());
-            }
-        }else{
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-    }
-
-    @PostMapping("/api/v1/LED/private-all")
-    public ResponseEntity<String> privateAll(Principal principal) {
-        User user = getCurrentUser(principal);
-        if(user.getRole().equals(UserRole.ADMIN) || getCurrentUser(principal).getRole().equals(UserRole.OWNER)){
-            try {
-                for(Light light : lightService.getPublicLights(true)){
-                    light.setPublic(false);
-                    lightService.saveLight(light);
-                }
-                return ResponseEntity.ok("Lights privated successfully");
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error editing lights: " + e.getMessage());
-            }
-        }else{
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 }
