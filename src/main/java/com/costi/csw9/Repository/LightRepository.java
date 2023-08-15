@@ -9,8 +9,5 @@ import java.util.List;
 @Repository
 public interface LightRepository extends JpaRepository<Light, Long> {
     List<Light> findAllByOrderByDateAddedDesc();
-    List<Light> findByIsEnabledOrderByDateAddedDesc(boolean isEnabled);
-    List<Light> findByIsPublicOrderByDateAddedDesc(boolean isPublic);
-    List<Light> findByIsFavoriteOrderByDateAddedDesc(boolean isFavorite);
-
+    List<Light> findAllByIsEnabledTrueAndIsPublicTrueOrderByDateAddedDesc();
 }

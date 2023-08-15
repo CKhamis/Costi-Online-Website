@@ -14,11 +14,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.rmi.ConnectIOException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Controller
@@ -254,11 +256,43 @@ public class COMTController {
 
     @PostMapping("/light/save")
     public ResponseEntity<String> saveLight(@RequestBody Light light) {
-        try{
-            comtService.saveLight(light);
+        try {
+            String result = comtService.saveLight(light);
+            return ResponseEntity.ok(result);
+        } catch (ConnectIOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error sending data: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding/updating light: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/light/delete")
+    public ResponseEntity<String> deleteLight(@RequestBody Long id) {
+        try {
+            comtService.deleteLight(id);
+            return ResponseEntity.ok("Light deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting light: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/light/sync-up")
+    public ResponseEntity<String> syncLightUp(@RequestBody Light light) {
+        try {
+            comtService.syncUp(light);
             return ResponseEntity.ok("Light saved successfully");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving light: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving settings to light: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/light/sync-down")
+    public ResponseEntity<String> syncLightDown(@RequestBody Light light) {
+        try {
+            comtService.syncDown(light);
+            return ResponseEntity.ok("Light saved successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving settings to light: " + e.getMessage());
         }
     }
 

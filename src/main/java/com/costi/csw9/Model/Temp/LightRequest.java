@@ -9,6 +9,9 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @NoArgsConstructor
+/***
+ * DTO for communication between Costi Online Light Nodes and Costi Online Services
+ */
 public class LightRequest {
     private String label, color, pattern;
     @NotNull

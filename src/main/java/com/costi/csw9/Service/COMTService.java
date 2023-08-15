@@ -6,12 +6,15 @@ import com.costi.csw9.Repository.*;
 import com.costi.csw9.Util.LogicTools;
 import com.costi.csw9.Validation.FileValidator;
 import org.hibernate.Hibernate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
+import java.rmi.ConnectIOException;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -232,25 +235,21 @@ public class COMTService {
         return lightRepository.findAll();
     }
 
-    public void saveLight(Light light) throws Exception{
+    public String saveLight(Light light) throws Exception{
         // Update dates
         if(light.getId() == null){
             light.setDateAdded(LocalDateTime.now());
         }
         light.setLastModified(LocalDateTime.now());
 
-        try{
-            // Save light
-            Light savedLight = lightRepository.save(light);
-            // Test light
-            String message = lightService.syncUp(savedLight);
+        //Upload data to light
+        String status = syncUp(light);
 
-            if(message.charAt(0) != 'C'){
-                throw new Exception("Light saved to database, but encountered a connection error: " + message);
-            }
-        }catch(Exception e){
-            throw e;
+        if(status.charAt(0) != 'C'){
+            throw new ConnectIOException("Error sending data: " + status);
         }
+
+        return status;
     }
 
     public void deleteLight(Long id) {
@@ -262,11 +261,15 @@ public class COMTService {
         List<Light> lights = lightRepository.findAllByOrderByDateAddedDesc();
         for (Light light : lights) {
             Hibernate.initialize(light.getLogs());
-            syncDown(light);
+            try{
+                syncDown(light);
+            }catch(Exception e){
+                System.out.println(e);
+            }
         }
     }
 
-    public String syncDown(Light light){
+    public void syncDown(Light light) throws Exception{
         String currentStatus = light.getCurrentStatus();
         LightLog log = new LightLog(light, currentStatus);
         light.getLogs().add(log);
@@ -275,7 +278,17 @@ public class COMTService {
         lightLogRepository.save(log);
         lightRepository.save(light);
 
-        return currentStatus;
+        if(currentStatus.charAt(0) != 'C'){
+            throw new Exception(currentStatus);
+        }
+    }
+
+    public String syncUp(Light light) throws Exception{
+        String response = lightService.syncUp(light);
+        if(response.charAt(0) != 'C'){
+            throw new Exception(response);
+        }
+        return response;
     }
 
     /*
