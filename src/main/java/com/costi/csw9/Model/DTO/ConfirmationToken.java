@@ -1,4 +1,4 @@
-package com.costi.csw9.Model.Temp;
+package com.costi.csw9.Model.DTO;
 
 import com.costi.csw9.Model.User;
 import lombok.Getter;

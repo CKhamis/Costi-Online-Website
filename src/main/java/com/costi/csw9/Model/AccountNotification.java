@@ -1,6 +1,6 @@
 package com.costi.csw9.Model;
 
-import com.costi.csw9.Model.Temp.AccountNotificationRequest;
+import com.costi.csw9.Model.DTO.AccountNotificationRequest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;

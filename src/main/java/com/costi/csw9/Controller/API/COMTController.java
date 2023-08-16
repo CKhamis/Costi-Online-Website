@@ -1,7 +1,8 @@
 package com.costi.csw9.Controller.API;
 
 import com.costi.csw9.Model.*;
-import com.costi.csw9.Model.Temp.AccountNotificationRequest;
+import com.costi.csw9.Model.DTO.AccountNotificationRequest;
+import com.costi.csw9.Model.DTO.ResponseMessage;
 import com.costi.csw9.Service.COMTService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.rmi.ConnectIOException;
@@ -20,7 +20,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Controller
@@ -88,27 +87,27 @@ public class COMTController {
     }
 
     @PostMapping("/announcement/save")
-    public ResponseEntity<String> saveAnnouncement(@RequestBody Announcement announcement) {
+    public ResponseEntity<ResponseMessage> saveAnnouncement(@RequestBody Announcement announcement) {
         try {
             if(announcement.getId() > 0){
                 comtService.saveAnnouncement(announcement);
             }else{
                 comtService.saveAnnouncement(new Announcement(announcement));
             }
-            return ResponseEntity.ok("Announcement saved successfully");
+            return ResponseEntity.ok(new ResponseMessage("Announcement Saved", ResponseMessage.Severity.INFORMATIONAL, "Announcement settings are saved to Costi Online"));
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving announcement: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error Saving Announcement", ResponseMessage.Severity.MEDIUM, e.getMessage()));
         }
     }
 
     @PostMapping("/announcement/delete")
-    public ResponseEntity<String> deleteAnnouncement(@RequestBody Long id) {
+    public ResponseEntity<ResponseMessage> deleteAnnouncement(@RequestBody Long id) {
         try {
             comtService.deleteAnnouncement(id);
-            return ResponseEntity.ok("Announcement deleted successfully");
+            return ResponseEntity.ok(new ResponseMessage("Announcement Deleted", ResponseMessage.Severity.INFORMATIONAL, "Announcement is no longer accessible nor recoverable."));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting announcement: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error Deleting Announcement", ResponseMessage.Severity.MEDIUM, e.getMessage()));
         }
     }
 
@@ -182,24 +181,24 @@ public class COMTController {
     }
 
     @PostMapping("/newsroom/delete")
-    public ResponseEntity<String> deletePost(@RequestBody Long id) {
+    public ResponseEntity<ResponseMessage> deletePost(@RequestBody Long id) {
         try {
             comtService.deletePost(id);
-            return ResponseEntity.ok("Post deleted successfully");
+            return ResponseEntity.ok(new ResponseMessage("Post Deleted", ResponseMessage.Severity.MEDIUM, "Post of ID " + id + " is no longer accessible nor recoverable."));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting post: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error Deleting Notification", ResponseMessage.Severity.MEDIUM, e.getMessage()));
         }
     }
 
     @PostMapping("/newsroom/save")
-    public ResponseEntity<?> savePost(@Valid @ModelAttribute Post post, BindingResult bindingResult, @RequestParam(value = "image", required = false) MultipartFile file) {
+    public ResponseEntity<ResponseMessage> savePost(@Valid @ModelAttribute Post post, BindingResult bindingResult, @RequestParam(value = "image", required = false) MultipartFile file) {
         // Check for validation errors
         if (bindingResult.hasErrors()) {
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
             String errorMessages = fieldErrors.stream()
                     .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
                     .collect(Collectors.joining(", "));
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Validation errors: " + errorMessages);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Error Creating Post", ResponseMessage.Severity.MEDIUM, errorMessages));
         }
 
         try {
@@ -208,9 +207,9 @@ public class COMTController {
             } else {
                 comtService.savePost(post);
             }
-            return ResponseEntity.status(HttpStatus.OK).body("Post Saved");
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("Post Saved", ResponseMessage.Severity.INFORMATIONAL, "Post was saved to Costi Online."));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving post: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error Creating Post", ResponseMessage.Severity.MEDIUM, e.getMessage()));
         }
     }
 
@@ -225,22 +224,22 @@ public class COMTController {
     }
 
     @PostMapping("/notifications/save")
-    public ResponseEntity<String> saveNotification(@RequestBody AccountNotificationRequest request) {
+    public ResponseEntity<ResponseMessage> saveNotification(@RequestBody AccountNotificationRequest request) {
         try{
             comtService.saveNotification(request);
-            return ResponseEntity.ok("Notification saved successfully");
+            return ResponseEntity.ok(new ResponseMessage("Notification Saved", ResponseMessage.Severity.INFORMATIONAL, "Post is now visible to user"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving notification: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error Saving Notification", ResponseMessage.Severity.MEDIUM, e.getMessage()));
         }
     }
 
     @PostMapping("/notifications/delete")
-    public ResponseEntity<String> deleteNotification(@RequestBody Long id) {
+    public ResponseEntity<ResponseMessage> deleteNotification(@RequestBody Long id) {
         try {
             comtService.deleteNotification(id);
-            return ResponseEntity.ok("Notification deleted successfully");
+            return ResponseEntity.ok(new ResponseMessage("Notification Deleted", ResponseMessage.Severity.INFORMATIONAL, "Notification is no longer accessible nor recoverable."));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting notification: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error Deleting Notification", ResponseMessage.Severity.MEDIUM, e.getMessage()));
         }
     }
 
@@ -255,44 +254,44 @@ public class COMTController {
     }
 
     @PostMapping("/light/save")
-    public ResponseEntity<String> saveLight(@RequestBody Light light) {
+    public ResponseEntity<ResponseMessage> saveLight(@RequestBody Light light) {
         try {
             String result = comtService.saveLight(light);
-            return ResponseEntity.ok(result);
+            return ResponseEntity.ok(new ResponseMessage("Light Saved", ResponseMessage.Severity.INFORMATIONAL, "New entry: " + result.toString()));
         } catch (ConnectIOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error sending data: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error Saving Light", ResponseMessage.Severity.MEDIUM, "Light settings saved to Costi Online, but could not send data to Costi Online LED module"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding/updating light: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error Saving Light", ResponseMessage.Severity.MEDIUM, e.getMessage()));
         }
     }
 
     @PostMapping("/light/delete")
-    public ResponseEntity<String> deleteLight(@RequestBody Long id) {
+    public ResponseEntity<ResponseMessage> deleteLight(@RequestBody Long id) {
         try {
             comtService.deleteLight(id);
-            return ResponseEntity.ok("Light deleted successfully");
+            return ResponseEntity.ok(new ResponseMessage("Light Deleted", ResponseMessage.Severity.INFORMATIONAL, "Light of id " + id + " is no longer accessible or recoverable."));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting light: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Communication Unsuccessful", ResponseMessage.Severity.HIGH, e.getMessage()));
         }
     }
 
     @PostMapping("/light/sync-up")
-    public ResponseEntity<String> syncLightUp(@RequestBody Light light) {
+    public ResponseEntity<ResponseMessage> syncLightUp(@RequestBody Long id) {
         try {
-            comtService.syncUp(light);
-            return ResponseEntity.ok("Light saved successfully");
+            comtService.syncUp(id);
+            return ResponseEntity.ok(new ResponseMessage("Communication Successful", ResponseMessage.Severity.INFORMATIONAL, "Data sent to light of id " + id + " successfully."));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving settings to light: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Communication Unsuccessful", ResponseMessage.Severity.HIGH, e.getMessage()));
         }
     }
 
     @PostMapping("/light/sync-down")
-    public ResponseEntity<String> syncLightDown(@RequestBody Light light) {
+    public ResponseEntity<ResponseMessage> syncLightDown(@RequestBody Long id) {
         try {
-            comtService.syncDown(light);
-            return ResponseEntity.ok("Light saved successfully");
+            comtService.syncDown(id);
+            return ResponseEntity.ok(new ResponseMessage("Communication Successful", ResponseMessage.Severity.INFORMATIONAL, "Data downloaded from light " + id + " successfully."));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving settings to light: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Communication Unsuccessful", ResponseMessage.Severity.HIGH, e.getMessage()));
         }
     }
 

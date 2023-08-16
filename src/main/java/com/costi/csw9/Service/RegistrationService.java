@@ -2,7 +2,7 @@ package com.costi.csw9.Service;
 
 import com.costi.csw9.Model.User;
 import com.costi.csw9.Model.UserRole;
-import com.costi.csw9.Model.Temp.ConfirmationToken;
+import com.costi.csw9.Model.DTO.ConfirmationToken;
 import com.costi.csw9.Repository.UserRepository;
 import com.costi.csw9.Validation.EmailValidator;
 import lombok.AllArgsConstructor;

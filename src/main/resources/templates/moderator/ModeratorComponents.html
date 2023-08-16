@@ -74,7 +74,7 @@
 
   // Fetch functions
   function getAllLightData(){
-    fetch("/api/v1/LED/all-lights")
+    fetch("/api/management/light/all")
             .then(checkStatus)
             .then(response => response.json())
             .then(data => {

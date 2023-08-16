@@ -1,7 +1,7 @@
 package com.costi.csw9.Controller;
 
 import com.costi.csw9.Model.Attachment;
-import com.costi.csw9.Model.Temp.FileUploadResponseData;
+import com.costi.csw9.Model.DTO.FileUploadResponseData;
 import com.costi.csw9.Service.AttachmentService;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;

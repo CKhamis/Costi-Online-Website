@@ -153,11 +153,7 @@
         // Perform the fetch request
         return fetch(url, options)
             .then(checkStatus)
-            .then(response => response.json())
-            .catch(error => {
-                // Handle any errors
-                console.error(error);
-            });
+            .then(response => response.json());
     }
     function checkStatus(response){
         if(response.ok){

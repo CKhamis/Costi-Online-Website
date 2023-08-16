@@ -1,7 +1,7 @@
 package com.costi.csw9.Service;
 
 import com.costi.csw9.Model.*;
-import com.costi.csw9.Model.Temp.ConfirmationToken;
+import com.costi.csw9.Model.DTO.ConfirmationToken;
 import com.costi.csw9.Repository.AccountNotificationRepository;
 import com.costi.csw9.Repository.UserRepository;
 import com.costi.csw9.Util.LogicTools;

@@ -174,18 +174,18 @@
     //GET functions
     function updateData(){
         getAllLightData();
-        fetch("/api/v1/LED/analytics")
-            .then(checkStatus)
-            .then(response => response.json())
-            .then(data => {
-                overviewData = data;
-                renderOverview();
-            })
-            .catch(error => {
-                // error handling
-                errorContainer.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>";
-                console.error('Error retrieving data:', error);
-            });
+        // fetch("/api/v1/LED/analytics")
+        //     .then(checkStatus)
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         overviewData = data;
+        //         renderOverview();
+        //     })
+        //     .catch(error => {
+        //         // error handling
+        //         errorContainer.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>";
+        //         console.error('Error retrieving data:', error);
+        //     });
     }
     updateData();
 
@@ -195,16 +195,13 @@
 
         pElement.innerText = "Please wait...";
         titleElement.innerText = "Connecting to light";
-        fetch(`/api/v1/LED/${id}/sync-down`)
-            .then(checkStatus)
+        postData("/api/management/light/sync-down", id)
             .then(data => {
-                titleElement.innerText = "Sync Complete";
-                pElement.innerText = "Device successfully responded. Data downloaded from device.";
+                console.log(data);
+                titleElement.innerText = data.title;
+                pElement.innerText = data.message;
             })
-            .catch(error => {
-                titleElement.innerText = "Sync Failed";
-                pElement.innerText = `Error connecting to light: ${error}`;
-            })
+            .catch(e =>{console.log(e)})
             .finally(() => {
                 updateData();
             });
@@ -216,16 +213,13 @@
 
         pElement.innerText = "Please wait...";
         titleElement.innerText = "Connecting to light";
-        fetch(`/api/v1/LED/${id}/sync-up`)
-            .then(checkStatus)
+        postData("/api/management/light/sync-up", id)
             .then(data => {
-                titleElement.innerText = "Sync Complete";
-                pElement.innerText = "Device successfully responded. Data sent to device.";
+                console.log(data);
+                titleElement.innerText = data.title;
+                pElement.innerText = data.message;
             })
-            .catch(error => {
-                titleElement.innerText = "Sync Failed";
-                pElement.innerText = `Error connecting to light: ${error}`;
-            })
+            .catch(e =>{console.log(e)})
             .finally(() => {
                 updateData();
             });
@@ -233,24 +227,6 @@
 
     //POST functions
     function saveLight() {
-        // Extract input values
-        let addressInput = document.getElementById('address-input');
-        let labelInput = document.getElementById('label-input');
-        let colorInput = document.getElementById('color-input');
-        let patterInput = document.getElementById('pattern-input');
-
-        // Execute submitNew() function with extracted values
-        let lightData = {"address": addressInput.value, "label": labelInput.value, "color": colorInput.value, "pattern": patterInput.value};
-
-        postData("/api/v1/LED/new", lightData)
-            .then(updateData);
-
-        // Reset the form
-        labelInput.value = "";
-        colorInput.value= "";
-        patterInput.value = "";
-    }
-    function editLight() {
         // Extract input values
         let idInput = document.getElementById('id-input');
         let addressInput = document.getElementById('address-2')
@@ -261,7 +237,7 @@
         // Execute submitNew() function with extracted values
         let lightData = {"address": addressInput.value, "id": idInput.value, "label": labelInput.value, "color": colorInput.value, "pattern": patterInput.value};
 
-        postData("/api/v1/LED/edit", lightData)
+        postData("/api/management/light/save", lightData)
             .then(updateData);
 
         // Reset the form
@@ -271,49 +247,24 @@
         idInput.value = "";
     }
     function deleteLight(id) {
-        postData(`/api/v1/LED/${id}/delete`)
+        postData(`/api/management/light/delete`, id)
             .catch(err => console.log(err))
             .then(updateData);
     }
     function publishLight(id, isPublic) {
-        let url = `/api/v1/LED/${id}/publish`;
-        if(!isPublic){
-            url = `/api/v1/LED/${id}/private`
-        }
 
-        postData(url)
-            .catch(err => console.log(err))
-            .then(updateData);
     }
     function enableLight(id, isEnabled) {
-        let url = `/api/v1/LED/${id}/enable`;
-        if(!isEnabled){
-            url = `/api/v1/LED/${id}/disable`
-        }
 
-        postData(url)
-            .catch(err => console.log(err))
-            .then(updateData);
     }
     function favoriteLight(id, isFavorite) {
-        let url = `/api/v1/LED/${id}/favorite`;
-        if(!isFavorite){
-            url = `/api/v1/LED/${id}/disfavorite`
-        }
 
-        postData(url)
-            .catch(err => console.log(err))
-            .then(updateData);
     }
     function disableAll() {
-        postData("/api/v1/LED/disable-all")
-            .catch(err => console.log(err))
-            .then(updateData);
+
     }
     function privateAll() {
-        postData("/api/v1/LED/private-all")
-            .catch(err => console.log(err))
-            .then(updateData);
+
     }
 
     //Rendering functions

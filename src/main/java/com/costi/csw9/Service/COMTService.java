@@ -1,13 +1,11 @@
 package com.costi.csw9.Service;
 
 import com.costi.csw9.Model.*;
-import com.costi.csw9.Model.Temp.AccountNotificationRequest;
+import com.costi.csw9.Model.DTO.AccountNotificationRequest;
 import com.costi.csw9.Repository.*;
 import com.costi.csw9.Util.LogicTools;
 import com.costi.csw9.Validation.FileValidator;
 import org.hibernate.Hibernate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,10 +14,7 @@ import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.rmi.ConnectIOException;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static com.costi.csw9.Util.LogicTools.POST_IMAGE_PATH;
 
@@ -243,7 +238,7 @@ public class COMTService {
         light.setLastModified(LocalDateTime.now());
 
         //Upload data to light
-        String status = syncUp(light);
+        String status = syncUp(light.getId()); // Inefficient, but couldn't really figure out a better way
 
         if(status.charAt(0) != 'C'){
             throw new ConnectIOException("Error sending data: " + status);
@@ -262,14 +257,22 @@ public class COMTService {
         for (Light light : lights) {
             Hibernate.initialize(light.getLogs());
             try{
-                syncDown(light);
+                syncDown(light.getId()); // Inefficient, but couldn't really figure out a better way
             }catch(Exception e){
                 System.out.println(e);
             }
         }
     }
 
-    public void syncDown(Light light) throws Exception{
+    public void syncDown(Long id) throws Exception{
+        Optional<Light> optionalLight = lightRepository.findById(id);
+
+        if(optionalLight.isEmpty()){
+            throw new NoSuchElementException("Light could not be found");
+        }
+
+        Light light = optionalLight.get();
+
         String currentStatus = light.getCurrentStatus();
         LightLog log = new LightLog(light, currentStatus);
         light.getLogs().add(log);
@@ -283,7 +286,15 @@ public class COMTService {
         }
     }
 
-    public String syncUp(Light light) throws Exception{
+    public String syncUp(Long id) throws Exception{
+        Optional<Light> optionalLight = lightRepository.findById(id);
+
+        if(optionalLight.isEmpty()){
+            throw new NoSuchElementException("Light could not be found");
+        }
+
+        Light light = optionalLight.get();
+
         String response = lightService.syncUp(light);
         if(response.charAt(0) != 'C'){
             throw new Exception(response);

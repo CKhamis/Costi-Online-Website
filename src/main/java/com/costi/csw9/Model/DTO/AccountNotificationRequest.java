@@ -1,10 +1,6 @@
-package com.costi.csw9.Model.Temp;
+package com.costi.csw9.Model.DTO;
 
-import com.costi.csw9.Model.User;
-
-import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 public class AccountNotificationRequest {
     private String title;
