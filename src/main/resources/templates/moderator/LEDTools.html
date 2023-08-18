@@ -242,7 +242,7 @@
         pElement.innerText = "Please wait...";
         titleElement.innerText = "Saving and Testing Light";
 
-        // Execute submitNew() function with extracted values
+        // Use extracted values to create a new ModeratorLightRequest
         let lightData = {"address": addressInput.value, "id": null, "label": labelInput.value, "color": colorInput.value, "pattern": patterInput.value, "favorite": false, "public": false,"enabled": false};
         postData("/api/management/light/save", lightData)
             .then(data => {
@@ -258,7 +258,7 @@
                     })
                     .catch(error => {
                         console.error("Error parsing error response:", error);
-                        titleElement.innerText = "Error Saving Light";
+                        titleElement.innerText = "Error Saving or Testing Light";
                         pElement.innerText = "An error occurred. Please check the console for more information.";
                     });
             })
@@ -280,7 +280,21 @@
                 document.getElementById(`${toastId}-title`).innerText = data.title;
                 document.getElementById(`${toastId}-loading`).style.color = "green";
             })
-            .catch(e =>{console.log(e)})
+            .catch((response)=>{
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
             .then(updateData);
     }
     function toggleVisibility(id) {
@@ -293,7 +307,21 @@
                 document.getElementById(`${toastId}-title`).innerText = data.title;
                 document.getElementById(`${toastId}-loading`).style.color = "green";
             })
-            .catch(e =>{console.log(e)})
+            .catch((response)=>{
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
             .then(updateData);
     }
     function enableLight(id) {
@@ -306,7 +334,21 @@
                 document.getElementById(`${toastId}-title`).innerText = data.title;
                 document.getElementById(`${toastId}-loading`).style.color = "green";
             })
-            .catch(e =>{console.log(e)})
+            .catch((response)=>{
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
             .then(updateData);
     }
     function favoriteLight(id) {
@@ -319,7 +361,21 @@
                 document.getElementById(`${toastId}-title`).innerText = data.title;
                 document.getElementById(`${toastId}-loading`).style.color = "green";
             })
-            .catch(e =>{console.log(e)})
+            .catch((response)=>{
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
             .then(updateData);
     }
     function disableAll() {
