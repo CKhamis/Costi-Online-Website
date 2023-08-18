@@ -265,10 +265,9 @@
     function toggleVisibility(id) {
         let toastId = createToast("Toggling Visibility");
         let light = getObjectById(id);
-        let newLight = {"address": light.address, "id": light.id, "label": light.label, "color": light.color, "pattern": light.pattern, "favorite": light.favorite, "public":  light.public,"enabled": light.enabled};
+        let newLight = {"address": light.address, "id": light.id, "label": light.label, "color": light.color, "pattern": light.pattern, "favorite": light.favorite, "public":  !light.public,"enabled": light.enabled};
         postData(`/api/management/light/save`, newLight)
             .then(data => {
-                console.log(data);
                 document.getElementById(`${toastId}-body`).innerText = getIcon(data.severity) + data.message;
                 document.getElementById(`${toastId}-title`).innerText = data.title;
                 document.getElementById(`${toastId}-loading`).style.color = "green";
@@ -276,11 +275,31 @@
             .catch(e =>{console.log(e)})
             .then(updateData);
     }
-    function enableLight(id, isEnabled) {
-
+    function enableLight(id) {
+        let toastId = createToast("Toggling Activation");
+        let light = getObjectById(id);
+        let newLight = {"address": light.address, "id": light.id, "label": light.label, "color": light.color, "pattern": light.pattern, "favorite": light.favorite, "public":  light.public,"enabled": !light.enabled};
+        postData(`/api/management/light/save`, newLight)
+            .then(data => {
+                document.getElementById(`${toastId}-body`).innerText = getIcon(data.severity) + data.message;
+                document.getElementById(`${toastId}-title`).innerText = data.title;
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch(e =>{console.log(e)})
+            .then(updateData);
     }
-    function favoriteLight(id, isFavorite) {
-
+    function favoriteLight(id) {
+        let toastId = createToast("Toggling Favorite");
+        let light = getObjectById(id);
+        let newLight = {"address": light.address, "id": light.id, "label": light.label, "color": light.color, "pattern": light.pattern, "favorite": !light.favorite, "public":  light.public,"enabled": light.enabled};
+        postData(`/api/management/light/save`, newLight)
+            .then(data => {
+                document.getElementById(`${toastId}-body`).innerText = getIcon(data.severity) + data.message;
+                document.getElementById(`${toastId}-title`).innerText = data.title;
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch(e =>{console.log(e)})
+            .then(updateData);
     }
     function disableAll() {
 

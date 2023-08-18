@@ -1,5 +1,6 @@
 package com.costi.csw9.Service;
 
+import com.costi.csw9.Model.DTO.UserLightRequest;
 import com.costi.csw9.Model.Light;
 import com.costi.csw9.Model.LightLog;
 import com.costi.csw9.Repository.LightLogRepository;
@@ -42,14 +43,14 @@ public class LightService {
         return currentStatus;
     }
 
-    public String saveLight(Light light) throws Exception{
+    public String saveLight(UserLightRequest request) throws Exception{
         // Check if valid
-        if(light.getId() == null){
+        if(request.getId() == null){
             throw new NullPointerException("ID field cannot be null");
         }
 
         // Check if exists
-        Optional<Light> optionalLight = lightRepository.findById(light.getId());
+        Optional<Light> optionalLight = lightRepository.findById(request.getId());
 
         if(optionalLight.isEmpty()){
             throw new NoSuchElementException("Light could not be found");
@@ -63,8 +64,8 @@ public class LightService {
         }
 
         // Transfer fields
-        originalLight.setColor(light.getColor());
-        originalLight.setPattern(light.getPattern());
+        originalLight.setColor(request.getColor());
+        originalLight.setPattern(request.getPattern());
         originalLight.setLastModified(LocalDateTime.now());
 
         //Upload data to light

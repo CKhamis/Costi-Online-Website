@@ -2,6 +2,7 @@ package com.costi.csw9.Controller.API;
 
 import com.costi.csw9.Model.*;
 import com.costi.csw9.Model.DTO.AccountNotificationRequest;
+import com.costi.csw9.Model.DTO.ModeratorLightRequest;
 import com.costi.csw9.Model.DTO.ResponseMessage;
 import com.costi.csw9.Service.COMTService;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Controller
@@ -254,13 +256,15 @@ public class COMTController {
     }
 
     @PostMapping("/light/save")
-    public ResponseEntity<ResponseMessage> saveLight(@RequestBody Light light) {
+    public ResponseEntity<ResponseMessage> saveLight(@RequestBody ModeratorLightRequest request) {
         try {
-            String result = comtService.saveLight(light);
-            return ResponseEntity.ok(new ResponseMessage("Light Saved", ResponseMessage.Severity.INFORMATIONAL, "New entry: " + result.toString()));
+            comtService.saveLight(request);
+            return ResponseEntity.ok(new ResponseMessage("Light Saved", ResponseMessage.Severity.INFORMATIONAL, "Light settings have been saved to Costi Online and uploaded to light"));
         } catch (ConnectIOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error Saving Light", ResponseMessage.Severity.MEDIUM, "Light settings saved to Costi Online, but could not send data to Costi Online LED module"));
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error Saving Light", ResponseMessage.Severity.LOW, "The specified ID of the request (" + request.getId() + ") could not be found on Costi Online."));
+        }catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error Saving Light", ResponseMessage.Severity.MEDIUM, e.getMessage()));
         }
     }

@@ -1,6 +1,7 @@
 package com.costi.csw9.Model;
 
 import com.costi.csw9.Model.DTO.LightRequest;
+import com.costi.csw9.Model.DTO.ModeratorLightRequest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -92,6 +93,17 @@ public class Light {
         this.color = request.getColor();
         this.pattern = request.getPattern();
         this.address = request.getAddress();
+        this.status = "Recently Edited";
+    }
+
+    public void setValues(ModeratorLightRequest request){
+        this.label = request.getLabel();
+        this.color = request.getColor();
+        this.pattern = request.getPattern();
+        this.address = request.getAddress();
+        this.isEnabled = request.isEnabled();
+        this.isPublic = request.isPublic();
+        this.isFavorite = request.isFavorite();
         this.status = "Recently Edited";
     }
 

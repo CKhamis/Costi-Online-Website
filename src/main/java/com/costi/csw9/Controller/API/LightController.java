@@ -1,5 +1,6 @@
 package com.costi.csw9.Controller.API;
 
+import com.costi.csw9.Model.DTO.UserLightRequest;
 import com.costi.csw9.Model.Light;
 import com.costi.csw9.Service.LightService;
 import org.springframework.http.HttpStatus;
@@ -27,9 +28,9 @@ public class LightController {
     }
 
     @PostMapping("/edit")
-    public ResponseEntity<?> editLight(@RequestBody @Valid Light light) {
+    public ResponseEntity<?> editLight(@RequestBody @Valid UserLightRequest request) {
         try {
-            String result = lightService.saveLight(light);
+            String result = lightService.saveLight(request);
             return ResponseEntity.ok(result);
         } catch (NullPointerException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

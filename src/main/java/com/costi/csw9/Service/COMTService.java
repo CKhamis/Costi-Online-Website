@@ -2,6 +2,7 @@ package com.costi.csw9.Service;
 
 import com.costi.csw9.Model.*;
 import com.costi.csw9.Model.DTO.AccountNotificationRequest;
+import com.costi.csw9.Model.DTO.ModeratorLightRequest;
 import com.costi.csw9.Repository.*;
 import com.costi.csw9.Util.LogicTools;
 import com.costi.csw9.Validation.FileValidator;
@@ -230,15 +231,31 @@ public class COMTService {
         return lightRepository.findAll();
     }
 
-    public String saveLight(Light light) throws Exception{
-        // Update dates
-        if(light.getId() == null){
+    public String saveLight(ModeratorLightRequest request) throws Exception{
+        Light light;
+        // Get or create new light
+        if(request.getId() == null){
+            // This is a new light. Create one
+            light = new Light();
             light.setDateAdded(LocalDateTime.now());
+            light.setStatus("New");
+        }else{
+            Optional<Light> optionalLight = lightRepository.findById(request.getId());
+            if(optionalLight.isPresent()){
+                // This light already exists, edit it
+                light = optionalLight.get();
+            }else{
+                // Light could not be found with specified id
+                throw new NoSuchElementException("The light with id " + request.getId() + " could not be found.");
+            }
         }
+
+        // Transfer values
+        light.setValues(request);
         light.setLastModified(LocalDateTime.now());
 
-        //Upload data to light
-        String status = syncUp(light.getId()); // Inefficient, but couldn't really figure out a better way
+        //Upload data and save to light
+        String status = syncUp(light);
 
         if(status.charAt(0) != 'C'){
             throw new ConnectIOException("Error sending data: " + status);
@@ -284,6 +301,14 @@ public class COMTService {
         if(currentStatus.charAt(0) != 'C'){
             throw new Exception(currentStatus);
         }
+    }
+
+    public String syncUp(Light light) throws Exception{
+        String response = lightService.syncUp(light);
+        if(response.charAt(0) != 'C'){
+            throw new Exception(response);
+        }
+        return response;
     }
 
     public String syncUp(Long id) throws Exception{
