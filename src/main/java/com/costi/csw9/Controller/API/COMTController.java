@@ -265,7 +265,7 @@ public class COMTController {
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error Saving Light", ResponseMessage.Severity.LOW, "The specified ID of the request (" + request.getId() + ") could not be found on Costi Online."));
         }catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error Saving Light", ResponseMessage.Severity.MEDIUM, e.getMessage()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Error Saving Light", ResponseMessage.Severity.LOW, e.getMessage()));
         }
     }
 

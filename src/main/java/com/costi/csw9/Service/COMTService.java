@@ -239,20 +239,21 @@ public class COMTService {
             light = new Light();
             light.setDateAdded(LocalDateTime.now());
             light.setStatus("New");
+            light.setValues(request);
+            light.setLastModified(LocalDateTime.now());
+            lightRepository.save(light);
         }else{
             Optional<Light> optionalLight = lightRepository.findById(request.getId());
             if(optionalLight.isPresent()){
                 // This light already exists, edit it
                 light = optionalLight.get();
+                light.setValues(request);
+                light.setLastModified(LocalDateTime.now());
             }else{
                 // Light could not be found with specified id
                 throw new NoSuchElementException("The light with id " + request.getId() + " could not be found.");
             }
         }
-
-        // Transfer values
-        light.setValues(request);
-        light.setLastModified(LocalDateTime.now());
 
         //Upload data and save to light
         String status = syncUp(light);

@@ -96,7 +96,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="saveLight()">Save</button>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#view-ping-modal" onclick="saveLight()">Save</button>
             </div>
         </div>
     </div>
@@ -141,7 +141,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="view-ping-modal" tabindex="-1" aria-labelledby="editLightModalLabel" aria-hidden="true">
+<div class="modal fade" id="view-ping-modal" tabindex="-1" aria-labelledby="view-ping-modal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content border-box">
             <div class="modal-header">
@@ -232,17 +232,31 @@
     //POST functions
     function saveLight() {
         // Extract input values
-        let idInput = document.getElementById('id-input');
-        let addressInput = document.getElementById('address-2')
-        let labelInput = document.getElementById('label-input-2');
-        let colorInput = document.getElementById('color-input-2');
-        let patterInput = document.getElementById('pattern-input-2');
+        let addressInput = document.getElementById('address-input')
+        let labelInput = document.getElementById('label-input');
+        let colorInput = document.getElementById('color-input');
+        let patterInput = document.getElementById('pattern-input');
+
+        const pElement = document.getElementById("ping-status");
+        const titleElement = document.getElementById("ping-title");
+        pElement.innerText = "Please wait...";
+        titleElement.innerText = "Saving and Testing Light";
 
         // Execute submitNew() function with extracted values
-        let lightData = {"address": addressInput.value, "id": idInput.value, "label": labelInput.value, "color": colorInput.value, "pattern": patterInput.value};
-
+        let lightData = {"address": addressInput.value, "id": null, "label": labelInput.value, "color": colorInput.value, "pattern": patterInput.value, "favorite": false, "public": false,"enabled": false};
         postData("/api/management/light/save", lightData)
-            .then(updateData);
+            .then(data => {
+                titleElement.innerText = data.title;
+                pElement.innerText = data.message;
+            })
+            .catch(e =>{
+                console.log(e);
+                titleElement.innerText = getIcon(e.severity) + e.title;
+                pElement.innerText = e.message;
+            })
+            .finally(() => {
+                updateData();
+            });
 
         // Reset the form
         labelInput.value = "";
