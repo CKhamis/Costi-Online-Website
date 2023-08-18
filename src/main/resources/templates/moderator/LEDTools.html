@@ -393,8 +393,7 @@
     }
     function disableAll() {
         let toastId = createToast("Hiding all Lights");
-        responseData.forEach(light => {
-
+        const promises = responseData.map(light => {
             let newLight = {
                 "address": light.address,
                 "id": light.id,
@@ -406,34 +405,35 @@
                 "enabled": false
             };
 
-            postData(`/api/management/light/save`, newLight)
-                .then(data => {
-                    document.getElementById(`${toastId}-body`).innerText = getIcon(data.severity) + data.message;
-                    document.getElementById(`${toastId}-title`).innerText = data.title;
-                    document.getElementById(`${toastId}-loading`).style.color = "green";
-                })
-                .catch((response) => {
-                    console.log(response);
-                    response.json()
-                        .then(errorData => {
-                            document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
-                            document.getElementById(`${toastId}-title`).innerText = errorData.title;
-                            document.getElementById(`${toastId}-loading`).style.color = "red";
-                        })
-                        .catch(error => {
-                            console.error("Error parsing error response:", error);
-                            document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
-                            document.getElementById(`${toastId}-title`).innerText = "Error";
-                            document.getElementById(`${toastId}-loading`).style.color = "red";
-                        });
-                });
+            return postData(`/api/management/light/save`, newLight);
         });
-        updateData();
+
+        Promise.all(promises)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "Data submitted to Costi Online";
+                document.getElementById(`${toastId}-title`).innerText = "Procedure Complete";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .finally(updateData);
     }
     function privateAll() {
         let toastId = createToast("Hiding all Lights");
-        responseData.forEach(light => {
-
+        const promises = responseData.map(light => {
             let newLight = {
                 "address": light.address,
                 "id": light.id,
@@ -445,36 +445,57 @@
                 "enabled": light.enabled
             };
 
-            postData(`/api/management/light/save`, newLight)
-                .then(data => {
-                    document.getElementById(`${toastId}-body`).innerText = getIcon(data.severity) + data.message;
-                    document.getElementById(`${toastId}-title`).innerText = data.title;
-                    document.getElementById(`${toastId}-loading`).style.color = "green";
-                })
-                .catch((response) => {
-                    console.log(response);
-                    response.json()
-                        .then(errorData => {
-                            document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
-                            document.getElementById(`${toastId}-title`).innerText = errorData.title;
-                            document.getElementById(`${toastId}-loading`).style.color = "red";
-                        })
-                        .catch(error => {
-                            console.error("Error parsing error response:", error);
-                            document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
-                            document.getElementById(`${toastId}-title`).innerText = "Error";
-                            document.getElementById(`${toastId}-loading`).style.color = "red";
-                        });
-                });
+            return postData(`/api/management/light/save`, newLight);
         });
-        updateData();
+
+        Promise.all(promises)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "Data submitted to Costi Online";
+                document.getElementById(`${toastId}-title`).innerText = "Procedure Complete";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .finally(updateData);
     }
+
 
     //Rendering functions
     function renderAllLights(){
         let tableContent = ``, optionsContent = ``;
+        let numFavorite = 0, numEnabled = 0, numPublic = 0, total = responseData.length, numPrivate = 0, numDisabled = 0, numNormal = 0;
         for(let i = 0; i < responseData.length; i++){
             let light = responseData[i];
+
+            // Analytics
+            if(light.favorite){
+                numFavorite++;
+            }else{
+                numNormal++;
+            }
+            if(light.enabled){
+                numEnabled++;
+            }else{
+                numDisabled++;
+            }
+            if(light.public){
+                numPublic++;
+            }else{
+                numPrivate++
+            }
 
             let publicClass = `btn-primary`, publicText = `Published`;
             if(!light.public){
@@ -533,37 +554,37 @@
         }
         table.innerHTML = tableContent;
         optionContainer.innerHTML = optionsContent;
-    }
-    function renderOverview(){
+
+
         overviewContainer.innerHTML = `
             <h3 class="fw-bold mb-2">Overview</h3>
             <div id="stats-container">
                 <div>
-                    <p class="fs-1 fw-bold  text-center">${overviewData["favoriteCount"]}</p>
+                    <p class="fs-1 fw-bold  text-center">${numFavorite}</p>
                     <p class="text-center">Favorites</p>
                 </div>
                 <div>
-                    <p class="fs-1 fw-bold  text-center">${overviewData["enabledCount"]}</p>
+                    <p class="fs-1 fw-bold  text-center">${numEnabled}</p>
                     <p class="text-center">Enabled</p>
                 </div>
                 <div>
-                    <p class="fs-1 fw-bold  text-center">${overviewData["publicCount"]}</p>
+                    <p class="fs-1 fw-bold  text-center">${numPublic}</p>
                     <p class="text-center">Public</p>
                 </div>
                 <div class="d-none d-lg-block">
-                    <p class="fs-1 fw-bold  text-center">${overviewData["totalLights"]}</p>
+                    <p class="fs-1 fw-bold  text-center">${total}</p>
                     <p class="text-center">Lights</p>
                 </div>
                 <div>
-                    <p class="fs-1 fw-bold  text-center">${overviewData["usedTodayCount"]}</p>
-                    <p class="text-center">Used Today</p>
+                    <p class="fs-1 fw-bold  text-center">${numNormal}</p>
+                    <p class="text-center">Regular</p>
                 </div>
                 <div class="d-none d-lg-block">
-                    <p class="fs-1 fw-bold  text-center">${overviewData["privateCount"]}</p>
+                    <p class="fs-1 fw-bold  text-center">${numPrivate}</p>
                     <p class="text-center">private</p>
                 </div>
                 <div class="d-none d-lg-block">
-                    <p class="fs-1 fw-bold  text-center">${overviewData["disabledCount"]}</p>
+                    <p class="fs-1 fw-bold  text-center">${numDisabled}</p>
                     <p class="text-center">Disabled</p>
                 </div>
             </div>
