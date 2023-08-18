@@ -249,10 +249,18 @@
                 titleElement.innerText = data.title;
                 pElement.innerText = data.message;
             })
-            .catch(e =>{
-                console.log(e);
-                titleElement.innerText = getIcon(e.severity) + e.title;
-                pElement.innerText = e.message;
+            .catch((response)=>{
+                console.log(response);
+                response.json()  // Parse the JSON error response
+                    .then(errorData => {
+                        titleElement.innerText = errorData.title;
+                        pElement.innerText = errorData.message;
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        titleElement.innerText = "Error Saving Light";
+                        pElement.innerText = "An error occurred. Please check the console for more information.";
+                    });
             })
             .finally(() => {
                 updateData();
@@ -262,7 +270,6 @@
         labelInput.value = "";
         colorInput.value= "";
         patterInput.value = "";
-        idInput.value = "";
     }
     function deleteLight(id) {
         let toastId = createToast("Deleting Light");
