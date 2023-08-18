@@ -178,18 +178,7 @@
     //GET functions
     function updateData(){
         getAllLightData();
-        // fetch("/api/v1/LED/analytics")
-        //     .then(checkStatus)
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         overviewData = data;
-        //         renderOverview();
-        //     })
-        //     .catch(error => {
-        //         // error handling
-        //         errorContainer.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>";
-        //         console.error('Error retrieving data:', error);
-        //     });
+
     }
     updateData();
 
@@ -205,7 +194,19 @@
                 titleElement.innerText = data.title;
                 pElement.innerText = data.message;
             })
-            .catch(e =>{console.log(e)})
+            .catch((response)=>{
+                console.log(response);
+                response.json()  // Parse the JSON error response
+                    .then(errorData => {
+                        titleElement.innerText = errorData.title;
+                        pElement.innerText = errorData.message;
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        titleElement.innerText = "Error Saving or Testing Light";
+                        pElement.innerText = "Costi Online Services may be down. Please check the console for more information.";
+                    });
+            })
             .finally(() => {
                 updateData();
             });
@@ -223,7 +224,19 @@
                 titleElement.innerText = data.title;
                 pElement.innerText = data.message;
             })
-            .catch(e =>{console.log(e)})
+            .catch((response)=>{
+                console.log(response);
+                response.json()  // Parse the JSON error response
+                    .then(errorData => {
+                        titleElement.innerText = errorData.title;
+                        pElement.innerText = errorData.message;
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        titleElement.innerText = "Error Saving or Testing Light";
+                        pElement.innerText = "Costi Online Services may be down. Please check the console for more information.";
+                    });
+            })
             .finally(() => {
                 updateData();
             });
@@ -379,10 +392,82 @@
             .then(updateData);
     }
     function disableAll() {
+        let toastId = createToast("Hiding all Lights");
+        responseData.forEach(light => {
 
+            let newLight = {
+                "address": light.address,
+                "id": light.id,
+                "label": light.label,
+                "color": light.color,
+                "pattern": light.pattern,
+                "favorite": light.favorite,
+                "public": light.public,
+                "enabled": false
+            };
+
+            postData(`/api/management/light/save`, newLight)
+                .then(data => {
+                    document.getElementById(`${toastId}-body`).innerText = getIcon(data.severity) + data.message;
+                    document.getElementById(`${toastId}-title`).innerText = data.title;
+                    document.getElementById(`${toastId}-loading`).style.color = "green";
+                })
+                .catch((response) => {
+                    console.log(response);
+                    response.json()
+                        .then(errorData => {
+                            document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                            document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                            document.getElementById(`${toastId}-loading`).style.color = "red";
+                        })
+                        .catch(error => {
+                            console.error("Error parsing error response:", error);
+                            document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                            document.getElementById(`${toastId}-title`).innerText = "Error";
+                            document.getElementById(`${toastId}-loading`).style.color = "red";
+                        });
+                });
+        });
+        updateData();
     }
     function privateAll() {
+        let toastId = createToast("Hiding all Lights");
+        responseData.forEach(light => {
 
+            let newLight = {
+                "address": light.address,
+                "id": light.id,
+                "label": light.label,
+                "color": light.color,
+                "pattern": light.pattern,
+                "favorite": light.favorite,
+                "public": false,
+                "enabled": light.enabled
+            };
+
+            postData(`/api/management/light/save`, newLight)
+                .then(data => {
+                    document.getElementById(`${toastId}-body`).innerText = getIcon(data.severity) + data.message;
+                    document.getElementById(`${toastId}-title`).innerText = data.title;
+                    document.getElementById(`${toastId}-loading`).style.color = "green";
+                })
+                .catch((response) => {
+                    console.log(response);
+                    response.json()
+                        .then(errorData => {
+                            document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                            document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                            document.getElementById(`${toastId}-loading`).style.color = "red";
+                        })
+                        .catch(error => {
+                            console.error("Error parsing error response:", error);
+                            document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                            document.getElementById(`${toastId}-title`).innerText = "Error";
+                            document.getElementById(`${toastId}-loading`).style.color = "red";
+                        });
+                });
+        });
+        updateData();
     }
 
     //Rendering functions
