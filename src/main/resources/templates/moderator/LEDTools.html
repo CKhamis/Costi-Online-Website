@@ -159,8 +159,12 @@
     </div>
 </div>
 
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 99" id="toast-container">
+</div>
+
 <div th:replace="Components :: JS"></div>
 <script th:replace="moderator/ModeratorComponents :: led-scripts"></script>
+<div th:replace="moderator/ModeratorComponents :: toast-scripts"></div>
 <script>
     //data
     let overviewData;
@@ -247,12 +251,30 @@
         idInput.value = "";
     }
     function deleteLight(id) {
+        let toastId = createToast("Deleting Light");
         postData(`/api/management/light/delete`, id)
-            .catch(err => console.log(err))
+            .then(data => {
+                console.log(data);
+                document.getElementById(`${toastId}-body`).innerText = getIcon(data.severity) + data.message;
+                document.getElementById(`${toastId}-title`).innerText = data.title;
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch(e =>{console.log(e)})
             .then(updateData);
     }
-    function publishLight(id, isPublic) {
-
+    function toggleVisibility(id) {
+        let toastId = createToast("Toggling Visibility");
+        let light = getObjectById(id);
+        let newLight = {"address": light.address, "id": light.id, "label": light.label, "color": light.color, "pattern": light.pattern, "favorite": light.favorite, "public":  light.public,"enabled": light.enabled};
+        postData(`/api/management/light/save`, newLight)
+            .then(data => {
+                console.log(data);
+                document.getElementById(`${toastId}-body`).innerText = getIcon(data.severity) + data.message;
+                document.getElementById(`${toastId}-title`).innerText = data.title;
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch(e =>{console.log(e)})
+            .then(updateData);
     }
     function enableLight(id, isEnabled) {
 
@@ -302,13 +324,13 @@
                 <td>${light.color}</td>
                 <td>${light.pattern}</td>
                 <td>
-                    <button type="button" class="btn btn-sm ${favoriteClass}" onclick="favoriteLight(${light.id}, ${!light.favorite})">${favoriteText}</button>
+                    <button type="button" class="btn btn-sm ${favoriteClass}" onclick="favoriteLight(${light.id})">${favoriteText}</button>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-sm ${publicClass}" onclick="publishLight(${light.id}, ${!light.public})">${publicText}</button>
+                    <button type="button" class="btn btn-sm ${publicClass}" onclick="toggleVisibility(${light.id})">${publicText}</button>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-sm ${enabledClass}" onclick="enableLight(${light.id}, ${!light.enabled})">${enabledText}</button>
+                    <button type="button" class="btn btn-sm ${enabledClass}" onclick="enableLight(${light.id})">${enabledText}</button>
                 </td>
                 <td>
                     <button class="btn btn-sm btn-dark" data-bs-toggle="modal" data-bs-target="#view-ping-modal" onclick="syncDown(${light.id})">
@@ -371,6 +393,10 @@
     // Exists as a connector for universal functions
     function next(){
         renderAllLights();
+    }
+
+    function getObjectById(id) {
+        return responseData.find(obj => obj["id"] == id);
     }
 
     //Controls

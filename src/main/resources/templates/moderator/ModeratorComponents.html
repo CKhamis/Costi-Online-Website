@@ -127,6 +127,21 @@
 </script>
 
 <script th:fragment="toast-scripts">
+  function getIcon(severity){
+    if(severity === "INFORMATIONAL"){
+      return "ℹ️";
+    }else if(severity === "LOW"){
+      return "🔔";
+    }else if(severity === "MEDIUM"){
+      return "⚠️";
+    }else if(severity === "HIGH"){
+      return "❗";
+    }else if(severity === "INSANE"){
+      return "❗❗❗";
+    }else{
+      return "⚠︎";
+    }
+  }
   function createToast(title) {
     const idText = Math.floor(Math.random() * 100);
     const toastContainer = document.getElementById("toast-container");
@@ -137,7 +152,7 @@
         <div class="spinner-grow spinner-grow-sm me-2" style="color:yellow" id="${idText}-loading" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>
-        <strong class="me-auto">${title}</strong>
+        <strong class="me-auto" id="${idText}-title">${title}</strong>
         <small>now</small>
         <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
       </div>
