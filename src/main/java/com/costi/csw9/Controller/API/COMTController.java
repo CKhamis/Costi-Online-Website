@@ -255,6 +255,18 @@ public class COMTController {
         return ResponseEntity.ok(lights);
     }
 
+    @GetMapping("/light/{id}/logs")
+    public ResponseEntity<?> getLogs(@PathVariable Long id){
+        try{
+            List<LightLog> lights = comtService.findLogs(id);
+            return ResponseEntity.ok(lights);
+        }catch (NoSuchElementException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Error Retrieving Light Logs", ResponseMessage.Severity.LOW, e.getMessage()));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error Retrieving Light Logs", ResponseMessage.Severity.LOW, e.getMessage()));
+        }
+    }
+
     @PostMapping("/light/save")
     public ResponseEntity<ResponseMessage> saveLight(@RequestBody ModeratorLightRequest request) {
         try {

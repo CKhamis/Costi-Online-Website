@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.el.ELException;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.rmi.ConnectIOException;
@@ -326,6 +327,17 @@ public class COMTService {
             throw new Exception(response);
         }
         return response;
+    }
+
+    public List<LightLog> findLogs(Long id) throws NoSuchElementException{
+        Optional<Light> optionalLight = lightRepository.findById(id);
+
+        if(optionalLight.isEmpty()){
+            throw new NoSuchElementException("The specified light could not be found in Costi Online");
+        }
+
+        Light light = optionalLight.get();
+        return lightLogRepository.findAllByLightOrderByDateCreatedDesc(light);
     }
 
     /*
