@@ -2,6 +2,7 @@ package com.costi.csw9.Controller.API;
 
 import com.costi.csw9.Model.AccountNotification;
 import com.costi.csw9.Model.Announcement;
+import com.costi.csw9.Model.DTO.ResponseMessage;
 import com.costi.csw9.Model.User;
 import com.costi.csw9.Model.UserRole;
 import com.costi.csw9.Service.AccountNotificationService;
@@ -34,17 +35,17 @@ public class NotificationController {
             List<AccountNotification> notifications = accountNotificationService.findByUser(getCurrentUser(principal));
             return ResponseEntity.ok(notifications);
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error retrieving notifications: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error getting Notifications", ResponseMessage.Severity.LOW, "Error retrieving notifications: " + e.getMessage()));
         }
     }
 
     @PostMapping("/delete")
-    public ResponseEntity<String> deleteNotification(@RequestBody Long id, Principal principal) {
+    public ResponseEntity<?> deleteNotification(@RequestBody Long id, Principal principal) {
         try {
             accountNotificationService.delete(id, getCurrentUser(principal));
             return ResponseEntity.ok("Notification deleted successfully");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting notification: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error Deleting Notification", ResponseMessage.Severity.MEDIUM, e.getMessage()));
         }
     }
 

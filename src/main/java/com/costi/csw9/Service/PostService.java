@@ -3,6 +3,7 @@ package com.costi.csw9.Service;
 import com.costi.csw9.Model.*;
 import com.costi.csw9.Repository.PostRepository;
 import com.costi.csw9.Util.LogicTools;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static com.costi.csw9.Util.LogicTools.POST_IMAGE_PATH;
@@ -33,10 +35,10 @@ public class PostService {
             if(post.isEnabled()){
                 return post;
             }
-            throw new Exception("Post" + LogicTools.INVALID_PERMISSIONS_MESSAGE);
+            throw new AccessDeniedException("Post" + LogicTools.INVALID_PERMISSIONS_MESSAGE);
 
         }else{
-            throw new Exception("Post" + LogicTools.NOT_FOUND_MESSAGE);
+            throw new NoSuchElementException("Post" + LogicTools.NOT_FOUND_MESSAGE);
         }
     }
 

@@ -39,15 +39,6 @@ public class SpecialController {
         this.userService = userService;
     }
 
-    private User getCurrentUser(Principal principal) {
-        if (principal == null) {
-            return new User("NULL", "NULL", "Not Signed In", "error", UserRole.USER);
-        }
-        String username = principal.getName();
-        User u = userService.findByEmail(username);
-        return u;
-    }
-
     /*
         JSON responses
      */
