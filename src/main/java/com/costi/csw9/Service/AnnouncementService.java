@@ -6,8 +6,10 @@ import com.costi.csw9.Repository.AnnouncementRepository;
 import com.costi.csw9.Util.LogicTools;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -26,10 +28,10 @@ public class AnnouncementService {
             if(announcement.isEnable()){
                 return announcement;
             }
-            throw new Exception("Announcement" + LogicTools.INVALID_PERMISSIONS_MESSAGE);
+            throw new AccessDeniedException(LogicTools.INVALID_PERMISSIONS_MESSAGE);
 
         }else{
-            throw new Exception("Announcement" + LogicTools.NOT_FOUND_MESSAGE);
+            throw new NoSuchElementException("Announcement" + LogicTools.NOT_FOUND_MESSAGE);
         }
     }
 

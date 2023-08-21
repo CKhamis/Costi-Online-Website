@@ -1,6 +1,7 @@
 package com.costi.csw9.Controller.API;
 
 import com.costi.csw9.Model.Announcement;
+import com.costi.csw9.Model.DTO.ResponseMessage;
 import com.costi.csw9.Service.AnnouncementService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping("/api/announcements")
@@ -26,16 +29,16 @@ public class AnnouncementController {
     }
 
     @GetMapping("/view")
-    public ResponseEntity<Announcement> getAnnouncementById(@RequestParam("id") Long id) {
+    public ResponseEntity<?> getAnnouncementById(@RequestParam("id") Long id) {
         try {
             Announcement announcement = announcementService.findById(id);
-            if (announcement.isEnable()) {
-                return ResponseEntity.ok(announcement);
-            } else {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-            }
+            return ResponseEntity.ok(announcement);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage("Announcement not Found", ResponseMessage.Severity.LOW, e.getMessage()));
+        } catch (AccessDeniedException e){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ResponseMessage("Post not Public", ResponseMessage.Severity.LOW, e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error Getting Announcement", ResponseMessage.Severity.MEDIUM, e.getMessage()));
         }
     }
 }

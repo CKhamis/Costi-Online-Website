@@ -118,12 +118,12 @@ public class COMTController {
      */
 
     @GetMapping("/newsroom/view/{id}")
-    public ResponseEntity<Post> getPostById(@PathVariable("id") Long id) {
+    public ResponseEntity<?> getPostById(@PathVariable("id") Long id) {
         try {
             Post post = comtService.findPostById(id);
             return ResponseEntity.ok(post);
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage("Post not Found", ResponseMessage.Severity.LOW, e.getMessage()));
         }
     }
 
