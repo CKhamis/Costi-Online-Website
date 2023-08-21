@@ -84,6 +84,20 @@
         .catch(error => {
             bodyContent.innerHTML = `<h3 class="text-center fw-bold">There was an error receiving data from Costi Online Services</h3><p class="text-center">${error}</p>`;
             console.error('Error retrieving data:', error);
+        })
+        .catch((response)=>{
+            console.log(response);
+            response.json()  // Parse the JSON error response
+                .then(errorData => {
+                    bodyContent.innerHTML = `<h3 class="text-center fw-bold">${errorData.title}</h3><p class="text-center">${errorData.message}</p>`;
+                })
+                .catch(error => {
+                    bodyContent.innerHTML = `<h3 class="text-center fw-bold">There was an error receiving data from Costi Online Services</h3><p class="text-center">${error}</p>`;
+
+                    console.error("Error parsing error response:", error);
+                    titleElement.innerText = "Error Saving or Testing Light";
+                    pElement.innerText = "Costi Online Services may be down. Please check the console for more information.";
+                });
         });
 
 
