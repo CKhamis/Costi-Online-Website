@@ -1,5 +1,6 @@
 package com.costi.csw9.Controller.API;
 
+import com.costi.csw9.Model.DTO.ResponseMessage;
 import com.costi.csw9.Model.DTO.UserLightRequest;
 import com.costi.csw9.Model.Light;
 import com.costi.csw9.Service.LightService;
@@ -33,13 +34,11 @@ public class LightController {
             String result = lightService.saveLight(request);
             return ResponseEntity.ok(result);
         } catch (NullPointerException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Invalid Information Sent", ResponseMessage.Severity.INFORMATIONAL, "There was an error processing the request:" + e.getMessage()));
         } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (ConnectIOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error sending data: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage("Light not Found", ResponseMessage.Severity.LOW, e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding/updating light: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error Processing Request", ResponseMessage.Severity.MEDIUM, e.getMessage()));
         }
     }
 }

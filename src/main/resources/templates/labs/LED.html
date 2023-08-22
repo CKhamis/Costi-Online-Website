@@ -195,13 +195,16 @@
             .then(response => response.json())
             .then(data => {
                 availableLights = data;
-                renderDropdown();
-                renderColors();
+                if (availableLights.length > 0) {
+                    renderDropdown();
+                    renderColors();
+                } else {
+                    errorContainer.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class="text-center fw-bold">No Lights Available</h3><p class="text-center">No LED nodes are active at this time. Please try again later.</p>`;
+                }
             })
-            .catch(error => {
-                // error handling
-                errorContainer.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Or there are no lights available</p>";
-                console.error('Error retrieving data:', error);
+            .catch((response)=>{
+                console.log(response);
+                errorContainer.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class="text-center fw-bold">There was an error receiving data from Costi Online Services</h3><p class="text-center">Error message could not be parsed. Check console for more information</p>`;
             })
             .finally(() => $("#loading").hide());
     }
