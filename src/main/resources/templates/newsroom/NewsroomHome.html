@@ -90,10 +90,17 @@
             renderNews();
             renderRecent(6);
         })
-        .catch(error => {
-            // error handling
-            bodyContent.innerHTML = "<h3 class=\"text-center fw-bold\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>";
-            console.error('Error retrieving data:', error);
+        .catch((response)=>{
+            console.log(response);
+            response.json()  // Parse the JSON error response
+                .then(errorData => {
+                    bodyContent.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class="text-center fw-bold">${errorData.title}</h3><p class="text-center">${errorData.message}</p>`;
+                })
+                .catch(error => {
+                    bodyContent.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class="text-center fw-bold">There was an error receiving data from Costi Online Services</h3><p class="text-center">Error message could not be parsed. ${error}</p>`;
+
+                    console.error("Error parsing error response:", error);
+                });
         })
         .finally(() => $("#loading").hide());
 
