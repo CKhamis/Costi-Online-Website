@@ -104,10 +104,16 @@
                 allAnnouncements = data;
                 renderTable();
             })
-            .catch(error => {
-                // error handling
-                errorContainer.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>";
-                console.error('Error retrieving data:', error);
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        errorContainer.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">${errorData.message}</p>`;
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        errorContainer.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Connection could not be established</p>`;
+                    });
             })
             .finally(() => $("#loading").hide());
 
@@ -118,10 +124,16 @@
                 overviewData = data;
                 renderOverview();
             })
-            .catch(error => {
-                // error handling
-                errorContainer.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>";
-                console.error('Error retrieving data:', error);
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        errorContainer.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">${errorData.message}</p>`;
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        errorContainer.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Connection could not be established</p>`;
+                    });
             });
     }
 
@@ -201,10 +213,20 @@
     function deleteAnnouncement(id){
         let toastId = createToast("Deleting Announcement");
         postData("/api/management/announcement/delete", id)
-            .catch(err => {
-                console.log(err);
-                document.getElementById(`${toastId}-body`).innerText = "❌ Connection unsuccessful";
-                document.getElementById(`${toastId}-loading`).style.color = "red";
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
             })
             .then(getData)
             .then(() => {
@@ -218,10 +240,20 @@
         let announcement = allAnnouncements.find(announcement => announcement.id === id);
         announcement.enable = !announcement.enable;
         postData("/api/management/announcement/save", announcement)
-            .catch(err => {
-                console.log(err);
-                document.getElementById(`${toastId}-body`).innerText = "❌ Connection unsuccessful";
-                document.getElementById(`${toastId}-loading`).style.color = "red";
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
             })
             .then(getData)
             .then(() => {
@@ -233,10 +265,20 @@
     function saveAnnouncement(announcement){
         let toastId = createToast("Saving Announcement");
         postData("/api/management/announcement/save", announcement)
-            .catch(err => {
-                console.log(err);
-                document.getElementById(`${toastId}-body`).innerText = "❌ Connection unsuccessful";
-                document.getElementById(`${toastId}-loading`).style.color = "red";
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
             })
             .then(getData)
             .then(() => {

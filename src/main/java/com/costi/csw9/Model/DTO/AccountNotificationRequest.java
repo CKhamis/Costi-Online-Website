@@ -9,8 +9,6 @@ public class AccountNotificationRequest {
 
     private String notificationType;
 
-    private LocalDateTime dateCreated = LocalDateTime.now();
-
     private String destination;
 
     public AccountNotificationRequest() {

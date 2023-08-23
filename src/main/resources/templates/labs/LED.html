@@ -204,7 +204,14 @@
             })
             .catch((response)=>{
                 console.log(response);
-                errorContainer.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class="text-center fw-bold">There was an error receiving data from Costi Online Services</h3><p class="text-center">Error message could not be parsed. Check console for more information</p>`;
+                response.json()
+                    .then(errorData => {
+                        errorContainer.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class="text-center fw-bold">${errorData.title}</h3><p class="text-center">${errorData.message}</p>`;
+                    })
+                    .catch(error => {
+                        errorContainer.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class="text-center fw-bold">There was an error receiving data from Costi Online Services</h3><p class="text-center">Error message could not be parsed. Check console for more information</p>`;
+
+                    });
             })
             .finally(() => $("#loading").hide());
     }

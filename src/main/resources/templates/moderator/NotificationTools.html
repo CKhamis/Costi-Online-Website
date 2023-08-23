@@ -147,6 +147,17 @@
             .catch(error => {
                 errorContainer.innerHTML = `<h3 class="text-center fw-bold">There was an error receiving data from Costi Online Services</h3><p class="text-center">${error}</p>`;
                 console.error('Error retrieving data:', error);
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        errorContainer.innerHTML = `<h3 class="text-center fw-bold">${getIcon(errorData.severity)} ${errorData.title}</h3><p class="text-center">${errorData.message}</p>`;
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        errorContainer.innerHTML = `<h3 class="text-center fw-bold">There was an error receiving data from Costi Online Services</h3><p class="text-center">Unable to establish communications with server.</p>`;
+                    });
             });
     }
     refresh();
@@ -158,10 +169,20 @@
                 document.getElementById(`${toastId}-body`).innerText = "✅ Notification Created";
                 document.getElementById(`${toastId}-loading`).style.color = "green";
             })
-            .catch(err => {
-                console.log(err);
-                document.getElementById(`${toastId}-body`).innerText = "❌ Connection unsuccessful";
-                document.getElementById(`${toastId}-loading`).style.color = "red";
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
             })
             .then(refresh);
     }
@@ -173,10 +194,20 @@
                 document.getElementById(`${toastId}-body`).innerText = "✅ Notification Deleted";
                 document.getElementById(`${toastId}-loading`).style.color = "green";
             })
-            .catch(err => {
-                console.log(err);
-                document.getElementById(`${toastId}-body`).innerText = "❌ Connection unsuccessful";
-                document.getElementById(`${toastId}-loading`).style.color = "red";
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
             })
             .then(refresh);
     }
