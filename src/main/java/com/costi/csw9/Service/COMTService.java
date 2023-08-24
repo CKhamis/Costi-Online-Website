@@ -11,7 +11,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.el.ELException;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.rmi.ConnectIOException;
@@ -339,20 +338,12 @@ public class COMTService {
         return wikiRepository.findAll();
     }
 
-    public WikiPage findWikiPageById(Long id){
-        Optional<WikiPage> optionalWikiPage = wikiRepository.findById(id);
-        if(optionalWikiPage.isEmpty()){
-            throw new NoSuchElementException("Wiki Page" + LogicTools.NOT_FOUND_MESSAGE);
-        }
-        return optionalWikiPage.get();
-    }
-
     public void deleteWikiPage(Long id){
         wikiRepository.deleteById(id);
     }
 
-    public String saveWikiPage(WikiPage wikiPage){
-        return null;
+    public WikiPage saveWikiPage(WikiPage wikiPage){
+        return wikiRepository.save(wikiPage);
     }
 
     /*

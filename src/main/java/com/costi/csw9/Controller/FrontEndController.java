@@ -471,7 +471,7 @@ public class FrontEndController {
         wikiPage.setAuthor(getCurrentUser(principal));
 
         try {
-            wikiService.save(wikiPage, getCurrentUser(principal));
+            wikiService.deprecatedSave(wikiPage, getCurrentUser(principal));
             return "redirect:/Wiki/" + wikiPage.getId() + "/view";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating wiki page", e.getMessage(), FlashMessage.Status.DANGER));
@@ -582,7 +582,7 @@ public class FrontEndController {
             wikiPage.setAuthor(wikiService.loadById(PageId).getAuthor());
 
             //Save new user
-            wikiService.save(wikiPage, getCurrentUser(principal));
+            wikiService.deprecatedSave(wikiPage, getCurrentUser(principal));
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Wiki Page Edited!", "Page has been updated.", FlashMessage.Status.SUCCESS));
         }catch (Exception e){
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing wiki page", e.getMessage(), FlashMessage.Status.DANGER));

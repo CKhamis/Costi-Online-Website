@@ -315,7 +315,30 @@ public class COMTController {
         Wiki
      */
 
+    @GetMapping("wiki/all")
+    public ResponseEntity<List<WikiPage>> getWikiPages(){
+        return ResponseEntity.ok(comtService.findAllWikiPages());
+    }
 
+    @PostMapping("/wiki/delete")
+    public ResponseEntity<ResponseMessage> deleteWikiPage(@RequestBody Long id) {
+        try {
+            comtService.deleteWikiPage(id);
+            return ResponseEntity.ok(new ResponseMessage("Wiki Page Deleted", ResponseMessage.Severity.INFORMATIONAL, "Page of id " + id + " is no longer accessible or recoverable."));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error deleting light", ResponseMessage.Severity.HIGH, e.getMessage()));
+        }
+    }
+
+    @PostMapping("/wiki/save")
+    public ResponseEntity<ResponseMessage> saveWikiPage(@RequestBody WikiPage wikiPage) {
+        try {
+            comtService.saveWikiPage(wikiPage);
+            return ResponseEntity.ok(new ResponseMessage("Wiki Page Saved", ResponseMessage.Severity.INFORMATIONAL, "Wiki Page has been saved to Costi Online"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Error Saving Wiki Page", ResponseMessage.Severity.LOW, e.getMessage()));
+        }
+    }
 
     /*
         Users
