@@ -53,12 +53,20 @@ public class WikiService {
                 if(originalWikiPage.getAuthor().equals(author) || author.isOwner() || author.isAdmin()){
                     //TODO: check if the originalWikiPage.getAuthor().equals(author) works
                     originalWikiPage.userEditValues(request);
+                    WikiPage savedPage = wikiRepository.save(originalWikiPage);
 
+                    // Add this to log
+                    AccountLog log = new AccountLog("Wiki page changed", savedPage.getTitle() + " is saved.", savedPage.getAuthor());
+                    accountLogService.save(log);
+
+                    return savedPage;
                 }else{
                     //Author does not match
                     // Add this to log
                     AccountLog log = new AccountLog("Account tried to modify a wiki page", "Wiki: " + originalWikiPage.getTitle() + " of id " + originalWikiPage.getId(), author);
                     accountLogService.save(log);
+
+                    throw new AccessDeniedException("Wiki Page" + LogicTools.INVALID_PERMISSIONS_MESSAGE);
                 }
             }else{
                 // Id is present, but not valid
@@ -71,7 +79,7 @@ public class WikiService {
             WikiPage savedPage = wikiRepository.save(newPage);
 
             // Add this to log
-            AccountLog log = new AccountLog("Wiki page created/changed", savedPage.getTitle() + " is saved.", savedPage.getAuthor());
+            AccountLog log = new AccountLog("Wiki page created", savedPage.getTitle() + " is saved.", savedPage.getAuthor());
             accountLogService.save(log);
 
             return savedPage;
