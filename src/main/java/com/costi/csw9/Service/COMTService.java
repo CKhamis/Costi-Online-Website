@@ -30,8 +30,9 @@ public class COMTService {
     private final LightRepository lightRepository;
     private final LightLogRepository lightLogRepository;
     private final LightService lightService;
+    private final WikiRepository wikiRepository;
 
-    public COMTService(AnnouncementRepository announcementRepository, PostRepository postRepository, AttachmentService attachmentService, AccountNotificationRepository accountNotificationRepository, UserRepository userRepository, LightRepository lightRepository, LightLogRepository lightLogRepository, LightService lightService) {
+    public COMTService(AnnouncementRepository announcementRepository, PostRepository postRepository, AttachmentService attachmentService, AccountNotificationRepository accountNotificationRepository, UserRepository userRepository, LightRepository lightRepository, LightLogRepository lightLogRepository, LightService lightService, WikiRepository wikiRepository) {
         this.announcementRepository = announcementRepository;
         this.postRepository = postRepository;
         this.attachmentService = attachmentService;
@@ -40,22 +41,12 @@ public class COMTService {
         this.lightRepository = lightRepository;
         this.lightService = lightService;
         this.lightLogRepository = lightLogRepository;
+        this.wikiRepository = wikiRepository;
     }
 
     /*
         Announcements
      */
-
-    public Announcement findAnnouncementById(Long id) throws Exception{
-        Optional<Announcement> optionalAnnouncement = announcementRepository.findById(id);
-
-        // Check if announcement exists
-        if(optionalAnnouncement.isPresent()){
-            return optionalAnnouncement.get();
-        }else{
-            throw new Exception("Announcement" + LogicTools.NOT_FOUND_MESSAGE);
-        }
-    }
 
     public List<Announcement> findAllAnnouncements(){
         return announcementRepository.findAll();
@@ -338,6 +329,30 @@ public class COMTService {
 
         Light light = optionalLight.get();
         return lightLogRepository.findAllByLightOrderByDateCreatedDesc(light);
+    }
+
+    /*
+        Wiki
+     */
+
+    public List<WikiPage> findAllWikiPages(){
+        return wikiRepository.findAll();
+    }
+
+    public WikiPage findWikiPageById(Long id){
+        Optional<WikiPage> optionalWikiPage = wikiRepository.findById(id);
+        if(optionalWikiPage.isEmpty()){
+            throw new NoSuchElementException("Wiki Page" + LogicTools.NOT_FOUND_MESSAGE);
+        }
+        return optionalWikiPage.get();
+    }
+
+    public void deleteWikiPage(Long id){
+        wikiRepository.deleteById(id);
+    }
+
+    public String saveWikiPage(WikiPage wikiPage){
+        return null;
     }
 
     /*
