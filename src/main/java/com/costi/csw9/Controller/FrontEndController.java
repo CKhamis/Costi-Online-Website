@@ -481,25 +481,18 @@ public class FrontEndController {
     }
 
     @RequestMapping("/Wiki/{PageId}/view")
-    public String viewPage(Model model, Principal principal, RedirectAttributes redirectAttributes, @PathVariable Long PageId) {
+    public String viewPage(Model model, Principal principal, @PathVariable Long PageId) {
         User current = getCurrentUser(principal);
+        model.addAttribute("isAdmin", current.isAdmin());
+        model.addAttribute("id", PageId);
 
         try {
             WikiPage wiki = wikiService.loadById(PageId);
-
             model.addAttribute("showEdit", (current.isAdmin() || wiki.getAuthor().equals(current)));
-            model.addAttribute("isAdmin", current.isAdmin());
-            model.addAttribute("user", current);
-            model.addAttribute("isViewable", current.isAdmin() || wiki.isEnabled());
 
-            model.addAttribute("wiki", wiki);
-            model.addAttribute("categoryPages", wikiService.findWikiByCategory(wiki.getCategory()));
             return "wiki/ViewWiki";
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error loading wiki page", e.getMessage(), FlashMessage.Status.DANGER));
-
-            // Redirect back to the form
-            return "redirect:/Wiki";
+            return "wiki/ViewWiki";
         }
     }
 
