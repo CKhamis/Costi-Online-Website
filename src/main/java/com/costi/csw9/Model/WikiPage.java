@@ -24,7 +24,6 @@ public class WikiPage {
     private String title;
     @Column(nullable = false)
     private LocalDateTime lastEdited;
-    @Column(nullable = false)
     private LocalDateTime dateCreated;
     @Column(nullable = false)
     private String subtitle;

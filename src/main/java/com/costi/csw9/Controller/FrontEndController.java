@@ -423,21 +423,18 @@ public class FrontEndController {
     }
 
     @GetMapping("/Projects")
-    public String getProjects(Model model, Principal principal) {
+    public String getProjects() {
         return "main/Projects";
     }
 
     @GetMapping("/login")
-    public String getLogin(Model model, Principal principal) {
+    public String getLogin() {
         return "main/login";
     }
 
     //Wiki
     @GetMapping("/Wiki")
-    public String getWikiHome(Model model, Principal principal) {
-        List<WikiPage> allEnabled = wikiService.getByApproval(true);
-        model.addAttribute("all", allEnabled);
-        model.addAttribute("categories", WikiCategory.values());
+    public String getWikiHome() {
         return "wiki/WikiHome";
     }
 
