@@ -9,23 +9,8 @@
     <div class="container-fluid" id="javascript-warning">
         <h2 class="text-center fw-bold">JavaScript is required to view Wiki posts</h2>
     </div>
-    <div class="row d-none" id="wiki-content">
-        <div class="col-lg-3 col-md-5 col-xs-12">
-            <div th:case="INSIDE_JOKE"   class="fs-3 mb-2 mt-0" th:text="|&#128518; Inside Jokes|">title</div>
-            <div th:case="HISTORICAL"    class="fs-3 mb-2 mt-0" th:text="|&#127984; Historical|">title</div>
-            <div th:case="PEOPLE"        class="fs-3 mb-2 mt-0" th:text="|&#128697; People|">title</div>
-            <div th:case="PROFESSIONAL"  class="fs-3 mb-2 mt-0" th:text="|&#128084; Professional|">title</div>
-            <div th:case="*"             class="fs-3 mb-2 mt-0" th:text="|&#10067; Other|">title</div>
-            <div class="list-group mb-3">
-                <a th:each="page : ${categoryPages}" th:href="'/Wiki/' + *{page.Id} + '/view'" class="list-group-item list-group-item-action">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1 text-truncate" th:text="*{page.title}">title</h5>
-                    </div>
-                    <p class="mb-1 text-truncate" th:text="*{page.subtitle}">Some placeholder content in a paragraph.</p>
-                    <small class="text-truncate" th:text="'By ' + *{page.author.firstName} + ' ' + *{page.author.lastName}">And some small print.</small>
-                </a>
-            </div>
-        </div>
+    <div class="d-none" id="wiki-content">
+        <div class="col-lg-3 col-md-5 col-xs-12" id="related-section"></div>
         <div class="col-lg-9 col-md-7 col-xs-12 px-lg-5">
             <div class="row">
                 <div class="col col-md-8 d-none d-md-block">
@@ -103,6 +88,7 @@
     let pageAuthor = document.querySelector("#page-author");
     let pageBody = document.querySelector("#page-body");
     let pageView = document.querySelector("#page-views");
+    let relatedView = document.querySelector("#related-section");
 
 
     // Data
@@ -147,7 +133,7 @@
 
     // Rendering functions
     function renderWiki(){
-        wikiView.className = "";;
+        wikiView.className = "row";
         breadcrumbTitle.innerText = page.title;
         lastEdited.innerText = page.dateEdited;
         pageTitle.innerText = page.title;
@@ -159,13 +145,44 @@
 
     function renderRecommendations(){
         sortObjectsByViews();
-        let relatedPages = ``;
-
-
+        let relatedPages = `
+            <div class="fs-3 mb-2 mt-0">${categoryName(page.category)}</div>
+            <div class="list-group mb-3">
+        `;
+        for(let wiki of allPages){
+            if(wiki.category !== page.category){
+                continue;
+            }
+            relatedPages += `
+                <a href="/Wiki/${wiki.id}/view" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1 text-truncate">${wiki.title}</h5>
+                    </div>
+                    <p class="mb-1 text-truncate">${wiki.subtitle}</p>
+                    <small class="text-truncate">By ${wiki.authorName}</small>
+                </a>
+            `;
+        }
+        relatedPages += `</div>`;
+        relatedView.innerHTML = relatedPages;
     }
 
     function sortObjectsByViews() {
         return allPages.sort((a, b) => b.views - a.views);
+    }
+
+    function categoryName(category){
+        if(category === "PEOPLE"){
+            return "🚹 People";
+        }else if(category === "HISTORICAL"){
+            return "🏰 Historical";
+        }else if(category === "INSIDE_JOKE"){
+            return "😆 Inside Jokes";
+        }else if(category === "Professional"){
+            return "👔 Professional";
+        }else{
+            return "❓ Other";
+        }
     }
 
     $(document).ready(function() {

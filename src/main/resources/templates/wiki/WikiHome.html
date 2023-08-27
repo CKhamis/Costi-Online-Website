@@ -61,7 +61,7 @@
             cardContent += `
                 <div class="col">
                     <div class="card border-box">
-                        <div class="card-header fw-bold">${page.category}</div>
+                        <div class="card-header fw-bold">${categoryName(page.category)}</div>
                         <div class="card-body">
                             <h5 class="card-title text-truncate pb-2">${page.title}</h5>
                             <h6 class="card-subtitle text-muted text-truncate">${page.subtitle}</h6>
@@ -78,6 +78,21 @@
 
     function sortObjectsByViews() {
         return wikiContent.sort((a, b) => b.views - a.views);
+    }
+
+    function categoryName(category){
+        if(category === "PEOPLE"){
+            return "🚹 People";
+        }else if(category === "HISTORICAL"){
+            return "🏰 Historical";
+        }else if(category === "INSIDE_JOKE"){
+            return "😆 Inside Jokes";
+        }else if(category === "Professional"){
+            return "😆 Inside Jokes";
+        }else{
+            console.log(category);
+            return "❓ Other";
+        }
     }
 
     $(document).ready(function (){
