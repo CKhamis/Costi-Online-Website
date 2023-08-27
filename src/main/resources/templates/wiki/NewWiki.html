@@ -8,26 +8,29 @@
     <div class="container-fluid">
         <h1 class="pb-2 border-bottom mb-4 fw-bold text-center" th:text="${title}">Create a Wiki Page</h1>
     </div>
+
+    <div th:replace="Components :: flash" class="mb-2"></div>
+
     <div th:if="${isAllowed}" class="row">
         <div class="pt-2 col-xs-12 col-md-6">
             <div class="p-4 mb-4 border-box">
-                <form th:action="@{${action}}" method="post" th:object="${page}">
+                <form action="/api/wiki/save" method="post" enctype="application/x-www-form-urlencoded">
                     <div class="form-row row">
                         <div class="col-12 mb-3">
                             <label for="tit">Title</label>
-                            <input type="text" class="form-control" id="tit" th:field="*{title}"
+                            <input type="text" class="form-control" id="tit" name="title"
                                    placeholder="Title here" required>
                         </div>
                     </div>
                     <div class="form-row row">
                         <div class="col-md-8 mb-3">
                             <label for="subt">Subtitle</label>
-                            <input type="text" class="form-control" id="subt" th:field="*{subtitle}"
+                            <input type="text" class="form-control" id="subt" name="subtitle"
                                    placeholder="subtitle" required>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="cat">Wiki Category</label>
-                            <select id="cat" th:field="*{category}"  class="form-control">
+                            <select id="cat" name="category"  class="form-control">
                                 <option value="" disabled="disabled">Select a category</option>
                                 <option th:each="cat : ${categories}" th:value="${cat.name}" th:text="${cat.name}">Error</option>
                             </select>
@@ -36,7 +39,7 @@
                     <div class="form-row row">
                         <div class="col-12 mb-3">
                             <label for="bod">Content Body</label>
-                            <textarea type="text" rows="10" class="form-control" id="bod" th:field="*{body}" placeholder="body content" required></textarea>
+                            <textarea type="text" rows="10" class="form-control" id="bod" name="body" placeholder="body content" required></textarea>
                         </div>
                     </div>
                     <div class="form-check">
@@ -51,7 +54,7 @@
                             There is no personally identifying content in my submission
                         </label>
                     </div>
-
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
             </div>
