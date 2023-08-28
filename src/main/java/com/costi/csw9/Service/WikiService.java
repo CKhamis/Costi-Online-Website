@@ -28,15 +28,18 @@ public class WikiService {
         return wikiRepository.findByEnabled(true);
     }
 
-    public WikiPage findById(Long id) throws Exception{
+    public WikiPage findById(Long id, User author) throws Exception{
         Optional<WikiPage> optionalWikiPage = wikiRepository.findById(id);
         if(optionalWikiPage.isPresent()){
-            WikiPage wikiPage = optionalWikiPage.get();
-            if(wikiPage.isEnabled()){
-                return wikiPage;
-            }
-            throw new AccessDeniedException("Wiki Page" + LogicTools.INVALID_PERMISSIONS_MESSAGE);
+            // Wiki Page already exists, check if the author matches
+            WikiPage originalWikiPage = optionalWikiPage.get();
 
+            if(originalWikiPage.isEnabled() || originalWikiPage.getAuthor().equals(author) || author.isOwner() || author.isAdmin()){
+                return originalWikiPage;
+            }else{
+                throw new AccessDeniedException(LogicTools.INVALID_PERMISSIONS_MESSAGE);
+
+            }
         }else{
             throw new NoSuchElementException("Wiki Page" + LogicTools.NOT_FOUND_MESSAGE);
         }
@@ -51,7 +54,6 @@ public class WikiService {
                 WikiPage originalWikiPage = optionalWikiPage.get();
 
                 if(originalWikiPage.getAuthor().equals(author) || author.isOwner() || author.isAdmin()){
-                    //TODO: check if the originalWikiPage.getAuthor().equals(author) works
                     originalWikiPage.userEditValues(request);
                     WikiPage savedPage = wikiRepository.save(originalWikiPage);
 

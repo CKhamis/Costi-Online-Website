@@ -444,7 +444,7 @@ public class FrontEndController {
         model.addAttribute("id", null);
         model.addAttribute("title", "Create New Wiki Page");
 
-        return "WikiMaker";
+        return "wiki/WikiMaker";
     }
     @GetMapping("/Wiki/{id}/edit")
     public String getCreateWiki(Model model, @PathVariable Long id) {
@@ -452,7 +452,7 @@ public class FrontEndController {
         model.addAttribute("id", id);
         model.addAttribute("title", "Edit Wiki Page");
 
-        return "WikiMaker";
+        return "wiki/WikiMaker";
     }
 
 

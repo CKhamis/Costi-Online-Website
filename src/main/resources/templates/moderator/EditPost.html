@@ -135,7 +135,7 @@
         .then(response => response.json())
         .then(data => {
             post = data;
-            displayPreview(id)
+            displayPreview()
         })
         .catch(error => {
             // error handling
@@ -143,7 +143,7 @@
         });
 
     // Render
-    function displayPreview(id){
+    function displayPreview(){
         image.setAttribute('src', post.imagePath);
         title.value = post.title;
         subtitle.value = post.subtitle;

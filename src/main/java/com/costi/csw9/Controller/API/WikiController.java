@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.nio.file.AccessDeniedException;
@@ -38,9 +39,9 @@ public class WikiController {
     }
 
     @GetMapping("/view")
-    public ResponseEntity<?> getWikiPageById(@RequestParam("id") Long id, HttpSession session) {
+    public ResponseEntity<?> getWikiPageById(@RequestParam("id") Long id, HttpSession session, Principal principal) {
         try {
-            WikiPage wikiPage = wikiService.findById(id);
+            WikiPage wikiPage = wikiService.findById(id, getCurrentUser(principal));
             if (session.getAttribute("noViewIncrement" + wikiPage.getId()) == null) {
                 wikiService.addView(wikiPage);
                 session.setAttribute("noViewIncrement" + wikiPage.getId(), true);
@@ -49,29 +50,27 @@ public class WikiController {
             return ResponseEntity.ok(wikiPage);
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage("Wiki page Not Found", ResponseMessage.Severity.LOW, e.getMessage()));
-        } catch (AccessDeniedException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ResponseMessage("Wiki page Not Public", ResponseMessage.Severity.LOW, e.getMessage()));
         } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error Getting wiki page", ResponseMessage.Severity.MEDIUM, e.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error getting wiki page", ResponseMessage.Severity.MEDIUM, e.getMessage()));
         }
     }
 
     @PostMapping("/save")
-    public String save(@Valid WikiRequest request, Principal principal, RedirectAttributes redirectAttributes) {
+    public String save(@Valid WikiRequest request, Principal principal, RedirectAttributes redirectAttributes, HttpServletRequest httpServletRequest) {
         try {
-            wikiService.save(request, getCurrentUser(principal));
+            WikiPage page = wikiService.save(request, getCurrentUser(principal));
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Wiki submission sent", "Please allow a few days for Costi Online moderators to review your wiki page", FlashMessage.Status.SUCCESS));
-            return "redirect:/Wiki";
+            return "redirect:/Wiki/" + page.getId() + "/edit";
         } catch (NoSuchElementException e) {
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing wiki page", "ID of wiki page is invalid", FlashMessage.Status.DANGER));
-            return "redirect:/Wiki/Create";
         } catch (AccessDeniedException e) {
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid permissions", "Please sign in with account used to create the wiki page", FlashMessage.Status.DANGER));
-            return "redirect:/Wiki/Create";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("OOOOPS! Generic error (awwww man)", "Perhaps the title isn't unique?", FlashMessage.Status.DANGER));
-            return "redirect:/Wiki/Create";
         }
+
+        String referer = httpServletRequest.getHeader("Referer");
+        return "redirect:" + (referer != null ? referer : "/Wiki");
     }
 
 
