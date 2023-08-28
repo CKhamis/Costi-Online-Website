@@ -3,129 +3,120 @@
 <head th:replace="Components :: head('COMT Wiki')"></head>
 <body class="bg-1 text-1">
 <div th:replace="moderator/ModeratorComponents :: moderatorNav"></div>
-<main class="container mt-5">
-    <div class="p-5 mb-4 mt-5 border-box">
-        <div class="container-fluid py-5">
-            <h1 class="display-5 fw-bold">Costi Online Management Terminal</h1>
-            <p class="col-md-8 fs-4">Create & Edit Wiki content</p>
-            <a href="/Wiki/Create" class="btn btn-primary" role="button">Create new Wiki ></a>
+
+<main class="container mt-3">
+    <div class="row d-flex">
+        <div class="col-12 col-md-7 h-100">
+            <div class="container-fluid bg-2 py-3" id="overview-container">
+            </div>
+        </div>
+        <div class="col-12 col-md-5 h-100">
+            <div class="container-fluid bg-2 py-3">
+                <h3 class="fw-bold mb-2">Actions</h3>
+                <div class="action-button-container">
+                    <div class="action-button" data-bs-toggle="modal" data-bs-target="#new-news-modal">
+                        <img th:src="@{/icons/New.svg}" />
+                        <p class="text-center">New</p>
+                    </div>
+                    <div class="action-button" onclick="refresh()">
+                        <img th:src="@{/icons/Refresh.svg}" />
+                        <p class="text-center">Refresh</p>
+                    </div>
+                    <div class="action-button" onclick="disableAll()">
+                        <img th:src="@{/icons/Disable.svg}" />
+                        <p class="text-center">Disable All</p>
+                    </div>
+                    <div class="action-button" onclick="privateAll()">
+                        <img th:src="@{/icons/Private.svg}" />
+                        <p class="text-center">Private All</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div th:replace="Components :: flash" class="mt-2"></div>
-    <h2 class="fs-2 mb-3">Disabled, Needs Approval</h2>
-    <table class="table table-bordered table-sm align-middle table-hover table-dark">
-        <thead>
+
+    <div class="container-fluid" id="error-container">
+
+    </div>
+    <div class="container-fluid bg-2 mt-4 p-0" id="news-container">
+        <table class="table table-sm align-middle table-hover table-dark">
+            <thead>
             <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Image</th>
                 <th scope="col">Title</th>
                 <th scope="col">Subtitle</th>
                 <th scope="col">Category</th>
-                <th scope="col">Author</th>
-                <th scope="col">Role</th>
                 <th scope="col">Last Edited</th>
+                <th scope="col">Views</th>
                 <th scope="col">View</th>
-                <th scope="col">Edit</th>
                 <th scope="col">Enable</th>
+                <th scope="col">Visibility</th>
+                <th scope="col">Edit</th>
                 <th scope="col">Delete</th>
             </tr>
-        </thead>
-        <tbody>
-            <tr th:each="page : ${disabled}">
-                <td scope="row" th:text="*{page.title}">Title</td>
-                <td th:text="*{page.subtitle}">Subtitle</td>
-                <td  class="text-center">
-                    <div th:switch="${page.category}">
-                        <span th:case="INSIDE_JOKE"   class="badge badge-pill bg-primary">Inside Joke</span>
-                        <span th:case="HISTORICAL"    class="badge badge-pill bg-info">Historical</span>
-                        <span th:case="PEOPLE"        class="badge badge-pill bg-success">People</span>
-                        <span th:case="PROFESSIONAL"  class="badge badge-pill bg-secondary">Professional</span>
-                        <span th:case="*"             class="badge badge-pill bg-dark">Other</span>
-                    </div>
-                </td>
-                <td th:text="*{page.author.firstName} + ' ' + *{page.author.lastName}">Author</td>
-                <td class="text-center">
-                    <div th:switch="*{page.author.role}">
-                        <span th:case="'ADMIN'"   class="badge badge-pill bg-primary">Admin</span>
-                        <span th:case="'USER'"    class="badge badge-pill bg-info">User</span>
-                        <span th:case="*"       class="badge badge-pill bg-dark" th:text="*{page.author.role}">Other</span>
-                    </div>
-                </td>
-                <td th:text="*{page.dateEdited}">Last Edited</td>
-                <td>
-                    <a th:href="'/Wiki/' + *{page.Id} + '/view'" class="card-link">View Page ></a>
-                </td>
-                <td>
-                    <a th:href="@{|/Wiki/${page.id}/edit|}" class="btn btn-secondary btn-sm" role="button" aria-pressed="true">Edit</a>
-                </td>
-                <td>
-                    <form th:action="@{|/Wiki/${page.id}/enable|}" method="post">
-                        <button type="submit" class="btn btn-success btn-sm">Enable</button>
-                    </form>
-                </td>
-                <td>
-                    <form th:action="@{|/Wiki/${page.id}/delete|}" method="post">
-                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                    </form>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <h2 class="fs-2 mb-3">Visible Pages</h2>
-    <table class="table table-bordered table-sm align-middle table-hover table-dark">
-        <thead>
-        <tr>
-            <th scope="col">Title</th>
-            <th scope="col">Subtitle</th>
-            <th scope="col">Category</th>
-            <th scope="col">Author</th>
-            <th scope="col">Role</th>
-            <th scope="col">Last Edited</th>
-            <th scope="col">View</th>
-            <th scope="col">Edit</th>
-            <th scope="col">Enable</th>
-            <th scope="col">Delete</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="page : ${enabled}">
-            <td scope="row" th:text="*{page.title}">Title</td>
-            <td th:text="*{page.subtitle}">Subtitle</td>
-            <td class="text-center">
-                <div th:switch="${page.category}">
-                    <span th:case="INSIDE_JOKE"   class="badge badge-pill bg-primary">Inside Joke</span>
-                    <span th:case="HISTORICAL"    class="badge badge-pill bg-info">Historical</span>
-                    <span th:case="PEOPLE"        class="badge badge-pill bg-success">People</span>
-                    <span th:case="PROFESSIONAL"  class="badge badge-pill bg-secondary">Professional</span>
-                    <span th:case="*"             class="badge badge-pill bg-dark">Other</span>
-                </div>
-            </td>
-            <td th:text="*{page.author.firstName} + ' ' + *{page.author.lastName}">Author</td>
-            <td class="text-center">
-                <span class="badge badge-pill bg-dark" th:text="*{page.author.role}">Other</span>
-            </td>
-            <td th:text="*{page.dateEdited}">Last Edited</td>
-            <td>
-                <a th:href="'/Wiki/' + *{page.Id} + '/view'" class="card-link">View Page ></a>
-            </td>
-            <td>
-                <a th:href="@{|/Wiki/${page.id}/edit|}" class="btn btn-secondary btn-sm" role="button" aria-pressed="true">Edit</a>
-            </td>
-            <td>
-                <form th:action="@{|/Wiki/${page.id}/disable|}" method="post">
-                    <button type="submit" class="btn btn-warning btn-sm">Disable</button>
-                </form>
-            </td>
-            <td>
-                <form th:action="@{|/Wiki/${page.id}/delete|}" method="post">
-                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+            </thead>
+            <tbody id="table-body">
+            </tbody>
+        </table>
+    </div>
 </main>
+
+<div class="modal fade" id="new-news-modal" tabindex="-1" aria-labelledby="newNewsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-box">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newNewsModalLabel">Create New Newsroom Post</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="new-news-form" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="file" class="form-label">Upload image (optional)</label>
+                        <input class="form-control" type="file" id="file" name="image" accept="image/webp">
+                    </div>
+
+                    <div class="form-row row">
+                        <div class="col-12 mb-3">
+                            <label for="title">Title</label>
+                            <input type="text" class="form-control" id="title"
+                                   placeholder="Title here" required>
+                        </div>
+                    </div>
+                    <div class="form-row row">
+                        <div class="col-md-8 mb-3">
+                            <label for="sub">Subtitle</label>
+                            <input type="text" class="form-control" id="sub"
+                                   placeholder="subtitle" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="cat">Post Category</label>
+                            <select id="cat"  class="form-control">
+                                <option value="" disabled="disabled">Select a category</option>
+                                <option th:each="cat : ${categories}" th:value="${cat.name}" th:text="${cat.name}">Error</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row row">
+                        <div class="col-12 mb-3">
+                            <label for="body">Content Body</label>
+                            <textarea type="text" rows="10" class="form-control" id="body" placeholder="body content" required></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="saveNews()">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 99" id="toast-container"></div>
+
 <div th:replace="Components :: footer"></div>
 <div th:replace="Components :: JS"></div>
-<div th:replace="Components :: axcel-sprite-logic"></div>
+<div th:replace="moderator/ModeratorComponents :: toast-scripts"></div>
 </body>
 </html>
