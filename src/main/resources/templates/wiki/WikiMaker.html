@@ -54,6 +54,7 @@
                             There is no personally identifying content in my submission
                         </label>
                     </div>
+                    <input type="hidden" th:value="${id}" id="id"/>
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
@@ -69,8 +70,8 @@
     <div th:unless="${isAllowed}" class="">
         <div class="p-3 p-lg-5 mb-4 border-box wikiRestrictedBannerBg">
             <div class="container-fluid py-5">
-                <h1 class="display-5 fw-bold">⚠️You do not have access to this wiki page</h1>
-                <p class="col-md-8 fs-4">Please make sure you are using the same account you used to create the wiki page with or moderator account. Otherwise, kindly fuck off.</p>
+                <h1 class="display-5 fw-bold">⚠️You do not have access to editing this wiki page</h1>
+                <p class="col-md-8 fs-4">Please make sure you are using the same account you used to create the wiki page with or moderator account</p>
             </div>
         </div>
     </div>
@@ -79,6 +80,9 @@
 <div th:replace="Components :: JS"></div>
 <div th:replace="Components :: footer"></div>
 <script>
+    //TODO: add in javascript for wiki editing purposes
+
+
     //Preview Elements
     let previewTitle = document.querySelector("#preview-title");
     let previewSubtitle = document.querySelector("#preview-subtitle");

@@ -439,46 +439,22 @@ public class FrontEndController {
     }
 
     @GetMapping("/Wiki/Create")
-    public String getCreateWiki(Model model, Principal principal, RedirectAttributes redirectAttributes) {
-        if (!model.containsAttribute("page")) {
-            model.addAttribute("page", new WikiPage(getCurrentUser(principal)));
-        }
-        model.addAttribute("isAllowed", true);
-        model.addAttribute("action", "/Wiki/Create/post");
+    public String getCreateWiki(Model model) {
         model.addAttribute("categories", WikiCategory.values());
+        model.addAttribute("id", null);
         model.addAttribute("title", "Create New Wiki Page");
 
-        return "wiki/NewWiki";
+        return "WikiMaker";
+    }
+    @GetMapping("/Wiki/{id}/edit")
+    public String getCreateWiki(Model model, @PathVariable Long id) {
+        model.addAttribute("categories", WikiCategory.values());
+        model.addAttribute("id", id);
+        model.addAttribute("title", "Edit Wiki Page");
+
+        return "WikiMaker";
     }
 
-    @PostMapping(value = "/Wiki/Create/post")
-    public String addNewPage(@Valid WikiPage wikiPage, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) {
-            // Include validation errors upon redirect
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.WikiPage", result);
-
-            // Re populate credentials in form
-            redirectAttributes.addFlashAttribute("page", wikiPage);
-
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating wiki page", getErrorString(result), FlashMessage.Status.DANGER));
-
-            // Redirect back to the form
-            return "redirect:/Wiki/Create";
-        }
-        wikiPage.setAuthor(getCurrentUser(principal));
-
-        try {
-            wikiService.deprecatedSave(wikiPage, getCurrentUser(principal));
-            return "redirect:/Wiki/" + wikiPage.getId() + "/view";
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating wiki page", e.getMessage(), FlashMessage.Status.DANGER));
-            // Re populate credentials in form
-            redirectAttributes.addFlashAttribute("page", wikiPage);
-
-            // Redirect back to the form
-            return "redirect:/Wiki/Create";
-        }
-    }
 
     @RequestMapping("/Wiki/{PageId}/view")
     public String viewPage(Model model, Principal principal, @PathVariable Long PageId) {
@@ -543,7 +519,7 @@ public class FrontEndController {
             model.addAttribute("categories", WikiCategory.values());
             model.addAttribute("title", "Edit Wiki Page");
 
-            return "wiki/NewWiki";
+            return "WikiMaker";
         }catch (Exception e){
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error viewing wiki page", e.getMessage(), FlashMessage.Status.DANGER));
             return "redirect:/COMT/Wiki";
