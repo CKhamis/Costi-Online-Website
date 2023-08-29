@@ -14,7 +14,7 @@
             <div class="container-fluid bg-2 py-3">
                 <h3 class="fw-bold mb-2">Actions</h3>
                 <div class="action-button-container">
-                    <div class="action-button" data-bs-toggle="modal" data-bs-target="#new-news-modal">
+                    <div class="action-button" data-bs-toggle="modal" data-bs-target="#new-wiki-modal">
                         <img th:src="@{/icons/New.svg}" />
                         <p class="text-center">New</p>
                     </div>
@@ -38,14 +38,14 @@
     <div class="container-fluid" id="error-container">
 
     </div>
-    <div class="container-fluid bg-2 mt-4 p-0" id="news-container">
+    <div class="container-fluid bg-2 mt-4 p-0" id="wiki-container">
         <table class="table table-sm align-middle table-hover table-dark">
             <thead>
             <tr>
                 <th scope="col">ID</th>
-                <th scope="col">Image</th>
                 <th scope="col">Title</th>
                 <th scope="col">Subtitle</th>
+                <th scope="col">Author</th>
                 <th scope="col">Category</th>
                 <th scope="col">Last Edited</th>
                 <th scope="col">Views</th>
@@ -62,14 +62,14 @@
     </div>
 </main>
 
-<div class="modal fade" id="new-news-modal" tabindex="-1" aria-labelledby="newNewsModalLabel" aria-hidden="true">
+<div class="modal fade" id="new-wiki-modal" tabindex="-1" aria-labelledby="newWikiModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content border-box">
             <div class="modal-header">
-                <h5 class="modal-title" id="newNewsModalLabel">Create New Newsroom Post</h5>
+                <h5 class="modal-title" id="newWikiModalLabel">Create New Wiki Page</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="new-news-form" enctype="multipart/form-data">
+            <form id="new-wiki-form" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="file" class="form-label">Upload image (optional)</label>
@@ -106,7 +106,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="saveNews()">Save</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="saveWiki()">Save</button>
                 </div>
             </form>
         </div>
@@ -118,5 +118,129 @@
 <div th:replace="Components :: footer"></div>
 <div th:replace="Components :: JS"></div>
 <div th:replace="moderator/ModeratorComponents :: toast-scripts"></div>
+<script>
+    // Data
+    let wikiList;
+
+    // Elements
+    const overviewContainer = document.querySelector("#overview-container");
+    const errorContainer = document.querySelector("#news-container");
+    const table = document.querySelector("#table-body");
+
+    // GET functions
+    function refresh(){
+        fetch("/api/management/wiki/all")
+            .then(checkStatus)
+            .then(response => response.json())
+            .then(data => {
+                wikiList = data;
+                renderData();
+            })
+            .catch(response => {
+                // error handling
+                response.json()
+                    .then(errorData => {
+                        errorContainer.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class="text-center fw-bold">${errorData.title}</h3><p class="text-center">${errorData.message}</p>`;
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        errorContainer.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>";
+                    });
+
+                console.error('Error retrieving data:', response);
+            });
+    }
+    refresh();
+
+    // Rendering functions
+    function renderData(){
+        let tableContent = ``;
+        let totalViews = 0, totalPages = wikiList.length, totalDisabled = 0, totalInsideJoke = 0, totalHistorical = 0, totalPeople = 0, totalProfessional = 0;
+        for(let i = 0; i < wikiList.length; i++){
+            let page = wikiList[i];
+
+            // Analytics
+            totalViews += page.views;
+            if(page.category == "INSIDE_JOKE"){
+                totalInsideJoke++;
+            }else if(page.category == "HISTORICAL"){
+                totalHistorical++;
+            }else  if(page.category == "PEOPLE"){
+                totalPeople++;
+            }else if(page.category == "PROFESSIONAL"){
+                totalProfessional++;
+            }
+
+            if(page.enabled == false){
+                totalDisabled++;
+            }
+
+            tableContent += `
+            <tr>
+                <td>${page.id}</td>
+                <td>${page.title}</td>
+                <td>${page.subtitle}</td>
+                <td>${page.authorName}</td>
+                <td class="text-center">
+                    <span class="badge ${page.category === 'INSIDE_JOKE' ? 'bg-primary' : page.category === 'HISTORICAL' ? 'bg-secondary' : page.category === 'PEOPLE' ? 'bg-info' : page.category === 'PROFESSIONAL' ? 'bg-danger' : 'bg-dark'}">${page.category}</span>
+                </td>
+                <td>${page.dateEdited}</td>
+                <td><p class="text-center fw-bold">${page.views}</p></td>
+                <td>
+                    <a class="btn btn-sm btn-primary ${page.enabled === true ? '' : 'disabled'}" href="/Wiki/${page.id}/view" role="button">View</a>
+                </td>
+                <td>
+                    <button class="btn btn-sm ${page.enabled === true ? 'btn-primary' : 'btn-secondary'}" onclick="toggleEnable(${page.id})">${page.enabled === true ? 'Enabled' : 'Disabled'}</button>
+                </td>
+                <td>
+                    <button class="btn btn-sm ${page.public === true ? 'btn-primary' : 'btn-secondary'}" onclick="toggleVisibility(${page.id})">${page.public === true ? 'Public' : 'Private'}</button>
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-secondary" href="/Wiki/${page.id}/edit" role="button">Edit</a>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="deletePage(${page.id})">Delete</button>
+                </td>
+            </tr>
+            `;
+        }
+        overviewContainer.innerHTML = `
+            <h3 class="fw-bold mb-2">Overview</h3>
+            <div id="stats-container">
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${totalViews}</p>
+                    <p class="text-center">All Views</p>
+                </div>
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${totalPages}</p>
+                    <p class="text-center">Posts</p>
+                </div>
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${totalDisabled}</p>
+                    <p class="text-center">Disabled</p>
+                </div>
+                <div class="d-none d-lg-block">
+                    <p class="fs-1 fw-bold  text-center">${totalPeople}</p>
+                    <p class="text-center">People</p>
+                </div>
+                <div class="d-none d-lg-block">
+                    <p class="fs-1 fw-bold  text-center">${totalProfessional}</p>
+                    <p class="text-center">Professional</p>
+                </div>
+                <div class="d-none d-lg-block">
+                    <p class="fs-1 fw-bold  text-center">${totalHistorical}</p>
+                    <p class="text-center">Historical</p>
+                </div>
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${totalInsideJoke}</p>
+                    <p class="text-center">Jokes</p>
+                </div>
+            </div>
+
+        `;
+
+        table.innerHTML = tableContent;
+    }
+</script>
 </body>
 </html>
