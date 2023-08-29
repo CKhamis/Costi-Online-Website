@@ -1,10 +1,9 @@
 package com.costi.csw9.Controller.API;
 
 import com.costi.csw9.Model.*;
-import com.costi.csw9.Model.DTO.AccountNotificationRequest;
-import com.costi.csw9.Model.DTO.ModeratorLightRequest;
-import com.costi.csw9.Model.DTO.ResponseMessage;
+import com.costi.csw9.Model.DTO.*;
 import com.costi.csw9.Service.COMTService;
+import com.costi.csw9.Service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.rmi.ConnectIOException;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
@@ -29,9 +29,11 @@ import java.util.stream.Collectors;
 @PreAuthorize("hasAnyAuthority('ADMIN', 'OWNER')")
 public class COMTController {
     private final COMTService comtService;
+    private final UserService userService;
 
-    public COMTController(COMTService comtService) {
+    public COMTController(COMTService comtService, UserService userService) {
         this.comtService = comtService;
+        this.userService = userService;
     }
 
     /*
@@ -331,9 +333,9 @@ public class COMTController {
     }
 
     @PostMapping("/wiki/save")
-    public ResponseEntity<ResponseMessage> saveWikiPage(@RequestBody WikiPage wikiPage) {
+    public ResponseEntity<ResponseMessage> saveWikiPage(@RequestBody ModeratorWikiRequest wikiPage, Principal principal) {
         try {
-            comtService.saveWikiPage(wikiPage);
+            comtService.saveWikiPage(wikiPage, getCurrentUser(principal));
             return ResponseEntity.ok(new ResponseMessage("Wiki Page Saved", ResponseMessage.Severity.INFORMATIONAL, "Wiki Page has been saved to Costi Online"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Error Saving Wiki Page", ResponseMessage.Severity.LOW, e.getMessage()));
@@ -348,5 +350,14 @@ public class COMTController {
     public ResponseEntity<List<User>> getUsers(){
         List<User> users = comtService.findAllUsers();
         return ResponseEntity.ok(users);
+    }
+
+    private User getCurrentUser(Principal principal) throws Exception{
+        if (principal == null) {
+            throw new Exception("No user logged in");
+        }
+        String username = principal.getName();
+        User u = userService.findByEmail(username);
+        return u;
     }
 }

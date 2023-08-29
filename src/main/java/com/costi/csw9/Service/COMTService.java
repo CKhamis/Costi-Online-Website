@@ -3,11 +3,14 @@ package com.costi.csw9.Service;
 import com.costi.csw9.Model.*;
 import com.costi.csw9.Model.DTO.AccountNotificationRequest;
 import com.costi.csw9.Model.DTO.ModeratorLightRequest;
+import com.costi.csw9.Model.DTO.ModeratorWikiRequest;
+import com.costi.csw9.Model.DTO.WikiRequest;
 import com.costi.csw9.Repository.*;
 import com.costi.csw9.Util.LogicTools;
 import com.costi.csw9.Validation.FileValidator;
 import org.hibernate.Hibernate;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,8 +33,9 @@ public class COMTService {
     private final LightLogRepository lightLogRepository;
     private final LightService lightService;
     private final WikiRepository wikiRepository;
+    private final AccountLogService accountLogService;
 
-    public COMTService(AnnouncementRepository announcementRepository, PostRepository postRepository, AttachmentService attachmentService, AccountNotificationRepository accountNotificationRepository, UserRepository userRepository, LightRepository lightRepository, LightLogRepository lightLogRepository, LightService lightService, WikiRepository wikiRepository) {
+    public COMTService(AnnouncementRepository announcementRepository, PostRepository postRepository, AttachmentService attachmentService, AccountNotificationRepository accountNotificationRepository, UserRepository userRepository, LightRepository lightRepository, LightLogRepository lightLogRepository, LightService lightService, WikiRepository wikiRepository, AccountLogService accountLogService) {
         this.announcementRepository = announcementRepository;
         this.postRepository = postRepository;
         this.attachmentService = attachmentService;
@@ -41,6 +45,7 @@ public class COMTService {
         this.lightService = lightService;
         this.lightLogRepository = lightLogRepository;
         this.wikiRepository = wikiRepository;
+        this.accountLogService = accountLogService;
     }
 
     /*
@@ -342,8 +347,38 @@ public class COMTService {
         wikiRepository.deleteById(id);
     }
 
-    public WikiPage saveWikiPage(WikiPage wikiPage){
-        return wikiRepository.save(wikiPage);
+    public WikiPage saveWikiPage(ModeratorWikiRequest request, User author){
+        // id must be null to create new pages
+        if(request.getId() != null && request.getId() >= 0){
+            Optional<WikiPage> optionalWikiPage = wikiRepository.findById(request.getId());
+            if(optionalWikiPage.isPresent()){
+                // Wiki Page already exists, check if the author matches
+                WikiPage originalWikiPage = optionalWikiPage.get();
+
+                originalWikiPage.moderatorEditValues(request);
+                WikiPage savedPage = wikiRepository.save(originalWikiPage);
+
+                // Add this to log
+                AccountLog log = new AccountLog("Wiki page changed", savedPage.getTitle() + " is saved.", savedPage.getAuthor());
+                accountLogService.save(log);
+
+                return savedPage;
+            }else{
+                // Id is present, but not valid
+                throw new NoSuchElementException("ID is invalid");
+            }
+        }else{
+            // Wiki Page does not exist, create a new one
+            WikiPage newPage = new WikiPage(author);
+            newPage.moderatorEditValues(request);
+            WikiPage savedPage = wikiRepository.save(newPage);
+
+            // Add this to log
+            AccountLog log = new AccountLog("Wiki page created", savedPage.getTitle() + " is saved.", savedPage.getAuthor());
+            accountLogService.save(log);
+
+            return savedPage;
+        }
     }
 
     /*

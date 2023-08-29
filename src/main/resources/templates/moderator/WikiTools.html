@@ -123,7 +123,7 @@
 
     // Elements
     const overviewContainer = document.querySelector("#overview-container");
-    const errorContainer = document.querySelector("#news-container");
+    const errorContainer = document.querySelector("#error-container");
     const table = document.querySelector("#table-body");
 
     // GET functions
@@ -238,6 +238,7 @@
         table.innerHTML = tableContent;
     }
 
+    // POST functions
     function deletePage(id){
         let toastId = createToast("Deleting Wiki Page");
         postData("/api/management/wiki/delete", id)
@@ -261,6 +262,33 @@
                     });
             })
             .then(refresh);
+    }
+
+    function toggleEnable(id){
+        let toastId = createToast("Switching Visibility");
+        let page = wikiList.find(announcement => announcement.id === id);
+        page.enabled = !page.enabled;
+        postData("/api/management/wiki/save", page)
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .then(refresh)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ Changes committed";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            });
     }
 </script>
 </body>

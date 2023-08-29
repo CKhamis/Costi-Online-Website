@@ -1,5 +1,6 @@
 package com.costi.csw9.Model;
 
+import com.costi.csw9.Model.DTO.ModeratorWikiRequest;
 import com.costi.csw9.Model.DTO.WikiRequest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
@@ -79,5 +80,14 @@ public class WikiPage {
         this.body = request.getBody();
         this.category = request.getCategory();
         this.enabled = false;
+    }
+
+    public void moderatorEditValues(ModeratorWikiRequest request){
+        this.lastEdited = LocalDateTime.now();
+        this.title = request.getTitle();
+        this.subtitle = request.getSubtitle();
+        this.body = request.getBody();
+        this.category = request.getCategory();
+        this.enabled = request.isEnabled();
     }
 }
