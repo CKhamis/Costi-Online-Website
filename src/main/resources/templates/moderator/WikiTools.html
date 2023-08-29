@@ -14,10 +14,10 @@
             <div class="container-fluid bg-2 py-3">
                 <h3 class="fw-bold mb-2">Actions</h3>
                 <div class="action-button-container">
-                    <div class="action-button" data-bs-toggle="modal" data-bs-target="#new-wiki-modal">
+                    <a class="action-button" href="/Wiki/Create">
                         <img th:src="@{/icons/New.svg}" />
                         <p class="text-center">New</p>
-                    </div>
+                    </a>
                     <div class="action-button" onclick="refresh()">
                         <img th:src="@{/icons/Refresh.svg}" />
                         <p class="text-center">Refresh</p>
@@ -25,10 +25,6 @@
                     <div class="action-button" onclick="disableAll()">
                         <img th:src="@{/icons/Disable.svg}" />
                         <p class="text-center">Disable All</p>
-                    </div>
-                    <div class="action-button" onclick="privateAll()">
-                        <img th:src="@{/icons/Private.svg}" />
-                        <p class="text-center">Private All</p>
                     </div>
                 </div>
             </div>
@@ -289,6 +285,45 @@
                 document.getElementById(`${toastId}-body`).innerText = "✅ Changes committed";
                 document.getElementById(`${toastId}-loading`).style.color = "green";
             });
+    }
+
+    function disableAll() {
+        let toastId = createToast("Disabling all Wiki Pages");
+        const promises = wikiList.map(page => {
+            let wiki = {
+                "body": page.body,
+                "id": page.id,
+                "title": page.title,
+                "subtitle": page.subtitle,
+                "category": page.category,
+                "enabled": false
+            };
+
+            return postData(`/api/management/wiki/save`, wiki);
+        });
+
+        Promise.all(promises)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "Data submitted to Costi Online";
+                document.getElementById(`${toastId}-title`).innerText = "Procedure Complete";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .finally(refresh);
     }
 </script>
 </body>
