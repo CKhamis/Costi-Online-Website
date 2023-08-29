@@ -51,7 +51,6 @@
                 <th scope="col">Views</th>
                 <th scope="col">View</th>
                 <th scope="col">Enable</th>
-                <th scope="col">Visibility</th>
                 <th scope="col">Edit</th>
                 <th scope="col">Delete</th>
             </tr>
@@ -193,9 +192,6 @@
                     <button class="btn btn-sm ${page.enabled === true ? 'btn-primary' : 'btn-secondary'}" onclick="toggleEnable(${page.id})">${page.enabled === true ? 'Enabled' : 'Disabled'}</button>
                 </td>
                 <td>
-                    <button class="btn btn-sm ${page.public === true ? 'btn-primary' : 'btn-secondary'}" onclick="toggleVisibility(${page.id})">${page.public === true ? 'Public' : 'Private'}</button>
-                </td>
-                <td>
                     <a class="btn btn-sm btn-secondary" href="/Wiki/${page.id}/edit" role="button">Edit</a>
                 </td>
                 <td>
@@ -240,6 +236,31 @@
         `;
 
         table.innerHTML = tableContent;
+    }
+
+    function deletePage(id){
+        let toastId = createToast("Deleting Wiki Page");
+        postData("/api/management/wiki/delete", id)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ Wiki page Deleted";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .then(refresh);
     }
 </script>
 </body>
