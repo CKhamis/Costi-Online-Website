@@ -58,12 +58,17 @@ public class WikiController {
     @PostMapping("/save")
     public String save(@Valid WikiRequest request, Principal principal, RedirectAttributes redirectAttributes, HttpServletRequest httpServletRequest) {
         try {
+            if (principal == null) {
+                throw new AccessDeniedException("No user logged in");
+            }
+
             WikiPage page = wikiService.save(request, getCurrentUser(principal));
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Wiki submission sent", "Please allow a few days for Costi Online moderators to review your wiki page", FlashMessage.Status.SUCCESS));
             return "redirect:/Wiki/" + page.getId() + "/edit";
         } catch (NoSuchElementException e) {
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing wiki page", "ID of wiki page is invalid", FlashMessage.Status.DANGER));
         } catch (AccessDeniedException e) {
+            //TODO: Find out why this doesn't work for the save service function
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid permissions", "Please sign in with account used to create the wiki page", FlashMessage.Status.DANGER));
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("OOOOPS! Generic error (awwww man)", "Perhaps the title isn't unique?", FlashMessage.Status.DANGER));
@@ -74,9 +79,9 @@ public class WikiController {
     }
 
 
-    private User getCurrentUser(Principal principal) throws Exception{
+    private User getCurrentUser(Principal principal){
         if (principal == null) {
-            throw new Exception("No user logged in");
+            return null;
         }
         String username = principal.getName();
         User u = userService.findByEmail(username);

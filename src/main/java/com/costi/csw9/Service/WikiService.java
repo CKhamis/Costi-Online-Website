@@ -45,7 +45,13 @@ public class WikiService {
         }
     }
 
-    public WikiPage save(WikiRequest request, User author) throws Exception{
+    public WikiPage save(WikiRequest request, User author){
+        // Author must exist
+        if(author == null){
+            // No use logged in
+            throw new AccessDeniedException("No user logged in");
+        }
+
         // id must be null to create new pages
         if(request.getId() != null && request.getId() >= 0){
             Optional<WikiPage> optionalWikiPage = wikiRepository.findById(request.getId());

@@ -439,7 +439,10 @@ public class FrontEndController {
     }
 
     @GetMapping("/Wiki/Create")
-    public String getCreateWiki(Model model) {
+    public String getCreateWiki(Model model, Principal principal) {
+        if(principal == null){
+            return "main/login";
+        }
         model.addAttribute("categories", WikiCategory.values());
         model.addAttribute("id", null);
         model.addAttribute("title", "Create New Wiki Page");
