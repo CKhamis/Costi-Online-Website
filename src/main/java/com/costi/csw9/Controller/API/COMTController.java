@@ -328,7 +328,7 @@ public class COMTController {
             comtService.deleteWikiPage(id);
             return ResponseEntity.ok(new ResponseMessage("Wiki Page Deleted", ResponseMessage.Severity.INFORMATIONAL, "Page of id " + id + " is no longer accessible or recoverable."));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error deleting light", ResponseMessage.Severity.HIGH, e.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error deleting wiki page", ResponseMessage.Severity.HIGH, e.getMessage()));
         }
     }
 
@@ -336,6 +336,36 @@ public class COMTController {
     public ResponseEntity<ResponseMessage> saveWikiPage(@RequestBody ModeratorWikiRequest wikiPage, Principal principal) {
         try {
             comtService.saveWikiPage(wikiPage, getCurrentUser(principal));
+            return ResponseEntity.ok(new ResponseMessage("Wiki Page Saved", ResponseMessage.Severity.INFORMATIONAL, "Wiki Page has been saved to Costi Online"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Error Saving Wiki Page", ResponseMessage.Severity.LOW, e.getMessage()));
+        }
+    }
+
+    /*
+        Account Logs
+     */
+
+    @GetMapping("/account-logs/all")
+    public ResponseEntity<List<AccountLog>> getAccountLogs(){
+        List<AccountLog> logs = comtService.findAllAccountLogs();
+        return ResponseEntity.ok(logs);
+    }
+
+    @PostMapping("/account-logs/delete")
+    public ResponseEntity<ResponseMessage> deleteAccountLog(@RequestBody Long id) {
+        try {
+            comtService.deleteAccountLog(id);
+            return ResponseEntity.ok(new ResponseMessage("Account Log Deleted", ResponseMessage.Severity.INFORMATIONAL, "Log of id " + id + " is no longer accessible or recoverable."));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error deleting log", ResponseMessage.Severity.HIGH, e.getMessage()));
+        }
+    }
+
+    @PostMapping("/account-logs/save")
+    public ResponseEntity<ResponseMessage> saveAccountLog(@RequestBody @Valid ModeratorAccountLogRequest request) {
+        try {
+            comtService.saveAccountLog(request);
             return ResponseEntity.ok(new ResponseMessage("Wiki Page Saved", ResponseMessage.Severity.INFORMATIONAL, "Wiki Page has been saved to Costi Online"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Error Saving Wiki Page", ResponseMessage.Severity.LOW, e.getMessage()));

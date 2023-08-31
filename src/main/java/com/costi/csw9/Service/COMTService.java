@@ -1,10 +1,7 @@
 package com.costi.csw9.Service;
 
 import com.costi.csw9.Model.*;
-import com.costi.csw9.Model.DTO.AccountNotificationRequest;
-import com.costi.csw9.Model.DTO.ModeratorLightRequest;
-import com.costi.csw9.Model.DTO.ModeratorWikiRequest;
-import com.costi.csw9.Model.DTO.WikiRequest;
+import com.costi.csw9.Model.DTO.*;
 import com.costi.csw9.Repository.*;
 import com.costi.csw9.Util.LogicTools;
 import com.costi.csw9.Validation.FileValidator;
@@ -34,8 +31,9 @@ public class COMTService {
     private final LightService lightService;
     private final WikiRepository wikiRepository;
     private final AccountLogService accountLogService;
+    private final AccountLogRepository accountLogRepository;
 
-    public COMTService(AnnouncementRepository announcementRepository, PostRepository postRepository, AttachmentService attachmentService, AccountNotificationRepository accountNotificationRepository, UserRepository userRepository, LightRepository lightRepository, LightLogRepository lightLogRepository, LightService lightService, WikiRepository wikiRepository, AccountLogService accountLogService) {
+    public COMTService(AccountLogRepository accountLogRepository, AnnouncementRepository announcementRepository, PostRepository postRepository, AttachmentService attachmentService, AccountNotificationRepository accountNotificationRepository, UserRepository userRepository, LightRepository lightRepository, LightLogRepository lightLogRepository, LightService lightService, WikiRepository wikiRepository, AccountLogService accountLogService) {
         this.announcementRepository = announcementRepository;
         this.postRepository = postRepository;
         this.attachmentService = attachmentService;
@@ -46,6 +44,7 @@ public class COMTService {
         this.lightLogRepository = lightLogRepository;
         this.wikiRepository = wikiRepository;
         this.accountLogService = accountLogService;
+        this.accountLogRepository = accountLogRepository;
     }
 
     /*
@@ -378,6 +377,68 @@ public class COMTService {
             accountLogService.save(log);
 
             return savedPage;
+        }
+    }
+
+    /*
+        Account Logs
+     */
+
+    public List<AccountLog> findAllAccountLogs(){return accountLogRepository.findAll();}
+
+    public void deleteAccountLog(Long id){
+        accountLogRepository.deleteById(id);
+    }
+
+    public void saveAccountLog(ModeratorAccountLogRequest request){
+        // Check if new log or editing log
+        if(request.getId() != null){
+            // Check if the id exists
+            Optional<AccountLog> optionalAccountLog = accountLogRepository.findById(request.getId());
+            if(optionalAccountLog.isPresent()){
+                // Account log exists, edit it
+                AccountLog log = optionalAccountLog.get();
+
+                // Set assignee
+                Optional<User> optionalUser = userRepository.findById(request.getUserId());
+                if(optionalUser.isPresent()){
+                    // User is present
+                    User assignee = optionalUser.get();
+                    log.setUser(assignee);
+
+                    // Set fields
+                    log.setTitle(request.getTitle());
+                    log.setBody(request.getBody());
+
+                    // Save
+                    accountLogRepository.save(log);
+                }else{
+                    // Account log does not exist
+                    throw new IllegalArgumentException("There are no logs in Costi Online with the given id");
+                }
+
+            }else{
+                // Account log does not exist
+                throw new IllegalArgumentException("There are no logs in Costi Online with the given id");
+            }
+
+        }else{
+            // Create new log
+
+            // Check if a user is assigned
+            if(request.getUserId() == null){
+                throw new IllegalArgumentException("User id field cannot be null");
+            }
+
+            Optional<User> optionalUser = userRepository.findById(request.getUserId());
+            if(optionalUser.isPresent()){
+                // ALl fields present
+                AccountLog log = new AccountLog(request.getTitle(), request.getBody(), optionalUser.get());
+                accountLogRepository.save(log);
+            }else{
+                // User is incorrect
+                throw new IllegalArgumentException("There are no users in Costi Online with the given id");
+            }
         }
     }
 

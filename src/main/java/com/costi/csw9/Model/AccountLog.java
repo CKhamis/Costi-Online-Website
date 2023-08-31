@@ -28,6 +28,7 @@ public class AccountLog {
         this.title = title;
         this.body = body;
         this.user = user;
+        this.dateCreated = LocalDateTime.now();
     }
 
     public User getUser() {
@@ -64,9 +65,5 @@ public class AccountLog {
 
     public String getDateCreated() {
         return dateCreated.getMonthValue() + "/" + dateCreated.getDayOfMonth() + "/" + dateCreated.getYear();
-    }
-
-    public void setDateCreated(LocalDateTime dateCreated) {
-        this.dateCreated = dateCreated;
     }
 }
