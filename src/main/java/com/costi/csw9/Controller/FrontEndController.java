@@ -16,8 +16,6 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -47,7 +45,7 @@ public class FrontEndController {
      **************************/
 
     // Theme
-    private String choseTheme() {
+    private String chooseTheme() {
         LocalDate today = LocalDate.now();
         if (today.getMonth().name().equalsIgnoreCase("July")) {
             return "/XpTheme.css";
@@ -78,16 +76,15 @@ public class FrontEndController {
         
         // User is logged in or out
         model.addAttribute("loggedIn", principal != null);
-        model.addAttribute("theme", choseTheme());
+        model.addAttribute("theme", chooseTheme());
     }
 
     /*******************
         Page Mappings
      ******************/
 
-    //FIXME: THE GREAT REFACTOR of 2023: All database data must come from an AJAX request
     @RequestMapping("/Account")
-    public String editUser(Model model, Principal principal, RedirectAttributes redirectAttributes) {
+    public String editUser(Model model, Principal principal) {
         User user = getCurrentUser(principal);
         model.addAttribute("action", "/Account/edit");
         model.addAttribute("logs", accountLogService.findByUser(user));
@@ -179,7 +176,7 @@ public class FrontEndController {
 
     //Moderator
     @GetMapping("/COMT/Wiki")
-    public String getCostiOnlineWikiTools(Model model, Principal principal, RedirectAttributes redirectAttributes) {
+    public String getCostiOnlineWikiTools(Model model) {
         model.addAttribute("disabled", wikiService.getByApproval(false));
         model.addAttribute("enabled", wikiService.getByApproval(true));
         return "moderator/WikiTools";
@@ -234,7 +231,7 @@ public class FrontEndController {
 
 
     @GetMapping("/COMT/Notifications")
-    public String getCostiOnlineNotificationSettings(Model model) {
+    public String getCostiOnlineNotificationSettings() {
         return "moderator/NotificationTools";
     }
 
@@ -377,17 +374,9 @@ public class FrontEndController {
     public String getHome(Model model, Principal principal, RedirectAttributes redirectAttributes) {
         model.addAttribute("version", VERSION);
 
-        List<WikiPage> random = wikiService.getByApproval(true);
-        Collections.shuffle(random);
-
-        if (random.size() > 3) {
-            random = new ArrayList<>(random.subList(0, 3));
-        }
-
         List<Post> recentNews = postService.findAll();
         generateSlides(model, recentNews);
 
-        model.addAttribute("wiki", random);
         return "main/Home";
     }
 
@@ -486,37 +475,12 @@ public class FrontEndController {
         return "redirect:/COMT/Wiki";
     }
 
-    @RequestMapping(value = "/Wiki/{PageId}/enable", method = RequestMethod.POST)
-    public String enableWikiPage(@PathVariable Long PageId, Principal principal, RedirectAttributes redirectAttributes) {
-        try{
-            WikiPage page = wikiService.loadById(PageId);
-            wikiService.enable(page, true, getCurrentUser(principal));
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Wiki page enabled!", "Wiki page is published and is viewable publicly.", FlashMessage.Status.SUCCESS));
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error enabling wiki page", e.getMessage(), FlashMessage.Status.DANGER));
-        }
-        return "redirect:/COMT/Wiki";
-    }
-
-    @RequestMapping(value = "/Wiki/{PageId}/disable", method = RequestMethod.POST)
-    public String disableWikiPage(@PathVariable Long PageId, Principal principal, RedirectAttributes redirectAttributes) {
-        try{
-            WikiPage page = wikiService.loadById(PageId);
-            wikiService.enable(page, false, getCurrentUser(principal));
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Wiki page disabled!", "Wiki page is published and is viewable publicly.", FlashMessage.Status.SUCCESS));
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error disabling wiki page", e.getMessage(), FlashMessage.Status.DANGER));
-        }
-        return "redirect:/COMT/Wiki";
-    }
-
     @RequestMapping("/Wiki/{PageId}/edit")
     public String getEditWiki(@PathVariable Long PageId, Model model, Principal principal, RedirectAttributes redirectAttributes) {
         User current = getCurrentUser(principal);
         try{
             WikiPage page = wikiService.loadById(PageId);
 
-            model.addAttribute("page", page);
             model.addAttribute("isAllowed", (current.isAdmin() || page.getAuthor().equals(current)));
             model.addAttribute("action", "/Wiki/" + PageId + "/edit");
             model.addAttribute("categories", WikiCategory.values());
@@ -529,104 +493,68 @@ public class FrontEndController {
         }
     }
 
-    @PostMapping(value = "/Wiki/{PageId}/edit")
-    public String editWikiPage(@PathVariable Long PageId, @Valid WikiPage wikiPage, Principal principal, BindingResult result, RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) {
-            // Include validation errors upon redirect
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.WikiPage", result);
-            // Add  member if invalid was received
-
-            String errors = getErrorString(result);
-
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing wiki page", errors, FlashMessage.Status.DANGER));
-
-            redirectAttributes.addFlashAttribute("page", wikiPage);
-            return "redirect:/Wiki/" + PageId + "/edit";
-        }
-
-        wikiPage.setId(PageId);
-
-        try{
-            // Keep author the same
-            wikiPage.setAuthor(wikiService.loadById(PageId).getAuthor());
-
-            //Save new user
-            wikiService.deprecatedSave(wikiPage, getCurrentUser(principal));
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Wiki Page Edited!", "Page has been updated.", FlashMessage.Status.SUCCESS));
-        }catch (Exception e){
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing wiki page", e.getMessage(), FlashMessage.Status.DANGER));
-        }
-
-        //Redirect depending on type of user
-        if (getCurrentUser(principal).isAdmin()) {
-            return "redirect:/COMT/Wiki";
-        } else {
-            return "redirect:/Wiki/" + wikiPage.getId() + "/view";
-        }
-    }
-
     //Media
     @GetMapping("/Media")
-    public String getMedia(Model model, Principal principal) {
+    public String getMedia() {
         return "main/Media";
     }
 
     //About
     @GetMapping("/About")
-    public String getAbout(Model model, Principal principal) {
+    public String getAbout() {
         return "main/About";
     }
 
     //Landing Page
     @GetMapping("/Tree")
-    public String getLandingPage(Model model, Principal principal) {
+    public String getLandingPage() {
         return "main/Tree";
     }
 
 
     //Minecraft
     @GetMapping("/Minecraft")
-    public String getMCHome(Model model, Principal principal) {
+    public String getMCHome() {
         return "minecraft/MCHome";
     }
 
     @GetMapping("/Minecraft/gov")
-    public String getGovernmentInfo(Model model, Principal principal) {
+    public String getGovernmentInfo() {
         return "minecraft/YourGovernment";
     }
 
     @GetMapping("/Minecraft/vote")
-    public String getVoting(Model model, Principal principal) {
+    public String getVoting() {
         return "minecraft/VotingCenter";
     }
 
     @GetMapping("/Minecraft/vote/VotingBooth")
-    public String getVotingBooth(Model model, Principal principal) {
+    public String getVotingBooth() {
         return "minecraft/VotingBooth";
     }
 
     @GetMapping("/Minecraft/vote/allCitizens")
-    public String getAllCitizens(Model model, Principal principal) {
+    public String getAllCitizens() {
         return "minecraft/AllCitizens";
     }
 
     @GetMapping("/Minecraft/vote/register")
-    public String getRegister(Model model, Principal principal) {
+    public String getRegister() {
         return "minecraft/Register";
     }
 
     @GetMapping("/Minecraft/vote/runForOffice")
-    public String getAddCandidate(Model model, Principal principal) {
+    public String getAddCandidate() {
         return "minecraft/AddCandidate";
     }
 
     @GetMapping("/Minecraft/vote/Polls")
-    public String getPolls(Model model, Principal principal) {
+    public String getPolls() {
         return "minecraft/Polls";
     }
 
     @GetMapping("/Minecraft/vote/BallotInfo")
-    public String getBallotInfo(Model model, Principal principal) {
+    public String getBallotInfo() {
         return "minecraft/BallotInfo";
     }
 
@@ -637,7 +565,7 @@ public class FrontEndController {
 
     // Axcel
     @GetMapping("/Axcel")
-    public String getAxcel(Model model, Principal principal) {
+    public String getAxcel() {
         return "main/Axcel";
     }
 
