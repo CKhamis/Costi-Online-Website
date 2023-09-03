@@ -113,18 +113,19 @@
             <h2>Account Event Logs</h2>
             <hr/>
 
-            <div class="px-0 container">
-                <div class="row mb-1" th:each="log : ${logs}">
-                    <div class="col-4">
-                        <p th:text="${log.dateCreated}"></p>
-                    </div>
-                    <div class="col-4">
-                        <p th:text="${log.title}"></p>
-                    </div>
-                    <div class="col-4">
-                        <p th:text="${log.body}"></p>
-                    </div>
-                </div>
+            <div class="px-0 container" id="error-container">
+                <table class="table table-sm align-middle table-hover table-dark mt-4">
+                    <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Time</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Message</th>
+                    </tr>
+                    </thead>
+                    <tbody id="table-body">
+                    </tbody>
+                </table>
             </div>
         </div>
         <p>*Costi Network IDs are not as secure as accounts of other websites. Make sure to use a unique password for this website. Accounts are subject for deletion at any point, as this is an experimental feature. Accounts are unable to be deleted once created unless an admin performs manual database editing. Passwords are encrypted in the server's database and cannot be recovered at this time.</p>
@@ -137,26 +138,53 @@
     // Elements
     let count = document.querySelector("#notification-count");
     let container = document.querySelector("#notification-container");
+    let logTable = document.querySelector("#table-body");
+    let errorContainer = document.querySelector("#error-container");
 
     // Data
-    let notifications;
+    let notifications, logs;
+
+    // Fetch
+    const logFetch = fetch("/api/account-logs/all");
+    const notificationFetch = fetch("/api/notifications/all");
 
     // fetch
     function refresh(){
-        fetch("/api/notifications/all")
-            .then(checkStatus)
-            .then(response => response.json())
-            .then(data => {
-                notifications = data;
-                renderNotifications()
+        Promise.all([logFetch, notificationFetch])
+            .then(responses => {
+                const response1 = checkStatus(responses[0]);
+                const response2 = checkStatus(responses[1]);
+
+                return Promise.all([response1, response2]);
             })
-            .catch(error => {
-                // error handling
-                console.error('Error retrieving data:', error);
+            .then(data => {
+                let logDownload = data[0].json();
+                let notificationDownload = data[1].json();
+
+                return Promise.all([logDownload, notificationDownload]);
+            })
+            .then(data => {
+                logs = data[0]; // post data
+                notifications = data[1]; // recommendation data
+                renderLogs();
+                renderNotifications();
+            })
+            .catch((response)=>{
+                console.log(response);
+                response.json()  // Parse the JSON error response
+                    .then(errorData => {
+                        errorContainer.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class="text-center fw-bold">${errorData.title}</h3><p class="text-center">${errorData.message}</p>`;
+                    })
+                    .catch(error => {
+                        errorContainer.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class="text-center fw-bold">There was an error receiving data from Costi Online Services</h3><p class="text-center">Error message could not be parsed. ${error}</p>`;
+
+                        console.error("Error parsing error response:", error);
+                    });
             });
     }
+
     refresh();
-    const interval = setInterval(refresh, 5000);
+    setInterval(refresh, 30000);
 
     function deleteNotification(id){
         postData("/api/notifications/delete", id)
@@ -167,6 +195,21 @@
     }
 
     // Render
+    function renderLogs(){
+        let tableContent = ``;
+        for(let log of logs){
+            tableContent += `
+            <tr>
+                <td>${log.id}</td>
+                <td>${log.dateCreated}</td>
+                <td>${log.title}</td>
+                <td>${log.body}</td>
+            </tr>
+            `;
+        }
+        logTable.innerHTML = tableContent;
+    }
+
     function renderNotifications(){
         count.innerText = notifications.length;
         if(notifications.length > 0){
