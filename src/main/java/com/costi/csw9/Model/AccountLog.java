@@ -1,5 +1,8 @@
 package com.costi.csw9.Model;
 
+import com.costi.csw9.Model.DTO.ModeratorAccountLogResponse;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -8,6 +11,7 @@ import java.time.LocalDateTime;
 public class AccountLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -18,6 +22,7 @@ public class AccountLog {
     private LocalDateTime dateCreated = LocalDateTime.now();
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
@@ -65,5 +70,10 @@ public class AccountLog {
 
     public String getDateCreated() {
         return dateCreated.getMonthValue() + "/" + dateCreated.getDayOfMonth() + "/" + dateCreated.getYear();
+    }
+
+    @JsonIgnore
+    public ModeratorAccountLogResponse getModeratorView(){
+        return new ModeratorAccountLogResponse(this.id, this.title, this.body, this.dateCreated);
     }
 }

@@ -347,9 +347,12 @@ public class COMTController {
      */
 
     @GetMapping("/account-logs/all")
-    public ResponseEntity<List<AccountLog>> getAccountLogs(){
+    public ResponseEntity<List<ModeratorAccountLogResponse>> getAccountLogs(){
         List<AccountLog> logs = comtService.findAllAccountLogs();
-        return ResponseEntity.ok(logs);
+        List<ModeratorAccountLogResponse> response = logs.stream()
+                .map(AccountLog::getModeratorView)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/account-logs/delete")
