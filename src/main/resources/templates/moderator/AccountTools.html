@@ -84,21 +84,16 @@
                 userList = data;
                 renderUsers();
             })
-            .catch(error => {
-                // error handling
-                errorContainer.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>";
-                console.error('Error retrieving data:', error);
-            })
             .catch((response)=>{
-                response.json()
-                    .then(errorData => {
-                        errorContainer.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class="text-center fw-bold">${errorData.title}</h3><p class="text-center">${errorData.message}</p>`;
-                    })
-                    .catch(error => {
-                        console.error("Error parsing error response:", error);
-                        errorContainer.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>";
-                    });
-
+                try{
+                    response.json()
+                        .then(errorData => {
+                            errorContainer.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class="text-center fw-bold">${errorData.title}</h3><p class="text-center">${errorData.message}</p>`;
+                        });
+                } catch (e){
+                    console.error("Error parsing error response:", error);
+                    errorContainer.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>";
+                }
                 console.error('Error retrieving data:', response);
             });
     }
@@ -148,27 +143,26 @@
             tableContent += `
             <tr>
                 <td>${user.id}</td>
-                <td>${post.firstName}</td>
-                <td>${post.lastName}</td>
+                <td>${user.firstName}</td>
+                <td>${user.lastName}</td>
+                <td>${user.email}</td>
                 <td class="text-center">
-                    <span class="badge ${post.category === 'ACHIEVEMENT' ? 'bg-primary' : post.category === 'NEWS' ? 'bg-secondary' : post.category === 'JOURNAL' ? 'bg-info' : post.category === 'EMERGENCY' ? 'bg-danger' : post.category === 'ARTICLE' ? 'bg-warning' : post.category === 'DISCOVERY' ? 'bg-success' : post.category === 'UPDATE' ? 'bg-dark' : post.category === 'EVENT' ? 'bg-success' : 'bg-dark'}">${post.category}</span>
-                </td>
-                <td>${post.dateEdited}</td>
-                <td><p class="text-center fw-bold">${post.views}</p></td>
-                <td>
-                    <a class="btn btn-sm btn-primary ${post.enabled === true ? '' : 'disabled'}" href="/Newsroom/${post.id}/view" role="button">View</a>
+                    <span class="badge ${user.role === 'OWNER' ? 'bg-primary' : user.role === 'USER' ? 'bg-secondary' : user.role === 'ADMIN' ? 'bg-info' : 'bg-dark'}">${user.role}</span>
                 </td>
                 <td>
-                    <button class="btn btn-sm ${post.enabled === true ? 'btn-primary' : 'btn-secondary'}" onclick="toggleEnable(${post.id})">${post.enabled === true ? 'Enabled' : 'Disabled'}</button>
+                    <button class="btn btn-sm btn-primary ${user.lock === true ? '' : 'disabled'}" onclick="toggleLock(${user.id})" role="button">${user.lock === true ? 'Locked' : 'Unlocked'}"</button>
                 </td>
                 <td>
-                    <button class="btn btn-sm ${post.public === true ? 'btn-primary' : 'btn-secondary'}" onclick="toggleVisibility(${post.id})">${post.public === true ? 'Public' : 'Private'}</button>
+                    <button class="btn btn-sm btn-primary ${user.enable === true ? '' : 'disabled'}" onclick="toggleEnable(${user.id})" role="button">${user.enable === true ? 'Enabled' : 'Disabled'}"</button>
                 </td>
                 <td>
-                    <a class="btn btn-sm btn-secondary" href="/COMT/Newsroom/${post.id}/edit" role="button">Edit</a>
+                    <a class="btn btn-sm btn-secondary" href="#" role="button">Edit</a>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-sm btn-danger" onclick="deletePost(${post.id})">Delete</button>
+                    <button class="btn btn-sm btn-primary ${user.role === 'ADMIN' ? '' : 'disabled'}" onclick="demote(${user.id})" role="button">Demote</button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="deleteUser(${post.id})">Delete</button>
                 </td>
             </tr>
             `;
