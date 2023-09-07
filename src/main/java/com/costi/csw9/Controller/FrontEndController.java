@@ -32,7 +32,7 @@ public class FrontEndController {
     private AccountLogService accountLogService;
     private AccountNotificationService accountNotificationService;
     private PostService postService;
-    private static final String VERSION = "6.3.0";
+    private static final String VERSION = "7.1.1";
 
     @Autowired
     public FrontEndController(UserService userService, RegistrationService registrationService, WikiService wikiService, AnnouncementService announcementService, AccountLogService accountLogService, AccountNotificationService accountNotificationService, PostService postService) {
@@ -203,6 +203,17 @@ public class FrontEndController {
         model.addAttribute("disabled", wikiService.getByApproval(false));
         model.addAttribute("enabled", wikiService.getByApproval(true));
         return "moderator/WikiTools";
+    }
+
+    @GetMapping("/COMT/LED")
+    public String getCostiOnlineLEDTools() {
+        return "moderator/LEDTools";
+    }
+
+    @GetMapping("/COMT/LED/{id}")
+    public String getCostiOnlineLEDInfo(@PathVariable Long id, Model model) {
+        model.addAttribute("id", id);
+        return "moderator/LEDInfo";
     }
 
     @GetMapping("/COMT/Accounts")
@@ -425,6 +436,18 @@ public class FrontEndController {
         }catch (Exception e){
             // Invalid id, permission denial, or database error
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error deleting post", e.getMessage(), FlashMessage.Status.DANGER));
+        }
+        return "redirect:/COMT/Newsroom";
+    }
+
+    @PostMapping(value = "/Newsroom/{postId}/toggle-visibility")
+    public String changePostVisibility(@PathVariable Long postId, Principal principal, RedirectAttributes redirectAttributes) {
+        try{
+            postService.toggleVisibility(postId, getCurrentUser(principal));
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Post Published!", "Post visibility is changed", FlashMessage.Status.SUCCESS));
+        }catch (Exception e){
+            // Invalid id, permission denial, or database error
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Post could not be changed", e.getMessage(), FlashMessage.Status.DANGER));
         }
         return "redirect:/COMT/Newsroom";
     }
@@ -1068,19 +1091,19 @@ public class FrontEndController {
         return "main/Axcel";
     }
 
+    // Costi Labs
+    @GetMapping("/Labs")
+    public String getLabs(Model model, Principal principal) {
+        return "labs/Home";
+    }
+    @GetMapping("/Labs/LED")
+    public String getLED(Model model, Principal principal) {
+        return "labs/LED";
+    }
+
     // Newsroom
     @GetMapping("/Newsroom")
-    public String getNewsroomHome(Model model, Principal principal) {
-        // Newsroom posts
-        List<Post> allPosts = postService.getByApproval(true);
-        List<Post> recentNews = postService.getByCategory(PostCategory.NEWS.name());
-        List<Post> recentPosts = postService.getFixedAmount(6);
-
-        generateSlides(model, recentNews);
-
-        model.addAttribute("recentPosts", recentPosts);
-        model.addAttribute("allPosts", allPosts);
-
+    public String getNewsroomHome(Model model) {
         //Announcements
         List<Announcement> announcements = announcementService.findByApproval(true);
         model.addAttribute("announcements", announcements);

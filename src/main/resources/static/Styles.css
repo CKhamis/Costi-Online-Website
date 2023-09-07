@@ -32,9 +32,22 @@
     }
 }
 
+/* Labs */
+.light-controller-container{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.light-controller-container > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 /* About */
 #education{
-    background-image: url('/images/About/SJSU.jpg');
+    background-image: url('/images/webpageImages/City Hall.jpg');
     background-position: right;
     background-size: 100%;
     background-attachment: fixed;
@@ -49,7 +62,7 @@
      background-image: url(images/webpageImages/WikiRestrictedBg.jpg);
      background-size: 100%;
 }
-#contentBody{
+.wiki-body{
     line-height: 2rem;
 }
 
@@ -110,6 +123,45 @@
   grid-template-columns: 25% 20% 20% auto;
   gap: 10px;
   height:100%;
+}
+
+.LED-background{
+    background-image: url('/images/webpageImages/LED Banner.webp');
+    background-position: right;
+    background-size: 100%;
+    background-attachment: fixed;
+}
+
+.action-button-container{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+#stats-container{
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+}
+
+@media (max-width: 992px) {
+    #stats-container {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.action-button > img{
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    margin: 0 25%;
+}
+
+.action-button > p, #stats-container p{
+    margin-bottom: 0;
+}
+
+.action-button{
+    cursor: pointer;
 }
 
 .ac-grid-scroll-pane{

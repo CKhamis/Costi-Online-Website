@@ -1,5 +1,6 @@
 package com.costi.csw9.Service;
 
+import ch.qos.logback.core.encoder.EchoEncoder;
 import com.costi.csw9.Model.*;
 import com.costi.csw9.Repository.PostRepository;
 import com.costi.csw9.Util.LogicTools;
@@ -32,7 +33,6 @@ public class PostService {
         }catch (Exception e){
             throw new Exception("Post" + LogicTools.NOT_FOUND_MESSAGE);
         }
-
     }
 
     public List<Post> getByCategory(String category){
@@ -45,6 +45,10 @@ public class PostService {
             outputList.add(original.get(i));
         }
         return outputList;
+    }
+
+    public List<Post> getByApproval(boolean enabled, boolean isPublic){
+        return postRepository.findByEnabledAndIsPublicOrderByLastEditedDesc(enabled, isPublic);
     }
 
     public List<Post> getByApproval(boolean enabled){
@@ -79,15 +83,7 @@ public class PostService {
     }
 
     public List<Post> getFixedAmount(int entries){
-        List<Post> original = postRepository.findByEnabledOrderByLastEditedDesc(true), outputList = new ArrayList<>();
-        for (int i = 0; i < entries && i < original.size(); i++) {
-            outputList.add(original.get(i));
-        }
-        return outputList;
-    }
-
-    public List<Post> getFixedAmount(int entries, String category){
-        List<Post> original = postRepository.findByCategoryOrderByLastEditedDesc(category), outputList = new ArrayList<>();
+        List<Post> original = postRepository.findByEnabledAndIsPublicOrderByLastEditedDesc(true, true), outputList = new ArrayList<>();
         for (int i = 0; i < entries && i < original.size(); i++) {
             outputList.add(original.get(i));
         }
@@ -179,7 +175,23 @@ public class PostService {
         if(!user.isOwner()){
             throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
         }
+
         postRepository.setEnabledById(id, enable);
+    }
+
+    public void toggleVisibility(Long id, User user) throws Exception {
+        // Check if user is owner
+        if(!user.isOwner()){
+            throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
+        }
+
+        try{
+            Post originalPost = postRepository.findById(id).get();
+            originalPost.setPublic(!originalPost.isPublic());
+            postRepository.save(originalPost);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     public void addView(Post post) {

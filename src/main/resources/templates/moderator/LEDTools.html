@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html xml:th="https://www.thymeleaf.org">
+<head th:replace="Components :: head('COMT LED Overview')"></head>
+<body class="bg-1 text-1">
+<div th:replace="moderator/ModeratorComponents :: moderatorNav"></div>
+
+<main class="container mt-3">
+    <div th:replace="moderator/ModeratorComponents :: lightNavigation"></div>
+
+    <div class="row d-flex">
+        <div class="col-12 col-md-7 h-100">
+            <div class="container-fluid bg-2 py-3" id="overview-container">
+            </div>
+        </div>
+        <div class="col-12 col-md-5 h-100">
+            <div class="container-fluid bg-2 py-3">
+                <h3 class="fw-bold mb-2">Actions</h3>
+                <div class="action-button-container">
+                    <div class="action-button" data-bs-toggle="modal" data-bs-target="#new-light-modal">
+                        <img th:src="@{/icons/New.svg}" />
+                        <p class="text-center">New</p>
+                    </div>
+                    <div class="action-button" id="refresh-button">
+                        <img th:src="@{/icons/Refresh.svg}" />
+                        <p class="text-center">Refresh</p>
+                    </div>
+                    <div class="action-button" id="disable-all-button">
+                        <img th:src="@{/icons/Disable.svg}" />
+                        <p class="text-center">Disable All</p>
+                    </div>
+                    <div class="action-button" id="private-all-button">
+                        <img th:src="@{/icons/Private.svg}" />
+                        <p class="text-center">Private All</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid" id="error-container">
+
+    </div>
+    <div class="container-fluid bg-2 mt-4" id="light-container">
+        <!-- lights here -->
+        <table class="table table-sm align-middle table-hover table-dark">
+            <thead>
+            <tr>
+                <th scope="col">Address</th>
+                <th scope="col">ID</th>
+                <th scope="col">Label</th>
+                <th scope="col">Modified</th>
+                <th scope="col">Status</th>
+                <th scope="col">Last Connected</th>
+                <th scope="col">Color</th>
+                <th scope="col">Pattern</th>
+                <th scope="col">Favorite</th>
+                <th scope="col">Public</th>
+                <th scope="col">Enabled</th>
+                <th scope="col">Sync</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Delete</th>
+            </tr>
+            </thead>
+            <tbody id="table-body">
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<div class="modal fade" id="new-light-modal" tabindex="-1" aria-labelledby="newLightModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-box">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newLightModalLabel">Add New Light</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="new-light-form">
+                    <div class="mb-3">
+                        <label for="address-input" class="form-label">IP Address</label>
+                        <input type="text" class="form-control" id="address-input">
+                    </div>
+                    <div class="mb-3">
+                        <label for="label-input" class="form-label">Label</label>
+                        <input type="text" class="form-control" id="label-input">
+                    </div>
+                    <div class="mb-3">
+                        <label for="color-input" class="form-label">Color</label>
+                        <input type="text" class="form-control" id="color-input">
+                    </div>
+                    <div class="mb-3">
+                        <label for="pattern-input" class="form-label">Pattern</label>
+                        <input type="text" class="form-control" id="pattern-input">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="saveLight()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="edit-light-modal" tabindex="-1" aria-labelledby="editLightModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-box">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editLightModalLabel">Edit Light</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-light-form">
+                    <div class="mb-3">
+                        <label for="id-input" class="form-label">ID</label>
+                        <select class="form-select" id="id-input">
+                            <!-- Options for the light IDs go here -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="address-2" class="form-label">IP Address</label>
+                        <input type="text" class="form-control" id="address-2">
+                    </div>
+                    <div class="mb-3">
+                        <label for="label-input-2" class="form-label">Label</label>
+                        <input type="text" class="form-control" id="label-input-2">
+                    </div>
+                    <div class="mb-3">
+                        <label for="color-input-2" class="form-label">Color</label>
+                        <input type="text" class="form-control" id="color-input-2">
+                    </div>
+                    <div class="mb-3">
+                        <label for="pattern-input-2" class="form-label">Pattern</label>
+                        <input type="text" class="form-control" id="pattern-input-2">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="editLight()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="view-ping-modal" tabindex="-1" aria-labelledby="editLightModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-box">
+            <div class="modal-header">
+                <h5 class="modal-title">Sync Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h3 class="fw-bold" id="ping-title"></h3>
+                <p id="ping-status"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="Components :: JS"></div>
+<!--<div th:replace="Components :: scripts"></div>-->
+<script th:replace="moderator/ModeratorComponents :: led-scripts"></script>
+<script>
+    //data
+    let overviewData;
+
+    //Main elements
+    const overviewContainer = document.querySelector("#overview-container");
+    const errorContainer = document.querySelector("#light-container");
+    const table = document.querySelector("#table-body");
+    const optionContainer = document.querySelector("#id-input");
+
+    //GET functions
+    function updateData(){
+        getAllLightData();
+        fetch("/api/v1/LED/analytics")
+            .then(checkStatus)
+            .then(response => response.json())
+            .then(data => {
+                overviewData = data;
+                renderOverview();
+            })
+            .catch(error => {
+                // error handling
+                errorContainer.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>";
+                console.error('Error retrieving data:', error);
+            });
+    }
+    updateData();
+
+    function syncDown(id){
+        const pElement = document.getElementById("ping-status");
+        const titleElement = document.getElementById("ping-title");
+
+        pElement.innerText = "Please wait...";
+        titleElement.innerText = "Connecting to light";
+        fetch(`/api/v1/LED/${id}/Sync-Down`)
+            .then(checkStatus)
+            .then(data => {
+                titleElement.innerText = "Sync Complete";
+                pElement.innerText = "Device successfully responded. Data downloaded from device.";
+            })
+            .catch(error => {
+                titleElement.innerText = "Sync Failed";
+                pElement.innerText = `Error connecting to light: ${error}`;
+            })
+            .finally(() => {
+                updateData();
+            });
+    }
+
+    function syncUp(id){
+        const pElement = document.getElementById("ping-status");
+        const titleElement = document.getElementById("ping-title");
+
+        pElement.innerText = "Please wait...";
+        titleElement.innerText = "Connecting to light";
+        fetch(`/api/v1/LED/${id}/Sync-Up`)
+            .then(checkStatus)
+            .then(data => {
+                titleElement.innerText = "Sync Complete";
+                pElement.innerText = "Device successfully responded. Data sent to device.";
+            })
+            .catch(error => {
+                titleElement.innerText = "Sync Failed";
+                pElement.innerText = `Error connecting to light: ${error}`;
+            })
+            .finally(() => {
+                updateData();
+            });
+    }
+
+    //POST functions
+    function saveLight() {
+        // Extract input values
+        let addressInput = document.getElementById('address-input');
+        let labelInput = document.getElementById('label-input');
+        let colorInput = document.getElementById('color-input');
+        let patterInput = document.getElementById('pattern-input');
+
+        // Execute submitNew() function with extracted values
+        let lightData = {"address": addressInput.value, "label": labelInput.value, "color": colorInput.value, "pattern": patterInput.value};
+
+        postData("/api/v1/LED/new", lightData)
+            .then(updateData);
+
+        // Reset the form
+        labelInput.value = "";
+        colorInput.value= "";
+        patterInput.value = "";
+    }
+    function editLight() {
+        // Extract input values
+        let idInput = document.getElementById('id-input');
+        let addressInput = document.getElementById('address-2')
+        let labelInput = document.getElementById('label-input-2');
+        let colorInput = document.getElementById('color-input-2');
+        let patterInput = document.getElementById('pattern-input-2');
+
+        // Execute submitNew() function with extracted values
+        let lightData = {"address": addressInput.value, "id": idInput.value, "label": labelInput.value, "color": colorInput.value, "pattern": patterInput.value};
+
+        postData("/api/v1/LED/Edit", lightData)
+            .then(updateData);
+
+        // Reset the form
+        labelInput.value = "";
+        colorInput.value= "";
+        patterInput.value = "";
+        idInput.value = "";
+    }
+    function deleteLight(id) {
+        postData(`/api/v1/LED/${id}/Delete`)
+            .catch(err => console.log(err))
+            .then(updateData);
+    }
+    function publishLight(id, isPublic) {
+        let url = `/api/v1/LED/${id}/Publish`;
+        if(!isPublic){
+            url = `/api/v1/LED/${id}/Private`
+        }
+
+        postData(url)
+            .catch(err => console.log(err))
+            .then(updateData);
+    }
+    function enableLight(id, isEnabled) {
+        let url = `/api/v1/LED/${id}/Enable`;
+        if(!isEnabled){
+            url = `/api/v1/LED/${id}/Disable`
+        }
+
+        postData(url)
+            .catch(err => console.log(err))
+            .then(updateData);
+    }
+    function favoriteLight(id, isFavorite) {
+        let url = `/api/v1/LED/${id}/Favorite`;
+        if(!isFavorite){
+            url = `/api/v1/LED/${id}/Disfavorite`
+        }
+
+        postData(url)
+            .catch(err => console.log(err))
+            .then(updateData);
+    }
+    function disableAll() {
+        postData("/api/v1/LED/DisableAll")
+            .catch(err => console.log(err))
+            .then(updateData);
+    }
+    function privateAll() {
+        postData("/api/v1/LED/PrivateAll")
+            .catch(err => console.log(err))
+            .then(updateData);
+    }
+
+    //Rendering functions
+    function renderAllLights(){
+        let tableContent = ``, optionsContent = ``;
+        for(let i = 0; i < responseData.length; i++){
+            let light = responseData[i];
+
+            let publicClass = `btn-primary`, publicText = `Published`;
+            if(!light.public){
+                publicClass = `btn-secondary`;
+                publicText = `Private`;
+            }
+
+            let enabledClass = `btn-success`, enabledText = `Enabled`;
+            if(!light.enabled){
+                enabledClass = `btn-secondary`;
+                enabledText = `Disabled`;
+            }
+
+            let favoriteClass = `btn-warning`, favoriteText = `Favorite`;
+            if(!light.favorite){
+                favoriteClass = `btn-secondary`;
+                favoriteText = `Normal`;
+            }
+
+            tableContent += `
+            <tr>
+                <td>${light.address}</td>
+                <td>${light.id}</td>
+                <td>${light.label}</td>
+                <td>${light.formattedModified}</td>
+                <td>${light.status}</td>
+                <td>${light.timeSinceLastConnected}</td>
+                <td>${light.color}</td>
+                <td>${light.pattern}</td>
+                <td>
+                    <button type="button" class="btn btn-sm ${favoriteClass}" onclick="favoriteLight(${light.id}, ${!light.favorite})">${favoriteText}</button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-sm ${publicClass}" onclick="publishLight(${light.id}, ${!light.public})">${publicText}</button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-sm ${enabledClass}" onclick="enableLight(${light.id}, ${!light.enabled})">${enabledText}</button>
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-dark" data-bs-toggle="modal" data-bs-target="#view-ping-modal" onclick="syncDown(${light.id})">
+                        <img src="/icons/Arrow.svg" alt="Arrow" width="20">
+                    </button>
+                    <button class="btn btn-sm btn-dark" data-bs-toggle="modal" data-bs-target="#view-ping-modal" onclick="syncUp(${light.id})">
+                        <img src="/icons/Arrow.svg" alt="Arrow" width="20" style="transform: rotate(180deg);">
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#edit-light-modal">Edit</button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="deleteLight(${light.id})">Delete</button>
+                </td>
+            </tr>
+            `;
+            optionsContent += `<option value="${light.id}">${light.id}</option>`;
+        }
+        table.innerHTML = tableContent;
+        optionContainer.innerHTML = optionsContent;
+    }
+    function renderOverview(){
+        overviewContainer.innerHTML = `
+            <h3 class="fw-bold mb-2">Overview</h3>
+            <div id="stats-container">
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${overviewData["favoriteCount"]}</p>
+                    <p class="text-center">Favorites</p>
+                </div>
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${overviewData["enabledCount"]}</p>
+                    <p class="text-center">Enabled</p>
+                </div>
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${overviewData["publicCount"]}</p>
+                    <p class="text-center">Public</p>
+                </div>
+                <div class="d-none d-lg-block">
+                    <p class="fs-1 fw-bold  text-center">${overviewData["totalLights"]}</p>
+                    <p class="text-center">Lights</p>
+                </div>
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${overviewData["usedTodayCount"]}</p>
+                    <p class="text-center">Used Today</p>
+                </div>
+                <div class="d-none d-lg-block">
+                    <p class="fs-1 fw-bold  text-center">${overviewData["privateCount"]}</p>
+                    <p class="text-center">private</p>
+                </div>
+                <div class="d-none d-lg-block">
+                    <p class="fs-1 fw-bold  text-center">${overviewData["disabledCount"]}</p>
+                    <p class="text-center">Disabled</p>
+                </div>
+            </div>
+
+        `;
+    }
+
+    // Exists as a connector for universal functions
+    function next(){
+        renderAllLights();
+    }
+
+    //Controls
+    $("#refresh-button").click(updateData);
+    $("#disable-all-button").click(disableAll);
+    $("#private-all-button").click(privateAll);
+</script>
+</body>
+</html>

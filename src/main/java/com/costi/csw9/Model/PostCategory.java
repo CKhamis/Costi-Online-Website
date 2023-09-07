@@ -8,5 +8,6 @@ public enum PostCategory {
     ARTICLE,
     DISCOVERY,
     UPDATE,
-    EVENT
+    EVENT,
+    INVITATION
 }

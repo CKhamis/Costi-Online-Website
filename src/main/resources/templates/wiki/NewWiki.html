@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xml:th="https://www.thymeleaf.org">
 <head th:replace="Components :: head('Make New Wiki')"></head>
-<body class="bg-2 text-1">
+<body class="bg-1 text-1">
 <div th:replace="Components :: main-navigation"></div>
 
 <main class="container mt-5">
@@ -9,9 +9,8 @@
         <h1 class="pb-2 border-bottom mb-4 fw-bold text-center" th:text="${title}">Create a Wiki Page</h1>
     </div>
     <div th:if="${isAllowed}" class="row">
-        <div class="d-none d-md-block col-md-1 col-lg-2 col-xl-3"></div>
-        <div class="pt-2 col-xs-12 col-md-10 col-lg-8 col-xl-6">
-            <div class="p-5 mb-4 border-box">
+        <div class="pt-2 col-xs-12 col-md-6">
+            <div class="p-4 mb-4 border-box">
                 <form th:action="@{${action}}" method="post" th:object="${page}">
                     <div class="form-row row">
                         <div class="col-12 mb-3">
@@ -37,7 +36,7 @@
                     <div class="form-row row">
                         <div class="col-12 mb-3">
                             <label for="bod">Content Body</label>
-                            <textarea type="text" class="form-control" id="bod" th:field="*{body}" placeholder="body content" required></textarea>
+                            <textarea type="text" rows="10" class="form-control" id="bod" th:field="*{body}" placeholder="body content" required></textarea>
                         </div>
                     </div>
                     <div class="form-check">
@@ -57,7 +56,12 @@
                 </form>
             </div>
         </div>
-        <div class="d-none d-md-block col-md-1 col-lg-2 col-xl-3"></div>
+        <div class="d-none d-md-block col-md-6">
+            <h1 class="fw-bold" id="preview-title">Edit field to see preview</h1>
+            <p class="text-muted fw-bold fs-5" id="preview-subtitle">Edit field to see preview</p>
+            <p>By You</p>
+            <div class="wiki-body" id="preview-body">Edit field to see preview</div>
+        </div>
     </div>
     <div th:unless="${isAllowed}" class="">
         <div class="p-3 p-lg-5 mb-4 border-box wikiRestrictedBannerBg">
@@ -72,5 +76,33 @@
 <div th:replace="Components :: JS"></div>
 <div th:replace="Components :: footer"></div>
 <div th:replace="Components :: scripts"></div>
+<script>
+    //Preview Elements
+    let previewTitle = document.querySelector("#preview-title");
+    let previewSubtitle = document.querySelector("#preview-subtitle");
+    let previewBody = document.querySelector("#preview-body");
+
+    //Form Elements
+    let formTitle = document.querySelector("#tit");
+    let formSubtitle = document.querySelector("#subt");
+    let formBody = document.querySelector("#bod");
+
+    //Triggers
+    formTitle.addEventListener('input', function (event) {
+        // Retrieve the current value of the text field
+        const inputValue = event.target.value;
+        previewTitle.innerHTML = inputValue;
+    });
+    formSubtitle.addEventListener('input', function (event) {
+        // Retrieve the current value of the text field
+        const inputValue = event.target.value;
+        previewSubtitle.innerHTML = inputValue;
+    });
+    formBody.addEventListener('input', function (event) {
+        // Retrieve the current value of the text field
+        const inputValue = event.target.value;
+        previewBody.innerHTML = inputValue;
+    });
+</script>
 </body>
 </html>
