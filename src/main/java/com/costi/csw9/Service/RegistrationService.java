@@ -137,6 +137,8 @@ public class RegistrationService {
         }
 
         confirmationTokenService.setConfirmedAt(token);
-        userRepository.enable(confirmationToken.getUser().getId(), true);
+        User user = confirmationToken.getUser();
+        user.setEnabled(true);
+        userRepository.save(user);
     }
 }

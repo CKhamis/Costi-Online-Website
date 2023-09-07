@@ -14,20 +14,6 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Modifying
-    @Transactional
-    @Query("UPDATE User u SET u.enabled = :enabled WHERE u.id = :id")
-    void enable(@Param("id") Long id, @Param("enabled") boolean enable);
-
-    @Modifying
-    @Transactional
-    @Query("UPDATE User u SET u.isLocked = :isLocked WHERE u.id = :id")
-    void lock(@Param("id") Long id, @Param("isLocked") boolean isLocked);
-
-    @Modifying
-    @Transactional
-    @Query("UPDATE User u SET u.role = 'USER' WHERE u.id = :id")
-    void demote(@Param("id") Long id);
-
+    User findFirstByRole(String role);
     Optional<User> findByEmail(String email);
 }

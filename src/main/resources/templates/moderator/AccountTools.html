@@ -45,7 +45,9 @@
                 <th scope="col">First</th>
                 <th scope="col">Last</th>
                 <th scope="col">Email</th>
+                <th scope="col">Joined</th>
                 <th scope="col">Role</th>
+                <th scope="col">Details</th>
                 <th scope="col">Lock</th>
                 <th scope="col">Enable</th>
                 <th scope="col">Edit</th>
@@ -100,45 +102,30 @@
 
     //Render
     function renderAnalytics(){
-        overviewContainer.innerHTML = `
-            <h3 class="fw-bold mb-2">Overview</h3>
-            <div id="stats-container">
-                <div>
-                    <p class="fs-1 fw-bold  text-center">${overviewData["totalViews"]}</p>
-                    <p class="text-center">All Views</p>
-                </div>
-                <div>
-                    <p class="fs-1 fw-bold  text-center">${overviewData["totalPosts"]}</p>
-                    <p class="text-center">Posts</p>
-                </div>
-                <div>
-                    <p class="fs-1 fw-bold  text-center">${overviewData["totalEnabled"]}</p>
-                    <p class="text-center">Enabled</p>
-                </div>
-                <div class="d-none d-lg-block">
-                    <p class="fs-1 fw-bold  text-center">${overviewData["totalDisabled"]}</p>
-                    <p class="text-center">Disabled</p>
-                </div>
-                <div class="d-none d-lg-block">
-                    <p class="fs-1 fw-bold  text-center">${overviewData["totalPublic"]}</p>
-                    <p class="text-center">Public</p>
-                </div>
-                <div class="d-none d-lg-block">
-                    <p class="fs-1 fw-bold  text-center">${overviewData["averageBodyLength"]}</p>
-                    <p class="text-center">μ Length</p>
-                </div>
-                <div>
-                    <p class="fs-1 fw-bold  text-center">${overviewData["oldestPost"]}</p>
-                    <p class="text-center">Oldest</p>
-                </div>
-            </div>
 
-        `;
     }
     function renderUsers(){
         let tableContent = ``;
+        let totalUsers = userList.length, numAdmin = 0, numUser = 0, numLocked = 0, numDisabled = 0, numUnlocked = 0, numEnabled = 0;
         for(let i = 0; i < userList.length; i++){
             let user = userList[i];
+            if(user.admin){
+                numAdmin++;
+            }else if(user.role == "USER"){
+                numUser++;
+            }
+
+            if(user.isLocked){
+                numLocked++;
+            }else{
+                numUnlocked++;
+            }
+
+            if(user.enabled){
+                numEnabled++;
+            }else{
+                numDisabled++;
+            }
 
             tableContent += `
             <tr>
@@ -146,14 +133,18 @@
                 <td>${user.firstName}</td>
                 <td>${user.lastName}</td>
                 <td>${user.email}</td>
+                <td>${user.formattedDateCreated}</td>
                 <td class="text-center">
                     <span class="badge ${user.role === 'OWNER' ? 'bg-primary' : user.role === 'USER' ? 'bg-secondary' : user.role === 'ADMIN' ? 'bg-info' : 'bg-dark'}">${user.role}</span>
                 </td>
                 <td>
-                    <button class="btn btn-sm btn-primary ${user.lock === true ? '' : 'disabled'}" onclick="toggleLock(${user.id})" role="button">${user.lock === true ? 'Locked' : 'Unlocked'}"</button>
+                    <a href="COMT/Accounts/${user.id}" class="btn btn-sm btn-success" role="button">Detail</a>
                 </td>
                 <td>
-                    <button class="btn btn-sm btn-primary ${user.enable === true ? '' : 'disabled'}" onclick="toggleEnable(${user.id})" role="button">${user.enable === true ? 'Enabled' : 'Disabled'}"</button>
+                    <button class="btn btn-sm ${user.isLocked === true ? 'btn-primary' : 'btn-secondary'}" onclick="toggleLock(${user.id})" role="button">${user.isLocked === true ? 'Locked' : 'Unlocked'}</button>
+                </td>
+                <td>
+                    <button class="btn btn-sm ${user.enabled === true ? 'btn-primary' : 'btn-secondary'}" onclick="toggleEnable(${user.id})" role="button">${user.enabled === true ? 'Enabled' : 'Disabled'}</button>
                 </td>
                 <td>
                     <a class="btn btn-sm btn-secondary" href="#" role="button">Edit</a>
@@ -162,12 +153,47 @@
                     <button class="btn btn-sm btn-primary ${user.role === 'ADMIN' ? '' : 'disabled'}" onclick="demote(${user.id})" role="button">Demote</button>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-sm btn-danger" onclick="deleteUser(${post.id})">Delete</button>
+                    <button type="button" class="btn btn-sm btn-danger ${user.role === 'ADMIN' || user.role === 'OWNER' ? 'disabled' : ''}" onclick="deleteUser(${user.id})">Delete</button>
                 </td>
             </tr>
             `;
         }
         table.innerHTML = tableContent;
+
+        overviewContainer.innerHTML = `
+            <h3 class="fw-bold mb-2">Overview</h3>
+            <div id="stats-container">
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${numUser}</p>
+                    <p class="text-center">Users</p>
+                </div>
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${numEnabled}</p>
+                    <p class="text-center">Enabled</p>
+                </div>
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${numDisabled}</p>
+                    <p class="text-center">Disabled</p>
+                </div>
+                <div class="d-none d-lg-block">
+                    <p class="fs-1 fw-bold  text-center">${numLocked}</p>
+                    <p class="text-center">Locked</p>
+                </div>
+                <div class="d-none d-lg-block">
+                    <p class="fs-1 fw-bold  text-center">${numUnlocked}</p>
+                    <p class="text-center">Unlocked</p>
+                </div>
+                <div class="d-none d-lg-block">
+                    <p class="fs-1 fw-bold  text-center">${numAdmin}</p>
+                    <p class="text-center">Admin</p>
+                </div>
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${numUser}</p>
+                    <p class="text-center">Regular</p>
+                </div>
+            </div>
+
+        `;
     }
 
     //POST functions
@@ -225,9 +251,9 @@
             .then(refresh);
     }
 
-    function deletePost(id){
-        let toastId = createToast("Deleting Post");
-        postData("/api/management/newsroom/delete", id)
+    function deleteUser(id){
+        let toastId = createToast("Deleting User");
+        postData("/api/management/users/delete", id)
             .then(() => {
                 document.getElementById(`${toastId}-body`).innerText = "✅ Post Deleted";
                 document.getElementById(`${toastId}-loading`).style.color = "green";
@@ -312,20 +338,6 @@
     //Helper functions
     function getObjectById(id) {
         return postList.find(obj => obj["id"] == id);
-    }
-
-    function convertToFormData(post){
-        const formData = new FormData();
-        formData.append('id', post.id);
-        formData.append('title', post.title);
-        formData.append('subtitle', post.subtitle);
-        formData.append('category', post.category);
-        formData.append('body', post.body);
-        formData.append('views', post.views);
-        formData.append('public', post.public);
-        formData.append('enabled', post.enabled);
-
-        return formData;
     }
 </script>
 </body>

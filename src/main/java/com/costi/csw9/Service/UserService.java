@@ -103,40 +103,6 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public void enable(User user, boolean enable, User requester) throws Exception {
-        if(requester.isAdmin() || requester.isOwner() || requester.getId().equals(user.getId())){
-            if(user.getRole().equals(UserRole.OWNER)){
-                //Cannot be locked out
-                throw new Exception("Owner account cannot be disabled");
-            }
-
-            userRepository.enable(user.getId(), enable);
-
-            //Add to log
-            AccountLog log = new AccountLog("Account Status Updated", "Account status set to: " + enable, user);
-            accountLogService.save(log);
-        }else{
-            throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
-        }
-    }
-
-    public void lock(User user, boolean lock, User requester) throws Exception{
-        if(requester.isAdmin() || requester.isOwner() || requester.getId().equals(user.getId())){
-            if(user.getRole().equals(UserRole.OWNER)){
-                //Cannot be locked out
-                throw new Exception("Owner account cannot be locked");
-            }
-
-            userRepository.lock(user.getId(), lock);
-
-            //Add to log
-            AccountLog log = new AccountLog("Account locked/unlocked", "Account lock set to: " + lock, user);
-            accountLogService.save(log);
-        }else{
-            throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
-        }
-    }
-
     public void save(User user) throws Exception {
         if(user.getPassword().equals("")){
             //Reuse old password
@@ -158,17 +124,6 @@ public class UserService implements UserDetailsService {
         accountLogService.save(log);
 
         userRepository.save(user);
-    }
-
-    public void demoteUser(User user, User requester) throws Exception{
-        if((requester.isAdmin() || requester.isOwner()) && !user.isOwner()){
-            AccountLog log = new AccountLog("Account demoted", "Account is now regular user", user);
-            accountLogService.save(log);
-
-            userRepository.demote(user.getId());
-        }else{
-            throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
-        }
     }
 
     public boolean isEmpty(){

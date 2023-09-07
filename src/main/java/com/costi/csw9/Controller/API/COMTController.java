@@ -385,6 +385,16 @@ public class COMTController {
         return ResponseEntity.ok(users);
     }
 
+    @PostMapping("/users/delete")
+    public ResponseEntity<ResponseMessage> deleteUser(@RequestBody Long id) {
+        try {
+            comtService.deleteUser(id);
+            return ResponseEntity.ok(new ResponseMessage("User Deleted", ResponseMessage.Severity.INFORMATIONAL, "User of id " + id + ", as well as their wiki posts, is no longer accessible or recoverable."));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error deleting user", ResponseMessage.Severity.HIGH, e.getMessage()));
+        }
+    }
+
     private User getCurrentUser(Principal principal) throws Exception{
         if (principal == null) {
             throw new Exception("No user logged in");

@@ -449,6 +449,39 @@ public class COMTService {
     public List<User> findAllUsers(){
         return userRepository.findAll();
     }
+
+    public void deleteUser(Long id){
+        // Check if the id is valid
+        if(id != null){
+            // Check if the id exists
+            Optional<User> optionalUser = userRepository.findById(id);
+            if(optionalUser.isPresent()){
+                // User exists
+
+                // Check if there are any wiki pages that are owned by account
+                List<WikiPage> wikiPages = wikiRepository.findByAuthor_Id(id);
+                if(!wikiPages.isEmpty()){
+                    // Rectify issue
+
+                    // Re-assign them to owner
+                    // Find owner
+                    User costi = userRepository.findFirstByRole("OWNER");
+                    for(WikiPage page : wikiPages){
+                        // Go through each one and transfer ownership
+                        page.setAuthor(costi);
+                        page.setBody(page.getBody() + "<br /><br /><p>Owner of this wiki page was deleted, ownership was transferred to owner.</p>");
+                        wikiRepository.save(page);
+                    }
+                }
+
+                // No wiki pages left. Ready to delete
+                userRepository.deleteById(id);
+            }
+        }
+        // ID is either null or doesn't have a user
+        throw new IllegalArgumentException("There are no users in Costi Online with the given id");
+    }
+
     public User findUserById(Long id){
         return userRepository.getById(id);
     }
