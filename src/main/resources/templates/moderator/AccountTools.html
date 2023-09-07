@@ -147,7 +147,7 @@
                     <a class="btn btn-sm btn-secondary" href="#" role="button">Edit</a>
                 </td>
                 <td>
-                    <button class="btn btn-sm btn-primary ${user.role === 'ADMIN' ? '' : 'disabled'}" onclick="demote(${user.id})" role="button">Demote</button>
+                    <button class="btn btn-sm btn-primary ${user.role === 'ADMIN' ? '' : 'disabled'}" onclick="demoteUser(${user.id})" role="button">Demote</button>
                 </td>
                 <td>
                     <button type="button" class="btn btn-sm btn-danger ${user.role === 'ADMIN' || user.role === 'OWNER' ? 'disabled' : ''}" onclick="deleteUser(${user.id})">Delete</button>
@@ -197,7 +197,7 @@
     function toggleEnable(id){
         let toastId = createToast("Toggling Publishing");
         let user = getObjectById(id);
-        user.enabled = !post.enabled;
+        user.enabled = !user.enabled;
         postData("/api/management/users/save", user)
             .then(() => {
                 document.getElementById(`${toastId}-body`).innerText = "✅ Publish Status Toggled";
@@ -253,6 +253,33 @@
         postData("/api/management/users/delete", id)
             .then(() => {
                 document.getElementById(`${toastId}-body`).innerText = "✅ User Deleted";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .then(refresh);
+    }
+
+    function demoteUser(id){
+        let toastId = createToast("Demoting User");
+        let user = getObjectById(id);
+        user.role = "USER";
+        postData("/api/management/users/save", user)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ User Demoted";
                 document.getElementById(`${toastId}-loading`).style.color = "green";
             })
             .catch((response) => {
