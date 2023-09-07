@@ -138,7 +138,7 @@
                     <a href="COMT/Accounts/${user.id}" class="btn btn-sm btn-success" role="button">Detail</a>
                 </td>
                 <td>
-                    <button class="btn btn-sm ${user.isLocked === true ? 'btn-primary' : 'btn-secondary'}" onclick="toggleLock(${user.id})" role="button">${user.isLocked === true ? 'Locked' : 'Unlocked'}</button>
+                    <button class="btn btn-sm ${user.isLocked === true ? 'btn-primary' : 'btn-secondary'}" onclick="toggleVisibility(${user.id})" role="button">${user.isLocked === true ? 'Locked' : 'Unlocked'}</button>
                 </td>
                 <td>
                     <button class="btn btn-sm ${user.enabled === true ? 'btn-primary' : 'btn-secondary'}" onclick="toggleEnable(${user.id})" role="button">${user.enabled === true ? 'Enabled' : 'Disabled'}</button>
@@ -196,9 +196,9 @@
     //POST functions
     function toggleEnable(id){
         let toastId = createToast("Toggling Publishing");
-        let post = getObjectById(id);
-        post.enabled = !post.enabled;
-        postDataWithFile("/api/management/newsroom/save", convertToFormData(post))
+        let user = getObjectById(id);
+        user.enabled = !post.enabled;
+        postData("/api/management/users/save", user)
             .then(() => {
                 document.getElementById(`${toastId}-body`).innerText = "✅ Publish Status Toggled";
                 document.getElementById(`${toastId}-loading`).style.color = "green";
@@ -223,9 +223,9 @@
 
     function toggleVisibility(id){
         let toastId = createToast("Toggling Visibility");
-        let post = getObjectById(id);
-        post.public = !post.public;
-        postDataWithFile("/api/management/newsroom/save", convertToFormData(post))
+        let user = getObjectById(id);
+        user.isLocked = !user.isLocked;
+        postDataWithFile("/api/management/users/save", user)
             .then(() => {
                 document.getElementById(`${toastId}-body`).innerText = "✅ Visibility Status Toggled";
                 document.getElementById(`${toastId}-loading`).style.color = "green";
@@ -334,7 +334,7 @@
 
     //Helper functions
     function getObjectById(id) {
-        return postList.find(obj => obj["id"] == id);
+        return userList.find(obj => obj["id"] == id);
     }
 </script>
 </body>
