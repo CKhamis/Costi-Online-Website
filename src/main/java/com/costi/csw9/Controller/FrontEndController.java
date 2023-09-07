@@ -285,7 +285,7 @@ public class FrontEndController {
 
     //Main
     @GetMapping("/")
-    public String getHome(Model model, Principal principal, RedirectAttributes redirectAttributes) {
+    public String getHome(Model model) {
         model.addAttribute("version", VERSION);
 
         List<Post> recentNews = postService.findAll();

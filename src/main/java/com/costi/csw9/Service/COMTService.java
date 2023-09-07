@@ -9,6 +9,7 @@ import org.hibernate.Hibernate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
@@ -450,6 +451,7 @@ public class COMTService {
         return userRepository.findAll();
     }
 
+    @Transactional
     public void deleteUser(Long id){
         // Check if the id is valid
         if(id != null){
@@ -457,6 +459,7 @@ public class COMTService {
             Optional<User> optionalUser = userRepository.findById(id);
             if(optionalUser.isPresent()){
                 // User exists
+                User user = optionalUser.get();
 
                 // Check if there are any wiki pages that are owned by account
                 List<WikiPage> wikiPages = wikiRepository.findByAuthor_Id(id);
@@ -465,7 +468,7 @@ public class COMTService {
 
                     // Re-assign them to owner
                     // Find owner
-                    User costi = userRepository.findFirstByRole("OWNER");
+                    User costi = userRepository.findFirstByRole(UserRole.OWNER);
                     for(WikiPage page : wikiPages){
                         // Go through each one and transfer ownership
                         page.setAuthor(costi);
@@ -474,8 +477,16 @@ public class COMTService {
                     }
                 }
 
-                // No wiki pages left. Ready to delete
+                // Delete any logs that are owned by account
+                accountLogRepository.deleteByUser(user);
+
+                // Delete any notifications that are owned by account
+                accountNotificationRepository.deleteByUser(user);
+
+                // Ready to delete
                 userRepository.deleteById(id);
+
+                return;
             }
         }
         // ID is either null or doesn't have a user

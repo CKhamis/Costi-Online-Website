@@ -255,7 +255,7 @@
         let toastId = createToast("Deleting User");
         postData("/api/management/users/delete", id)
             .then(() => {
-                document.getElementById(`${toastId}-body`).innerText = "✅ Post Deleted";
+                document.getElementById(`${toastId}-body`).innerText = "✅ User Deleted";
                 document.getElementById(`${toastId}-loading`).style.color = "green";
             })
             .catch((response) => {
