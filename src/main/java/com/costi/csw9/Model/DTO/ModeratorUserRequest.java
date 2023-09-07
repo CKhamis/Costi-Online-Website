@@ -13,22 +13,17 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class ModeratorUserRequest {
     @NotNull
-    @NotBlank
     private Long id;
 
     @NotNull
-    @NotBlank
     private String firstName, lastName, email;
 
     @NotNull
-    @NotBlank
     private UserRole role;
 
     @NotNull
-    @NotBlank
     private boolean isLocked, enabled;
 
     @NotNull
-    @NotBlank
     private int profilePicture;
 }

@@ -138,7 +138,7 @@
                     <a href="COMT/Accounts/${user.id}" class="btn btn-sm btn-success" role="button">Detail</a>
                 </td>
                 <td>
-                    <button class="btn btn-sm ${user.isLocked === true ? 'btn-primary' : 'btn-secondary'}" onclick="toggleVisibility(${user.id})" role="button">${user.isLocked === true ? 'Locked' : 'Unlocked'}</button>
+                    <button class="btn btn-sm ${user.isLocked === true ? 'btn-secondary' : 'btn-primary'}" onclick="toggleVisibility(${user.id})" role="button">${user.isLocked === true ? 'Locked' : 'Unlocked'}</button>
                 </td>
                 <td>
                     <button class="btn btn-sm ${user.enabled === true ? 'btn-primary' : 'btn-secondary'}" onclick="toggleEnable(${user.id})" role="button">${user.enabled === true ? 'Enabled' : 'Disabled'}</button>
@@ -225,7 +225,7 @@
         let toastId = createToast("Toggling Visibility");
         let user = getObjectById(id);
         user.isLocked = !user.isLocked;
-        postDataWithFile("/api/management/users/save", user)
+        postData("/api/management/users/save", user)
             .then(() => {
                 document.getElementById(`${toastId}-body`).innerText = "✅ Visibility Status Toggled";
                 document.getElementById(`${toastId}-loading`).style.color = "green";

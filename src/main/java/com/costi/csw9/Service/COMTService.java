@@ -517,6 +517,8 @@ public class COMTService {
 
                 // Save user
                 userRepository.save(user);
+
+                return;
             }
         }
         // ID is either null or doesn't have a user
