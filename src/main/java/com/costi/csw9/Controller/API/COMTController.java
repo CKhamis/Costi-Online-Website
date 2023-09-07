@@ -391,7 +391,17 @@ public class COMTController {
             comtService.deleteUser(id);
             return ResponseEntity.ok(new ResponseMessage("User Deleted", ResponseMessage.Severity.INFORMATIONAL, "User of id " + id + ", as well as their wiki posts, is no longer accessible or recoverable."));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error deleting user", ResponseMessage.Severity.HIGH, e.getMessage()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Error deleting user", ResponseMessage.Severity.HIGH, e.getMessage()));
+        }
+    }
+
+    @PostMapping("/users/save")
+    public ResponseEntity<ResponseMessage> saveUser(@RequestBody @Valid ModeratorUserRequest request) {
+        try {
+            comtService.saveUser(request);
+            return ResponseEntity.ok(new ResponseMessage("Wiki Page Saved", ResponseMessage.Severity.INFORMATIONAL, "Wiki Page has been saved to Costi Online"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Error Saving Wiki Page", ResponseMessage.Severity.LOW, e.getMessage()));
         }
     }
 

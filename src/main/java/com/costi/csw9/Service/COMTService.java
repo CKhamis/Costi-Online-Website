@@ -493,6 +493,35 @@ public class COMTService {
         throw new IllegalArgumentException("There are no users in Costi Online with the given id");
     }
 
+    public void saveUser(ModeratorUserRequest request){
+        // Check if the id is valid
+        if(request.getId() != null){
+            // Check if the id exists
+            Optional<User> optionalUser = userRepository.findById(request.getId());
+            if(optionalUser.isPresent()){
+                // User exists
+                User user = optionalUser.get();
+
+                // Set values
+                user.setRole(request.getRole());
+                user.setEmail(request.getEmail());
+                user.setEnabled(request.isEnabled());
+                user.setFirstName(request.getFirstName());
+                user.setLastName(request.getLastName());
+                user.setIsLocked(request.isLocked());
+                user.setProfilePicture(request.getProfilePicture());
+
+                // Create log
+                AccountLog editLog = new AccountLog("Edited by Moderator", "A moderator has modified this account.", user);
+                accountLogRepository.save(editLog);
+
+                // Save user
+                userRepository.save(user);
+            }
+        }
+        // ID is either null or doesn't have a user
+        throw new IllegalArgumentException("There are no users in Costi Online with the given id");
+    }
     public User findUserById(Long id){
         return userRepository.getById(id);
     }

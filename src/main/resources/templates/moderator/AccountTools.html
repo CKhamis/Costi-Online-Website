@@ -101,9 +101,6 @@
     }
 
     //Render
-    function renderAnalytics(){
-
-    }
     function renderUsers(){
         let tableContent = ``;
         let totalUsers = userList.length, numAdmin = 0, numUser = 0, numLocked = 0, numDisabled = 0, numUnlocked = 0, numEnabled = 0;
@@ -164,7 +161,7 @@
             <h3 class="fw-bold mb-2">Overview</h3>
             <div id="stats-container">
                 <div>
-                    <p class="fs-1 fw-bold  text-center">${numUser}</p>
+                    <p class="fs-1 fw-bold  text-center">${totalUsers}</p>
                     <p class="text-center">Users</p>
                 </div>
                 <div>
