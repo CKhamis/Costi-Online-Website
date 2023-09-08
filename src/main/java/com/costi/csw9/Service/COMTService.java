@@ -503,7 +503,10 @@ public class COMTService {
                 User user = optionalUser.get();
 
                 // Set values
-                user.setRole(request.getRole());
+                if(!user.isOwner()){
+                    // Ignore role change if user is the administrator
+                    user.setRole(request.getRole());
+                }
                 user.setEmail(request.getEmail());
                 user.setEnabled(request.isEnabled());
                 user.setFirstName(request.getFirstName());
@@ -517,8 +520,10 @@ public class COMTService {
 
                 // Save user
                 userRepository.save(user);
-
                 return;
+            }else{
+                // User does not exist. Create new one and discard the id
+                //TODO: implement this
             }
         }
         // ID is either null or doesn't have a user
