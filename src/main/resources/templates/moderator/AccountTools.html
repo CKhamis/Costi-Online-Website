@@ -422,22 +422,67 @@
     }
 
     function disableAll(){
-        for(let i = 0; i < postList.length; i++) {
-            let post = postList[i];
-            post.enabled = false;
-            postDataWithFile("/api/management/newsroom/save", convertToFormData(post))
-                .then(refresh);
-        }
+        let toastId = createToast("Disabling all Users");
+        const promises = userList.map(user => {
+            user.enabled = false;
+
+            return postData(`/api/management/users/save`, user);
+        });
+
+        Promise.all(promises)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "Data submitted to Costi Online";
+                document.getElementById(`${toastId}-title`).innerText = "Procedure Complete";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .finally(refresh);
     }
 
     function privateAll(){
-        for(let i = 0; i < postList.length; i++) {
-            let post = postList[i];
-            post.public = false;
+        let toastId = createToast("Disabling all Users");
+        const promises = userList.map(user => {
+            user.isLocked = true;
 
-            postDataWithFile("/api/management/newsroom/save", convertToFormData(post))
-                .then(refresh);
-        }
+            return postData(`/api/management/users/save`, user);
+        });
+
+        Promise.all(promises)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "Data submitted to Costi Online";
+                document.getElementById(`${toastId}-title`).innerText = "Procedure Complete";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .finally(refresh);
     }
 
     //Helper functions
