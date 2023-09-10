@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -29,7 +30,9 @@ public class User implements UserDetails {
    String firstName;
    @Size(max = 20, message = "Last name can only be 20 characters or less")
    String lastName;
+   @NotNull
    String email;
+   @NotNull
    String password;
 
    private LocalDateTime dateCreated = LocalDateTime.now();

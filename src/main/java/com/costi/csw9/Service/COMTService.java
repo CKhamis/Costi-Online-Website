@@ -5,9 +5,11 @@ import com.costi.csw9.Model.DTO.*;
 import com.costi.csw9.Repository.*;
 import com.costi.csw9.Util.LogicTools;
 import com.costi.csw9.Validation.FileValidator;
+import lombok.AllArgsConstructor;
 import org.hibernate.Hibernate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +23,7 @@ import java.util.*;
 import static com.costi.csw9.Util.LogicTools.POST_IMAGE_PATH;
 
 @Service
+@AllArgsConstructor
 public class COMTService {
     private final AnnouncementRepository announcementRepository;
     private final PostRepository postRepository;
@@ -34,19 +37,7 @@ public class COMTService {
     private final AccountLogService accountLogService;
     private final AccountLogRepository accountLogRepository;
 
-    public COMTService(AccountLogRepository accountLogRepository, AnnouncementRepository announcementRepository, PostRepository postRepository, AttachmentService attachmentService, AccountNotificationRepository accountNotificationRepository, UserRepository userRepository, LightRepository lightRepository, LightLogRepository lightLogRepository, LightService lightService, WikiRepository wikiRepository, AccountLogService accountLogService) {
-        this.announcementRepository = announcementRepository;
-        this.postRepository = postRepository;
-        this.attachmentService = attachmentService;
-        this.accountNotificationRepository = accountNotificationRepository;
-        this.userRepository = userRepository;
-        this.lightRepository = lightRepository;
-        this.lightService = lightService;
-        this.lightLogRepository = lightLogRepository;
-        this.wikiRepository = wikiRepository;
-        this.accountLogService = accountLogService;
-        this.accountLogRepository = accountLogRepository;
-    }
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     /*
         Announcements
@@ -511,6 +502,11 @@ public class COMTService {
                     // Ignore role change if user is the administrator
                     user.setRole(request.getRole());
                 }
+
+                if(!request.getPassword().isBlank()){
+                    String encodedPass = bCryptPasswordEncoder.encode(user.getPassword());
+                    user.setPassword(encodedPass);
+                }
                 user.setEmail(request.getEmail());
                 user.setEnabled(request.isEnabled());
                 user.setFirstName(request.getFirstName());
@@ -524,14 +520,35 @@ public class COMTService {
 
                 // Save user
                 userRepository.save(user);
-                return;
             }else{
-                // User does not exist. Create new one and discard the id
-                //TODO: implement this
+                // User does not exist
+                throw new IllegalArgumentException("There are no users in Costi Online with the given id");
             }
+        }else{
+            User newUser = new User();
+
+            // Assign values
+            newUser.setFirstName(request.getFirstName());
+            newUser.setLastName(request.getLastName());
+            newUser.setRole(request.getRole());
+            newUser.setDateCreated(LocalDateTime.now());
+            newUser.setProfilePicture(request.getProfilePicture());
+            newUser.setEnabled(request.isEnabled());
+            newUser.setIsLocked(request.isLocked());
+            newUser.setEmail(request.getEmail());
+
+            String encodedPass = bCryptPasswordEncoder.encode(request.getPassword());
+            newUser.setPassword(encodedPass);
+            User savedUser = userRepository.save(newUser);
+
+            // Add to log
+            AccountLog log = new AccountLog("Account Created", "User was created and activated", savedUser);
+            accountLogService.save(log);
+
+            // Create welcoming message
+            AccountNotification welcome = new AccountNotification("Welcome!", "<p>Welcome to your Costi Network ID!</p>", "success", savedUser);
+            accountNotificationRepository.save(welcome);
         }
-        // ID is either null or doesn't have a user
-        throw new IllegalArgumentException("There are no users in Costi Online with the given id");
     }
     public User findUserById(Long id){
         return userRepository.getById(id);

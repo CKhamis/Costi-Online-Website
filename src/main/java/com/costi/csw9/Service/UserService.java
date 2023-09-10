@@ -48,6 +48,8 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
+
+
     public String signUpAdmin(User user){
         //Check if exists
         boolean userExists = userRepository.findByEmail(user.getEmail()).isPresent();

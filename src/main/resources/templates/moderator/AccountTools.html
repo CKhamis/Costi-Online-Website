@@ -133,7 +133,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="createUser()">Create</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="saveNewUser()">Create</button>
                 </div>
             </form>
         </div>
@@ -380,27 +380,27 @@
             .then(refresh);
     }
 
-    function saveNews() {
-        let toastId = createToast("Saving New Post");
+    function saveNewUser(){
+        // Capture field values
+        let newUser = {
+            id: null,
+            firstName: document.querySelector("#firstName").value,
+            lastName: document.querySelector("#lastName").value,
+            email: document.querySelector("#email").value,
+            role: document.querySelector("#role").value,
+            password: document.querySelector("#password").value,
+            isLocked: document.querySelector("#isLocked").checked,
+            enabled: document.querySelector("#enabled").checked,
+            profilePicture: document.querySelector("#profilePicture").value
+        };
+        submitUser(newUser);
+    }
 
-        // Get form elements
-        const title = document.getElementById('title').value;
-        const subtitle = document.getElementById('sub').value;
-        const category = document.getElementById('cat').value;
-        const body = document.getElementById('body').value;
-        const imageFile = document.getElementById('file').files[0];
-
-        // Construct the FormData object
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('subtitle', subtitle);
-        formData.append('category', category);
-        formData.append('body', body);
-        formData.append('image', imageFile);
-
-        postDataWithFile("/api/management/newsroom/save", formData)
+    function submitUser(user){
+        let toastId = createToast("Creating Server");
+        postData("/api/management/users/save", user)
             .then(() => {
-                document.getElementById(`${toastId}-body`).innerText = "✅ Newsroom Post Created";
+                document.getElementById(`${toastId}-body`).innerText = "✅ User Saved";
                 document.getElementById(`${toastId}-loading`).style.color = "green";
             })
             .catch((response) => {
@@ -420,6 +420,7 @@
             })
             .then(refresh);
     }
+
     function disableAll(){
         for(let i = 0; i < postList.length; i++) {
             let post = postList[i];
