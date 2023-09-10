@@ -4,6 +4,7 @@
 <body class="bg-1 text-1">
 <div th:replace="moderator/ModeratorComponents :: moderatorNav"></div>
 <main class="container mt-3">
+    <div th:replace="moderator/ModeratorComponents :: userNavigation"></div>
     <div class="row d-flex">
         <div class="col-12 col-md-7 h-100">
             <div class="container-fluid bg-2 py-3" id="overview-container">
@@ -13,10 +14,10 @@
             <div class="container-fluid bg-2 py-3">
                 <h3 class="fw-bold mb-2">Actions</h3>
                 <div class="action-button-container">
-                    <a href="/SignUp" class="action-button" data-bs-toggle="modal">
+                    <div class="action-button" data-bs-toggle="modal" data-bs-target="#new-user-modal">
                         <img th:src="@{/icons/New.svg}" />
                         <p class="text-center">New</p>
-                    </a>
+                    </div>
                     <div class="action-button" onclick="refresh()">
                         <img th:src="@{/icons/Refresh.svg}" />
                         <p class="text-center">Refresh</p>
@@ -60,6 +61,85 @@
         </table>
     </div>
 </main>
+
+<div class="modal fade" id="new-user-modal" tabindex="-1" aria-labelledby="newUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-box">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newUserModalLabel">Create New User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="new-user-form" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="profilePicture" class="form-label">Profile Picture</label>
+                        <select class="form-control" id="profilePicture" name="profilePicture" required>
+                            <option value="" disabled="disabled">Select a profile picture</option>
+                            <option value="0">Airplane</option>
+                            <option value="1">Ball</option>
+                            <option value="2">Beach</option>
+                            <option value="3">Car</option>
+                            <option value="4">Cat</option>
+                            <option value="5">Chess</option>
+                            <option value="6">Dog</option>
+                            <option value="7">Drip</option>
+                            <option value="8">Duck</option>
+                            <option value="9">Fish</option>
+                            <option value="10">Guest</option>
+                            <option value="11">Guitar</option>
+                            <option value="12">Kick</option>
+                            <option value="13">Lift-off</option>
+                            <option value="14">Red Flower</option>
+                            <option value="15">Snowflake</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row row">
+                        <div class="col-12 mb-3">
+                            <label for="role">Role</label>
+                            <select id="role" class="form-control" required>
+                                <option value="" disabled="disabled">Select a role</option>
+                                <option value="ADMIN">Admin</option>
+                                <option value="USER">User</option>
+                            </select>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label for="firstName">First Name</label>
+                            <input type="text" class="form-control" id="firstName" placeholder="First Name" required>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" class="form-control" id="lastName" placeholder="Last Name" required>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="Email" required>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" placeholder="Password" required>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <div class="form-check form-check-inline">
+                                <label for="isLocked">Lock</label>
+                                <input type="checkbox" class="form-check-input" id="isLocked" required>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <label for="enabled">Enable</label>
+                                <input type="checkbox" class="form-check-input" id="enabled" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="createUser()">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 99" id="toast-container"></div>
 <div th:replace="Components :: JS"></div>

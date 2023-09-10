@@ -461,6 +461,10 @@ public class COMTService {
                 // User exists
                 User user = optionalUser.get();
 
+                if(user.isOwner()){
+                    throw new AccessDeniedException("Owner user cannot be deleted");
+                }
+
                 // Check if there are any wiki pages that are owned by account
                 List<WikiPage> wikiPages = wikiRepository.findByAuthor_Id(id);
                 if(!wikiPages.isEmpty()){

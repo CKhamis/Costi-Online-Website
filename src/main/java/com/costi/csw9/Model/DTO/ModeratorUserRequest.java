@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
 @Setter
 @AllArgsConstructor
 public class ModeratorUserRequest {
-    @NotNull
     private Long id;
 
     @NotNull
