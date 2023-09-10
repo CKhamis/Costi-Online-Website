@@ -27,7 +27,7 @@ public class FrontEndController {
     private AccountLogService accountLogService;
     private AccountNotificationService accountNotificationService;
     private PostService postService;
-    private static final String VERSION = "7.1.1";
+    private static final String VERSION = "7.9";
 
     @Autowired
     public FrontEndController(UserService userService, RegistrationService registrationService, WikiService wikiService, AnnouncementService announcementService, AccountLogService accountLogService, AccountNotificationService accountNotificationService, PostService postService) {
@@ -194,8 +194,7 @@ public class FrontEndController {
     }
 
     @GetMapping("/COMT/Accounts")
-    public String getCostiOnlineAccountTools(Model model) {
-        model.addAttribute("all", userService.loadAll());
+    public String getCostiOnlineAccountTools() {
         return "moderator/AccountTools";
     }
 
@@ -340,35 +339,6 @@ public class FrontEndController {
             return "wiki/ViewWiki";
         } catch (Exception e) {
             return "wiki/ViewWiki";
-        }
-    }
-
-    @PostMapping(value = "/Wiki/{PageId}/delete")
-    public String deleteWikiPage(@PathVariable Long PageId, Principal principal, RedirectAttributes redirectAttributes) {
-        try{
-            wikiService.delete(PageId, getCurrentUser(principal));
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Wiki Page deleted!", "Page is no longer accessible nor recoverable.", FlashMessage.Status.SUCCESS));
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error deleting wiki page", e.getMessage(), FlashMessage.Status.DANGER));
-        }
-        return "redirect:/COMT/Wiki";
-    }
-
-    @RequestMapping("/Wiki/{PageId}/edit")
-    public String getEditWiki(@PathVariable Long PageId, Model model, Principal principal, RedirectAttributes redirectAttributes) {
-        User current = getCurrentUser(principal);
-        try{
-            WikiPage page = wikiService.loadById(PageId);
-
-            model.addAttribute("isAllowed", (current.isAdmin() || page.getAuthor().equals(current)));
-            model.addAttribute("action", "/Wiki/" + PageId + "/edit");
-            model.addAttribute("categories", WikiCategory.values());
-            model.addAttribute("title", "Edit Wiki Page");
-
-            return "WikiMaker";
-        }catch (Exception e){
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error viewing wiki page", e.getMessage(), FlashMessage.Status.DANGER));
-            return "redirect:/COMT/Wiki";
         }
     }
 
