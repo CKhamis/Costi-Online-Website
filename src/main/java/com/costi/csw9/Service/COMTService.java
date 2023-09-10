@@ -502,17 +502,17 @@ public class COMTService {
                 // Set values
                 if(!user.isOwner()){
                     // Ignore field changes if user is the owner
-                    user.setRole(request.getRole());
+                    if(!request.getRole().equals("OWNER")){
+                        user.setRole(request.getRole());
+                    }
                     user.setEmail(request.getEmail());
                     user.setEnabled(request.isEnabled());
                     user.setIsLocked(request.isLocked());
                 }
 
                 if(request.getPassword() != null && !request.getPassword().isBlank()){
-                    System.out.println(user.getPassword() + "---------------");
                     String encodedPass = bCryptPasswordEncoder.encode(request.getPassword());
                     user.setPassword(encodedPass);
-                    System.out.println(user.getPassword() + "---------------");
                 }
                 user.setFirstName(request.getFirstName());
                 user.setLastName(request.getLastName());
