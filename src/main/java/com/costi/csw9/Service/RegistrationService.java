@@ -27,7 +27,6 @@ public class RegistrationService {
         }
 
         String token;
-        System.out.println(userService.isEmpty());
         if(userService.isEmpty()){
             token = userService.signUpAdmin(
                     new User(

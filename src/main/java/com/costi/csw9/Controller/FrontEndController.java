@@ -127,7 +127,7 @@ public class FrontEndController {
     }
 
     @GetMapping("/SignUp")
-    public String getNewAccount(Model model, RedirectAttributes redirectAttributes) {
+    public String getNewAccount(Model model) {
         if (!model.containsAttribute("user")) {
             model.addAttribute("user", new User());
         }
@@ -287,42 +287,7 @@ public class FrontEndController {
     @GetMapping("/")
     public String getHome(Model model) {
         model.addAttribute("version", VERSION);
-
-        List<Post> recentNews = postService.findAll();
-        generateSlides(model, recentNews);
-
         return "main/Home";
-    }
-
-    private void generateSlides(Model model, List<Post> recentNews) {
-        if(recentNews.size() == 0){
-            // if no news posts at all
-            Post blank = new Post("No Posts", "No posts were found in database", PostCategory.NEWS.name(), "");
-            blank.setLastEdited(LocalDateTime.MIN);
-            blank.setId(-1L);
-            blank.setImagePath("/images/default-posts/no-image.jpg");
-            model.addAttribute("slide1", blank);
-            model.addAttribute("slide2", blank);
-            model.addAttribute("slide3", blank);
-            model.addAttribute("slide4", blank);
-            model.addAttribute("slide5", blank);
-            model.addAttribute("slide6", blank);
-            model.addAttribute("slide7", blank);
-            model.addAttribute("slide8", blank);
-            model.addAttribute("slide9", blank);
-            model.addAttribute("slide10", blank);
-        }else{
-            model.addAttribute("slide1", recentNews.get(LogicTools.clamp(0, 0, recentNews.size()-1)));
-            model.addAttribute("slide2", recentNews.get(LogicTools.clamp(1, 0, recentNews.size()-1)));
-            model.addAttribute("slide3", recentNews.get(LogicTools.clamp(2, 0, recentNews.size()-1)));
-            model.addAttribute("slide4", recentNews.get(LogicTools.clamp(3, 0, recentNews.size()-1)));
-            model.addAttribute("slide5", recentNews.get(LogicTools.clamp(4, 0, recentNews.size()-1)));
-            model.addAttribute("slide6", recentNews.get(LogicTools.clamp(5, 0, recentNews.size()-1)));
-            model.addAttribute("slide7", recentNews.get(LogicTools.clamp(6, 0, recentNews.size()-1)));
-            model.addAttribute("slide8", recentNews.get(LogicTools.clamp(7, 0, recentNews.size()-1)));
-            model.addAttribute("slide9", recentNews.get(LogicTools.clamp(8, 0, recentNews.size()-1)));
-            model.addAttribute("slide10", recentNews.get(LogicTools.clamp(9, 0, recentNews.size()-1)));
-        }
     }
 
     @GetMapping("/Projects")
@@ -424,7 +389,6 @@ public class FrontEndController {
     public String getLandingPage() {
         return "main/Tree";
     }
-
 
     //Minecraft
     @GetMapping("/Minecraft")
