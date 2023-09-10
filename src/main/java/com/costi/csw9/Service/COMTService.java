@@ -472,6 +472,8 @@ public class COMTService {
                     }
                 }
 
+                //TODO: check to see if they have a confirmation token
+
                 // Delete any logs that are owned by account
                 accountLogRepository.deleteByUser(user);
 
@@ -499,19 +501,21 @@ public class COMTService {
 
                 // Set values
                 if(!user.isOwner()){
-                    // Ignore role change if user is the administrator
+                    // Ignore field changes if user is the owner
                     user.setRole(request.getRole());
+                    user.setEmail(request.getEmail());
+                    user.setEnabled(request.isEnabled());
+                    user.setIsLocked(request.isLocked());
                 }
 
-                if(!request.getPassword().isBlank()){
-                    String encodedPass = bCryptPasswordEncoder.encode(user.getPassword());
+                if(request.getPassword() != null && !request.getPassword().isBlank()){
+                    System.out.println(user.getPassword() + "---------------");
+                    String encodedPass = bCryptPasswordEncoder.encode(request.getPassword());
                     user.setPassword(encodedPass);
+                    System.out.println(user.getPassword() + "---------------");
                 }
-                user.setEmail(request.getEmail());
-                user.setEnabled(request.isEnabled());
                 user.setFirstName(request.getFirstName());
                 user.setLastName(request.getLastName());
-                user.setIsLocked(request.isLocked());
                 user.setProfilePicture(request.getProfilePicture());
 
                 // Create log

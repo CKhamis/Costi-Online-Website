@@ -1,5 +1,6 @@
 package com.costi.csw9.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,6 +34,7 @@ public class User implements UserDetails {
    @NotNull
    String email;
    @NotNull
+   @JsonIgnore
    String password;
 
    private LocalDateTime dateCreated = LocalDateTime.now();

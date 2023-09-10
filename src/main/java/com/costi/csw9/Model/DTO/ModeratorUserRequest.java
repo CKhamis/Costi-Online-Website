@@ -26,6 +26,5 @@ public class ModeratorUserRequest {
     @NotNull
     private int profilePicture;
 
-    @NotNull
     private String password;
 }

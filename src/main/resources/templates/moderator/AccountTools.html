@@ -218,10 +218,10 @@
                     <a href="COMT/Accounts/${user.id}" class="btn btn-sm btn-success" role="button">Detail</a>
                 </td>
                 <td>
-                    <button class="btn btn-sm ${user.isLocked === true ? 'btn-secondary' : 'btn-primary'}" onclick="toggleVisibility(${user.id})" role="button">${user.isLocked === true ? 'Locked' : 'Unlocked'}</button>
+                    <button class="btn btn-sm ${user.isLocked === true ? 'btn-secondary' : 'btn-primary'}${user.role === 'OWNER' ? ' disabled' : ''}" onclick="toggleVisibility(${user.id})" role="button">${user.isLocked === true ? 'Locked' : 'Unlocked'}</button>
                 </td>
                 <td>
-                    <button class="btn btn-sm ${user.enabled === true ? 'btn-primary' : 'btn-secondary'}" onclick="toggleEnable(${user.id})" role="button">${user.enabled === true ? 'Enabled' : 'Disabled'}</button>
+                    <button class="btn btn-sm ${user.enabled === true ? 'btn-primary' : 'btn-secondary'}${user.role === 'OWNER' ? ' disabled' : ''}" onclick="toggleEnable(${user.id})" role="button">${user.enabled === true ? 'Enabled' : 'Disabled'}</button>
                 </td>
                 <td>
                     <a class="btn btn-sm btn-secondary" href="#" role="button">Edit</a>
@@ -275,12 +275,12 @@
 
     //POST functions
     function toggleEnable(id){
-        let toastId = createToast("Toggling Publishing");
+        let toastId = createToast("Toggling Enable");
         let user = getObjectById(id);
         user.enabled = !user.enabled;
         postData("/api/management/users/save", user)
             .then(() => {
-                document.getElementById(`${toastId}-body`).innerText = "✅ Publish Status Toggled";
+                document.getElementById(`${toastId}-body`).innerText = "✅ User Status Updated";
                 document.getElementById(`${toastId}-loading`).style.color = "green";
             })
             .catch((response) => {
@@ -302,7 +302,7 @@
     }
 
     function toggleVisibility(id){
-        let toastId = createToast("Toggling Visibility");
+        let toastId = createToast("Toggling Lock");
         let user = getObjectById(id);
         user.isLocked = !user.isLocked;
         postData("/api/management/users/save", user)
