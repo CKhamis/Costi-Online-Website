@@ -201,8 +201,7 @@ public class FrontEndController {
 
     @GetMapping("/COMT/Accounts/{id}")
     public String getCostiOnlineAccountSettings(Model model, @PathVariable Long id) {
-        // TODO: implement this
-        return "moderator/AdminAccountView";
+        return "moderator/AccountInfo";
     }
 
 

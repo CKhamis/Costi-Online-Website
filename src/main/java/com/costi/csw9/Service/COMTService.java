@@ -472,8 +472,6 @@ public class COMTService {
                     }
                 }
 
-                //TODO: check to see if they have a confirmation token
-
                 // Delete any logs that are owned by account
                 accountLogRepository.deleteByUser(user);
 
