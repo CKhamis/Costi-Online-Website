@@ -490,7 +490,7 @@ public class COMTService {
         throw new IllegalArgumentException("There are no users in Costi Online with the given id");
     }
 
-    public void saveUser(ModeratorUserRequest request){
+    public void saveUser(ModeratorAccountRequest request){
         // Check if the id is valid
         if(request.getId() != null){
             // Check if the id exists

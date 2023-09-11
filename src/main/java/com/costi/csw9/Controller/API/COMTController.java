@@ -396,7 +396,7 @@ public class COMTController {
     }
 
     @PostMapping("/users/save")
-    public ResponseEntity<ResponseMessage> saveUser(@RequestBody @Valid ModeratorUserRequest request) {
+    public ResponseEntity<ResponseMessage> saveUser(@RequestBody @Valid ModeratorAccountRequest request) {
         try {
             comtService.saveUser(request);
             return ResponseEntity.ok(new ResponseMessage("User Saved", ResponseMessage.Severity.INFORMATIONAL, "User has been saved to Costi Online"));

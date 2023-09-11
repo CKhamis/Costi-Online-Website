@@ -11,12 +11,9 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Controller
 public class FrontEndController {
@@ -118,7 +115,7 @@ public class FrontEndController {
 
         //Save new user
         try {
-            userService.save(user);
+            userService.legacySave(user);
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("✅ Account Successfully Edited", "Changes saved to server", FlashMessage.Status.SUCCESS));
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing account", e.getMessage(), FlashMessage.Status.DANGER));
@@ -205,26 +202,8 @@ public class FrontEndController {
     }
 
     @GetMapping("/COMT/Accounts/{id}")
-    public String getCostiOnlineAccountSettings(Model model, Principal principal, RedirectAttributes redirectAttributes, @PathVariable Long id) {
-        // TODO: add a nicer way to enable/disable, lock/unlock accounts
-        model.addAttribute("all", userService.loadAll());
-        model.addAttribute("action", "/COMT/Accounts/" + id + "/edit");
-
-        //Selected User
-        User selectedUser = userService.findById(id);
-        model.addAttribute("selectedUser", selectedUser);
-        List<AccountNotification> notifications = accountNotificationService.findByUser(selectedUser);
-        model.addAttribute("SUNotificationCount", notifications.size());
-        model.addAttribute("SUNotifications", notifications);
-        List<AccountLog> logs = accountLogService.findByUser(selectedUser);
-        model.addAttribute("SULogCount", logs.size());
-        model.addAttribute("SULogs", logs);
-        model.addAttribute("SUlastInteraction", logs.get(logs.size()-1).getDateCreated());
-        model.addAttribute("SUCanSignIn", !selectedUser.getIsLocked() && selectedUser.getEnabled());
-//        List<WikiPage> wikiPages = wikiService.getWikiPagesByAuthor(id);
-//        model.addAttribute("SUWikiCount", wikiPages.size());
-//        model.addAttribute("SUWikiPages", wikiPages);
-
+    public String getCostiOnlineAccountSettings(Model model, @PathVariable Long id) {
+        // TODO: implement this
         return "moderator/AdminAccountView";
     }
 
@@ -254,7 +233,7 @@ public class FrontEndController {
             if(((!loggedInUser.isOwner()) && formUser.isOwner())){
                 throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
             }else{
-                userService.save(formUser);
+                userService.legacySave(formUser);
                 redirectAttributes.addFlashAttribute("flash", new FlashMessage("✅ Account Successfully Edited", "Changes saved to server", FlashMessage.Status.SUCCESS));
 
             }

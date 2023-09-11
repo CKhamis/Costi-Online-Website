@@ -1,7 +1,7 @@
 package com.costi.csw9.Service;
 
 import com.costi.csw9.Model.*;
-import com.costi.csw9.Model.DTO.ConfirmationToken;
+import com.costi.csw9.Model.DTO.UserAccountRequest;
 import com.costi.csw9.Repository.AccountNotificationRepository;
 import com.costi.csw9.Repository.UserRepository;
 import com.costi.csw9.Util.LogicTools;
@@ -12,17 +12,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @AllArgsConstructor
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final ConfirmationTokenService confirmationTokenService;
     private final AccountLogService accountLogService;
     private final AccountNotificationRepository accountNotificationRepository;
 
@@ -35,44 +31,71 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public User findById(Long id) throws UsernameNotFoundException {
-        Optional<User> optionalUser = userRepository.findById(id);
-        if(optionalUser.isPresent()){
-            return optionalUser.get();
-        }else{
-            throw new UsernameNotFoundException("User" + LogicTools.NOT_FOUND_MESSAGE);
-        }
-    }
+    public String save(UserAccountRequest request){
+        if(request.getId() == null){
+            // New user account
+            User newUser = new User();
+            newUser.setFirstName(request.getFirstName());
+            newUser.setLastName(request.getLastName());
+            newUser.setEnabled(true);
+            newUser.setIsLocked(false);
+            newUser.setEmail(request.getEmail());
+            newUser.setProfilePicture(request.getProfilePicture());
 
-    public List<User> loadAll(){
-        return userRepository.findAll();
-    }
+            if(request.getPassword() != null && !request.getPassword().isBlank()){
+                String encodedPass = bCryptPasswordEncoder.encode(request.getPassword());
+                newUser.setPassword(encodedPass);
+            }else{
+                throw new IllegalArgumentException("Password field cannot be blank for creating new users");
+            }
 
+            if(userRepository.findAll().size() == 0){
+                // No users present. Genesis user will now be upgraded to owner role
+                newUser.setRole(UserRole.OWNER);
+            }else{
+                // Admin accounts are unavailable in this method and must be done through COMT
+                newUser.setRole(UserRole.USER);
+            }
 
-
-    public String signUpAdmin(User user){
-        //Check if exists
-        boolean userExists = userRepository.findByEmail(user.getEmail()).isPresent();
-        if(userExists){
-            throw new IllegalStateException("username already taken");
-        }else{
-            //Encode Password
-            String encodedPass = bCryptPasswordEncoder.encode(user.getPassword());
-            user.setPassword(encodedPass);
-
-            //Save User
-            userRepository.save(user);
+            User savedUser = userRepository.save(newUser);
 
             //Add to log
-            AccountLog log = new AccountLog("Account Created", "Admin was created and not yet activated", user);
+            AccountLog log = new AccountLog("Account Created", "User was created and activated", savedUser);
             accountLogService.save(log);
 
-            String token = UUID.randomUUID().toString();
-            ConfirmationToken confirmationToken = new ConfirmationToken(token, LocalDateTime.now(), LocalDateTime.now().plusMinutes(15), user);
-            confirmationTokenService.saveConfirmationToken(confirmationToken);
+            //Add welcome message
+            AccountNotification welcome = new AccountNotification("Welcome!", "<p>Welcome to your Costi Network ID!</p>", "primary", savedUser);
+            accountNotificationRepository.save(welcome);
 
-            return token;
+            return "New " + newUser.getRole().name() + " created";
+        }else{
+            // Edit existing user account
+            Optional<User> optionalUser = userRepository.findById(request.getId());
+            if(optionalUser.isPresent()){
+                // Transfer values to the present user
+                User presentUser = optionalUser.get();
+                presentUser.setFirstName(request.getFirstName());
+                presentUser.setLastName(request.getLastName());
+                presentUser.setEmail(request.getEmail());
+                presentUser.setProfilePicture(request.getProfilePicture());
+
+                if(request.getPassword() != null && !request.getPassword().isBlank()){
+                    String encodedPass = bCryptPasswordEncoder.encode(request.getPassword());
+                    presentUser.setPassword(encodedPass);
+                }
+
+                User savedUser = userRepository.save(presentUser);
+
+                //Add to log
+                AccountLog log = new AccountLog("Account details updated", presentUser.toString(), savedUser);
+                accountLogService.save(log);
+
+                return "Account was edited successfully";
+            }else{
+                throw new IllegalArgumentException("There are no users in Costi Online with the given id");
+            }
         }
+
     }
 
     public void signUpUser(User user){
@@ -105,7 +128,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public void save(User user) throws Exception {
+    public void legacySave(User user) throws Exception {
         if(user.getPassword().equals("")){
             //Reuse old password
             Optional<User> optionalOld = userRepository.findById(user.getId());
