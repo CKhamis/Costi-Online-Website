@@ -48,10 +48,9 @@
                 <th scope="col">Email</th>
                 <th scope="col">Joined</th>
                 <th scope="col">Role</th>
-                <th scope="col">Details</th>
                 <th scope="col">Lock</th>
                 <th scope="col">Enable</th>
-                <th scope="col">Edit</th>
+                <th scope="col">Details</th>
                 <th scope="col">Demote</th>
                 <th scope="col">Delete</th>
             </tr>
@@ -165,6 +164,7 @@
             .then(data => {
                 userList = data;
                 renderUsers();
+                renderNavUsers();
             })
             .catch((response)=>{
                 try{
@@ -215,16 +215,13 @@
                     <span class="badge ${user.role === 'OWNER' ? 'bg-primary' : user.role === 'USER' ? 'bg-secondary' : user.role === 'ADMIN' ? 'bg-info' : 'bg-dark'}">${user.role}</span>
                 </td>
                 <td>
-                    <a href="COMT/Accounts/${user.id}" class="btn btn-sm btn-success" role="button">Detail</a>
-                </td>
-                <td>
                     <button class="btn btn-sm ${user.isLocked === true ? 'btn-secondary' : 'btn-primary'}${user.role === 'OWNER' ? ' disabled' : ''}" onclick="toggleVisibility(${user.id})" role="button">${user.isLocked === true ? 'Locked' : 'Unlocked'}</button>
                 </td>
                 <td>
                     <button class="btn btn-sm ${user.enabled === true ? 'btn-primary' : 'btn-secondary'}${user.role === 'OWNER' ? ' disabled' : ''}" onclick="toggleEnable(${user.id})" role="button">${user.enabled === true ? 'Enabled' : 'Disabled'}</button>
                 </td>
                 <td>
-                    <a class="btn btn-sm btn-secondary" href="#" role="button">Edit</a>
+                    <a href="/COMT/Accounts/${user.id}" class="btn btn-sm btn-success" role="button">Details</a>
                 </td>
                 <td>
                     <button class="btn btn-sm btn-primary ${user.role === 'ADMIN' ? '' : 'disabled'}" onclick="demoteUser(${user.id})" role="button">Demote</button>

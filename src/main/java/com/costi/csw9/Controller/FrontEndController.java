@@ -18,7 +18,6 @@ import java.time.LocalDate;
 @Controller
 public class FrontEndController {
     private final UserService userService;
-    private RegistrationService registrationService;
     private WikiService wikiService;
     private AnnouncementService announcementService;
     private AccountLogService accountLogService;
@@ -27,9 +26,8 @@ public class FrontEndController {
     private static final String VERSION = "7.9";
 
     @Autowired
-    public FrontEndController(UserService userService, RegistrationService registrationService, WikiService wikiService, AnnouncementService announcementService, AccountLogService accountLogService, AccountNotificationService accountNotificationService, PostService postService) {
+    public FrontEndController(UserService userService, WikiService wikiService, AnnouncementService announcementService, AccountLogService accountLogService, AccountNotificationService accountNotificationService, PostService postService) {
         this.userService = userService;
-        this.registrationService = registrationService;
         this.wikiService = wikiService;
         this.announcementService = announcementService;
         this.accountLogService = accountLogService;
@@ -150,12 +148,12 @@ public class FrontEndController {
         }
 
         if (user.getRole().name().equals("ADMIN")) {
-            registrationService.registerAdmin(user);
+            //registrationService.registerAdmin(user);
             return "redirect:/";
         }
 
         try{
-            registrationService.registerUser(user);
+            //registrationService.registerUser(user);
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("✅ Costi Account Created!", "Please sign in to continue.", FlashMessage.Status.SUCCESS));
             return "redirect:/";
         }catch (Exception e){
