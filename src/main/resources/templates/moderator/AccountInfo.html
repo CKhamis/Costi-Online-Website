@@ -4,20 +4,49 @@
 <body class="bg-1 text-1">
 <div th:replace="moderator/ModeratorComponents :: moderatorNav"></div>
 
-<main class="container-fluid" style="background-color: red">
+<main class="container-fluid">
    <div class="container">
        <div class="row">
            <div class="col-12">
                <div th:replace="moderator/ModeratorComponents :: userNavigation"></div>
            </div>
-           <div class="col-12 col-md-4">
-               <div class="p-4">
-                    <img th:src="@{/icons/profile-photos/Windows Icons/airplane.jpg}" class="img-fluid" style="width:100%; object-fit: cover; aspect-ratio: 1 / 1;">
-               </div>
+           <div class="col-12 col-md-3">
+               <img th:src="@{/icons/profile-photos/Windows Icons/airplane.jpg}" class="img-fluid" style="width:100%; object-fit: cover; aspect-ratio: 1 / 1;">
+               <h3 class="text-center fw-bold">FirstName LastName</h3>
+               <h4 class="text-center">Role</h4>
            </div>
-           <div class="col-12 col-md-8" style="background-color: blue">
-               <div class="p-4">
-
+           <div class="col-12 col-md-9">
+               <div>
+                   <nav>
+                       <div class="nav nav-tabs mb-3" id="view-tabs" role="tablist" style="background-color: transparent; border:none">
+                           <button class="nav-link active" id="view-overview-tab" data-bs-toggle="tab" data-bs-target="#nav-overview" type="button" role="tab" aria-controls="nav-overview" aria-selected="true" tabindex="-1">Overview</button>
+                           <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" tabindex="-1">Profile</button>
+                           <button class="nav-link" id="nav-notifications-tab" data-bs-toggle="tab" data-bs-target="#nav-notifications" type="button" role="tab" aria-controls="nav-notifications">Notifications</button>
+                           <button class="nav-link" id="nav-logs-tab" data-bs-toggle="tab" data-bs-target="#nav-logs" type="button" role="tab" aria-controls="nav-logs" tabindex="-1">Logs</button>
+                           <button class="nav-link" id="nav-wiki-tab" data-bs-toggle="tab" data-bs-target="#nav-wiki" type="button" role="tab" aria-controls="nav-wiki">Wiki</button>
+                           <button class="nav-link" id="nav-permissions-tab" data-bs-toggle="tab" data-bs-target="#nav-permissions" type="button" role="tab" aria-controls="nav-permissions">Permissions</button>
+                       </div>
+                   </nav>
+                   <div class="tab-content" id="nav-tabContent">
+                       <div class="tab-pane fade active show" id="nav-overview" role="tabpanel" aria-labelledby="view-overview-tab" tabindex="0">
+                           <p>mainThis is some placeholder content the <strong>Home tab's</strong> associated content. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling. You can use it with tabs, pills, and any other <code>.nav</code>-powered navigation.</p>
+                       </div>
+                       <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
+                           <p>profileThis is some placeholder content the <strong>Profile tab's</strong> associated content. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling. You can use it with tabs, pills, and any other <code>.nav</code>-powered navigation.</p>
+                       </div>
+                       <div class="tab-pane fade" id="nav-notifications" role="tabpanel" aria-labelledby="nav-notifications-tab" tabindex="0">
+                           <p>notifThis is some placeholder content the <strong>Contact tab's</strong> associated content. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling. You can use it with tabs, pills, and any other <code>.nav</code>-powered navigation.</p>
+                       </div>
+                       <div class="tab-pane fade" id="nav-logs" role="tabpanel" aria-labelledby="nav-logs-tab" tabindex="0">
+                           <p>logsThis is some placeholder content the <strong>Disabled tab's</strong> associated content.</p>
+                       </div>
+                       <div class="tab-pane fade" id="nav-wiki" role="tabpanel" aria-labelledby="nav-wiki-tab" tabindex="0">
+                           <p>wikiThis is some placeholder content the <strong>Disabled tab's</strong> associated content.</p>
+                       </div>
+                       <div class="tab-pane fade" id="nav-permissions" role="tabpanel" aria-labelledby="nav-permissions-tab" tabindex="0">
+                           <p>permsThis is some placeholder content the <strong>Disabled tab's</strong> associated content.</p>
+                       </div>
+                   </div>
                </div>
            </div>
        </div>
