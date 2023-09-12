@@ -160,7 +160,7 @@
 <div th:replace="moderator/ModeratorComponents :: toast-scripts"></div>
 <script>
     // Data
-    let user, logs, notifications, wikiPages;
+    let userList, logs, notifications, wikiPages, selectedUser;
     const id = document.querySelector("#id").value;
 
     // Elements
@@ -170,7 +170,7 @@
     function refresh(){
         const logFetch = fetch("/api/management/account-logs/" + id);
         const notificationFetch = fetch("/api/management/notifications/" + id);
-        const userFetch = fetch("/api/management/users/" + id);
+        const userFetch = fetch("/api/management/users/all");
         const wikiFetch = fetch("/api/management/wiki/" + id);
 
         Promise.all([logFetch, notificationFetch, userFetch, wikiFetch])
@@ -186,17 +186,20 @@
                 let logDownload = data[0].json();
                 let notificationDownload = data[1].json();
                 let userDownload = data[2].json();
-                let wikiDownload = data[2].json();
+                let wikiDownload = data[3].json();
 
                 return Promise.all([logDownload, notificationDownload, userDownload, wikiDownload]);
             })
             .then(data => {
                 logs = data[0];
                 notifications = data[1];
-                user = data[2];
+                userList = data[2];
                 wikiPages = data[3];
 
+                selectedUser = getObjectById(id);
+
                 renderNavUsers();
+                renderSettingsUI();
             })
             .catch((response)=>{
                 console.log(response);
@@ -210,6 +213,19 @@
                         console.error("Error parsing error response:", error);
                     });
             });
+    }
+
+    // Rendering functions
+    function renderSettingsUI(){
+        document.querySelector("#created-text").innerText = selectedUser.formattedDateCreated;
+        document.querySelector("#notification-count-text").innerText = `${notifications.length} notifications`;
+        document.querySelector("#wiki-count-text").innerText = `${wikiPages.length} wiki pages`;
+        document.querySelector("#log-count-text").innerText = `${logs.length} logs`;
+        document.querySelector("#login-text").innerText = `Account ${selectedUser.enabled && !selectedUser.isLocked? 'can' : 'cannot'} log in`;
+    }
+
+    function getObjectById(id) {
+        return userList.find(obj => obj["id"] == id);
     }
 </script>
 </body>
