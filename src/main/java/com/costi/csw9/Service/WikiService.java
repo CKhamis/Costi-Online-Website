@@ -135,26 +135,4 @@ public class WikiService {
             throw new Exception("Wiki page" + LogicTools.NOT_FOUND_MESSAGE);
         }
     }
-
-    public void deprecatedSave(WikiPage wikiPage, User requester) throws Exception {
-        if(requester.isAdmin() || requester.isOwner() || requester.getId().equals(wikiPage.getAuthor().getId())){
-            wikiPage.setLastEdited(LocalDateTime.now());
-
-            //Add to log
-            AccountLog log = new AccountLog("Wiki page created/changed", wikiPage.getTitle() + " is saved.", wikiPage.getAuthor());
-            accountLogService.save(log);
-
-            wikiRepository.save(wikiPage);
-        }else{
-            throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
-        }
-    }
-
-    public void enable(WikiPage wikiPage, boolean enable, User requester) throws Exception {
-        if (requester.isAdmin() || requester.isOwner()) {
-            wikiRepository.setEnabledById(wikiPage.getId(), enable);
-        } else {
-            throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
-        }
-    }
 }

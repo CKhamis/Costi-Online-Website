@@ -5,7 +5,8 @@
 <div th:replace="moderator/ModeratorComponents :: moderatorNav"></div>
 
 <main class="container-fluid">
-   <div class="container">
+   <input type="hidden" th:value="${id}" id="id"/>
+   <div class="container" id="error-container">
        <div class="row">
            <div class="col-12">
                <div th:replace="moderator/ModeratorComponents :: userNavigation"></div>
@@ -158,7 +159,58 @@
 <div th:replace="Components :: JS"></div>
 <div th:replace="moderator/ModeratorComponents :: toast-scripts"></div>
 <script>
+    // Data
+    let user, logs, notifications, wikiPages;
+    const id = document.querySelector("#id").value;
 
+    // Elements
+    let errorContainer = document.querySelector("#error-container");
+
+    refresh();
+    function refresh(){
+        const logFetch = fetch("/api/management/account-logs/" + id);
+        const notificationFetch = fetch("/api/management/notifications/" + id);
+        const userFetch = fetch("/api/management/users/" + id);
+        const wikiFetch = fetch("/api/management/wiki/" + id);
+
+        Promise.all([logFetch, notificationFetch, userFetch, wikiFetch])
+            .then(responses => {
+                const response1 = checkStatus(responses[0]);
+                const response2 = checkStatus(responses[1]);
+                const response3 = checkStatus(responses[2]);
+                const response4 = checkStatus(responses[3]);
+
+                return Promise.all([response1, response2, response3, response4]);
+            })
+            .then(data => {
+                let logDownload = data[0].json();
+                let notificationDownload = data[1].json();
+                let userDownload = data[2].json();
+                let wikiDownload = data[2].json();
+
+                return Promise.all([logDownload, notificationDownload, userDownload, wikiDownload]);
+            })
+            .then(data => {
+                logs = data[0];
+                notifications = data[1];
+                user = data[2];
+                wikiPages = data[3];
+
+                renderNavUsers();
+            })
+            .catch((response)=>{
+                console.log(response);
+                response.json()  // Parse the JSON error response
+                    .then(errorData => {
+                        errorContainer.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class="text-center fw-bold">${errorData.title}</h3><p class="text-center">${errorData.message}</p>`;
+                    })
+                    .catch(error => {
+                        errorContainer.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class="text-center fw-bold">There was an error receiving data from Costi Online Services</h3><p class="text-center">Error message could not be parsed. ${error}</p>`;
+
+                        console.error("Error parsing error response:", error);
+                    });
+            });
+    }
 </script>
 </body>
 </html>

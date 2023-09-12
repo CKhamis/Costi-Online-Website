@@ -227,6 +227,18 @@ public class COMTController {
         return ResponseEntity.ok(notifications);
     }
 
+    @GetMapping("/notifications/{id}")
+    public ResponseEntity<?> getNotifications(@PathVariable Long id){
+        try {
+            List<AccountNotification> notifications = comtService.findAllNotificationsByUser(id);
+            return ResponseEntity.ok(notifications);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Error Retrieving Logs", ResponseMessage.Severity.LOW, e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error Retrieving Logs", ResponseMessage.Severity.MEDIUM, e.getMessage()));
+        }
+    }
+
     @PostMapping("/notifications/save")
     public ResponseEntity<ResponseMessage> saveNotification(@RequestBody AccountNotificationRequest request) {
         try{
@@ -322,6 +334,17 @@ public class COMTController {
         return ResponseEntity.ok(comtService.findAllWikiPages());
     }
 
+    @GetMapping("/wiki/{id}")
+    public ResponseEntity<?> getWikiByUser(@PathVariable Long id){
+        try {
+            return ResponseEntity.ok(comtService.findAllWikiPagesByUser(id));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Error Retrieving Logs", ResponseMessage.Severity.LOW, e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error Retrieving Logs", ResponseMessage.Severity.MEDIUM, e.getMessage()));
+        }
+    }
+
     @PostMapping("/wiki/delete")
     public ResponseEntity<ResponseMessage> deleteWikiPage(@RequestBody Long id) {
         try {
@@ -355,6 +378,21 @@ public class COMTController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/account-logs/{id}")
+    public ResponseEntity<?> getAccountLogsByUser(@PathVariable Long id){
+        try {
+            List<AccountLog> logs = comtService.findAllAccountLogsByUser(id);
+            List<ModeratorAccountLogResponse> response = logs.stream()
+                    .map(AccountLog::getModeratorView)
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Error Retrieving Logs", ResponseMessage.Severity.LOW, e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error Retrieving Logs", ResponseMessage.Severity.MEDIUM, e.getMessage()));
+        }
+    }
+
     @PostMapping("/account-logs/delete")
     public ResponseEntity<ResponseMessage> deleteAccountLog(@RequestBody Long id) {
         try {
@@ -383,6 +421,17 @@ public class COMTController {
     public ResponseEntity<List<User>> getUsers(){
         List<User> users = comtService.findAllUsers();
         return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/users/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable Long id){
+        try {
+            return ResponseEntity.ok(comtService.findUserById(id));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Error Retrieving User", ResponseMessage.Severity.LOW, e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error Retrieving User", ResponseMessage.Severity.MEDIUM, e.getMessage()));
+        }
     }
 
     @PostMapping("/users/delete")

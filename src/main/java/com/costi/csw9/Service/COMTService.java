@@ -180,6 +180,19 @@ public class COMTService {
     public List<AccountNotification> findAllNotifications(){
         return accountNotificationRepository.findAll();
     }
+
+    public List<AccountNotification> findAllNotificationsByUser(Long id){
+        if(id == null){
+            throw new NullPointerException("ID field cannot be null");
+        }
+
+        Optional<User> optionalUser = userRepository.findById(id);
+        if(optionalUser.isPresent()){
+            return accountNotificationRepository.findByUser(optionalUser.get());
+        }else{
+            throw new IllegalArgumentException("There are no logs in Costi Online with the given id");
+        }
+    }
     public void saveNotification(AccountNotificationRequest notification) throws Exception{
         // Check if user exists
         if(notification.getDestination().equals("All")) {
@@ -334,6 +347,19 @@ public class COMTService {
         return wikiRepository.findAll();
     }
 
+    public List<WikiPage> findAllWikiPagesByUser(Long id){
+        if(id == null){
+            throw new NullPointerException("ID field cannot be null");
+        }
+
+        Optional<User> optionalUser = userRepository.findById(id);
+        if(optionalUser.isPresent()){
+            return wikiRepository.findByAuthor(optionalUser.get());
+        }else{
+            throw new IllegalArgumentException("There are no logs in Costi Online with the given id");
+        }
+    }
+
     public void deleteWikiPage(Long id){
         wikiRepository.deleteById(id);
     }
@@ -377,6 +403,19 @@ public class COMTService {
      */
 
     public List<AccountLog> findAllAccountLogs(){return accountLogRepository.findAll();}
+
+    public List<AccountLog> findAllAccountLogsByUser(Long id){
+        if(id == null){
+            throw new NullPointerException("ID field cannot be null");
+        }
+
+        Optional<User> optionalUser = userRepository.findById(id);
+        if(optionalUser.isPresent()){
+            return accountLogRepository.findByUser(optionalUser.get());
+        }else{
+            throw new IllegalArgumentException("There are no logs in Costi Online with the given id");
+        }
+    }
 
     public void deleteAccountLog(Long id){
         accountLogRepository.deleteById(id);
