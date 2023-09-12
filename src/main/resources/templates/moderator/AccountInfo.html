@@ -29,10 +29,112 @@
                    </nav>
                    <div class="tab-content" id="nav-tabContent">
                        <div class="tab-pane fade active show" id="nav-overview" role="tabpanel" aria-labelledby="view-overview-tab" tabindex="0">
-                           <p>mainThis is some placeholder content the <strong>Home tab's</strong> associated content. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling. You can use it with tabs, pills, and any other <code>.nav</code>-powered navigation.</p>
+                           <h3 class="fw-bold">Account Overview</h3>
+                           <hr />
+                           <div class="row">
+                               <div class="col-12 col-md-4 mb-2">
+                                   <div class="card">
+                                       <div class="card-header">
+                                           Join Date
+                                       </div>
+                                       <div class="card-body">
+                                           <p class="card-text" id="created-text"></p>
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="col-12 col-md-4 mb-2">
+                                   <div class="card">
+                                       <div class="card-header">
+                                           Account Viability
+                                       </div>
+                                       <div class="card-body">
+                                           <p class="card-text" id="login-text"></p>
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="col-12 col-md-4 mb-2">
+                                   <div class="card">
+                                       <div class="card-header">
+                                           Notifications
+                                       </div>
+                                       <div class="card-body">
+                                           <p class="card-text" id="notification-count-text"></p>
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="col-12 col-md-4 mb-2">
+                                   <div class="card">
+                                       <div class="card-header">
+                                           Wiki Pages
+                                       </div>
+                                       <div class="card-body">
+                                           <p class="card-text" id="wiki-count-text"></p>
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="col-12 col-md-4 mb-2">
+                                   <div class="card">
+                                       <div class="card-header">
+                                           Account Logs
+                                       </div>
+                                       <div class="card-body">
+                                           <p class="card-text" id="log-count-text"></p>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
                        </div>
                        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
-                           <p>profileThis is some placeholder content the <strong>Profile tab's</strong> associated content. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling. You can use it with tabs, pills, and any other <code>.nav</code>-powered navigation.</p>
+                           <h3 class="fw-bold">Edit User Details</h3>
+                           <hr />
+                           <div class="form-row row">
+                               <div class="col-6 mb-3">
+                                   <label for="profilePicture">Profile Picture</label>
+                                   <select class="form-control" id="profilePicture" name="profilePicture" required>
+                                       <option value="" disabled="disabled">Select a profile picture</option>
+                                       <option value="0">Airplane</option>
+                                       <option value="1">Ball</option>
+                                       <option value="2">Beach</option>
+                                       <option value="3">Car</option>
+                                       <option value="4">Cat</option>
+                                       <option value="5">Chess</option>
+                                       <option value="6">Dog</option>
+                                       <option value="7">Drip</option>
+                                       <option value="8">Duck</option>
+                                       <option value="9">Fish</option>
+                                       <option value="10">Guest</option>
+                                       <option value="11">Guitar</option>
+                                       <option value="12">Kick</option>
+                                       <option value="13">Lift-off</option>
+                                       <option value="14">Red Flower</option>
+                                       <option value="15">Snowflake</option>
+                                   </select>
+                               </div>
+                               <div class="col-6 mb-3">
+                                   <label for="role">Role</label>
+                                   <select id="role" class="form-control" required>
+                                       <option value="" disabled="disabled">Select a role</option>
+                                       <option value="ADMIN">Admin</option>
+                                       <option value="USER">User</option>
+                                   </select>
+                               </div>
+                               <div class="col-6 mb-3">
+                                   <label for="firstName">First Name</label>
+                                   <input type="text" class="form-control" id="firstName" placeholder="First Name" required>
+                               </div>
+                               <div class="col-6 mb-3">
+                                   <label for="lastName">Last Name</label>
+                                   <input type="text" class="form-control" id="lastName" placeholder="Last Name" required>
+                               </div>
+                               <div class="col-6 mb-3">
+                                   <label for="email">Email</label>
+                                   <input type="email" class="form-control" id="email" placeholder="Email" required>
+                               </div>
+                               <div class="col-6 mb-3">
+                                   <label for="password">Password</label>
+                                   <input type="password" class="form-control" id="password" placeholder="Password" required>
+                               </div>
+                           </div>
                        </div>
                        <div class="tab-pane fade" id="nav-notifications" role="tabpanel" aria-labelledby="nav-notifications-tab" tabindex="0">
                            <p>notifThis is some placeholder content the <strong>Contact tab's</strong> associated content. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling. You can use it with tabs, pills, and any other <code>.nav</code>-powered navigation.</p>
@@ -54,6 +156,7 @@
 </main>
 
 <div th:replace="Components :: JS"></div>
+<div th:replace="moderator/ModeratorComponents :: toast-scripts"></div>
 <script>
 
 </script>
