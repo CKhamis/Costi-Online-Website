@@ -13,8 +13,8 @@
            </div>
            <div class="col-12 col-md-3">
                <img th:src="@{/icons/profile-photos/Windows Icons/airplane.jpg}" class="img-fluid" style="width:100%; object-fit: cover; aspect-ratio: 1 / 1;">
-               <h3 class="text-center fw-bold">FirstName LastName</h3>
-               <h4 class="text-center">Role</h4>
+               <h3 class="text-center fw-bold" id="user-name-text">User Name</h3>
+               <div id="user-role-badge">Role</div>
            </div>
            <div class="col-12 col-md-9">
                <div>
@@ -217,11 +217,22 @@
 
     // Rendering functions
     function renderSettingsUI(){
+        document.querySelector("#user-name-text").innerText = selectedUser.firstName + " " + selectedUser.lastName;
+        document.querySelector("#user-role-badge").innerText = `<span class="fs-5 badge ${selectedUser.role === 'OWNER' ? 'bg-primary' : selectedUser.role === 'USER' ? 'bg-secondary' : selectedUser.role === 'ADMIN' ? 'bg-info' : 'bg-dark'}">${selectedUser.role}</span>`;
+
         document.querySelector("#created-text").innerText = selectedUser.formattedDateCreated;
         document.querySelector("#notification-count-text").innerText = `${notifications.length} notifications`;
         document.querySelector("#wiki-count-text").innerText = `${wikiPages.length} wiki pages`;
         document.querySelector("#log-count-text").innerText = `${logs.length} logs`;
         document.querySelector("#login-text").innerText = `Account ${selectedUser.enabled && !selectedUser.isLocked? 'can' : 'cannot'} log in`;
+
+        document.querySelector("#profilePicture").value = selectedUser.profilePicture;
+        document.querySelector("#role").value = selectedUser.role;
+        document.querySelector("#firstName").value = selectedUser.firstName;
+        document.querySelector("#lastName").value = selectedUser.lastName;
+        document.querySelector("#email").value = selectedUser.username;
+        // document.querySelector("#password").value = selectedUser.password;
+
     }
 
     function getObjectById(id) {
