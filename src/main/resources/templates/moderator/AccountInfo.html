@@ -137,17 +137,75 @@
                                </div>
                            </div>
                        </div>
-                       <div class="tab-pane fade" id="nav-notifications" role="tabpanel" aria-labelledby="nav-notifications-tab" tabindex="0">
-                           <p>notifThis is some placeholder content the <strong>Contact tab's</strong> associated content. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling. You can use it with tabs, pills, and any other <code>.nav</code>-powered navigation.</p>
+                       <div class="tab-pane fade table-responsive" id="nav-notifications" role="tabpanel" aria-labelledby="nav-notifications-tab" tabindex="0">
+                           <table class="table table-sm align-middle table-hover table-dark">
+                               <thead>
+                               <tr>
+                                   <th scope="col">ID</th>
+                                   <th scope="col">Title</th>
+                                   <th scope="col">Body</th>
+                                   <th scope="col">Type</th>
+                                   <th scope="col">Created</th>
+                                   <th scope="col">Delete</th>
+                               </tr>
+                               </thead>
+                               <tbody id="notifications-table-body">
+                               </tbody>
+                           </table>
                        </div>
-                       <div class="tab-pane fade" id="nav-logs" role="tabpanel" aria-labelledby="nav-logs-tab" tabindex="0">
-                           <p>logsThis is some placeholder content the <strong>Disabled tab's</strong> associated content.</p>
+                       <div class="tab-pane fade table-responsive" id="nav-logs" role="tabpanel" aria-labelledby="nav-logs-tab" tabindex="0">
+                           <table class="table table-sm align-middle table-hover table-dark">
+                               <thead>
+                               <tr>
+                                   <th scope="col">ID</th>
+                                   <th scope="col">Title</th>
+                                   <th scope="col">Body</th>
+                                   <th scope="col">Created</th>
+                                   <th scope="col">Delete</th>
+                               </tr>
+                               </thead>
+                               <tbody id="logs-table-body">
+                               </tbody>
+                           </table>
                        </div>
-                       <div class="tab-pane fade" id="nav-wiki" role="tabpanel" aria-labelledby="nav-wiki-tab" tabindex="0">
-                           <p>wikiThis is some placeholder content the <strong>Disabled tab's</strong> associated content.</p>
+                       <div class="tab-pane fade table-responsive" id="nav-wiki" role="tabpanel" aria-labelledby="nav-wiki-tab" tabindex="0">
+                           <table class="table table-sm align-middle table-hover table-dark">
+                               <thead>
+                               <tr>
+                                   <th scope="col">ID</th>
+                                   <th scope="col">Title</th>
+                                   <th scope="col">Subtitle</th>
+                                   <th scope="col">Category</th>
+                                   <th scope="col">Last Edited</th>
+                                   <th scope="col">Views</th>
+                                   <th scope="col">View</th>
+                                   <th scope="col">Enable</th>
+                                   <th scope="col">Edit</th>
+                                   <th scope="col">Delete</th>
+                               </tr>
+                               </thead>
+                               <tbody id="wiki-table-body">
+                               </tbody>
+                           </table>
                        </div>
                        <div class="tab-pane fade" id="nav-permissions" role="tabpanel" aria-labelledby="nav-permissions-tab" tabindex="0">
-                           <p>permsThis is some placeholder content the <strong>Disabled tab's</strong> associated content.</p>
+                           <h3 class="fw-bold">Account Access</h3>
+                           <hr />
+                           <div class="container-fluid border-box">
+                               <h4 class="fw-bold">Account Lock</h4>
+                               <p>Account lock disables login access and is generally meant for use in security risks</p>
+                                <div id="account-lock"></div>
+                           </div>
+                           <div class="container-fluid border-box">
+                               <h4 class="fw-bold">Account Enable</h4>
+                               <p>Account enable disables login access and is generally meant for use in account activation</p>
+                               <div id="account-enable"></div>
+                           </div>
+                           <div class="container-fluid border-box">
+                               <h4 class="fw-bold">Account Role</h4>
+                               <p>Account role allows/ denies users access to COMT system.</p>
+                               <div id="account-demote"></div>
+                           </div>
                        </div>
                    </div>
                </div>
@@ -218,13 +276,13 @@
     // Rendering functions
     function renderSettingsUI(){
         document.querySelector("#user-name-text").innerText = selectedUser.firstName + " " + selectedUser.lastName;
-        document.querySelector("#user-role-badge").innerText = `<span class="fs-5 badge ${selectedUser.role === 'OWNER' ? 'bg-primary' : selectedUser.role === 'USER' ? 'bg-secondary' : selectedUser.role === 'ADMIN' ? 'bg-info' : 'bg-dark'}">${selectedUser.role}</span>`;
+        document.querySelector("#user-role-badge").innerHTML = `<span class="fs-5 badge ${selectedUser.role === 'OWNER' ? 'bg-primary' : selectedUser.role === 'USER' ? 'bg-secondary' : selectedUser.role === 'ADMIN' ? 'bg-info' : 'bg-dark'}">${selectedUser.role}</span>`;
 
         document.querySelector("#created-text").innerText = selectedUser.formattedDateCreated;
         document.querySelector("#notification-count-text").innerText = `${notifications.length} notifications`;
         document.querySelector("#wiki-count-text").innerText = `${wikiPages.length} wiki pages`;
         document.querySelector("#log-count-text").innerText = `${logs.length} logs`;
-        document.querySelector("#login-text").innerText = `Account ${selectedUser.enabled && !selectedUser.isLocked? 'can' : 'cannot'} log in`;
+        document.querySelector("#login-text").innerHTML = `Account ${selectedUser.enabled && !selectedUser.isLocked? 'can' : 'cannot'} log in`;
 
         document.querySelector("#profilePicture").value = selectedUser.profilePicture;
         document.querySelector("#role").value = selectedUser.role;
@@ -232,9 +290,90 @@
         document.querySelector("#lastName").value = selectedUser.lastName;
         document.querySelector("#email").value = selectedUser.username;
         // document.querySelector("#password").value = selectedUser.password;
+        renderNotifications();
+        renderLogs();
+        renderWiki();
+
+        document.querySelector("#account-lock").innerHTML = `<button class="btn btn-sm ${selectedUser.enabled === true ? 'btn-primary' : 'btn-secondary'}" onclick="toggleRole(${selectedUser.id})">${selectedUser.enabled === true ? 'Enabled' : 'Disabled'}</button>`;
 
     }
 
+    function renderNotifications(){
+        const notificationTable = document.querySelector("#notifications-table-body");
+
+        let tableContent = ``;
+        for(let i = 0; i < notifications.length; i++){
+            let notification = notifications[i];
+            tableContent += `
+            <tr>
+                <td>${notification.id}</td>
+                <td>${notification.title}</td>
+                <td>${notification.body}</td>
+                <td class="text-center">
+                    <span class="badge bg-${notification.notificationType}">${notification.notificationType}</span>
+                </td>
+                <td>${notification.dateCreated}</td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="deleteNotification(${notification.id})">Delete</button>
+                </td>
+            </tr>
+            `;
+        }
+        notificationTable.innerHTML = tableContent;
+    }
+    function renderLogs(){
+        const logTable = document.querySelector("#logs-table-body");
+
+        let tableContent = ``;
+        for(let i = 0; i < logs.length; i++){
+            let log = logs[i];
+            tableContent += `
+            <tr>
+                <td>${log.id}</td>
+                <td>${log.title}</td>
+                <td>${log.body}</td>
+                <td>${log.formattedDateCreated}</td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="deleteLog(${log.id})">Delete</button>
+                </td>
+            </tr>
+            `;
+        }
+        logTable.innerHTML = tableContent;
+    }
+    function renderWiki(){
+        const wikiTable = document.querySelector("#wiki-table-body");
+        let tableContent = ``;
+        for(let i = 0; i < wikiPages.length; i++){
+            let page = wikiPages[i];
+
+            tableContent += `
+            <tr>
+                <td>${page.id}</td>
+                <td>${page.title}</td>
+                <td>${page.subtitle}</td>
+                <td class="text-center">
+                    <span class="badge ${page.category === 'INSIDE_JOKE' ? 'bg-primary' : page.category === 'HISTORICAL' ? 'bg-secondary' : page.category === 'PEOPLE' ? 'bg-info' : page.category === 'PROFESSIONAL' ? 'bg-danger' : 'bg-dark'}">${page.category}</span>
+                </td>
+                <td>${page.dateEdited}</td>
+                <td><p class="text-center fw-bold">${page.views}</p></td>
+                <td>
+                    <a class="btn btn-sm btn-primary ${page.enabled === true ? '' : 'disabled'}" href="/Wiki/${page.id}/view" role="button">View</a>
+                </td>
+                <td>
+                    <button class="btn btn-sm ${page.enabled === true ? 'btn-primary' : 'btn-secondary'}" onclick="toggleEnable(${page.id})">${page.enabled === true ? 'Enabled' : 'Disabled'}</button>
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-secondary" href="/Wiki/${page.id}/edit" role="button">Edit</a>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="deletePage(${page.id})">Delete</button>
+                </td>
+            </tr>
+            `;
+        }
+        wikiTable.innerHTML = tableContent;
+    }
     function getObjectById(id) {
         return userList.find(obj => obj["id"] == id);
     }

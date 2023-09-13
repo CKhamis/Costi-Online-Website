@@ -74,6 +74,6 @@ public class AccountLog {
 
     @JsonIgnore
     public ModeratorAccountLogResponse getModeratorView(){
-        return new ModeratorAccountLogResponse(this.id, this.title, this.body, this.dateCreated);
+        return new ModeratorAccountLogResponse(this.id, this.title, this.body, this.dateCreated, dateCreated.getMonthValue() + "/" + dateCreated.getDayOfMonth() + "/" + dateCreated.getYear());
     }
 }

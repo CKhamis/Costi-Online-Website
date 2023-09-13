@@ -13,4 +13,5 @@ public class ModeratorAccountLogResponse {
     private Long id;
     private String title, body;
     private LocalDateTime dateCreated;
+    private String formattedDateCreated;
 }
