@@ -14,7 +14,7 @@
            <div class="col-12 col-md-3">
                <img th:src="@{/icons/profile-photos/Windows Icons/airplane.jpg}" class="img-fluid" style="width:100%; object-fit: cover; aspect-ratio: 1 / 1;">
                <h3 class="text-center fw-bold" id="user-name-text">User Name</h3>
-               <div id="user-role-badge">Role</div>
+               <div id="user-role-badge" class="d-flex justify-content-center align-items-center">Role</div>
            </div>
            <div class="col-12 col-md-9">
                <div>
@@ -191,17 +191,17 @@
                        <div class="tab-pane fade" id="nav-permissions" role="tabpanel" aria-labelledby="nav-permissions-tab" tabindex="0">
                            <h3 class="fw-bold">Account Access</h3>
                            <hr />
-                           <div class="container-fluid border-box">
+                           <div class="container-fluid border-box mb-3 py-3">
                                <h4 class="fw-bold">Account Lock</h4>
                                <p>Account lock disables login access and is generally meant for use in security risks</p>
                                 <div id="account-lock"></div>
                            </div>
-                           <div class="container-fluid border-box">
+                           <div class="container-fluid border-box mb-3 py-3">
                                <h4 class="fw-bold">Account Enable</h4>
                                <p>Account enable disables login access and is generally meant for use in account activation</p>
                                <div id="account-enable"></div>
                            </div>
-                           <div class="container-fluid border-box">
+                           <div class="container-fluid border-box mb-3 py-3">
                                <h4 class="fw-bold">Account Role</h4>
                                <p>Account role allows/ denies users access to COMT system.</p>
                                <div id="account-demote"></div>
@@ -294,7 +294,9 @@
         renderLogs();
         renderWiki();
 
-        document.querySelector("#account-lock").innerHTML = `<button class="btn btn-sm ${selectedUser.enabled === true ? 'btn-primary' : 'btn-secondary'}" onclick="toggleRole(${selectedUser.id})">${selectedUser.enabled === true ? 'Enabled' : 'Disabled'}</button>`;
+        document.querySelector("#account-lock").innerHTML = `<button class="btn btn-sm ${selectedUser.isLocked === true ? 'btn-secondary' : 'btn-primary'}" onclick="toggleLock(${selectedUser.id})">${selectedUser.isLocked === true ? 'Locked' : 'Unlocked'}</button>`;
+        document.querySelector("#account-enable").innerHTML = `<button class="btn btn-sm ${selectedUser.enabled === true ? 'btn-primary' : 'btn-secondary'}" onclick="toggleEnable(${selectedUser.id})">${selectedUser.enabled === true ? 'Enabled' : 'Disabled'}</button>`;
+        document.querySelector("#account-demote").innerHTML = `<button class="btn btn-sm ${selectedUser.role === 'ADMIN' ? 'btn-primary' : 'btn-secondary'}" onclick="toggleRole(${selectedUser.id})" role="button">Demote</button>`;
 
     }
 
