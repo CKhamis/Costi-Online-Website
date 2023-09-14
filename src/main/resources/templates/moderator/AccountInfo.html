@@ -116,6 +116,7 @@
                                    <select id="role" class="form-control" required>
                                        <option value="" disabled="disabled">Select a role</option>
                                        <option value="ADMIN">Admin</option>
+                                       <option value="OWNER">Owner</option>
                                        <option value="USER">User</option>
                                    </select>
                                </div>
@@ -134,6 +135,9 @@
                                <div class="col-6 mb-3">
                                    <label for="password">Password</label>
                                    <input type="password" class="form-control" id="password" placeholder="Password" required>
+                               </div>
+                               <div class="col-12">
+                                   <button type="button" class="btn btn-sm btn-primary" onclick="saveUser()">Save</button>
                                </div>
                            </div>
                        </div>
@@ -299,7 +303,6 @@
         document.querySelector("#account-demote").innerHTML = `<button class="btn btn-sm ${selectedUser.role === 'ADMIN' ? 'btn-primary' : 'btn-secondary'}" onclick="toggleRole(${selectedUser.id})" role="button">Demote</button>`;
 
     }
-
     function renderNotifications(){
         const notificationTable = document.querySelector("#notifications-table-body");
 
