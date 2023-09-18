@@ -12,7 +12,7 @@
                <div th:replace="moderator/ModeratorComponents :: userNavigation"></div>
            </div>
            <div class="col-12 col-md-3">
-               <img th:src="@{/icons/profile-photos/Windows Icons/airplane.jpg}" class="img-fluid" style="width:100%; object-fit: cover; aspect-ratio: 1 / 1;">
+               <img class="img-fluid" id="profile-image" style="width:100%; object-fit: cover; aspect-ratio: 1 / 1;">
                <h3 class="text-center fw-bold" id="user-name-text">User Name</h3>
                <div id="user-role-badge" class="d-flex justify-content-center align-items-center">Role</div>
            </div>
@@ -286,6 +286,8 @@
 
     // Rendering functions
     function renderSettingsUI(){
+        document.querySelector("#profile-image").src = "/icons/profile-photos/Windows Icons/" + selectedUser.profilePicture + ".jpg";
+
         document.querySelector("#user-name-text").innerText = selectedUser.firstName + " " + selectedUser.lastName;
         document.querySelector("#user-role-badge").innerHTML = `<span class="fs-5 badge ${selectedUser.role === 'OWNER' ? 'bg-primary' : selectedUser.role === 'USER' ? 'bg-secondary' : selectedUser.role === 'ADMIN' ? 'bg-info' : 'bg-dark'}">${selectedUser.role}</span>`;
 
@@ -374,7 +376,7 @@
                     <a class="btn btn-sm btn-primary ${page.enabled === true ? '' : 'disabled'}" href="/Wiki/${page.id}/view" role="button">View</a>
                 </td>
                 <td>
-                    <button class="btn btn-sm ${page.enabled === true ? 'btn-primary' : 'btn-secondary'}" onclick="toggleEnable(${page.id})">${page.enabled === true ? 'Enabled' : 'Disabled'}</button>
+                    <button class="btn btn-sm ${page.enabled === true ? 'btn-primary' : 'btn-secondary'}" onclick="wikiToggleEnable(${page.id})">${page.enabled === true ? 'Enabled' : 'Disabled'}</button>
                 </td>
                 <td>
                     <a class="btn btn-sm btn-secondary" href="/Wiki/${page.id}/edit" role="button">Edit</a>
@@ -539,6 +541,94 @@
         postData("/api/management/notifications/delete", id)
             .then(() => {
                 document.getElementById(`${toastId}-body`).innerText = "✅ Notification Deleted";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .then(refresh);
+    }
+
+    // Wiki
+    function deletePage(id){
+        let toastId = createToast("Deleting Wiki Page");
+        postData("/api/management/wiki/delete", id)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ Wiki page Deleted";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .then(refresh);
+    }
+    function wikiToggleEnable(id){
+        let toastId = createToast("Switching Visibility");
+        let page = wikiList.find(announcement => announcement.id === id);
+        page.enabled = !page.enabled;
+        postData("/api/management/wiki/save", page)
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .then(refresh)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ Changes committed";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            });
+    }
+
+    // Profile
+    function saveUser(){
+        selectedUser.profilePicture = document.querySelector("#profilePicture").value;
+        selectedUser.role = document.querySelector("#role").value;
+        selectedUser.firstName = document.querySelector("#firstName").value;
+        selectedUser.lastName = document.querySelector("#lastName").value;
+        selectedUser.email = document.querySelector("#email").value;
+        selectedUser.password = document.querySelector("#password").value;
+        submitUser();
+    }
+
+    function submitUser(){
+        let toastId = createToast("Saving User");
+        postData("/api/management/users/save", selectedUser)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ User Saved";
                 document.getElementById(`${toastId}-loading`).style.color = "green";
             })
             .catch((response) => {
