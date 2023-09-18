@@ -25,7 +25,7 @@
                            <button class="nav-link" id="nav-notifications-tab" data-bs-toggle="tab" data-bs-target="#nav-notifications" type="button" role="tab" aria-controls="nav-notifications">Notifications</button>
                            <button class="nav-link" id="nav-logs-tab" data-bs-toggle="tab" data-bs-target="#nav-logs" type="button" role="tab" aria-controls="nav-logs" tabindex="-1">Logs</button>
                            <button class="nav-link" id="nav-wiki-tab" data-bs-toggle="tab" data-bs-target="#nav-wiki" type="button" role="tab" aria-controls="nav-wiki">Wiki</button>
-                           <button class="nav-link" id="nav-permissions-tab" data-bs-toggle="tab" data-bs-target="#nav-permissions" type="button" role="tab" aria-controls="nav-permissions">Permissions</button>
+                           <button class="nav-link" id="nav-permissions-tab" data-bs-toggle="tab" data-bs-target="#nav-permissions" type="button" role="tab" aria-controls="nav-permissions">Settings</button>
                        </div>
                    </nav>
                    <div class="tab-content" id="nav-tabContent">
@@ -193,7 +193,7 @@
                            </table>
                        </div>
                        <div class="tab-pane fade" id="nav-permissions" role="tabpanel" aria-labelledby="nav-permissions-tab" tabindex="0">
-                           <h3 class="fw-bold">Account Access</h3>
+                           <h3 class="fw-bold">Account Settings</h3>
                            <hr />
                            <div class="container-fluid border-box mb-3 py-3">
                                <h4 class="fw-bold">Account Lock</h4>
@@ -210,6 +210,11 @@
                                <p>Account role allows/ denies users access to COMT system.</p>
                                <div id="account-demote"></div>
                            </div>
+                           <div class="container-fluid border-box mb-3 py-3">
+                               <h4 class="fw-bold">Delete Account</h4>
+                               <p>Removes account from internal database. Accounts that are deleted are no longer recoverable. Wiki pages of deleted accounts will be re-assigned to owner account..</p>
+                               <div id="account-delete"></div>
+                           </div>
                        </div>
                    </div>
                </div>
@@ -217,6 +222,8 @@
        </div>
    </div>
 </main>
+
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 99" id="toast-container"></div>
 
 <div th:replace="Components :: JS"></div>
 <div th:replace="moderator/ModeratorComponents :: toast-scripts"></div>
@@ -298,9 +305,10 @@
         renderLogs();
         renderWiki();
 
-        document.querySelector("#account-lock").innerHTML = `<button class="btn btn-sm ${selectedUser.isLocked === true ? 'btn-secondary' : 'btn-primary'}" onclick="toggleLock(${selectedUser.id})">${selectedUser.isLocked === true ? 'Locked' : 'Unlocked'}</button>`;
-        document.querySelector("#account-enable").innerHTML = `<button class="btn btn-sm ${selectedUser.enabled === true ? 'btn-primary' : 'btn-secondary'}" onclick="toggleEnable(${selectedUser.id})">${selectedUser.enabled === true ? 'Enabled' : 'Disabled'}</button>`;
-        document.querySelector("#account-demote").innerHTML = `<button class="btn btn-sm ${selectedUser.role === 'ADMIN' ? 'btn-primary' : 'btn-secondary'}" onclick="toggleRole(${selectedUser.id})" role="button">Demote</button>`;
+        document.querySelector("#account-lock").innerHTML = `<button class="btn btn-sm ${selectedUser.isLocked === true ? 'btn-secondary' : 'btn-primary'} ${selectedUser.role === 'OWNER' ? 'disabled' : ''}" onclick="toggleLock(${selectedUser.id})">${selectedUser.isLocked === true ? 'Locked' : 'Unlocked'}</button>`;
+        document.querySelector("#account-enable").innerHTML = `<button class="btn btn-sm ${selectedUser.enabled === true ? 'btn-primary' : 'btn-secondary'} ${selectedUser.role === 'OWNER' ? 'disabled' : ''}" onclick="toggleEnable(${selectedUser.id})">${selectedUser.enabled === true ? 'Enabled' : 'Disabled'}</button>`;
+        document.querySelector("#account-demote").innerHTML = `<button class="btn btn-sm ${selectedUser.role === 'ADMIN' ? 'btn-secondary' : 'btn-primary'} ${selectedUser.role === 'OWNER' ? 'disabled' : ''}" onclick="toggleRole(${selectedUser.id})" role="button">${selectedUser.role === "USER" ? 'Promote' : 'Demote'}</button>`;
+        document.querySelector("#account-delete").innerHTML = `<button class="btn btn-sm btn-danger ${selectedUser.role === 'OWNER' ? 'disabled' : ''}" onclick="deleteUser(${selectedUser.id})" role="button">Delete</button>`;
 
     }
     function renderNotifications(){
@@ -339,7 +347,7 @@
                 <td>${log.body}</td>
                 <td>${log.formattedDateCreated}</td>
                 <td>
-                    <button type="button" class="btn btn-sm btn-danger" onclick="deleteLog(${log.id})">Delete</button>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="deleteAccountLog(${log.id})">Delete</button>
                 </td>
             </tr>
             `;
@@ -381,6 +389,174 @@
     }
     function getObjectById(id) {
         return userList.find(obj => obj["id"] == id);
+    }
+
+    // Logs
+    function deleteAccountLog(id){
+        let toastId = createToast("Deleting Account Log");
+        postData("/api/management/account-logs/delete", id)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ Account Log Deleted";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .then(refresh);
+    }
+
+    // Account Settings
+    function toggleEnable(id){
+        let toastId = createToast("Toggling Enable");
+        let user = getObjectById(id);
+        user.enabled = !user.enabled;
+        postData("/api/management/users/save", user)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ User Status Updated";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .then(refresh);
+    }
+
+    function toggleLock(id){
+        let toastId = createToast("Toggling Lock");
+        let user = getObjectById(id);
+        user.isLocked = !user.isLocked;
+        postData("/api/management/users/save", user)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ Visibility Status Toggled";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .then(refresh);
+    }
+
+    function deleteUser(id){
+        let toastId = createToast("Deleting User");
+        postData("/api/management/users/delete", id)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ User Deleted";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .then(refresh);
+    }
+
+    function toggleRole(id){
+        let toastId;
+        let user = getObjectById(id);
+        if(user.role == "ADMIN"){
+            user.role = "USER";
+            toastId = createToast("Demoting User");
+        }else if(user.role == "USER"){
+            user.role = "ADMIN";
+            toastId = createToast("Promoting User");
+        }else{
+            return;
+        }
+
+        postData("/api/management/users/save", user)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ User Role updated";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .then(refresh);
+    }
+
+    // Notifications
+    function deleteNotification(id){
+        let toastId = createToast("Deleting Notification");
+        postData("/api/management/notifications/delete", id)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ Notification Deleted";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .then(refresh);
     }
 </script>
 </body>
