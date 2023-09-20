@@ -10,11 +10,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 import java.security.Principal;
 
 @Controller
+@RequestMapping("/api/user")
 public class AccountController {
     private final UserService userService;
 
@@ -22,7 +24,7 @@ public class AccountController {
         this.userService = userService;
     }
 
-    @GetMapping("/user")
+    @GetMapping("/current")
     public ResponseEntity<?> getUser(Principal principal) {
         User user = getCurrentUser(principal);
         if(user != null){
