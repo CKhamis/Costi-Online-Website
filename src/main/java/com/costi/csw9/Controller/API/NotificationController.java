@@ -1,12 +1,9 @@
 package com.costi.csw9.Controller.API;
 
 import com.costi.csw9.Model.AccountNotification;
-import com.costi.csw9.Model.Announcement;
 import com.costi.csw9.Model.DTO.ResponseMessage;
 import com.costi.csw9.Model.User;
-import com.costi.csw9.Model.UserRole;
 import com.costi.csw9.Service.AccountNotificationService;
-import com.costi.csw9.Service.AnnouncementService;
 import com.costi.csw9.Service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/api/notifications")
@@ -54,7 +50,7 @@ public class NotificationController {
             throw new Exception("No user logged in");
         }
         String username = principal.getName();
-        User u = userService.findByEmail(username);
+        User u = userService.loadUserByUsername(username);
         return u;
     }
 }

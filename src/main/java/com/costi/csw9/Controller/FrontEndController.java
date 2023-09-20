@@ -57,7 +57,7 @@ public class FrontEndController {
             return new User("NULL", "NULL", "Not Signed In", "error", UserRole.USER);
         }
         String username = principal.getName();
-        User u = userService.findByEmail(username);
+        User u = userService.loadUserByUsername(username);
         return u;
     }
 
@@ -226,7 +226,7 @@ public class FrontEndController {
 
         //Save new user
         try {
-            User loggedInUser = userService.findByEmail(principal.getName());
+            User loggedInUser = userService.loadUserByUsername(principal.getName());
             if(((!loggedInUser.isOwner()) && formUser.isOwner())){
                 throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
             }else{

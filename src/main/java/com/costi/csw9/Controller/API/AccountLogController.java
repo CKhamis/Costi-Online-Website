@@ -1,7 +1,6 @@
 package com.costi.csw9.Controller.API;
 
 import com.costi.csw9.Model.AccountLog;
-import com.costi.csw9.Model.AccountNotification;
 import com.costi.csw9.Model.DTO.ResponseMessage;
 import com.costi.csw9.Model.User;
 import com.costi.csw9.Repository.AccountLogRepository;
@@ -41,7 +40,7 @@ public class AccountLogController {
             throw new Exception("No user logged in");
         }
         String username = principal.getName();
-        User u = userService.findByEmail(username);
+        User u = userService.loadUserByUsername(username);
         return u;
     }
 }

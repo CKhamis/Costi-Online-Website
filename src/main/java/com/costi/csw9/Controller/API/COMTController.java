@@ -438,7 +438,7 @@ public class COMTController {
     public ResponseEntity<ResponseMessage> deleteUser(@RequestBody Long id) {
         try {
             comtService.deleteUser(id);
-            return ResponseEntity.ok(new ResponseMessage("User Deleted", ResponseMessage.Severity.INFORMATIONAL, "User of id " + id + ", as well as their wiki posts, is no longer accessible or recoverable."));
+            return ResponseEntity.ok(new ResponseMessage("User Deleted", ResponseMessage.Severity.INFORMATIONAL, "User of id " + id + ", is no longer accessible or recoverable. Wiki posts are re-assigned to owner account."));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Error deleting user", ResponseMessage.Severity.HIGH, e.getMessage()));
         }
@@ -450,7 +450,7 @@ public class COMTController {
             comtService.saveUser(request);
             return ResponseEntity.ok(new ResponseMessage("User Saved", ResponseMessage.Severity.INFORMATIONAL, "User has been saved to Costi Online"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Error Saving Wiki Page", ResponseMessage.Severity.LOW, e.getMessage()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Error Saving User", ResponseMessage.Severity.LOW, e.getMessage()));
         }
     }
 
@@ -459,7 +459,7 @@ public class COMTController {
             throw new Exception("No user logged in");
         }
         String username = principal.getName();
-        User u = userService.findByEmail(username);
+        User u = userService.loadUserByUsername(username);
         return u;
     }
 }

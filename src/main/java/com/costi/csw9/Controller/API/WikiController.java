@@ -3,7 +3,6 @@ package com.costi.csw9.Controller.API;
 import com.costi.csw9.Model.DTO.ResponseMessage;
 import com.costi.csw9.Model.DTO.WikiRequest;
 import com.costi.csw9.Model.FlashMessage;
-import com.costi.csw9.Model.Post;
 import com.costi.csw9.Model.User;
 import com.costi.csw9.Model.WikiPage;
 import com.costi.csw9.Service.UserService;
@@ -84,7 +83,7 @@ public class WikiController {
             return null;
         }
         String username = principal.getName();
-        User u = userService.findByEmail(username);
+        User u = userService.loadUserByUsername(username);
         return u;
     }
 }
