@@ -2,6 +2,10 @@ package com.costi.csw9.Model;
 
 import com.costi.csw9.Model.DTO.AccountNotificationRequest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -9,6 +13,10 @@ import java.time.temporal.ChronoUnit;
 
 @Entity
 @Table(name="Account_notifications")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class AccountNotification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,24 +29,16 @@ public class AccountNotification {
     @Column(nullable = false)
     private String body;
 
+    @Column(nullable = false)
     private String notificationType;
 
+    @Column(nullable = false)
     private LocalDateTime dateCreated = LocalDateTime.now();
 
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
-
-    public AccountNotification() {
-    }
-
-    public AccountNotification(String title, String body, User user) {
-        this.title = title;
-        this.body = body;
-        notificationType = "primary";
-        this.user = user;
-    }
 
     public AccountNotification(String title, String body, String notificationType, User user) {
         this.title = title;
@@ -58,38 +58,6 @@ public class AccountNotification {
         return this.user.getId();
     }
 
-    public String getNotificationType() {
-        return notificationType;
-    }
-
-    public void setNotificationType(String notificationType) {
-        this.notificationType = notificationType;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getBody() {
-        return body;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
-    }
-
     public String getTimeSinceCreated() {
         String unit = "";
         LocalDateTime now = LocalDateTime.now();
@@ -107,22 +75,6 @@ public class AccountNotification {
         } else{
             diff = ChronoUnit.YEARS.between(dateCreated,now);
         }
-        return String.format("%d %s",diff,unit);
-    }
-
-    public String getDateCreated(){
-        return dateCreated.getMonthValue() + "/" + dateCreated.getDayOfMonth() + "/" + dateCreated.getYear();
-    }
-
-    public void setDateCreated(LocalDateTime dateCreated) {
-        this.dateCreated = dateCreated;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
+        return String.format("%d%s",diff,unit);
     }
 }

@@ -27,7 +27,7 @@
                     </nav>
                     <div class="tab-content" id="nav-tabContent">
                         <div class="tab-pane fade active show" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
-                            <h3 class="fw-bold">Edit User Details</h3>
+                            <h3 class="fw-bold">Edit Profile</h3>
                             <hr />
                             <div class="form-row row">
                                 <div class="col-6 mb-3">
@@ -80,30 +80,17 @@
                             </div>
                         </div>
                         <div class="tab-pane fade table-responsive" id="nav-notifications" role="tabpanel" aria-labelledby="nav-notifications-tab" tabindex="0">
-                            <table class="table table-sm align-middle table-hover table-dark">
-                                <thead>
-                                <tr>
-                                    <th scope="col">ID</th>
-                                    <th scope="col">Title</th>
-                                    <th scope="col">Body</th>
-                                    <th scope="col">Type</th>
-                                    <th scope="col">Created</th>
-                                    <th scope="col">Delete</th>
-                                </tr>
-                                </thead>
-                                <tbody id="notifications-table-body">
-                                </tbody>
-                            </table>
+                            <h3 class="fw-bold">Notifications</h3>
+                            <hr />
+                            <div id="notification-content"></div>
                         </div>
                         <div class="tab-pane fade table-responsive" id="nav-logs" role="tabpanel" aria-labelledby="nav-logs-tab" tabindex="0">
                             <table class="table table-sm align-middle table-hover table-dark">
                                 <thead>
                                 <tr>
-                                    <th scope="col">ID</th>
+                                    <th scope="col">Created</th>
                                     <th scope="col">Title</th>
                                     <th scope="col">Body</th>
-                                    <th scope="col">Created</th>
-                                    <th scope="col">Delete</th>
                                 </tr>
                                 </thead>
                                 <tbody id="logs-table-body">
@@ -223,27 +210,20 @@
 
     }
     function renderNotifications(){
-        const notificationTable = document.querySelector("#notifications-table-body");
+        const notificationContainer = document.querySelector("#notification-content");
 
         let tableContent = ``;
         for(let i = 0; i < notifications.length; i++){
             let notification = notifications[i];
             tableContent += `
-            <tr>
-                <td>${notification.id}</td>
-                <td>${notification.title}</td>
-                <td>${notification.body}</td>
-                <td class="text-center">
-                    <span class="badge bg-${notification.notificationType}">${notification.notificationType}</span>
-                </td>
-                <td>${notification.dateCreated}</td>
-                <td>
-                    <button type="button" class="btn btn-sm btn-danger" onclick="deleteNotification(${notification.id})">Delete</button>
-                </td>
-            </tr>
+            <div class="alert alert-${notification.notificationType} alert-dismissible fade show" role="alert">
+                <p class="fw-bold">${notification.title} • ${notification.timeSinceCreated}</p>
+                <a class="btn-close" onClick="deleteNotification(${notification.id})"></a>
+                <p>${notification.body}</p>
+            </div>
             `;
         }
-        notificationTable.innerHTML = tableContent;
+        notificationContainer.innerHTML = tableContent;
     }
     function renderLogs(){
         const logTable = document.querySelector("#logs-table-body");
@@ -253,13 +233,9 @@
             let log = logs[i];
             tableContent += `
             <tr>
-                <td>${log.id}</td>
+                <td>${log.dateCreated}</td>
                 <td>${log.title}</td>
                 <td>${log.body}</td>
-                <td>${log.formattedDateCreated}</td>
-                <td>
-                    <button type="button" class="btn btn-sm btn-danger" onclick="deleteAccountLog(${log.id})">Delete</button>
-                </td>
             </tr>
             `;
         }

@@ -159,8 +159,9 @@ public class FrontEndController {
         return "moderator/NewsroomTools";
     }
 
-    @GetMapping("/COMT/Accounts/")
-    public String getCostiOnlineAccountSettings() {
+    @GetMapping("/COMT/Accounts/{id}")
+    public String getCostiOnlineAccountSettings(@PathVariable Long id, Model model) {
+        model.addAttribute("id", id);
         return "moderator/AccountInfo";
     }
 
