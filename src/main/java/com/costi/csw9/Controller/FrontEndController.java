@@ -79,46 +79,8 @@ public class FrontEndController {
      ******************/
 
     @RequestMapping("/Account")
-    public String editUser(Model model, Principal principal) {
-        User user = getCurrentUser(principal);
-        model.addAttribute("action", "/Account/edit");
-        model.addAttribute("logs", accountLogService.findByUser(user));
+    public String editUser() {
         return "main/ViewAccount";
-    }
-
-    @PostMapping("/Account/edit")
-    public String updateUser(@Valid User user, BindingResult result, RedirectAttributes redirectAttributes, Principal principal) {
-        if (result.hasErrors()) {
-            // Include validation errors upon redirect
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.User", result);
-            // Add  member if invalid was received
-            redirectAttributes.addFlashAttribute("user", user);
-
-            String errors = getErrorString(result);
-
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing account", errors, FlashMessage.Status.DANGER));
-
-            return "redirect:/Account";
-        }
-
-        //Transfer id so it gets overwritten in data
-        User currentUser = getCurrentUser(principal);
-        user.setId(currentUser.getId());
-
-        //Enable user if enabled
-        user.setEnabled(currentUser.getEnabled());
-
-        //Transfer role
-        user.setRole(currentUser.getRole());
-
-        //Save new user
-        try {
-            userService.legacySave(user);
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("✅ Account Successfully Edited", "Changes saved to server", FlashMessage.Status.SUCCESS));
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing account", e.getMessage(), FlashMessage.Status.DANGER));
-        }
-        return "redirect:/Account";
     }
 
     @GetMapping("/SignUp")
@@ -171,9 +133,7 @@ public class FrontEndController {
 
     //Moderator
     @GetMapping("/COMT/Wiki")
-    public String getCostiOnlineWikiTools(Model model) {
-        model.addAttribute("disabled", wikiService.getByApproval(false));
-        model.addAttribute("enabled", wikiService.getByApproval(true));
+    public String getCostiOnlineWikiTools() {
         return "moderator/WikiTools";
     }
 
@@ -199,8 +159,8 @@ public class FrontEndController {
         return "moderator/NewsroomTools";
     }
 
-    @GetMapping("/COMT/Accounts/{id}")
-    public String getCostiOnlineAccountSettings(Model model, @PathVariable Long id) {
+    @GetMapping("/COMT/Accounts/")
+    public String getCostiOnlineAccountSettings() {
         return "moderator/AccountInfo";
     }
 
@@ -208,36 +168,6 @@ public class FrontEndController {
     @GetMapping("/COMT/Notifications")
     public String getCostiOnlineNotificationSettings() {
         return "moderator/NotificationTools";
-    }
-
-    @PostMapping("/COMT/Accounts/{id}/edit")
-    public String adminUpdateUser(@Valid @ModelAttribute("selectedUser") User formUser, BindingResult result, RedirectAttributes redirectAttributes, Principal principal, @PathVariable Long id) {
-        if (result.hasErrors()) {
-            // Include validation errors upon redirect
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.User", result);
-            // Add  member if invalid was received
-            redirectAttributes.addFlashAttribute("selectedUser", formUser);
-
-            String errors = getErrorString(result);
-
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing user", errors, FlashMessage.Status.DANGER));
-            return "redirect:/COMT/Accounts/" + id;
-        }
-
-        //Save new user
-        try {
-            User loggedInUser = userService.loadUserByUsername(principal.getName());
-            if(((!loggedInUser.isOwner()) && formUser.isOwner())){
-                throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
-            }else{
-                userService.legacySave(formUser);
-                redirectAttributes.addFlashAttribute("flash", new FlashMessage("✅ Account Successfully Edited", "Changes saved to server", FlashMessage.Status.SUCCESS));
-
-            }
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("❌ Account Edit Failed", e.getMessage(), FlashMessage.Status.DANGER));
-        }
-        return "redirect:/COMT/Accounts/" + id;
     }
 
     @GetMapping("/COMT/Announcements")
@@ -383,7 +313,7 @@ public class FrontEndController {
     }
 
     @GetMapping("/Minecraft/vote/results")
-    public String getResults(Model model) {
+    public String getResults() {
         return "minecraft/ElectionResults";
     }
 
