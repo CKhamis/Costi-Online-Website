@@ -32,7 +32,6 @@ public class AccountController {
         }else{
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage("No user logged in", ResponseMessage.Severity.LOW, "Cannot return user information if there is no logged in user"));
         }
-
     }
 
     @PostMapping("/delete")

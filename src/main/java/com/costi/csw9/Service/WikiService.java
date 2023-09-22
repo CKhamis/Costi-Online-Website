@@ -116,7 +116,7 @@ public class WikiService {
         Optional<WikiPage> wikiPage = wikiRepository.findById(id);
         try{
             WikiPage page = wikiPage.get();
-            if(page.getAuthor().equals(requester)){
+            if(page.getAuthor().equals(requester) || requester.isAdmin() || requester.isOwner()){
                 wikiRepository.deleteById(id);
 
                 // Document change

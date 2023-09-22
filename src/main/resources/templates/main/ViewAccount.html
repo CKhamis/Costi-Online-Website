@@ -244,6 +244,9 @@
             </div>
             `;
         }
+        if(tableContent == ""){
+            tableContent += "<p>No notifications</p>";
+        }
         notificationContainer.innerHTML = tableContent;
     }
     function renderLogs(){
@@ -323,7 +326,7 @@
 
     // Notifications
     function deleteNotification(id){
-        postData("/api/management/notifications/delete", id)
+        postData("/api/notifications/delete", id)
             .catch((response) => {
                 console.log(response);
             })
