@@ -35,7 +35,7 @@ public class AccountController {
 
     }
 
-    @PostMapping("/users/delete")
+    @PostMapping("/delete")
     public ResponseEntity<ResponseMessage> deleteUser(Principal principal) {
         try {
             // Make it such that users can't edit other users
@@ -48,7 +48,7 @@ public class AccountController {
         }
     }
 
-    @PostMapping("/users/save")
+    @PostMapping("/save")
     public ResponseEntity<ResponseMessage> saveUser(@RequestBody @Valid UserAccountRequest request, Principal principal) {
         try {
             // Make it such that users can't edit other users

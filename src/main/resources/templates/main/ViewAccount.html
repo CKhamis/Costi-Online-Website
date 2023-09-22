@@ -108,7 +108,6 @@
                                     <th scope="col">Last Edited</th>
                                     <th scope="col">Views</th>
                                     <th scope="col">View</th>
-                                    <th scope="col">Enable</th>
                                     <th scope="col">Edit</th>
                                     <th scope="col">Delete</th>
                                 </tr>
@@ -123,7 +122,7 @@
                             <div class="container-fluid border-box mb-3 py-3">
                                 <h4 class="fw-bold">Delete Account</h4>
                                 <p>Removes account from internal database. Accounts that are deleted are no longer recoverable. Wiki pages of deleted accounts will be re-assigned to owner account.</p>
-                                <div id="account-delete"></div>
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-user-modal">Delete my account</button>
                             </div>
                         </div>
                     </div>
@@ -132,10 +131,28 @@
         </div>
     </div>
 </main>
+<div class="modal fade" id="delete-user-modal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-box">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteUserModalLabel">Delete Costi Online Account</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>If you delete your Costi Online account, you will no longer be able to recover it. You will lose access to any wiki pages you have created, personal details entered within your account, and any notifications and logs you many have. <br /> Please confirm whether you would like to continue with account deletion below.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <div id="account-delete"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 99" id="toast-container"></div>
 
 <div th:replace="moderator/ModeratorComponents :: toast-scripts"></div>
-<div th:replace="Components :: footer"></div>
 
 <div th:replace="Components :: footer"></div>
 <div th:replace="Components :: JS"></div>
@@ -210,7 +227,7 @@
         renderLogs();
         renderWiki();
 
-        document.querySelector("#account-delete").innerHTML = `<button class="btn btn-sm btn-danger ${selectedUser.role === 'OWNER' ? 'disabled' : ''}" onclick="deleteUser(${selectedUser.id})" role="button">Delete</button>`;
+        document.querySelector("#account-delete").innerHTML = `<button class="btn btn-danger ${selectedUser.role === 'OWNER' ? 'disabled' : ''}" onclick="deleteUser(${selectedUser.id})" data-bs-dismiss="modal" role="button">Delete</button>`;
 
     }
     function renderNotifications(){
@@ -266,9 +283,6 @@
                     <a class="btn btn-sm btn-primary ${page.enabled === true ? '' : 'disabled'}" href="/Wiki/${page.id}/view" role="button">View</a>
                 </td>
                 <td>
-                    <button class="btn btn-sm ${page.enabled === true ? 'btn-primary' : 'btn-secondary'}" onclick="wikiToggleEnable(${page.id})">${page.enabled === true ? 'Enabled' : 'Disabled'}</button>
-                </td>
-                <td>
                     <a class="btn btn-sm btn-secondary" href="/Wiki/${page.id}/edit" role="button">Edit</a>
                 </td>
                 <td>
@@ -284,7 +298,7 @@
     // Account Settings
     function deleteUser(){
         let toastId = createToast("Deleting User");
-        postData("/api/users/delete")
+        postData("/api/user/delete")
             .then(() => {
                 document.getElementById(`${toastId}-body`).innerText = "✅ User Deleted";
                 document.getElementById(`${toastId}-loading`).style.color = "green";
@@ -341,32 +355,6 @@
             })
             .then(refresh);
     }
-    function wikiToggleEnable(id){
-        let toastId = createToast("Switching Visibility");
-        let page = wikiPages.find(announcement => announcement.id === id);
-        page.enabled = !page.enabled;
-        postData("/api/wiki/save", page)
-            .catch((response) => {
-                console.log(response);
-                response.json()
-                    .then(errorData => {
-                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
-                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
-                        document.getElementById(`${toastId}-loading`).style.color = "red";
-                    })
-                    .catch(error => {
-                        console.error("Error parsing error response:", error);
-                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
-                        document.getElementById(`${toastId}-title`).innerText = "Error";
-                        document.getElementById(`${toastId}-loading`).style.color = "red";
-                    });
-            })
-            .then(refresh)
-            .then(() => {
-                document.getElementById(`${toastId}-body`).innerText = "✅ Changes committed";
-                document.getElementById(`${toastId}-loading`).style.color = "green";
-            });
-    }
 
     // Profile
     function saveUser(){
@@ -381,7 +369,7 @@
 
     function submitUser(){
         let toastId = createToast("Saving User");
-        postData("/api/management/users/save", selectedUser)
+        postData("/api/user/save", selectedUser)
             .then(() => {
                 document.getElementById(`${toastId}-body`).innerText = "✅ User Saved";
                 document.getElementById(`${toastId}-loading`).style.color = "green";

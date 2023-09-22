@@ -120,7 +120,7 @@ public class WikiService {
                 wikiRepository.deleteById(id);
 
                 // Document change
-                AccountLog log = new AccountLog("Wiki Page Deleted", "User " + requester.getFirstName() + " " + requester.getLastName() + " has deleted a wiki page they own", requester);
+                AccountLog log = new AccountLog("Wiki Page Deleted", "User " + requester.getFirstName() + " " + requester.getLastName() + " has deleted a wiki page their own", requester);
                 accountLogService.save(log);
 
             }else{
