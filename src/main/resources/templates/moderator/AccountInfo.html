@@ -585,7 +585,7 @@
     }
     function wikiToggleEnable(id){
         let toastId = createToast("Switching Visibility");
-        let page = wikiList.find(announcement => announcement.id === id);
+        let page = wikiPages.find(announcement => announcement.id === id);
         page.enabled = !page.enabled;
         postData("/api/management/wiki/save", page)
             .catch((response) => {

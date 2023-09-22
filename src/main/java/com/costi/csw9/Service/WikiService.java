@@ -7,8 +7,10 @@ import com.costi.csw9.Model.WikiPage;
 import com.costi.csw9.Repository.WikiRepository;
 import com.costi.csw9.Util.LogicTools;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.Null;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -110,29 +112,22 @@ public class WikiService {
         }
     }
 
-    public List<WikiPage> findWikiByCategory(String category){
-        return wikiRepository.findByCategory(category);
-    }
-
-    public List<WikiPage> getAll(){
-        return wikiRepository.findAll();
-    }
-
-    public List<WikiPage> getByApproval(boolean enabled){
-        return wikiRepository.findByEnabled(enabled);
-    }
-
-    public void delete(Long id, User requester) throws Exception {
+    public void delete(Long id, User requester) {
         Optional<WikiPage> wikiPage = wikiRepository.findById(id);
         try{
             WikiPage page = wikiPage.get();
-            if(requester.isAdmin() || requester.isOwner()){
+            if(page.getAuthor().equals(requester)){
                 wikiRepository.deleteById(id);
+
+                // Document change
+                AccountLog log = new AccountLog("Wiki Page Deleted", "User " + requester.getFirstName() + " " + requester.getLastName() + " has deleted a wiki page they own", requester);
+                accountLogService.save(log);
+
             }else{
-                throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
+                throw new InsufficientAuthenticationException(LogicTools.INVALID_PERMISSIONS_MESSAGE);
             }
         }catch (Exception e){
-            throw new Exception("Wiki page" + LogicTools.NOT_FOUND_MESSAGE);
+            throw new NullPointerException("Wiki page" + LogicTools.NOT_FOUND_MESSAGE);
         }
     }
 }

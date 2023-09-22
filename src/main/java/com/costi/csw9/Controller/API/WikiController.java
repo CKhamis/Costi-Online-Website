@@ -1,5 +1,6 @@
 package com.costi.csw9.Controller.API;
 
+import com.costi.csw9.Model.AccountLog;
 import com.costi.csw9.Model.DTO.ResponseMessage;
 import com.costi.csw9.Model.DTO.WikiRequest;
 import com.costi.csw9.Model.FlashMessage;
@@ -67,7 +68,6 @@ public class WikiController {
         } catch (NoSuchElementException e) {
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error editing wiki page", "ID of wiki page is invalid", FlashMessage.Status.DANGER));
         } catch (AccessDeniedException e) {
-            //TODO: Find out why this doesn't work for the save service function
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("Invalid permissions", "Please sign in with account used to create the wiki page", FlashMessage.Status.DANGER));
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("OOOOPS! Generic error (awwww man)", "Perhaps the title isn't unique?", FlashMessage.Status.DANGER));
@@ -75,6 +75,22 @@ public class WikiController {
 
         String referer = httpServletRequest.getHeader("Referer");
         return "redirect:" + (referer != null ? referer : "/Wiki");
+    }
+
+    @PostMapping("/delete")
+    public ResponseEntity<?> delete(@RequestBody Long id, Principal principal) {
+        try {
+            if (principal == null) {
+                throw new AccessDeniedException("No user logged in");
+            }
+
+            wikiService.delete(id, getCurrentUser(principal));
+            return ResponseEntity.ok(new ResponseMessage("Wiki Page Deleted", ResponseMessage.Severity.INFORMATIONAL, "The selected wiki page is no longer accessible or recoverable"));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage("Wiki Page Not Found", ResponseMessage.Severity.LOW, e.getMessage()));
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error Getting Wiki Page", ResponseMessage.Severity.MEDIUM, e.getMessage()));
+        }
     }
 
 

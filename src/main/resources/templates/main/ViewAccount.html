@@ -51,7 +51,7 @@
                                 </div>
                                 <div class="col-6 mb-3">
                                     <label for="role">Role</label>
-                                    <select id="role" class="form-control" required>
+                                    <select id="role" class="form-control disabled" disabled>
                                         <option value="" disabled="disabled">Select a role</option>
                                         <option value="ADMIN">Admin</option>
                                         <option value="OWNER">Owner</option>
@@ -132,6 +132,10 @@
         </div>
     </div>
 </main>
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 99" id="toast-container"></div>
+
+<div th:replace="moderator/ModeratorComponents :: toast-scripts"></div>
+<div th:replace="Components :: footer"></div>
 
 <div th:replace="Components :: footer"></div>
 <div th:replace="Components :: JS"></div>
@@ -247,7 +251,8 @@
         for(let i = 0; i < wikiPages.length; i++){
             let page = wikiPages[i];
 
-            tableContent += `
+            if(page.authorName == selectedUser.firstName + " " + selectedUser.lastName){
+                tableContent += `
             <tr>
                 <td>${page.id}</td>
                 <td>${page.title}</td>
@@ -271,6 +276,7 @@
                 </td>
             </tr>
             `;
+            }
         }
         wikiTable.innerHTML = tableContent;
     }
@@ -303,26 +309,9 @@
 
     // Notifications
     function deleteNotification(id){
-        let toastId = createToast("Deleting Notification");
         postData("/api/management/notifications/delete", id)
-            .then(() => {
-                document.getElementById(`${toastId}-body`).innerText = "✅ Notification Deleted";
-                document.getElementById(`${toastId}-loading`).style.color = "green";
-            })
             .catch((response) => {
                 console.log(response);
-                response.json()
-                    .then(errorData => {
-                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
-                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
-                        document.getElementById(`${toastId}-loading`).style.color = "red";
-                    })
-                    .catch(error => {
-                        console.error("Error parsing error response:", error);
-                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
-                        document.getElementById(`${toastId}-title`).innerText = "Error";
-                        document.getElementById(`${toastId}-loading`).style.color = "red";
-                    });
             })
             .then(refresh);
     }
@@ -354,9 +343,9 @@
     }
     function wikiToggleEnable(id){
         let toastId = createToast("Switching Visibility");
-        let page = wikiList.find(announcement => announcement.id === id);
+        let page = wikiPages.find(announcement => announcement.id === id);
         page.enabled = !page.enabled;
-        postData("/api/management/wiki/save", page)
+        postData("/api/wiki/save", page)
             .catch((response) => {
                 console.log(response);
                 response.json()
