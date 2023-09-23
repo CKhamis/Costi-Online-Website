@@ -539,7 +539,7 @@ public class COMTService {
                 // Set values
                 if(!user.isOwner()){
                     // Ignore field changes if user is the owner
-                    if(!request.getRole().equals("OWNER")){
+                    if(!request.getRole().equals(UserRole.OWNER)){
                         user.setRole(request.getRole());
                     }
                     user.setEmail(request.getEmail());
@@ -566,12 +566,23 @@ public class COMTService {
                 throw new IllegalArgumentException("There are no users in Costi Online with the given id");
             }
         }else{
+            // Create new user
             User newUser = new User();
+
+            // promote to owner if no other accounts exist
+            if(userRepository.findAll().size() == 0){
+                newUser.setRole(UserRole.OWNER);
+            }else if(request.getRole().equals(UserRole.OWNER)){
+                // An owner already exists, but the request is asking for another
+                newUser.setRole(UserRole.USER);
+            }else{
+                // Either admin or user
+                newUser.setRole(request.getRole());
+            }
 
             // Assign values
             newUser.setFirstName(request.getFirstName());
             newUser.setLastName(request.getLastName());
-            newUser.setRole(request.getRole());
             newUser.setDateCreated(LocalDateTime.now());
             newUser.setProfilePicture(request.getProfilePicture());
             newUser.setEnabled(request.isEnabled());
