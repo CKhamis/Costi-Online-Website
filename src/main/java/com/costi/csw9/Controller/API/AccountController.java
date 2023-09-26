@@ -2,27 +2,41 @@ package com.costi.csw9.Controller.API;
 
 import com.costi.csw9.Model.DTO.ResponseMessage;
 import com.costi.csw9.Model.DTO.UserAccountRequest;
+import com.costi.csw9.Model.DTO.WikiRequest;
+import com.costi.csw9.Model.FlashMessage;
 import com.costi.csw9.Model.User;
+import com.costi.csw9.Model.WikiPage;
 import com.costi.csw9.Service.UserService;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.nio.file.AccessDeniedException;
 import java.security.Principal;
+import java.util.NoSuchElementException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 @Controller
+@AllArgsConstructor
 @RequestMapping("/api/user")
 public class AccountController {
     private final UserService userService;
 
-    public AccountController(UserService userService){
-        this.userService = userService;
-    }
+    private AuthenticationManager authenticationManager;
+
 
     @GetMapping("/current")
     public ResponseEntity<?> getUser(Principal principal) {
@@ -61,6 +75,23 @@ public class AccountController {
         }
     }
 
+    @PostMapping("/new")
+    public String newUser(@Valid UserAccountRequest request, RedirectAttributes redirectAttributes) {
+        try{
+            request.setId(null);
+            userService.save(request); //TODO: Somehow can still save new users with non-unique emails
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Congratulations!", "Your new Costi Online Account has been created.", FlashMessage.Status.SUCCESS));
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
+            Authentication authentication = authenticationManager.authenticate(authenticationToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            return "redirect:/Account";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("OOOOPS! Generic error (awwww man)", "Make sure to use a unique email", FlashMessage.Status.DANGER));
+        }
+        //TODO: does not show you errors
+        return "redirect:/SignUp";
+    }
 
     private User getCurrentUser(Principal principal){
         if (principal == null) {

@@ -31,7 +31,7 @@ public class User implements UserDetails {
    String firstName;
    @Size(max = 20, message = "Last name can only be 20 characters or less")
    String lastName;
-   @NotNull
+   @Column(nullable = false, unique = true)
    String email;
    @NotNull
    @JsonIgnore

@@ -73,6 +73,7 @@ public class WikiController {
             redirectAttributes.addFlashAttribute("flash", new FlashMessage("OOOOPS! Generic error (awwww man)", "Perhaps the title isn't unique?", FlashMessage.Status.DANGER));
         }
 
+        //TODO: fill in form elements again if there is an error
         String referer = httpServletRequest.getHeader("Referer");
         return "redirect:" + (referer != null ? referer : "/Wiki");
     }

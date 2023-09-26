@@ -8,52 +8,62 @@
     <div class="container-fluid">
         <h1 class="pb-2 border-bottom mb-4 fw-bold text-center">Create a Costi Online Account</h1>
     </div>
-    <div class="col-lg-3 col-md-5 col-xs-12">
+    <div class="col-lg-5 col-md-7 col-xs-12">
         <div class="p-3 mb-4 border-box">
             <div class="container-fluid">
-                <h3 class="fw-bold">⚠️Important Information</h3>
+                <h2 class="fw-bold">⚠️Important Information</h2>
                 <p class="fs-4">Please make sure you read the information below</p>
             </div>
         </div>
         <div class="container-fluid mb-5">
-            <p class="fs-4">Please note that the account system is in its alpha phase. Your information is subject to deletion at any point due to a mistake or error. <strong>Please make sure to use a unique password for your account.</strong></p>
+            <p class="fs-4">Costi Online accounts are not as secure as accounts from other websites. Please be careful and make sure you use a unique password.</strong></p>
         </div>
     </div>
-    <div class="col-lg-9 col-md-7 col-xs-12">
+    <div class="col-lg-7 col-md-5 col-xs-12">
         <div th:replace="Components :: flash" class="mt-2"></div>
         <div class="p-5 mb-4 border-box">
-            <form th:action="@{${action}}" method="post" th:object="${user}">
-                <h2>General Information</h2>
-                <hr/>
+            <form action="/api/user/new" method="post" enctype="application/x-www-form-urlencoded">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                 <div class="form-row row">
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="fnf">First name</label>
-                        <input type="text" class="form-control" id="fnf" th:field="*{firstName}"
+                        <input type="text" class="form-control" id="fnf" name="firstName"
                                placeholder="First name" required>
                     </div>
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="lnf">Last name</label>
-                        <input type="text" class="form-control" id="lnf" th:field="*{lastName}"
+                        <input type="text" class="form-control" id="lnf" name="lastName"
                                placeholder="Last name" required>
                     </div>
-                    <div class="col-md-4 mb-3">
+                    <div class="col-6 mb-3">
                         <label for="mnf">Email</label>
                         <input type="text" class="form-control" id="mnf"
-                               th:field="*{email}" placeholder="email" required>
+                               name="email" placeholder="email" required>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label for="profilePicture">Profile Picture</label>
+                        <select class="form-control" id="profilePicture" name="profilePicture" required>
+                            <option value="" disabled="disabled">Select a profile picture</option>
+                            <option value="1">Logo</option>
+                            <option value="2">Axcel on a couch</option>
+                            <option value="3">Costi</option>
+                            <option value="4">Evil orthodontist</option>
+                            <option value="5">Axcel sitting</option>
+                            <option value="6">Train</option>
+                            <option value="7">Dragonboat</option>
+                            <option value="8">Funtime Costi</option>
+                            <option value="9">SJSU</option>
+                            <option value="10">Rock Pikmin</option>
+                            <option value="11">Airplane</option>
+                            <option value="12">Chess</option>
+                            <option value="13">Red flower</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-row row">
-                    <div class="col-md-6 mb-3">
+                    <div class="col-12 mb-3">
                         <label for="fnf">Password</label>
-                        <input type="password" class="form-control" id="pass" th:field="*{password}" placeholder="Password" required>
-                    </div>
-                    <div class="col-md-6 mb-3 d-none">
-                        <label for="rol">Website Role</label>
-                        <select th:field="*{role}" class="form-control" id="rol">
-                            <option value="" disabled="disabled">Select a role</option>
-                            <option value = "USER">User</option>
-                            <option value = "ADMIN">Administrator</option>
-                        </select>
+                        <input type="password" class="form-control" id="pass" name="password" placeholder="Password" required>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
