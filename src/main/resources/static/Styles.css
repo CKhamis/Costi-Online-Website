@@ -192,11 +192,6 @@
     left: 1rem;
     bottom: 1rem;
 }
-.newsroom-slide-caption{
-    background: rgb(0,0,0);
-    background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 10%, rgba(0,0,0,0.5) 90%, rgba(0,0,0,0) 100%);
-    margin-bottom:40px;
-}
 
 @media screen and (max-width: 768px){
     .newsroom-slide{
