@@ -23,7 +23,7 @@ public class FrontEndController {
     private AccountLogService accountLogService;
     private AccountNotificationService accountNotificationService;
     private PostService postService;
-    private static final String VERSION = "7.9";
+    private static final String VERSION = "9.0.0";
 
     @Autowired
     public FrontEndController(UserService userService, WikiService wikiService, AnnouncementService announcementService, AccountLogService accountLogService, AccountNotificationService accountNotificationService, PostService postService) {
@@ -85,50 +85,7 @@ public class FrontEndController {
 
     @GetMapping("/SignUp")
     public String getNewAccount(Model model) {
-        if (!model.containsAttribute("user")) {
-            model.addAttribute("user", new User());
-        }
-        model.addAttribute("action", "/SignUp");
         return "main/NewAccount";
-    }
-
-    @PostMapping(value = "/SignUp")
-    public String addNewUser(@Valid  User user, BindingResult result, RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) {
-            // Include validation errors upon redirect
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category", result);
-
-            // Re populate credentials in form
-            redirectAttributes.addFlashAttribute("user", user);
-
-            String errors = getErrorString(result);
-
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating account", errors, FlashMessage.Status.DANGER));
-
-            // Redirect back to the form
-            return "redirect:/SignUp";
-        }
-
-        if (user.getRole().name().equals("ADMIN")) {
-            //registrationService.registerAdmin(user);
-            return "redirect:/";
-        }
-
-        try{
-            //registrationService.registerUser(user);
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("✅ Costi Account Created!", "Please sign in to continue.", FlashMessage.Status.SUCCESS));
-            return "redirect:/";
-        }catch (Exception e){
-            // Include validation errors upon redirect
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category", result);
-
-            // Re populate credentials in form
-            redirectAttributes.addFlashAttribute("user", user);
-
-            redirectAttributes.addFlashAttribute("flash", new FlashMessage("Error creating account", e.getMessage(), FlashMessage.Status.DANGER));
-            return "redirect:/SignUp";
-        }
-
     }
 
     //Moderator
@@ -174,19 +131,6 @@ public class FrontEndController {
     @GetMapping("/COMT/Announcements")
     public String getCostiOnlineAnnouncementTools() {
         return "moderator/AnnouncementTools";
-    }
-
-    public static String getErrorString(BindingResult result) {
-        String errors = "";
-        if(result.getAllErrors().size() > 1){
-
-            for(ObjectError error : result.getAllErrors()){
-                errors += error.getDefaultMessage() + ". ";
-            }
-        }else{
-            errors = result.getAllErrors().get(0).getDefaultMessage();
-        }
-        return errors;
     }
 
     //Main
