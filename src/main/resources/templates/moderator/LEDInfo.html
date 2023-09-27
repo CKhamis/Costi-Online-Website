@@ -4,7 +4,7 @@
 <body class="bg-1 text-1">
 <div th:replace="moderator/ModeratorComponents :: moderatorNav"></div>
 <input id="id-selector" type="hidden" th:value="${id}"/>
-<main class="container mt-3">
+<main class="container mt-3 table-responsive">
     <div th:replace="moderator/ModeratorComponents :: lightNavigation"></div>
 
     <div class="container-fluid p-0 gradient mt-3 LED-background" id="error-container">
@@ -42,7 +42,6 @@
 </main>
 
 <div th:replace="Components :: JS"></div>
-<!--<div th:replace="Components :: scripts"></div>-->
 <script th:replace="moderator/ModeratorComponents :: led-scripts"></script>
 <script>
     //data
@@ -54,17 +53,23 @@
     //GET functions
     function updateData(){
         getAllLightData();
-        fetch(`/api/v1/LED/${id}/Logs`)
+        fetch(`/api/management/light/${id}/logs`)
             .then(checkStatus)
             .then(response => response.json())
             .then(data => {
                 logs = data;
                 renderAllInfo();
             })
-            .catch(error => {
-                // error handling
-                errorContainer.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>";
-                console.error('Error retrieving data:', error);
+            .catch((response)=>{
+                console.error('Error retrieving data:', response);
+                response.json()  // Parse the JSON error response
+                    .then(errorData => {
+                        errorContainer.innerHTML = `<h3 class=\"text-center\">${errorData.title}</h3><p class=\"text-center\">${errorData.message}</p>`;
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        errorContainer.innerHTML = `<h3 class=\"text-center\">Error getting logs</h3><p class=\"text-center\">Costi Online Services may be down. Please check the console for more information.</p>`;
+                    });
             });
     }
     updateData();
@@ -119,6 +124,10 @@
     // Exists as a connector for universal functions
     function next(){
         //updateData();
+    }
+
+    function getObjectById(id) {
+        return responseData.find(obj => obj["id"] == id);
     }
 
 </script>

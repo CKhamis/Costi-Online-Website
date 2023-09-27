@@ -24,6 +24,7 @@
 
 <div th:fragment="main-navigation" class="position-sticky" style="z-index:99; width:100%;top:0;opacity:95%">
     <nav th:fragment="topNav" class="navbar navbar-expand-lg navbar-dark nav">
+        <script th:replace="Components :: network-util"></script>
         <div class="container-fluid">
             <a class="navbar-brand" href="/">
                 <img th:src="@{/icons/Logo.svg}" alt="costi online logo" width="30" height="30" class="d-inline-block align-text-top">
@@ -56,7 +57,7 @@
 
                         <ul th:if="${loggedIn}" class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item fw-bold" href="/Account" th:text="|${user.firstName} ${user.lastName}|">Action</a></li>
-                            <li><a class="dropdown-item" href="/Account" th:text="|Notifications: ${notificationCount}|">Notifications</a></li>
+                            <li id="nav-notification-container"></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="/Account">Account Settings</a></li>
                             <li class="dropdown-item">
@@ -65,18 +66,73 @@
                                     <button type="submit" class="btn btn-link p-0 text-1 text-decoration-none">Logout</button>
                                 </form>
                             </li>
+                            <div th:replace="Components :: nav-logic"></div>
                         </ul>
                     </li>
-
                 </div>
             </div>
-
         </div>
     </nav>
 </div>
 
-<script th:fragment="scripts">
-    // Universal assets
+<script th:fragment="nav-logic">
+    //Requires network-util & nav to function
+
+    // Elements
+    let navContainer = document.querySelector("#nav-notification-container");
+
+    // Data
+    let navNotifications;
+
+    // fetch
+    function navRefresh(){
+        fetch("/api/notifications/all")
+            .then(checkStatus)
+            .then(response => response.json())
+            .then(data => {
+                navNotifications = data;
+                renderNavNotifications()
+            })
+            .catch(error => {
+                // error handling
+                console.error('Error retrieving data:', error);
+            });
+    }
+    navRefresh();
+    setInterval(navRefresh, 60000);
+
+    function deleteNotification(id){
+        postData("/api/notifications/delete", id)
+            .catch(err => {
+                console.log(err);
+            })
+            .then(navRefresh);
+    }
+
+    // Render
+    function renderNavNotifications(){
+        if(navNotifications.length > 0){
+            let content = ``;
+            for(let i = navNotifications.length-1; i >= 0; i--){
+                let notification = navNotifications[i];
+
+                content += `
+                    <div class="alert alert-${notification.notificationType} alert-dismissible fade show" role="alert">
+                        <p class="fw-bold d-inline">${notification.title} • </p>
+                        <p class="d-inline">${notification.timeSinceCreated}</p>
+                        <a class="btn-close" onclick="deleteNotification(${notification.id})"></a>
+                        <p>${notification.body}</p>
+                    </div>
+                `;
+            }
+            navContainer.innerHTML = content;
+        }else{
+            navContainer.innerHTML = "<p class='text-center'>No Notifications</p>";
+        }
+    }
+</script>
+
+<script th:fragment="network-util">
     function postData(url, data) {
         // Retrieve the CSRF token from the meta tags
         let csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
@@ -97,35 +153,25 @@
         // Perform the fetch request
         return fetch(url, options)
             .then(checkStatus)
-            .then(response => response.json())
-            .catch(error => {
-                // Handle any errors
-                console.error(error);
-            });
-    }
-
-    function checkStatus(response) {
-        if (response.ok) {
-            // If the response status is within the 2xx range, return the response
-            return response;
-        } else {
-            // Otherwise, throw an error with the response status and text
-            throw new Error(`Request failed with status ${response.status}: ${response.statusText}`);
-        }
-    }
-
-    function getFooterHeight() {
-        const footer = document.querySelector('footer');
-        return footer ? footer.offsetHeight : 0;
+            .then(response => response.json());
     }
     function checkStatus(response){
         if(response.ok){
             return Promise.resolve(response);
         }else{
-            return Promise.reject(new Error(response.statusText));
+            return Promise.reject(response);
         }
     }
+</script>
 
+<script th:fragment="lazy-loading">
+    function getFooterHeight() {
+        const footer = document.querySelector('footer');
+        return footer ? footer.offsetHeight : 0;
+    }
+</script>
+
+<script th:fragment="axcel-sprite-logic">
     //Axcel game
     let numFoundSprites = 0;
     let quota = 0;
@@ -276,12 +322,45 @@
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 
-<div th:fragment="notification" th:each="notification : ${notifications}" th:class="|alert alert-${notification.notificationType} alert-dismissible fade show|" role="alert">
-    <p class="fw-bold d-inline" th:text="|${notification.title} • |"></p>
-    <p class="d-inline" th:text="${notification.dateCreated}"></p>
-    <a class="btn-close" th:href="@{|/Account/Notification/${notification.id}/delete|}"></a>
-    <p th:utext="${notification.body}"></p>
-</div>
+<th:block th:fragment="announcements">
+    <div id="announcementContainer" class="container mt-3"></div>
+</th:block>
+
+<script th:fragment="announcementScript">
+    const announcementContainer = document.querySelector("#announcementContainer");
+    let announcements = fetch("/api/announcements/all")
+        .then(checkStatus)
+        .then(response => response.json())
+        .then(data => {
+            announcements = data;
+            renderAnnouncements();
+        })
+        .catch(error => {
+            announcementContainer.innerHTML = `
+                <h3 class="text-center fw-bold">Error getting announcements</h3>
+                <p class="text-secondary text-center">${error}</p>
+            `;
+            console.error(error);
+        });
+    function renderAnnouncements(){
+        let content = ``;
+
+        if(announcements.length > 0){
+            content += "<h3>📢Announcements</h3>"
+        }
+        for(let announcement of announcements){
+            content += `
+                <div class="alert alert-dismissible fade show" style="background-color:rgba(0,0,0,.1); border: 1px black solid;">
+                    <div class="fw-bold d-inline">${announcement.title}</div>
+                    <div class="d-inline">${announcement.body}</div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+        }
+        announcementContainer.innerHTML = content;
+    }
+
+</script>
 
 <div th:fragment="dialogue-box" class="container-fluid position-fixed" id="dialogue-container" style="display:none;bottom:0px; background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);">
     <div class="row" style="bottom: 50px; position: relative">
@@ -312,25 +391,6 @@
 <div th:fragment="toast-box" class="alert alert-info position-fixed" style="bottom: 20px; right:50px;display: none;z-index: 99" id="toast-container">
     <p class="float-start mb-0 ml-1" id="toast-text"></p>
 </div>
-
-<th:block th:fragment="profilePhoto" th:switch="*{profilePicture}">
-    <img th:case="0" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/airplane.jpg}" />
-    <img th:case="1" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/ball.jpg}" />
-    <img th:case="2" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/beach.jpg}" />
-    <img th:case="3" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/car.jpg}" />
-    <img th:case="4" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/cat.jpg}" />
-    <img th:case="5" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/chess.jpg}" />
-    <img th:case="6" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/dog.jpg}" />
-    <img th:case="7" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/drip.jpg}" />
-    <img th:case="8" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/duck.jpg}" />
-    <img th:case="9" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/fish.jpg}" />
-    <img th:case="10" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/guest.jpg}" />
-    <img th:case="11" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/guitar.jpg}" />
-    <img th:case="12" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/kick.jpg}" />
-    <img th:case="13" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/lift-off.jpg}" />
-    <img th:case="14" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/red flower.JPG}" />
-    <img th:case="15" class="profile-photo" th:src="@{/icons/profile-photos/Windows Icons/snowflake.jpg}" />
-</th:block>
 
 <div th:fragment="footer" class="text-1 tiled-COW-background" id="footer">
     <div class="container py-5">

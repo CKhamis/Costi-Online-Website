@@ -5,87 +5,167 @@
 <div th:replace="Components :: main-navigation"></div>
 
 <main class="container-fluid mt-3">
-    <div class="row" th:if="${isViewable}">
-        <div class="d-none d-md-block col-md-3 px-5">
-            <h3 class="text-secondary fw-bold" th:text="${post.getCategory() == 'ACHIEVEMENT'} ? 'Other achievements' : (${post.getCategory() == 'NEWS'} ? 'Other news' : (${post.getCategory() == 'JOURNAL'} ? 'Other journals' : (${post.getCategory() == 'EMERGENCY'} ? 'Other emergencies' : (${post.getCategory() == 'ARTICLE'} ? 'Other articles' : (${post.getCategory() == 'DISCOVERY'} ? 'Other discoveries' : (${post.getCategory() == 'UPDATE'} ? 'Other updates' : (${post.getCategory() == 'EVENT'} ? 'Other events' : 'Unknown category')))))))">Category</h3>
-            <th:block th:each="related : ${relatedPosts}">
-                <a th:href="|/Newsroom/*{related.getId()}/view|">
-                    <img th:src="@{*{related.getImagePath()}}" style="aspect-ratio: 16 / 9; object-fit:cover;width: 100%;"/>
-                    <div class="mb-5">
-                        <h4 class="fw-bold text-1 text-decoration-none" th:text="*{related.getTitle()}"></h4>
-                        <p class="text-secondary mb-5" th:text="|${related.getTimeSinceEdited()}|"></p>
-                    </div>
-                </a>
-            </th:block>
-            <div th:if="${relatedPosts.isEmpty()}">
-                <p>No posts :(</p>
-            </div>
+    <input id="id-selector" type="hidden" th:value="${id}"/>
+    <div class="row">
+        <div class="d-none d-md-block col-md-3 px-5" id="left-panel">
+            <h3 class="text-1 fw-bold">Category</h3>
+                <h4>No Posts :(</h4>
         </div>
-        <div class="col-12 col-md-8 col-lg-6" th:object="${post}">
+        <div class="col-12 col-md-8 col-lg-6" id="body-content">
             <div class="row">
                 <div class="col col-md-8 d-none d-md-block">
                     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="/" class="text-secondary">Costi Online</a></li>
-                            <li class="breadcrumb-item"><a href="/Newsroom" class="text-secondary">Newsroom Home</a></li>
-                            <li class="breadcrumb-item active" aria-current="page" th:text="*{getTitle()}"></li>
+                            <li class="breadcrumb-item"><a href="/" class="text-1">Costi Online</a></li>
+                            <li class="breadcrumb-item"><a href="/Newsroom" class="text-1">Newsroom Home</a></li>
+                            <li class="breadcrumb-item text-1" aria-current="page" id="breadcrumb-title"></li>
                         </ol>
                     </nav>
                 </div>
-                <a href="/Newsroom" class="text-secondary d-block d-md-none">< Back to Newsroom</a>
+                <a href="/Newsroom" class="text-1 d-block d-md-none">< Back to Newsroom</a>
                 <div class="col col-md-4 d-none d-md-block">
-                    <p th:text="'Last Edited: ' + *{getDateEdited()}" class="text-end text-secondary"></p>
+                    <p id="header-last-edited" class="text-end text-1"></p>
                 </div>
             </div>
-            <img th:src="@{*{getImagePath()}}" class="newsroom-slide"/>
+            <img id="body-image" class="newsroom-slide"/>
 
-            <h1 class="fw-bold mb-0" th:text="*{getTitle()}"></h1>
-            <h4 class="text-muted fw-bold" th:text="*{getSubtitle()}"></h4>
+            <h1 class="fw-bold mb-0" id="body-title"></h1>
+            <h4 class="text-muted fw-bold" id="body-subtitle"></h4>
 
-            <div th:unless="*{enabled}" class="alert alert-secondary text-center" role="alert">
-                <h4>This post is not visible to the public</h4>
+            <div id="status"></div>
+
+            <div>
+                <p class="fs-5" id="body-body"></p>
             </div>
 
-            <div th:unless="*{public}" class="alert alert-dark text-center" role="alert">
-                <h4>This post is unlisted</h4>
-            </div>
-
-            <div id="contentBody">
-                <p class="fs-5" th:utext="*{getBody()}"></p>
-            </div>
-
-            <a class="btn btn-primary btn-sm d-inline" th:href="@{|/COMT/Newsroom/*{getId()}/edit|}" th:if="${isOwner}">Edit</a>
+            <a class="btn btn-primary btn-sm d-inline" th:href="@{|/COMT/Newsroom/${id}/edit|}" th:if="${isOwner}">Edit</a>
             <a class="btn btn-secondary btn-sm d-inline" href="/COMT/Newsroom" th:if="${isOwner}">COMT</a>
-            <p th:text="|views: ${post.getViews()}|"></p>
+            <p id="body-views"></p>
             <a href="/Newsroom" class="text-secondary d-block d-md-none">< Back to Newsroom</a>
 
         </div>
-        <div class="d-none d-lg-block col-lg-3 px-lg-5">
-            <h3 class="text-secondary fw-bold">Recent content</h3>
-            <th:block th:each="recent : ${recentPosts}">
-                <a th:href="|/Newsroom/*{recent.getId()}/view|">
-                    <img th:src="@{*{recent.getImagePath()}}" style="aspect-ratio: 16 / 9; object-fit:cover;width: 100%;"/>
-                    <h4 class="fw-bold text-1 text-decoration-none" th:text="*{recent.getTitle()}"></h4>
-                    <p class="text-secondary mb-5" th:text="|${recent.getTimeSinceEdited()}|"></p>
-                </a>
-            </th:block>
-            <div th:if="${recentPosts.isEmpty()}">
-                <p>No posts :(</p>
-            </div>
-        </div>
-    </div>
-    <div th:unless="${isViewable}">
-        <div class="p-3 p-lg-5 mb-4 border-box">
-            <div class="container py-5">
-                <h1 class="display-5 fw-bold">⚠️You do not have access to this post</h1>
-                <p class="col-lg-10 fs-4">This post is currently under review by the website owner. Please check back on this page at a future point</p>
-            </div>
+        <div class="d-none d-lg-block col-lg-3 px-lg-5" id="right-panel">
+            <h3 class="text-1 fw-bold">Recent content</h3>
+                <h4>No Posts :(</h4>
         </div>
     </div>
 </main>
 
 <div th:replace="Components :: footer"></div>
 <div th:replace="Components :: JS"></div>
-<div th:replace="Components :: scripts"></div>
+<script>
+    const bodyContent = document.getElementById("body-content");
+    let url = `/api/newsroom/view?id=${document.getElementById("id-selector").value}`;
+    let post;
+    let allNews;
+
+    const postFetch = fetch(url);
+    const allFetch = fetch("/api/newsroom/all");
+
+    Promise.all([postFetch, allFetch])
+        .then(responses => {
+            const response1 = checkStatus(responses[0]);
+            const response2 = checkStatus(responses[1]);
+
+            return Promise.all([response1, response2]);
+        })
+        .then(data => {
+            let postDownload = data[0].json();
+            let recommendationDownload = data[1].json();
+
+            return Promise.all([postDownload, recommendationDownload]);
+        })
+        .then(data => {
+            post = data[0]; // post data
+            allNews = data[1]; // recommendation data
+            renderNews();
+            renderRecommendations();
+        })
+        .catch((response)=>{
+            console.log(response);
+            response.json()  // Parse the JSON error response
+                .then(errorData => {
+                    bodyContent.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class="text-center fw-bold">${errorData.title}</h3><p class="text-center">${errorData.message}</p>`;
+                })
+                .catch(error => {
+                    bodyContent.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class="text-center fw-bold">There was an error receiving data from Costi Online Services</h3><p class="text-center">Error message could not be parsed. ${error}</p>`;
+
+                    console.error("Error parsing error response:", error);
+                });
+        });
+
+
+    function renderNews(){
+        document.getElementById("breadcrumb-title").textContent = post.title;
+        document.getElementById("body-title").textContent = post.title;
+        document.getElementById("body-subtitle").textContent = post.subtitle;
+        document.getElementById("header-last-edited").textContent = `Last Edited: ${post.dateEdited}`;
+        document.getElementById("body-views").textContent = `Views: ${post.views}`;
+        document.getElementById("body-image").src = post.imagePath;
+        document.getElementById("body-body").innerHTML = post.body;
+        document.getElementById("status").innerHTML = !post.public ? "<div class=\"alert alert-secondary text-center\" role=\"alert\"><h4>This post is unlisted</h4></div>": "";
+    }
+    function renderRecommendations(){
+        //Render left panel
+        let leftTitle = "Other Posts"
+        if(post.category == "NEWS"){
+            leftTitle = "Other News";
+        }else if(post.category == "ACHIEVEMENT"){
+            leftTitle = "Other Achievements";
+        }else if(post.category == "JOURNAL"){
+            leftTitle = "Other Journals";
+        }else if(post.category == "EMERGENCY"){
+            leftTitle = "Other Emergencies";
+        }else if(post.category == "ARTICLE"){
+            leftTitle = "Other Articles";
+        }else if(post.category == "DISCOVERY"){
+            leftTitle = "Other Discoveries";
+        }else if(post.category == "UPDATE"){
+            leftTitle = "Other Updates";
+        }else if(post.category == "EVENT" || post.category == "INVITATION"){
+            leftTitle = "Other Events";
+        }
+
+        let leftPanel = `<h3 class="text-1 fw-bold">${leftTitle}</h3>`;
+        let rightPanel = `<h3 class="text-1 fw-bold">Recent Posts</h3>`;
+        let leftCount = 0, rightCount = 0;
+
+        for(let otherPost of allNews){
+            if(post.category === otherPost.category && post.id != otherPost.id){
+                leftPanel += `
+                    <a href="/Newsroom/${otherPost.id}/view">
+                       <img src="${otherPost.imagePath}" style="aspect-ratio: 16 / 9; object-fit:cover;width: 100%;"/>
+                        <div class="mb-5">
+                            <h4 class="fw-bold text-1 text-decoration-none">${otherPost.title}</h4>
+                            <p class="text-secondary mb-5">${otherPost.timeSinceEdited}</p>
+                        </div>
+                    </a>
+                `;
+                leftCount++;
+            }else if(post.id != otherPost.id){
+                rightPanel += `
+                    <a href="/Newsroom/${otherPost.id}/view">
+                       <img src="${otherPost.imagePath}" style="aspect-ratio: 16 / 9; object-fit:cover;width: 100%;"/>
+                        <div class="mb-5">
+                            <h4 class="fw-bold text-1 text-decoration-none">${otherPost.title}</h4>
+                            <p class="text-secondary mb-5">${otherPost.timeSinceEdited}</p>
+                        </div>
+                    </a>
+                `;
+                rightCount++;
+            }
+        }
+
+        if(leftCount == 0){
+            leftPanel += "<p>No Posts :(</p>";
+        }
+
+        if(rightCount == 0){
+            rightPanel += "<p>No Posts :(</p>";
+        }
+        document.querySelector("#left-panel").innerHTML = leftPanel;
+        document.querySelector("#right-panel").innerHTML = rightPanel;
+    }
+</script>
 </body>
 </html>

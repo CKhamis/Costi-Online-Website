@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface AccountLogRepository extends JpaRepository<AccountLog, Long> {
     List<AccountLog> findByUser(User user);
-
+    void deleteByUser(User user);
 }

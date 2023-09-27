@@ -6,189 +6,202 @@
 
 <main class="container">
     <div class="container-fluid">
-        <h1 class="pb-2 border-bottom mb-4 fw-bold text-center" th:text="${title}">Edit a newsroom post</h1>
+        <h1 class="pb-2 border-bottom mb-4 fw-bold text-center">Edit Newsroom Post</h1>
     </div>
-    <div th:if="${isAllowed}" class="row">
-        <div class="pt-2 col-xs-12 col-md-6">
-            <div th:replace="Components :: flash" class="my-2"></div>
-            <div class="p-4 mb-4 border-box">
-                <form th:unless="${hasImage}" th:action="@{${action}} + 'NoImage'" method="post" th:object="${post}">
-                    <h2>Post without Image</h2>
-                    <hr/>
-                    <div class="form-row row">
-                        <div class="col-12 mb-3">
-                            <label for="title1">Title</label>
-                            <input type="text" class="form-control" id="title1" th:field="*{title}"
-                                   placeholder="Title here" required>
+    <div class="row">
+        <div class="col-xs-12 col-md-6">
+            <div class="p-4 mb-4 bg-2">
+                <form id="edit-news-form" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="file" class="form-label">Upload image (optional)</label>
+                            <input class="form-control" type="file" id="file" name="image" accept="image/webp">
                         </div>
-                    </div>
-                    <div class="form-row row">
-                        <div class="col-md-8 mb-3">
-                            <label for="sub1">Subtitle</label>
-                            <input type="text" class="form-control" id="sub1" th:field="*{subtitle}"
-                                   placeholder="subtitle" required>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="cat">Post Category</label>
-                            <select id="cat" th:field="*{category}"  class="form-control">
-                                <option value="" disabled="disabled">Select a category</option>
-                                <option th:each="cat : ${categories}" th:value="${cat.name}" th:text="${cat.name}">Error</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-row row">
-                        <div class="col-12 mb-3">
-                            <label for="input1">Content Body</label>
-                            <textarea type="text" rows="10" class="form-control" id="input1" th:field="*{body}" placeholder="body content" required></textarea>
-                        </div>
-                    </div>
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" value="" id="disclaimerCheck2" required>
-                        <label class="form-check-label" for="disclaimerCheck2">
-                            There is no personally identifying content in my submission
-                        </label>
-                    </div>
-                    <input type="hidden" th:field="*{id}"/>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
-                <form th:if="${hasImage}" th:action="@{${action}}" method="post" th:object="${post}" enctype="multipart/form-data">
-                    <h2>Post with Image</h2>
-                    <hr/>
-                    <div class="mb-3">
-                        <label for="file" class="form-label">Upload image</label>
-                        <input class="form-control" type="file" id="file" name="image" accept="image/png, image/jpeg">
-                    </div>
 
-                    <div class="form-row row">
-                        <div class="col-12 mb-3">
-                            <label for="title2">Title</label>
-                            <input type="text" class="form-control" id="title2" th:field="*{title}"
-                                   placeholder="Title here" required>
+                        <div class="form-row row">
+                            <div class="col-12 mb-3">
+                                <label for="title">Title</label>
+                                <input type="text" class="form-control" id="title"
+                                       placeholder="Title here" required>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-row row">
-                        <div class="col-md-8 mb-3">
-                            <label for="sub2">Subtitle</label>
-                            <input type="text" class="form-control" id="sub2" th:field="*{subtitle}"
-                                   placeholder="subtitle" required>
+                        <div class="form-row row">
+                            <div class="col-md-8 mb-3">
+                                <label for="sub">Subtitle</label>
+                                <input type="text" class="form-control" id="sub"
+                                       placeholder="subtitle" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="cat">Post Category</label>
+                                <select id="cat"  class="form-control">
+                                    <option value="" disabled="disabled">Select a category</option>
+                                    <option th:each="cat : ${categories}" th:value="${cat.name}" th:text="${cat.name}">Error</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="cat">Post Category</label>
-                            <select id="cat" th:field="*{category}"  class="form-control">
-                                <option value="" disabled="disabled">Select a category</option>
-                                <option th:each="cat : ${categories}" th:value="${cat.name}" th:text="${cat.name}">Error</option>
-                            </select>
+                        <div class="form-row row">
+                            <div class="col-12 mb-3">
+                                <label for="body">Content Body</label>
+                                <textarea type="text" rows="10" class="form-control" id="body" placeholder="body content" required></textarea>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-row row">
-                        <div class="col-12 mb-3">
-                            <label for="input2">Content Body</label>
-                            <textarea type="text" rows="10" class="form-control" id="input2" th:field="*{body}" placeholder="body content" required></textarea>
+                        <div class="form-row row">
+                            <div class="col-12 mb-3">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="enabled-input">
+                                    <label class="form-check-label" for="enabled-input">Enabled</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="listed-input">
+                                    <label class="form-check-label" for="listed-input">Public</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="pinned-input">
+                                    <label class="form-check-label" for="pinned-input">Pinned (unused)</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="favorite-input">
+                                    <label class="form-check-label" for="favorite-input">Favorite (unused)</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="featured-input">
+                                    <label class="form-check-label" for="featured-input">Featured (unused)</label>
+                                </div>
+                            </div>
                         </div>
+                        <input type="hidden" th:value="${id}" id="id"/>
                     </div>
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" value="" id="disclaimerCheck2" required>
-                        <label class="form-check-label" for="disclaimerCheck2">
-                            There is no personally identifying content in my submission
-                        </label>
-                    </div>
-                    <input type="hidden" th:field="*{id}"/>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-primary" onclick="saveNews()">Save</button>
+                    <p class="text-secondary">Note: View count will be reset once edited</p>
                 </form>
             </div>
         </div>
-        <div class="d-none d-md-block col-md-6" id="preview-panel"></div>
-    </div>
-    <div th:unless="${isAllowed}" class="">
-        <div class="p-3 p-lg-5 mb-4 border-box">
-            <div class="container-fluid py-5">
-                <h1 class="display-5 fw-bold">⚠️You do not have access to modifying a Newsroom post</h1>
-                <p class="col-lg-10 fs-4">Newsroom posts are only created, modified, or deleted by the website owner. Perhaps you are looking for the wiki tools tab</p>
+        <div class="d-none d-md-block col-md-6">
+            <img id="image" class="newsroom-slide"/>
+            <div class="m-0" id="preview-panel">
+
             </div>
         </div>
     </div>
 </main>
+
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 99" id="toast-container">
+</div>
+
+
 <div th:replace="Components :: JS"></div>
-<div th:replace="Components :: scripts"></div>
+<div th:replace="moderator/ModeratorComponents :: toast-scripts"></div>
+<div th:replace="moderator/ModeratorComponents :: form-data-script"></div>
 <script>
+    let post;
+
     // Elements
     const container = document.querySelector("#preview-panel");
+    const image = document.querySelector("#image");
+    const category = document.querySelector("#cat");
     const id = document.querySelector("#id").value;
+    let title = document.querySelector("#title");
+    let subtitle = document.querySelector("#sub");
+    let body = document.querySelector("#body");
 
-    let title1 = document.querySelector("#title1");
-    let title2 = document.querySelector("#title2");
+    let enabledInput = document.querySelector("#enabled-input");
+    let publicInput = document.querySelector("#listed-input");
+    let pinnedInput = document.querySelector("#pinned-input");
+    let favoriteInput = document.querySelector("#favorite-input");
+    let featuredInput = document.querySelector("#featured-input");
 
+    // Live Preview
+    body.addEventListener('input', function (event) {
+        // Retrieve the current value of the text field
+        const inputValue = event.target.value;
+        document.querySelector("#preview-text").innerHTML = inputValue;
+    });
 
-    let subtitle1 = document.querySelector("#sub1");
-    let subtitle2 = document.querySelector("#sub2");
+    subtitle.addEventListener('input', function (event) {
+        // Retrieve the current value of the text field
+        const inputValue = event.target.value;
+        document.querySelector("#preview-sub").innerHTML = inputValue;
+    });
 
-    let textField1 = document.querySelector("#input1");
-    let textField2 = document.querySelector("#input2");
-
-    // Triggers
-    if(textField1) {
-        textField1.addEventListener('input', function (event) {
-            // Retrieve the current value of the text field
-            const inputValue = event.target.value;
-            document.querySelector("#preview-text").innerHTML = inputValue;
-        });
-    }else if(textField2){
-        textField2.addEventListener('input', function(event) {
-            // Retrieve the current value of the text field
-            const inputValue = event.target.value;
-            document.querySelector("#preview-text").innerHTML = inputValue;
-        });
-    }
-
-    if(subtitle1) {
-        subtitle1.addEventListener('input', function (event) {
-            // Retrieve the current value of the text field
-            const inputValue = event.target.value;
-            document.querySelector("#preview-sub").innerHTML = inputValue;
-        });
-    }else if(subtitle2){
-        subtitle2.addEventListener('input', function(event) {
-            // Retrieve the current value of the text field
-            const inputValue = event.target.value;
-            document.querySelector("#preview-sub").innerHTML = inputValue;
-        });
-    }
-
-    if(title1) {
-        title1.addEventListener('input', function (event) {
-            // Retrieve the current value of the text field
-            const inputValue = event.target.value;
-            document.querySelector("#preview-title").innerHTML = inputValue;
-        });
-    }else if(title2){
-        title2.addEventListener('input', function(event) {
-            // Retrieve the current value of the text field
-            const inputValue = event.target.value;
-            document.querySelector("#preview-title").innerHTML = inputValue;
-        });
-    }
+    title.addEventListener('input', function (event) {
+        // Retrieve the current value of the text field
+        const inputValue = event.target.value;
+        document.querySelector("#preview-title").innerHTML = inputValue;
+    });
 
     // fetch
-    fetch("/api/v1/newsroom/post/" + id)
+    fetch("/api/management/newsroom/view/" + id)
         .then(checkStatus)
         .then(response => response.json())
         .then(data => {
-            // Process the retrieved data
-            displayPreview(data)
+            post = data;
+            displayPreview()
+        })
+        .catch(error => {
+            // error handling
+            console.error('Error retrieving data:', error);
         });
 
     // Render
-    function displayPreview(data){
-        container.innerHTML = `
-            <img src="${data.imagePath}" alt="${data.title}" class="newsroom-slide"/>
+    function displayPreview(){
+        image.setAttribute('src', post.imagePath);
+        title.value = post.title;
+        subtitle.value = post.subtitle;
+        body.value = post.body;
+        category.value = post.category;
 
-            <h1 class="fw-bold mb-0" id="preview-title">${data.title}</h1>
-            <h4 class="text-muted fw-bold" id="preview-sub">${data.subtitle}</h4>
+        enabledInput.checked = post.enabled;
+        publicInput.checked = post.public;
+        pinnedInput.checked = post.pinned;
+        favoriteInput.checked = post.favorite;
+        featuredInput.checked = post.featured;
+
+        container.innerHTML = `
+            <h1 class="fw-bold mb-0" id="preview-title">${post.title}</h1>
+            <h4 class="text-muted fw-bold" id="preview-sub">${post.subtitle}</h4>
 
             <div id="contentBody">
-                <p class="fs-5" id="preview-text">${data.body}</p>
+                <p class="fs-5" id="preview-text">${post.body}</p>
             </div>
             `;
+    }
+
+    // Save
+    function saveNews(){
+        let toastId = createToast("Saving Edited Post");
+
+        const formData = new FormData();
+        const imageFile = document.getElementById('file').files[0];
+        formData.append('image', imageFile);
+        formData.append('id', id);
+        formData.append('title', title.value);
+        formData.append('subtitle', subtitle.value);
+        formData.append('category', category.value);
+        formData.append('body', body.value);
+        formData.append('enabled', enabledInput.checked);
+        formData.append('public', publicInput.checked);
+        formData.append('pinned', pinnedInput.checked);
+        formData.append('favorite', favoriteInput.checked);
+        formData.append('featured', featuredInput.checked);
+
+        console.log(formData);
+
+        postDataWithFile("/api/management/newsroom/save", formData)
+            .then(() => {
+                if(imageFile){
+                    document.getElementById(`${toastId}-body`).innerText = "✅ Newsroom Post Edited. Refresh page to see new image";
+                }else{
+                    document.getElementById(`${toastId}-body`).innerText = "✅ Newsroom Post Edited";
+                }
+
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch(err => {
+                console.log(err);
+
+                document.getElementById(`${toastId}-body`).innerText = "❌ Procedure unsuccessful";
+                document.getElementById(`${toastId}-loading`).style.color = "red";
+            });
     }
 </script>
 </body>

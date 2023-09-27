@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -22,16 +24,25 @@ public class Post {
     private Long id;
 
     @Column(nullable = false, unique = true)
+    @NotNull
+    @NotBlank
     private String title;
     @Column(nullable = false)
     private LocalDateTime lastEdited;
     @Column(nullable = false)
+    @NotNull
+    @NotBlank
     private String subtitle;
 
     @Column(nullable = false)
+    @NotNull
     private boolean enabled = false;
+    @NotNull
+    @NotBlank
     private String category;
-    @Column(columnDefinition="text")
+    @Column(columnDefinition="text", nullable = false)
+    @NotNull
+    @NotBlank
     private String body;
 
     private String imagePath;

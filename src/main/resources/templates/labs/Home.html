@@ -43,7 +43,7 @@
 </main>
 <div th:replace="Components :: footer"></div>
 <div th:replace="Components :: JS"></div>
-<div th:replace="Components :: scripts"></div>
+<div th:replace="Components :: axcel-sprite-logic"></div>
 <script>
     let availableLights;
     getAllLights();
@@ -58,7 +58,6 @@
             })
             .catch(error => {
                 // error handling
-                errorContainer.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Or there are no lights available</p>";
                 console.error('Error retrieving data:', error);
             })
             .finally(() => $("#loading").hide());

@@ -36,6 +36,12 @@ public class Announcement {
         this.body = body;
     }
 
+    public Announcement(Announcement announcement){
+        this.title = announcement.getTitle();
+        this.body = announcement.getBody();
+        this.enable = announcement.isEnable();
+    }
+
     public String getDateEdited(){
         return date.getMonthValue() + "/" + date.getDayOfMonth() + "/" + date.getYear();
     }

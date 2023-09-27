@@ -4,7 +4,7 @@
 <body class="bg-1 text-1">
 <div th:replace="Components :: main-navigation"></div>
 
-<main class="container mt-3">
+<main class="container mt-3" id="body-container">
     <div class="p-5 mb-4 border-box wikiBannerBg">
         <div class="container-fluid py-5">
             <h1 class="display-5 fw-bold">Costipedia</h1>
@@ -13,41 +13,94 @@
             <a href="/Wiki/Create" th:class="'btn btn-primary '  + (*{loggedIn}? 'd-none' : '')" role="button">Sign in to add a new wiki page</a>
         </div>
     </div>
-    <h2 class="fs-2 mt-5 mb-4" id="cat">View By Category</h2>
-    <div class="row g-4 row-cols-1 row-cols-lg-3">
-        <div class="col" th:each="category : ${categories}" th:switch="*{category.name}">
-            <h4 th:case="INSIDE_JOKE"   class="fs-4" th:text="|&#128518; Inside Jokes|">title</h4>
-            <h4 th:case="HISTORICAL"    class="fs-4" th:text="|&#127984; Historical|">title</h4>
-            <h4 th:case="PEOPLE"        class="fs-4" th:text="|&#128697; People|">title</h4>
-            <h4 th:case="PROFESSIONAL"  class="fs-4" th:text="|&#128084; Professional|">title</h4>
-            <h4 th:case="*"             class="fs-4" th:text="*{category}">title</h4> <!--th:text="|&#10067; Other|" -->
-            <hr />
-            <ul th:each="page : ${all}">
-                <li th:if="${category.name == page.category}" class="my-0"><p class="fs-6"><a th:href="'/Wiki/' + *{page.Id} + '/view'"  th:text="*{page.title}" class="py-1 text-1">title</a></p></li>
-            </ul>
-        </div>
-    </div>
+
+    <div th:replace="Components :: flash" class="mb-2"></div>
+
     <h2 class="fs-2 mt-5 mb-4">All Wiki Content</h2>
-    <div class="row g-4 row-cols-1 row-cols-md-3 row-cols-lg-5">
-        <div class="col" th:each="page : ${all}">
-            <div th:switch="${page.category}"   class="card border-box">
-                <div th:case="INSIDE_JOKE"      class="card-header fw-bold" th:text="|&#128518; Inside Jokes|">Card title</div>
-                <div th:case="HISTORICAL"       class="card-header fw-bold" th:text="|&#127984; Historical|">Card title</div>
-                <div th:case="PEOPLE"           class="card-header fw-bold" th:text="|&#128697; People|">Card title</div>
-                <div th:case="PROFESSIONAL"     class="card-header fw-bold" th:text="|&#128084; Professional|">Card title</div>
-                <div th:case="*"                class="card-header fw-bold" th:text="|&#10067; Other|">Card title</div>
-                <div class="card-body">
-                    <h5 class="card-title text-truncate" th:text="*{page.title}">Title</h5>
-                    <h6 class="card-subtitle mb-2 text-muted text-truncate" th:text="*{page.subtitle}">Card subtitle</h6>
-                    <!--<p class="card-text text-truncate" th:text="*{page.body}">Some quick example text to build on the card title and make up the bulk of the card's content.</p>-->
-                    <a th:href="'/Wiki/' + *{page.Id} + '/view'" class="card-link">View ></a>
-                </div>
-            </div>
+    <div class="row g-4 row-cols-1 row-cols-md-3 row-cols-lg-5" id="card-container">
+        <div class="container-fluid" id="javascript-warning">
+            <h2 class="text-center fw-bold">JavaScript is required to view Newsroom posts</h2>
         </div>
     </div>
 </main>
 <div th:replace="Components :: JS"></div>
 <div th:replace="Components :: footer"></div>
-<div th:replace="Components :: scripts"></div>
+<script>
+    //Elements
+    let cardContainer = document.querySelector("#card-container");
+    let bodyContent = document.querySelector("#body-container");
+
+    // Data
+    let wikiContent;
+
+    // GET functions
+    fetch("/api/wiki/all")
+        .then(checkStatus)
+        .then(response => response.json())
+        .then(data => {
+            // Process the retrieved data
+            wikiContent = data;
+
+            renderCards();
+        })
+        .catch((response)=>{
+            console.log(response);
+            response.json()  // Parse the JSON error response
+                .then(errorData => {
+                    bodyContent.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class="text-center fw-bold">${errorData.title}</h3><p class="text-center">${errorData.message}</p>`;
+                })
+                .catch(error => {
+                    bodyContent.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class="text-center fw-bold">There was an error receiving data from Costi Online Services</h3><p class="text-center">Error message could not be parsed.</p>`;
+
+                    console.error("Error parsing error response:", error);
+                });
+        });
+
+    // Rendering functions
+    function renderCards(){
+        sortObjectsByViews();
+        let cardContent = ``;
+        for(let page of wikiContent){
+            cardContent += `
+                <div class="col">
+                    <div class="card border-box">
+                        <div class="card-header fw-bold">${categoryName(page.category)}</div>
+                        <div class="card-body">
+                            <h5 class="card-title text-truncate pb-2">${page.title}</h5>
+                            <h6 class="card-subtitle text-muted text-truncate">${page.subtitle}</h6>
+                            <p class="text-secondary pb-2">${page.views} Views</p>
+                            <a href="/Wiki/${page.id}/view" class="card-link">View &gt;</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        cardContainer.innerHTML = cardContent;
+    }
+
+    function sortObjectsByViews() {
+        return wikiContent.sort((a, b) => b.views - a.views);
+    }
+
+    function categoryName(category){
+        if(category === "PEOPLE"){
+            return "🚹 People";
+        }else if(category === "HISTORICAL"){
+            return "🏰 Historical";
+        }else if(category === "INSIDE_JOKE"){
+            return "😆 Inside Jokes";
+        }else if(category === "Professional"){
+            return "😆 Inside Jokes";
+        }else{
+            console.log(category);
+            return "❓ Other";
+        }
+    }
+
+    $(document).ready(function (){
+        $("#javascript-warning").hide();
+    });
+</script>
 </body>
 </html>

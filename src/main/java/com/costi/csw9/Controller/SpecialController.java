@@ -39,40 +39,9 @@ public class SpecialController {
         this.userService = userService;
     }
 
-    private User getCurrentUser(Principal principal) {
-        if (principal == null) {
-            return new User("NULL", "NULL", "Not Signed In", "error", UserRole.USER);
-        }
-        String username = principal.getName();
-        User u = userService.findByEmail(username);
-        return u;
-    }
-
     /*
         JSON responses
      */
-    @GetMapping("/api/v1/newsroom/post/{id}")
-    public ResponseEntity<Post> getNewsroomPost(@PathVariable Long id, Principal principal) {
-        try{
-            Post post = postService.loadById(id);
-            if(post.isEnabled()){
-                return ResponseEntity.ok(post);
-            }else{
-                if(getCurrentUser(principal).isOwner() || getCurrentUser(principal).isAdmin()){
-                    return ResponseEntity.ok(post);
-                }else{
-                    return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-                }
-            }
-        }catch (Exception e){
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @GetMapping("/api/v1/Newsroom/post/all")
-    public ResponseEntity<List<Post>> getNewsroomPosts() {
-        return ResponseEntity.ok(postService.getByApproval(true, true));
-    }
 
     @GetMapping("/api/v1/Media/all")
     public ResponseEntity<List<MediaInfo>> getMedia() {
