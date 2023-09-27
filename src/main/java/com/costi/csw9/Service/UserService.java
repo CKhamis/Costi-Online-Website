@@ -1,32 +1,35 @@
 package com.costi.csw9.Service;
 
 import com.costi.csw9.Model.*;
-import com.costi.csw9.Model.Temp.ConfirmationToken;
+import com.costi.csw9.Model.DTO.UserAccountRequest;
+import com.costi.csw9.Repository.AccountLogRepository;
+import com.costi.csw9.Repository.AccountNotificationRepository;
 import com.costi.csw9.Repository.UserRepository;
+import com.costi.csw9.Repository.WikiRepository;
 import com.costi.csw9.Util.LogicTools;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @AllArgsConstructor
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final ConfirmationTokenService confirmationTokenService;
-    private final AccountNotificationService accountNotificationService;
-
     private final AccountLogService accountLogService;
+    private final AccountNotificationRepository accountNotificationRepository;
+    private final WikiRepository wikiRepository;
+    private final AccountLogRepository accountLogRepository;
 
-    public User findByEmail(String email) throws UsernameNotFoundException {
+    public User loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<User> optionalUser = userRepository.findByEmail(email);
         if(optionalUser.isPresent()){
             return optionalUser.get();
@@ -35,153 +38,114 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public User findById(Long id) throws UsernameNotFoundException {
-        Optional<User> optionalUser = userRepository.findById(id);
-        if(optionalUser.isPresent()){
-            return optionalUser.get();
-        }else{
-            throw new UsernameNotFoundException("User" + LogicTools.NOT_FOUND_MESSAGE);
-        }
-    }
+    public String save(UserAccountRequest request){
+        if(request.getId() == null){
+            // New user account
+            User newUser = new User();
+            newUser.setFirstName(request.getFirstName());
+            newUser.setLastName(request.getLastName());
+            newUser.setEnabled(true);
+            newUser.setIsLocked(false);
+            newUser.setEmail(request.getEmail());
+            newUser.setProfilePicture(request.getProfilePicture());
 
-    public List<User> loadAll(){
-        return userRepository.findAll();
-    }
+            if(request.getPassword() != null && !request.getPassword().isBlank()){
+                String encodedPass = bCryptPasswordEncoder.encode(request.getPassword());
+                newUser.setPassword(encodedPass);
+            }else{
+                throw new IllegalArgumentException("Password field cannot be blank for creating new users");
+            }
 
-    public String signUpAdmin(User user){
-        //Check if exists
-        boolean userExists = userRepository.findByEmail(user.getEmail()).isPresent();
-        if(userExists){
-            throw new IllegalStateException("username already taken");
-        }else{
-            //Encode Password
-            String encodedPass = bCryptPasswordEncoder.encode(user.getPassword());
-            user.setPassword(encodedPass);
+            if(userRepository.findAll().size() == 0){
+                // No users present. Genesis user will now be upgraded to owner role
+                newUser.setRole(UserRole.OWNER);
+            }else{
+                // Admin accounts are unavailable in this method and must be done through COMT
+                newUser.setRole(UserRole.USER);
+            }
 
-            //Save User
-            userRepository.save(user);
-
-            //Add to log
-            AccountLog log = new AccountLog("Account Created", "Admin was created and not yet activated", user);
-            accountLogService.save(log);
-
-            String token = UUID.randomUUID().toString();
-            ConfirmationToken confirmationToken = new ConfirmationToken(token, LocalDateTime.now(), LocalDateTime.now().plusMinutes(15), user);
-            confirmationTokenService.saveConfirmationToken(confirmationToken);
-
-            return token;
-        }
-    }
-
-    public void signUpUser(User user){
-        //Check if exists
-        boolean userExists = userRepository.findByEmail(user.getEmail()).isPresent();
-        if(userExists){
-            throw new IllegalStateException("username already taken");
-        }else{
-            //Encode Password
-            String encodedPass = bCryptPasswordEncoder.encode(user.getPassword());
-            user.setPassword(encodedPass);
-
-            //Enable user
-            user.setEnabled(true);
-
-            //Save User
-            userRepository.save(user);
+            User savedUser = userRepository.save(newUser);
 
             //Add to log
-            AccountLog log = new AccountLog("Account Created", "User was created and activated", user);
+            AccountLog log = new AccountLog("Account Created", "User was created and activated", savedUser);
             accountLogService.save(log);
 
             //Add welcome message
-            AccountNotification welcome = new AccountNotification("Welcome!", "<p>Welcome to your Costi Network ID, here you will see various details regarding your account. Try changing your profile picture!</p>", "primary", user);
-            try {
-                accountNotificationService.save(welcome, user);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
+            AccountNotification welcome = new AccountNotification("Welcome!", "<p>Welcome to your Costi Network ID!</p>", "primary", savedUser);
+            accountNotificationRepository.save(welcome);
 
-    public void enable(User user, boolean enable, User requester) throws Exception {
-        if(requester.isAdmin() || requester.isOwner() || requester.getId().equals(user.getId())){
-            if(user.getRole().equals(UserRole.OWNER)){
-                //Cannot be locked out
-                throw new Exception("Owner account cannot be disabled");
-            }
-
-            userRepository.enable(user.getId(), enable);
-
-            //Add to log
-            AccountLog log = new AccountLog("Account Status Updated", "Account status set to: " + enable, user);
-            accountLogService.save(log);
+            return "New " + newUser.getRole().name() + " created";
         }else{
-            throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
-        }
-    }
+            // Edit existing user account
+            Optional<User> optionalUser = userRepository.findById(request.getId());
+            if(optionalUser.isPresent()){
+                // Transfer values to the present user
+                User presentUser = optionalUser.get();
+                presentUser.setFirstName(request.getFirstName());
+                presentUser.setLastName(request.getLastName());
+                presentUser.setEmail(request.getEmail());
+                presentUser.setProfilePicture(request.getProfilePicture());
 
-    public void lock(User user, boolean lock, User requester) throws Exception{
-        if(requester.isAdmin() || requester.isOwner() || requester.getId().equals(user.getId())){
-            if(user.getRole().equals(UserRole.OWNER)){
-                //Cannot be locked out
-                throw new Exception("Owner account cannot be locked");
-            }
+                if(request.getPassword() != null && !request.getPassword().isBlank()){
+                    String encodedPass = bCryptPasswordEncoder.encode(request.getPassword());
+                    presentUser.setPassword(encodedPass);
+                }
 
-            userRepository.lock(user.getId(), lock);
+                User savedUser = userRepository.save(presentUser);
 
-            //Add to log
-            AccountLog log = new AccountLog("Account locked/unlocked", "Account lock set to: " + lock, user);
-            accountLogService.save(log);
-        }else{
-            throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
-        }
-    }
+                //Add to log
+                AccountLog log = new AccountLog("Account details updated", presentUser.toString(), savedUser);
+                accountLogService.save(log);
 
-    public void save(User user) throws Exception {
-        if(user.getPassword().equals("")){
-            //Reuse old password
-            Optional<User> optionalOld = userRepository.findById(user.getId());
-            if(optionalOld.isPresent()){
-                User old = optionalOld.get();
-                user.setPassword(old.getPassword());
+                return "Account was edited successfully";
             }else{
-                throw new Exception("User" + LogicTools.NOT_FOUND_MESSAGE);
+                throw new IllegalArgumentException("There are no users in Costi Online with the given id");
             }
-        }else{
-            //Encode Password
-            String encodedPass = bCryptPasswordEncoder.encode(user.getPassword());
-            user.setPassword(encodedPass);
         }
 
-        //Add to log
-        AccountLog log = new AccountLog("Account details updated", user.toString(), user);
-        accountLogService.save(log);
-
-        userRepository.save(user);
     }
 
-    public void demoteUser(User user, User requester) throws Exception{
-        if((requester.isAdmin() || requester.isOwner()) && !user.isOwner()){
-            AccountLog log = new AccountLog("Account demoted", "Account is now regular user", user);
-            accountLogService.save(log);
+    @Transactional
+    public void delete(Long id){
+        // Check if the id is valid
+        if(id != null){
+            // Check if the id exists
+            Optional<User> optionalUser = userRepository.findById(id);
+            if(optionalUser.isPresent()){
+                // User exists
+                User user = optionalUser.get();
 
-            userRepository.demote(user.getId());
-        }else{
-            throw new Exception(LogicTools.INVALID_PERMISSIONS_MESSAGE);
+                if(user.isOwner()){
+                    throw new AccessDeniedException("Owner user cannot be deleted");
+                }
+
+                // Check if there are any wiki pages that are owned by account
+                List<WikiPage> wikiPages = wikiRepository.findByAuthor_Id(id);
+                if(!wikiPages.isEmpty()){
+                    // Re-assign them to owner
+                    // Find owner
+                    User costi = userRepository.findFirstByRole(UserRole.OWNER);
+                    for(WikiPage page : wikiPages){
+                        // Go through each one and transfer ownership
+                        page.setAuthor(costi);
+                        page.setBody(page.getBody() + "<br /><br /><p>Owner of this wiki page was deleted, ownership was transferred to owner.</p>");
+                        wikiRepository.save(page);
+                    }
+                }
+
+                // Delete any logs that are owned by account
+                accountLogRepository.deleteByUser(user);
+
+                // Delete any notifications that are owned by account
+                accountNotificationRepository.deleteByUser(user);
+
+                // Ready to delete
+                userRepository.deleteById(id);
+
+                return;
+            }
         }
-    }
-
-    public boolean isEmpty(){
-        return userRepository.findAll().isEmpty();
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> optionalUser = userRepository.findByEmail(username);
-        if(optionalUser.isPresent()){
-            return optionalUser.get();
-        }else{
-            throw new UsernameNotFoundException("User" + LogicTools.NOT_FOUND_MESSAGE);
-        }
+        // ID is either null or doesn't have a user
+        throw new IllegalArgumentException("There are no users in Costi Online with the given id");
     }
 }

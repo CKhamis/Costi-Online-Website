@@ -18,8 +18,5 @@ public interface WikiRepository extends JpaRepository<WikiPage, Long> {
     List<WikiPage> findByAuthor_Id(Long id);
     List<WikiPage> findByCategory(String category);
     List<WikiPage> findByEnabled(boolean enabled);
-    @Modifying
-    @Transactional
-    @Query("UPDATE WikiPage u SET u.enabled = :enabled WHERE u.id = :id")
-    void setEnabledById(@Param("id") Long id, @Param("enabled") boolean enable);
+    List<WikiPage> findByAuthor(User user);
 }

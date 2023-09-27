@@ -3,76 +3,485 @@
 <head th:replace="Components :: head('COMT Users')"></head>
 <body class="bg-1 text-1">
 <div th:replace="moderator/ModeratorComponents :: moderatorNav"></div>
-<main class="container mt-5">
-    <div class="p-5 mt-5 mb-4 border-box">
-        <div class="container-fluid py-5">
-            <h1 class="display-5 fw-bold">Costi Online Management Terminal</h1>
-            <p class="col-md-8 fs-4">Manage Users</p>
+<main class="container mt-3">
+    <div th:replace="moderator/ModeratorComponents :: userNavigation"></div>
+    <div class="row d-flex">
+        <div class="col-12 col-md-7 h-100">
+            <div class="container-fluid bg-2 py-3" id="overview-container">
+            </div>
+        </div>
+        <div class="col-12 col-md-5 h-100">
+            <div class="container-fluid bg-2 py-3">
+                <h3 class="fw-bold mb-2">Actions</h3>
+                <div class="action-button-container">
+                    <div class="action-button" data-bs-toggle="modal" data-bs-target="#new-user-modal">
+                        <img th:src="@{/icons/New.svg}" />
+                        <p class="text-center">New</p>
+                    </div>
+                    <div class="action-button" onclick="refresh()">
+                        <img th:src="@{/icons/Refresh.svg}" />
+                        <p class="text-center">Refresh</p>
+                    </div>
+                    <div class="action-button" onclick="disableAll()">
+                        <img th:src="@{/icons/Disable.svg}" />
+                        <p class="text-center">Disable All</p>
+                    </div>
+                    <div class="action-button" onclick="privateAll()">
+                        <img th:src="@{/icons/Private.svg}" />
+                        <p class="text-center">Private All</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div th:replace="Components :: flash" class="mt-2"></div>
-    <h2 class="fs-2 mb-3">All Users</h2>
-    <table class="table table-bordered table-sm align-middle table-hover table-dark">
-        <thead>
+
+    <div class="container-fluid" id="error-container">
+
+    </div>
+    <div class="container-fluid bg-2 mt-4 p-0 table-responsive" id="user-container">
+        <table class="table table-sm align-middle table-hover table-dark">
+            <thead>
             <tr>
-                <th scope="col">Name</th>
+                <th scope="col">ID</th>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
                 <th scope="col">Email</th>
+                <th scope="col">Joined</th>
                 <th scope="col">Role</th>
                 <th scope="col">Lock</th>
-                <th scope="col">Enabled</th>
-                <th scope="col">Lock Account</th>
-                <th scope="col">Enable Account</th>
-                <th scope="col">Perma Demote</th>
+                <th scope="col">Enable</th>
+                <th scope="col">Details</th>
+                <th scope="col">Demote</th>
+                <th scope="col">Delete</th>
             </tr>
-        </thead>
-        <tbody>
-            <tr th:each="user : ${all}">
-                <td>
-                    <a th:href="|/COMT/Accounts/*{user.id}/|" th:text="*{user.firstName} + ' ' + *{user.lastName}"></a>
-                </td>
-                <td>
-                    <p th:text="*{user.email}"></p>
-                </td>
-                <td class="text-center">
-                    <span class="badge badge-pill bg-dark" th:text="*{user.role}">Other</span>
-                </td>
-                <td>
-                    <p th:if="*{user.isLocked}">🔒 Locked</p>
-                    <p th:unless="*{user.isLocked}">🔓 Unlocked</p>
-                </td>
-                <td>
-                    <p th:if="*{user.enabled}">✅ Enabled</p>
-                    <p th:unless="*{user.enabled}">❌ Disabled</p>
-                </td>
-                <td>
-                    <form th:action="@{|/Accounts/${user.id}/unlock|}" method="post" th:if="*{user.isLocked}">
-                        <button type="submit" class="btn btn-success btn-sm">Unlock</button>
-                    </form>
-                    <form th:action="@{|/Accounts/${user.id}/lock|}" method="post" th:unless="*{user.isLocked}">
-                        <button type="submit" class="btn btn-danger btn-sm">Lock</button>
-                    </form>
-                </td>
-                <td>
-                    <form th:action="@{|/Accounts/${user.id}/disable|}" method="post" th:if="*{user.isEnabled}">
-                        <button type="submit" class="btn btn-danger btn-sm">Disable</button>
-                    </form>
-                    <form th:action="@{|/Accounts/${user.id}/enable|}" method="post" th:unless="*{user.isEnabled}">
-                        <button type="submit" class="btn btn-success btn-sm">Enable</button>
-                    </form>
-                </td>
-                <td>
-                    <form th:action="@{|/Accounts/${user.id}/demote|}" method="post" th:if="*{user.isAdmin}">
-                        <button type="submit" class="btn btn-success btn-sm">Demote</button>
-                    </form>
-                    <a th:unless="*{user.isAdmin}" class="btn btn-success btn-sm disabled" role="button" aria-disabled="true">Already User</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
+            </thead>
+            <tbody id="table-body">
+            </tbody>
+        </table>
+    </div>
 </main>
-<div th:replace="Components :: footer"></div>
+
+<div class="modal fade" id="new-user-modal" tabindex="-1" aria-labelledby="newUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-box">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newUserModalLabel">Create New User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="new-user-form" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="form-row row">
+                        <div class="col-12 mb-3">
+                            <label for="profilePicture">Profile Picture</label>
+                            <select class="form-control" id="profilePicture" name="profilePicture" required>
+                                <option value="" disabled="disabled">Select a profile picture</option>
+                                <option value="1">Logo</option>
+                                <option value="2">Axcel on a couch</option>
+                                <option value="3">Costi</option>
+                                <option value="4">Evil orthodontist</option>
+                                <option value="5">Axcel sitting</option>
+                                <option value="6">Train</option>
+                                <option value="7">Dragonboat</option>
+                                <option value="8">Funtime Costi</option>
+                                <option value="9">SJSU</option>
+                                <option value="10">Rock Pikmin</option>
+                                <option value="11">Airplane</option>
+                                <option value="12">Chess</option>
+                                <option value="13">Red flower</option>
+                            </select>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="role">Role</label>
+                            <select id="role" class="form-control" required>
+                                <option value="" disabled="disabled">Select a role</option>
+                                <option value="ADMIN">Admin</option>
+                                <option value="USER">User</option>
+                            </select>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label for="firstName">First Name</label>
+                            <input type="text" class="form-control" id="firstName" placeholder="First Name" required>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" class="form-control" id="lastName" placeholder="Last Name" required>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="Email" required>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" placeholder="Password" required>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <div class="form-check form-check-inline">
+                                <label for="isLocked">Lock</label>
+                                <input type="checkbox" class="form-check-input" id="isLocked" required>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <label for="enabled">Enable</label>
+                                <input type="checkbox" class="form-check-input" id="enabled" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="saveNewUser()">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 99" id="toast-container"></div>
 <div th:replace="Components :: JS"></div>
-<div th:replace="Components :: scripts"></div>
+<div th:replace="moderator/ModeratorComponents :: toast-scripts"></div>
+<script>
+    //data
+    let userList;
+
+    const overviewContainer = document.querySelector("#overview-container");
+    const errorContainer = document.querySelector("#news-container");
+    const table = document.querySelector("#table-body");
+
+    function refresh(){
+        updateUsers();
+    }
+    refresh();
+
+    //GET functions
+    function updateUsers(){
+        fetch("/api/management/users/all")
+            .then(checkStatus)
+            .then(response => response.json())
+            .then(data => {
+                userList = data;
+                renderUsers();
+                renderNavUsers();
+            })
+            .catch((response)=>{
+                try{
+                    response.json()
+                        .then(errorData => {
+                            errorContainer.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class="text-center fw-bold">${errorData.title}</h3><p class="text-center">${errorData.message}</p>`;
+                        });
+                } catch (e){
+                    console.error("Error parsing error response:", error);
+                    errorContainer.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>";
+                }
+                console.error('Error retrieving data:', response);
+            });
+    }
+
+    //Render
+    function renderUsers(){
+        let tableContent = ``;
+        let totalUsers = userList.length, numAdmin = 0, numUser = 0, numLocked = 0, numDisabled = 0, numUnlocked = 0, numEnabled = 0;
+        for(let i = 0; i < userList.length; i++){
+            let user = userList[i];
+            if(user.admin){
+                numAdmin++;
+            }else if(user.role == "USER"){
+                numUser++;
+            }
+
+            if(user.isLocked){
+                numLocked++;
+            }else{
+                numUnlocked++;
+            }
+
+            if(user.enabled){
+                numEnabled++;
+            }else{
+                numDisabled++;
+            }
+
+            tableContent += `
+            <tr>
+                <td>${user.id}</td>
+                <td>${user.firstName}</td>
+                <td>${user.lastName}</td>
+                <td>${user.email}</td>
+                <td>${user.formattedDateCreated}</td>
+                <td class="text-center">
+                    <span class="badge ${user.role === 'OWNER' ? 'bg-primary' : user.role === 'USER' ? 'bg-secondary' : user.role === 'ADMIN' ? 'bg-info' : 'bg-dark'}">${user.role}</span>
+                </td>
+                <td>
+                    <button class="btn btn-sm ${user.isLocked === true ? 'btn-secondary' : 'btn-primary'}${user.role === 'OWNER' ? ' disabled' : ''}" onclick="toggleVisibility(${user.id})" role="button">${user.isLocked === true ? 'Locked' : 'Unlocked'}</button>
+                </td>
+                <td>
+                    <button class="btn btn-sm ${user.enabled === true ? 'btn-primary' : 'btn-secondary'}${user.role === 'OWNER' ? ' disabled' : ''}" onclick="toggleEnable(${user.id})" role="button">${user.enabled === true ? 'Enabled' : 'Disabled'}</button>
+                </td>
+                <td>
+                    <a href="/COMT/Accounts/${user.id}" class="btn btn-sm btn-success" role="button">Details</a>
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-primary ${user.role === 'ADMIN' ? '' : 'disabled'}" onclick="demoteUser(${user.id})" role="button">Demote</button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-danger ${user.role === 'ADMIN' || user.role === 'OWNER' ? 'disabled' : ''}" onclick="deleteUser(${user.id})">Delete</button>
+                </td>
+            </tr>
+            `;
+        }
+        table.innerHTML = tableContent;
+
+        overviewContainer.innerHTML = `
+            <h3 class="fw-bold mb-2">Overview</h3>
+            <div id="stats-container">
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${totalUsers}</p>
+                    <p class="text-center">Users</p>
+                </div>
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${numEnabled}</p>
+                    <p class="text-center">Enabled</p>
+                </div>
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${numDisabled}</p>
+                    <p class="text-center">Disabled</p>
+                </div>
+                <div class="d-none d-lg-block">
+                    <p class="fs-1 fw-bold  text-center">${numLocked}</p>
+                    <p class="text-center">Locked</p>
+                </div>
+                <div class="d-none d-lg-block">
+                    <p class="fs-1 fw-bold  text-center">${numUnlocked}</p>
+                    <p class="text-center">Unlocked</p>
+                </div>
+                <div class="d-none d-lg-block">
+                    <p class="fs-1 fw-bold  text-center">${numAdmin}</p>
+                    <p class="text-center">Admin</p>
+                </div>
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${numUser}</p>
+                    <p class="text-center">Regular</p>
+                </div>
+            </div>
+
+        `;
+    }
+
+    //POST functions
+    function toggleEnable(id){
+        let toastId = createToast("Toggling Enable");
+        let user = getObjectById(id);
+        user.enabled = !user.enabled;
+        postData("/api/management/users/save", user)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ User Status Updated";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .then(refresh);
+    }
+
+    function toggleVisibility(id){
+        let toastId = createToast("Toggling Lock");
+        let user = getObjectById(id);
+        user.isLocked = !user.isLocked;
+        postData("/api/management/users/save", user)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ Visibility Status Toggled";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .then(refresh);
+    }
+
+    function deleteUser(id){
+        let toastId = createToast("Deleting User");
+        postData("/api/management/users/delete", id)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ User Deleted";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .then(refresh);
+    }
+
+    function demoteUser(id){
+        let toastId = createToast("Demoting User");
+        let user = getObjectById(id);
+        user.role = "USER";
+        postData("/api/management/users/save", user)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ User Demoted";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .then(refresh);
+    }
+
+    function saveNewUser(){
+        // Capture field values
+        let newUser = {
+            id: null,
+            firstName: document.querySelector("#firstName").value,
+            lastName: document.querySelector("#lastName").value,
+            email: document.querySelector("#email").value,
+            role: document.querySelector("#role").value,
+            password: document.querySelector("#password").value,
+            isLocked: document.querySelector("#isLocked").checked,
+            enabled: document.querySelector("#enabled").checked,
+            profilePicture: document.querySelector("#profilePicture").value
+        };
+        submitUser(newUser);
+    }
+
+    function submitUser(user){
+        let toastId = createToast("Saving User");
+        postData("/api/management/users/save", user)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ User Saved";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .then(refresh);
+    }
+
+    function disableAll(){
+        let toastId = createToast("Disabling all Users");
+        const promises = userList.map(user => {
+            user.enabled = false;
+
+            return postData(`/api/management/users/save`, user);
+        });
+
+        Promise.all(promises)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "Data submitted to Costi Online";
+                document.getElementById(`${toastId}-title`).innerText = "Procedure Complete";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .finally(refresh);
+    }
+
+    function privateAll(){
+        let toastId = createToast("Disabling all Users");
+        const promises = userList.map(user => {
+            user.isLocked = true;
+
+            return postData(`/api/management/users/save`, user);
+        });
+
+        Promise.all(promises)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "Data submitted to Costi Online";
+                document.getElementById(`${toastId}-title`).innerText = "Procedure Complete";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .finally(refresh);
+    }
+
+    //Helper functions
+    function getObjectById(id) {
+        return userList.find(obj => obj["id"] == id);
+    }
+</script>
 </body>
 </html>

@@ -1,14 +1,13 @@
 package com.costi.csw9.Model;
 
-import com.costi.csw9.Model.Temp.LightRequest;
-import com.costi.csw9.Model.Temp.LightResponse;
+import com.costi.csw9.Model.DTO.LightRequest;
+import com.costi.csw9.Model.DTO.ModeratorLightRequest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.http.*;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.persistence.*;
@@ -19,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 @Getter
 @Setter
 @EqualsAndHashCode
@@ -94,6 +93,17 @@ public class Light {
         this.color = request.getColor();
         this.pattern = request.getPattern();
         this.address = request.getAddress();
+        this.status = "Recently Edited";
+    }
+
+    public void setValues(ModeratorLightRequest request){
+        this.label = request.getLabel();
+        this.color = request.getColor();
+        this.pattern = request.getPattern();
+        this.address = request.getAddress();
+        this.isEnabled = request.isEnabled();
+        this.isPublic = request.isPublic();
+        this.isFavorite = request.isFavorite();
         this.status = "Recently Edited";
     }
 

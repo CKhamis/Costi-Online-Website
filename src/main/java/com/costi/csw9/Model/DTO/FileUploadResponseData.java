@@ -1,4 +1,4 @@
-package com.costi.csw9.Model.Temp;
+package com.costi.csw9.Model.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

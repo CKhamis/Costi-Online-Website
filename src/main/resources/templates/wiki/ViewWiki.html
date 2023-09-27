@@ -4,52 +4,41 @@
 <body class="bg-1 text-1">
 <div th:replace="Components :: main-navigation"></div>
 
-<main class="container mt-5">
-    <div class="row" th:if="${isViewable}">
-        <div class="col-lg-3 col-md-5 col-xs-12" th:switch="${wiki.category}">
-            <div th:case="INSIDE_JOKE"   class="fs-3 mb-2 mt-0" th:text="|&#128518; Inside Jokes|">title</div>
-            <div th:case="HISTORICAL"    class="fs-3 mb-2 mt-0" th:text="|&#127984; Historical|">title</div>
-            <div th:case="PEOPLE"        class="fs-3 mb-2 mt-0" th:text="|&#128697; People|">title</div>
-            <div th:case="PROFESSIONAL"  class="fs-3 mb-2 mt-0" th:text="|&#128084; Professional|">title</div>
-            <div th:case="*"             class="fs-3 mb-2 mt-0" th:text="|&#10067; Other|">title</div>
-            <div class="list-group mb-3">
-                <a th:each="page : ${categoryPages}" th:href="'/Wiki/' + *{page.Id} + '/view'" class="list-group-item list-group-item-action">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1 text-truncate" th:text="*{page.title}">title</h5>
-                    </div>
-                    <p class="mb-1 text-truncate" th:text="*{page.subtitle}">Some placeholder content in a paragraph.</p>
-                    <small class="text-truncate" th:text="'By ' + *{page.author.firstName} + ' ' + *{page.author.lastName}">And some small print.</small>
-                </a>
-            </div>
-        </div>
-        <div class="col-lg-9 col-md-7 col-xs-12 px-lg-5" th:object="${wiki}">
+<main class="container mt-5" id="body-content">
+    <input id="id-selector" type="hidden" th:value="${id}"/>
+    <div class="container-fluid" id="javascript-warning">
+        <h2 class="text-center fw-bold">JavaScript is required to view Wiki posts</h2>
+    </div>
+    <div class="d-none" id="wiki-content">
+        <div class="col-lg-3 col-md-5 col-xs-12" id="related-section"></div>
+        <div class="col-lg-9 col-md-7 col-xs-12 px-lg-5">
             <div class="row">
                 <div class="col col-md-8 d-none d-md-block">
                     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="/">Costi Online</a></li>
                             <li class="breadcrumb-item"><a href="/Wiki">Wiki Home</a></li>
-                            <li class="breadcrumb-item active" aria-current="page" th:text="*{title}"></li>
+                            <li class="breadcrumb-item active" aria-current="page" id="breadcrumb-title"></li>
                         </ol>
                     </nav>
                 </div>
                 <div class="col col-md-4 d-none d-md-block">
-                    <p th:text="'Last Edited: ' + *{dateEdited}" class="text-end"></p>
+                    <p class="text-end" id="last-edited">Last Edited: </p>
                 </div>
             </div>
-            <h1 class="fw-bold" th:text="*{title}"></h1>
-            <p class="text-muted fw-bold fs-4" th:text="*{subtitle}"></p>
-            <p th:text="'By ' + *{author.firstName} + ' ' + *{author.lastName}"></p>
-            <span th:unless="*{enabled}" class="badge bg-light text-dark">NOT VISIBLE</span>
+            <h1 class="fw-bold" id="page-title"></h1>
+            <p class="text-muted fw-bold fs-4" id="page-subtitle"></p>
+            <p id="page-author"></p>
 
             <div class="wiki-body">
-                <p class="fs-5" th:utext="*{body}"></p>
-                <a class="btn btn-primary btn-sm" th:href="@{|/Wiki/${wiki.id}/edit|}" th:if="${showEdit}">Edit</a>
+                <p class="fs-5" id="page-body"></p>
+                <p id="page-views"></p>
+                <a class="btn btn-primary btn-sm" th:href="@{|/Wiki/${id}/edit|}" th:if="${showEdit}">Edit</a>
                 <a class="btn btn-secondary btn-sm d-inline" href="/COMT/Wiki" th:if="${isAdmin}">COMT</a>
             </div>
         </div>
     </div>
-    <div th:unless="${isViewable}">
+    <div class="d-none">
         <div class="p-5 mb-4  border-box wikiRestrictedBannerBg">
             <div class="container-fluid py-5">
                 <h1 class="display-5 fw-bold">Wiki Page Currently Under Review</h1>
@@ -88,6 +77,117 @@
 
 <div th:replace="Components :: footer"></div>
 <div th:replace="Components :: JS"></div>
-<div th:replace="Components :: scripts"></div>
+<script>
+    // Elements
+    let wikiView = document.querySelector("#wiki-content");
+    let bodyContent = document.querySelector("#body-content");
+    let breadcrumbTitle = document.querySelector("#breadcrumb-title");
+    let lastEdited = document.querySelector("#last-edited");
+    let pageTitle = document.querySelector("#page-title");
+    let pageSubtitle = document.querySelector("#page-subtitle");
+    let pageAuthor = document.querySelector("#page-author");
+    let pageBody = document.querySelector("#page-body");
+    let pageView = document.querySelector("#page-views");
+    let relatedView = document.querySelector("#related-section");
+
+
+    // Data
+    let id = document.getElementById("id-selector").value;
+    let page, allPages;
+
+    // Fetch functions
+    const postFetch = fetch("/api/wiki/view?id=" + id);
+    const allFetch = fetch("/api/wiki/all");
+
+    Promise.all([postFetch, allFetch])
+        .then(responses => {
+            const response1 = checkStatus(responses[0]);
+            const response2 = checkStatus(responses[1]);
+
+            return Promise.all([response1, response2]);
+        })
+        .then(data => {
+            let postDownload = data[0].json();
+            let recommendationDownload = data[1].json();
+
+            return Promise.all([postDownload, recommendationDownload]);
+        })
+        .then(data => {
+            page = data[0]; // wiki data
+            allPages = data[1]; // recommendation data
+            renderWiki();
+            renderRecommendations();
+        })
+        .catch((response)=>{
+            console.log(response);
+            response.json()  // Parse the JSON error response
+                .then(errorData => {
+                    bodyContent.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class="text-center fw-bold">${errorData.title}</h3><p class="text-center">${errorData.message}</p>`;
+                })
+                .catch(error => {
+                    bodyContent.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class="text-center fw-bold">There was an error receiving data from Costi Online Services</h3><p class="text-center">Error message could not be parsed. ${error}</p>`;
+
+                    console.error("Error parsing error response:", error);
+                });
+        });
+
+    // Rendering functions
+    function renderWiki(){
+        wikiView.className = "row";
+        breadcrumbTitle.innerText = page.title;
+        lastEdited.innerText = page.dateEdited;
+        pageTitle.innerText = page.title;
+        pageSubtitle.innerText = page.subtitle;
+        pageAuthor.innerText = "by " + page.authorName;
+        pageBody.innerHTML = page.body;
+        pageView.innerText = page.views + " views";
+    }
+
+    function renderRecommendations(){
+        sortObjectsByViews();
+        let relatedPages = `
+            <div class="fs-3 mb-2 mt-0">${categoryName(page.category)}</div>
+            <div class="list-group mb-3">
+        `;
+        for(let wiki of allPages){
+            if(wiki.category !== page.category){
+                continue;
+            }
+            relatedPages += `
+                <a href="/Wiki/${wiki.id}/view" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1 text-truncate">${wiki.title}</h5>
+                    </div>
+                    <p class="mb-1 text-truncate">${wiki.subtitle}</p>
+                    <small class="text-truncate">By ${wiki.authorName}</small>
+                </a>
+            `;
+        }
+        relatedPages += `</div>`;
+        relatedView.innerHTML = relatedPages;
+    }
+
+    function sortObjectsByViews() {
+        return allPages.sort((a, b) => b.views - a.views);
+    }
+
+    function categoryName(category){
+        if(category === "PEOPLE"){
+            return "🚹 People";
+        }else if(category === "HISTORICAL"){
+            return "🏰 Historical";
+        }else if(category === "INSIDE_JOKE"){
+            return "😆 Inside Jokes";
+        }else if(category === "Professional"){
+            return "👔 Professional";
+        }else{
+            return "❓ Other";
+        }
+    }
+
+    $(document).ready(function() {
+        $("#javascript-warning").hide();
+    });
+</script>
 </body>
 </html>

@@ -14,11 +14,4 @@ import java.util.List;
 public interface AnnouncementRepository extends JpaRepository<Announcement, Long> {
 
     List<Announcement> findByEnable(boolean enable);
-
-    @Modifying
-    @Transactional
-    @Query("UPDATE Announcement a SET a.enable = :enable WHERE a.id = :id")
-    void setEnableById(@Param("id") Long id, @Param("enable") boolean enable);
-
-
 }

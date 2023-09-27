@@ -40,7 +40,7 @@
     <div class="container-fluid" id="error-container">
 
     </div>
-    <div class="container-fluid bg-2 mt-4" id="light-container">
+    <div class="container-fluid bg-2 mt-4 table-responsive" id="light-container">
         <!-- lights here -->
         <table class="table table-sm align-middle table-hover table-dark">
             <thead>
@@ -96,7 +96,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="saveLight()">Save</button>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#view-ping-modal" onclick="saveLight()">Save</button>
             </div>
         </div>
     </div>
@@ -141,7 +141,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="view-ping-modal" tabindex="-1" aria-labelledby="editLightModalLabel" aria-hidden="true">
+<div class="modal fade" id="view-ping-modal" tabindex="-1" aria-labelledby="view-ping-modal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content border-box">
             <div class="modal-header">
@@ -159,9 +159,12 @@
     </div>
 </div>
 
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 99" id="toast-container">
+</div>
+
 <div th:replace="Components :: JS"></div>
-<!--<div th:replace="Components :: scripts"></div>-->
 <script th:replace="moderator/ModeratorComponents :: led-scripts"></script>
+<div th:replace="moderator/ModeratorComponents :: toast-scripts"></div>
 <script>
     //data
     let overviewData;
@@ -175,18 +178,7 @@
     //GET functions
     function updateData(){
         getAllLightData();
-        fetch("/api/v1/LED/analytics")
-            .then(checkStatus)
-            .then(response => response.json())
-            .then(data => {
-                overviewData = data;
-                renderOverview();
-            })
-            .catch(error => {
-                // error handling
-                errorContainer.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>";
-                console.error('Error retrieving data:', error);
-            });
+
     }
     updateData();
 
@@ -196,15 +188,24 @@
 
         pElement.innerText = "Please wait...";
         titleElement.innerText = "Connecting to light";
-        fetch(`/api/v1/LED/${id}/Sync-Down`)
-            .then(checkStatus)
+        postData("/api/management/light/sync-down", id)
             .then(data => {
-                titleElement.innerText = "Sync Complete";
-                pElement.innerText = "Device successfully responded. Data downloaded from device.";
+                console.log(data);
+                titleElement.innerText = data.title;
+                pElement.innerText = data.message;
             })
-            .catch(error => {
-                titleElement.innerText = "Sync Failed";
-                pElement.innerText = `Error connecting to light: ${error}`;
+            .catch((response)=>{
+                console.log(response);
+                response.json()  // Parse the JSON error response
+                    .then(errorData => {
+                        titleElement.innerText = errorData.title;
+                        pElement.innerText = errorData.message;
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        titleElement.innerText = "Error Saving or Testing Light";
+                        pElement.innerText = "Costi Online Services may be down. Please check the console for more information.";
+                    });
             })
             .finally(() => {
                 updateData();
@@ -217,15 +218,24 @@
 
         pElement.innerText = "Please wait...";
         titleElement.innerText = "Connecting to light";
-        fetch(`/api/v1/LED/${id}/Sync-Up`)
-            .then(checkStatus)
+        postData("/api/management/light/sync-up", id)
             .then(data => {
-                titleElement.innerText = "Sync Complete";
-                pElement.innerText = "Device successfully responded. Data sent to device.";
+                console.log(data);
+                titleElement.innerText = data.title;
+                pElement.innerText = data.message;
             })
-            .catch(error => {
-                titleElement.innerText = "Sync Failed";
-                pElement.innerText = `Error connecting to light: ${error}`;
+            .catch((response)=>{
+                console.log(response);
+                response.json()  // Parse the JSON error response
+                    .then(errorData => {
+                        titleElement.innerText = errorData.title;
+                        pElement.innerText = errorData.message;
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        titleElement.innerText = "Error Saving or Testing Light";
+                        pElement.innerText = "Costi Online Services may be down. Please check the console for more information.";
+                    });
             })
             .finally(() => {
                 updateData();
@@ -235,93 +245,257 @@
     //POST functions
     function saveLight() {
         // Extract input values
-        let addressInput = document.getElementById('address-input');
+        let addressInput = document.getElementById('address-input')
         let labelInput = document.getElementById('label-input');
         let colorInput = document.getElementById('color-input');
         let patterInput = document.getElementById('pattern-input');
 
-        // Execute submitNew() function with extracted values
-        let lightData = {"address": addressInput.value, "label": labelInput.value, "color": colorInput.value, "pattern": patterInput.value};
+        const pElement = document.getElementById("ping-status");
+        const titleElement = document.getElementById("ping-title");
+        pElement.innerText = "Please wait...";
+        titleElement.innerText = "Saving and Testing Light";
 
-        postData("/api/v1/LED/new", lightData)
-            .then(updateData);
+        // Use extracted values to create a new ModeratorLightRequest
+        let lightData = {"address": addressInput.value, "id": null, "label": labelInput.value, "color": colorInput.value, "pattern": patterInput.value, "favorite": false, "public": false,"enabled": false};
+        postData("/api/management/light/save", lightData)
+            .then(data => {
+                titleElement.innerText = data.title;
+                pElement.innerText = data.message;
+            })
+            .catch((response)=>{
+                console.log(response);
+                response.json()  // Parse the JSON error response
+                    .then(errorData => {
+                        titleElement.innerText = errorData.title;
+                        pElement.innerText = errorData.message;
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        titleElement.innerText = "Error Saving or Testing Light";
+                        pElement.innerText = "An error occurred. Please check the console for more information.";
+                    });
+            })
+            .finally(() => {
+                updateData();
+            });
 
         // Reset the form
         labelInput.value = "";
         colorInput.value= "";
         patterInput.value = "";
-    }
-    function editLight() {
-        // Extract input values
-        let idInput = document.getElementById('id-input');
-        let addressInput = document.getElementById('address-2')
-        let labelInput = document.getElementById('label-input-2');
-        let colorInput = document.getElementById('color-input-2');
-        let patterInput = document.getElementById('pattern-input-2');
-
-        // Execute submitNew() function with extracted values
-        let lightData = {"address": addressInput.value, "id": idInput.value, "label": labelInput.value, "color": colorInput.value, "pattern": patterInput.value};
-
-        postData("/api/v1/LED/Edit", lightData)
-            .then(updateData);
-
-        // Reset the form
-        labelInput.value = "";
-        colorInput.value= "";
-        patterInput.value = "";
-        idInput.value = "";
     }
     function deleteLight(id) {
-        postData(`/api/v1/LED/${id}/Delete`)
-            .catch(err => console.log(err))
+        let toastId = createToast("Deleting Light");
+        postData(`/api/management/light/delete`, id)
+            .then(data => {
+                console.log(data);
+                document.getElementById(`${toastId}-body`).innerText = getIcon(data.severity) + data.message;
+                document.getElementById(`${toastId}-title`).innerText = data.title;
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response)=>{
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
             .then(updateData);
     }
-    function publishLight(id, isPublic) {
-        let url = `/api/v1/LED/${id}/Publish`;
-        if(!isPublic){
-            url = `/api/v1/LED/${id}/Private`
-        }
-
-        postData(url)
-            .catch(err => console.log(err))
+    function toggleVisibility(id) {
+        let toastId = createToast("Toggling Visibility");
+        let light = getObjectById(id);
+        let newLight = {"address": light.address, "id": light.id, "label": light.label, "color": light.color, "pattern": light.pattern, "favorite": light.favorite, "public":  !light.public,"enabled": light.enabled};
+        postData(`/api/management/light/save`, newLight)
+            .then(data => {
+                document.getElementById(`${toastId}-body`).innerText = getIcon(data.severity) + data.message;
+                document.getElementById(`${toastId}-title`).innerText = data.title;
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response)=>{
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
             .then(updateData);
     }
-    function enableLight(id, isEnabled) {
-        let url = `/api/v1/LED/${id}/Enable`;
-        if(!isEnabled){
-            url = `/api/v1/LED/${id}/Disable`
-        }
-
-        postData(url)
-            .catch(err => console.log(err))
+    function enableLight(id) {
+        let toastId = createToast("Toggling Activation");
+        let light = getObjectById(id);
+        let newLight = {"address": light.address, "id": light.id, "label": light.label, "color": light.color, "pattern": light.pattern, "favorite": light.favorite, "public":  light.public,"enabled": !light.enabled};
+        postData(`/api/management/light/save`, newLight)
+            .then(data => {
+                document.getElementById(`${toastId}-body`).innerText = getIcon(data.severity) + data.message;
+                document.getElementById(`${toastId}-title`).innerText = data.title;
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response)=>{
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
             .then(updateData);
     }
-    function favoriteLight(id, isFavorite) {
-        let url = `/api/v1/LED/${id}/Favorite`;
-        if(!isFavorite){
-            url = `/api/v1/LED/${id}/Disfavorite`
-        }
-
-        postData(url)
-            .catch(err => console.log(err))
+    function favoriteLight(id) {
+        let toastId = createToast("Toggling Favorite");
+        let light = getObjectById(id);
+        let newLight = {"address": light.address, "id": light.id, "label": light.label, "color": light.color, "pattern": light.pattern, "favorite": !light.favorite, "public":  light.public,"enabled": light.enabled};
+        postData(`/api/management/light/save`, newLight)
+            .then(data => {
+                document.getElementById(`${toastId}-body`).innerText = getIcon(data.severity) + data.message;
+                document.getElementById(`${toastId}-title`).innerText = data.title;
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response)=>{
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
             .then(updateData);
     }
     function disableAll() {
-        postData("/api/v1/LED/DisableAll")
-            .catch(err => console.log(err))
-            .then(updateData);
+        let toastId = createToast("Hiding all Lights");
+        const promises = responseData.map(light => {
+            let newLight = {
+                "address": light.address,
+                "id": light.id,
+                "label": light.label,
+                "color": light.color,
+                "pattern": light.pattern,
+                "favorite": light.favorite,
+                "public": light.public,
+                "enabled": false
+            };
+
+            return postData(`/api/management/light/save`, newLight);
+        });
+
+        Promise.all(promises)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "Data submitted to Costi Online";
+                document.getElementById(`${toastId}-title`).innerText = "Procedure Complete";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .finally(updateData);
     }
     function privateAll() {
-        postData("/api/v1/LED/PrivateAll")
-            .catch(err => console.log(err))
-            .then(updateData);
+        let toastId = createToast("Hiding all Lights");
+        const promises = responseData.map(light => {
+            let newLight = {
+                "address": light.address,
+                "id": light.id,
+                "label": light.label,
+                "color": light.color,
+                "pattern": light.pattern,
+                "favorite": light.favorite,
+                "public": false,
+                "enabled": light.enabled
+            };
+
+            return postData(`/api/management/light/save`, newLight);
+        });
+
+        Promise.all(promises)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "Data submitted to Costi Online";
+                document.getElementById(`${toastId}-title`).innerText = "Procedure Complete";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .finally(updateData);
     }
+
 
     //Rendering functions
     function renderAllLights(){
         let tableContent = ``, optionsContent = ``;
+        let numFavorite = 0, numEnabled = 0, numPublic = 0, total = responseData.length, numPrivate = 0, numDisabled = 0, numNormal = 0;
         for(let i = 0; i < responseData.length; i++){
             let light = responseData[i];
+
+            // Analytics
+            if(light.favorite){
+                numFavorite++;
+            }else{
+                numNormal++;
+            }
+            if(light.enabled){
+                numEnabled++;
+            }else{
+                numDisabled++;
+            }
+            if(light.public){
+                numPublic++;
+            }else{
+                numPrivate++
+            }
 
             let publicClass = `btn-primary`, publicText = `Published`;
             if(!light.public){
@@ -352,13 +526,13 @@
                 <td>${light.color}</td>
                 <td>${light.pattern}</td>
                 <td>
-                    <button type="button" class="btn btn-sm ${favoriteClass}" onclick="favoriteLight(${light.id}, ${!light.favorite})">${favoriteText}</button>
+                    <button type="button" class="btn btn-sm ${favoriteClass}" onclick="favoriteLight(${light.id})">${favoriteText}</button>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-sm ${publicClass}" onclick="publishLight(${light.id}, ${!light.public})">${publicText}</button>
+                    <button type="button" class="btn btn-sm ${publicClass}" onclick="toggleVisibility(${light.id})">${publicText}</button>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-sm ${enabledClass}" onclick="enableLight(${light.id}, ${!light.enabled})">${enabledText}</button>
+                    <button type="button" class="btn btn-sm ${enabledClass}" onclick="enableLight(${light.id})">${enabledText}</button>
                 </td>
                 <td>
                     <button class="btn btn-sm btn-dark" data-bs-toggle="modal" data-bs-target="#view-ping-modal" onclick="syncDown(${light.id})">
@@ -380,37 +554,37 @@
         }
         table.innerHTML = tableContent;
         optionContainer.innerHTML = optionsContent;
-    }
-    function renderOverview(){
+
+
         overviewContainer.innerHTML = `
             <h3 class="fw-bold mb-2">Overview</h3>
             <div id="stats-container">
                 <div>
-                    <p class="fs-1 fw-bold  text-center">${overviewData["favoriteCount"]}</p>
+                    <p class="fs-1 fw-bold  text-center">${numFavorite}</p>
                     <p class="text-center">Favorites</p>
                 </div>
                 <div>
-                    <p class="fs-1 fw-bold  text-center">${overviewData["enabledCount"]}</p>
+                    <p class="fs-1 fw-bold  text-center">${numEnabled}</p>
                     <p class="text-center">Enabled</p>
                 </div>
                 <div>
-                    <p class="fs-1 fw-bold  text-center">${overviewData["publicCount"]}</p>
+                    <p class="fs-1 fw-bold  text-center">${numPublic}</p>
                     <p class="text-center">Public</p>
                 </div>
                 <div class="d-none d-lg-block">
-                    <p class="fs-1 fw-bold  text-center">${overviewData["totalLights"]}</p>
+                    <p class="fs-1 fw-bold  text-center">${total}</p>
                     <p class="text-center">Lights</p>
                 </div>
                 <div>
-                    <p class="fs-1 fw-bold  text-center">${overviewData["usedTodayCount"]}</p>
-                    <p class="text-center">Used Today</p>
+                    <p class="fs-1 fw-bold  text-center">${numNormal}</p>
+                    <p class="text-center">Regular</p>
                 </div>
                 <div class="d-none d-lg-block">
-                    <p class="fs-1 fw-bold  text-center">${overviewData["privateCount"]}</p>
+                    <p class="fs-1 fw-bold  text-center">${numPrivate}</p>
                     <p class="text-center">private</p>
                 </div>
                 <div class="d-none d-lg-block">
-                    <p class="fs-1 fw-bold  text-center">${overviewData["disabledCount"]}</p>
+                    <p class="fs-1 fw-bold  text-center">${numDisabled}</p>
                     <p class="text-center">Disabled</p>
                 </div>
             </div>
@@ -421,6 +595,10 @@
     // Exists as a connector for universal functions
     function next(){
         renderAllLights();
+    }
+
+    function getObjectById(id) {
+        return responseData.find(obj => obj["id"] == id);
     }
 
     //Controls

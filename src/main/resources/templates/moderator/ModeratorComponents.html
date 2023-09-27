@@ -26,7 +26,7 @@
             <a class="nav-link" href="/COMT/Announcements">Announcements</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/COMT/Notifications/Create">Notifications</a>
+            <a class="nav-link" href="/COMT/Notifications">Notifications</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/COMT/Newsroom">Newsroom</a>
@@ -43,7 +43,7 @@
 <div th:fragment="lightNavigation" class="mb-4 mt-2">
   <nav class="navbar navbar-expand-lg navbar-dark bg-2">
     <div class="container-fluid">
-      <a class="navbar-brand fw-bold" href="/COMT/LED">LED Light Controller</a>
+      <a class="navbar-brand fw-bold" href="/COMT/LED">Dynamic Lighting</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -52,9 +52,9 @@
           <li class="nav-item">
             <a class="nav-link" aria-current="page" href="/COMT/LED">Overview</a>
           </li>
-<!--          <li class="nav-item">-->
-<!--            <a class="nav-link" href="/COMT/LED/Logs">Logs</a>-->
-<!--          </li>-->
+          <!--          <li class="nav-item">-->
+          <!--            <a class="nav-link" href="/COMT/LED/Logs">Logs</a>-->
+          <!--          </li>-->
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Detail View
@@ -68,13 +68,50 @@
   </nav>
 </div>
 
+<div th:fragment="userNavigation" class="mb-4 mt-2">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-2">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold" href="/COMT/Accounts">Costi Online Users</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#userNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="userNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/COMT/Accounts">Overview</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="userNavDropdownMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Detail View
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="userNavDropdownMenu" id="user-list-dropdown">
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <script>
+    function renderNavUsers(){
+        let dropdownContent = ``;
+        for(let i = 0; i < userList.length; i++){
+            let currentUser = userList[i];
+            dropdownContent += `
+                <li><a class="dropdown-item" href="/COMT/Accounts/${currentUser.id}">${currentUser.firstName} ${currentUser.lastName}</a></li>
+            `;
+        }
+        document.querySelector("#user-list-dropdown").innerHTML = dropdownContent;
+    }
+  </script>
+</div>
+
 <script th:fragment="led-scripts">
   const dropdownContainer = document.querySelector("#light-list-dropdown");
   let responseData;
 
   // Fetch functions
   function getAllLightData(){
-    fetch("/api/v1/LED/all-lights")
+    fetch("/api/management/light/all")
             .then(checkStatus)
             .then(response => response.json())
             .then(data => {
@@ -101,46 +138,74 @@
     }
     dropdownContainer.innerHTML = dropdownList;
   }
+</script>
 
-  // Fetch tools
-  function checkStatus(response) {
-    if (response.ok) {
-      // If the response status is within the 2xx range, return the response
-      return response;
-    } else {
-      // Otherwise, throw an error with the response status and text
-      throw new Error(`Request failed with status ${response.status}: ${response.statusText}`);
-    }
-  }
-
-  function postData(url, data) {
+<script th:fragment="form-data-script">
+  function postDataWithFile(url, formData) {
     // Retrieve the CSRF token from the meta tags
     let csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
     let csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
     // Create the fetch request headers and include the CSRF token
     let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
     headers.append(csrfHeader, csrfToken);
 
     // Create the fetch options
     let options = {
       method: 'POST',
       headers: headers,
-      body: JSON.stringify(data)
+      body: formData
     };
 
     // Perform the fetch request
     return fetch(url, options)
-            .then(checkStatus)
-            .catch(error => {
-              // Handle any errors
-              console.error(error);
-            });
+            .then(checkStatus);
   }
+</script>
 
-  function getObjectById(id) {
-    return responseData.find(obj => obj["id"] == id);
+<script th:fragment="toast-scripts">
+  function getIcon(severity){
+    if(severity === "INFORMATIONAL"){
+      return "ℹ️";
+    }else if(severity === "LOW"){
+      return "🔔";
+    }else if(severity === "MEDIUM"){
+      return "⚠️";
+    }else if(severity === "HIGH"){
+      return "❗";
+    }else if(severity === "INSANE"){
+      return "❗❗❗";
+    }else{
+      return "⚠︎";
+    }
+  }
+  function createToast(title) {
+    const idText = Math.floor(Math.random() * 100);
+    const toastContainer = document.getElementById("toast-container");
+
+    const toastHTML = `
+    <div id="${idText}" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <div class="spinner-grow spinner-grow-sm me-2" style="color:yellow" id="${idText}-loading" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <strong class="me-auto" id="${idText}-title">${title}</strong>
+        <small>now</small>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body text-black-50" id="${idText}-body">
+        Contacting Costi Online Services
+      </div>
+    </div>
+  `;
+
+    toastContainer.insertAdjacentHTML('beforeend', toastHTML);
+
+    const toastElement = document.getElementById(idText);
+    const toastInstance = new bootstrap.Toast(toastElement);
+    toastInstance.show();
+
+    return idText;
   }
 
 </script>

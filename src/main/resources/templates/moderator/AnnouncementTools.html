@@ -1,102 +1,317 @@
 <!DOCTYPE html>
 <html xml:th="https://www.thymeleaf.org">
-<head th:replace="Components :: head('COMT Wiki')"></head>
+<head th:replace="Components :: head('COMT Announcements')"></head>
 <body class="bg-1 text-1">
 <div th:replace="moderator/ModeratorComponents :: moderatorNav"></div>
-<main class="container mt-5">
-    <div class="p-5 mb-4 mt-5 border-box">
-        <div class="container-fluid py-5">
-            <h1 class="display-5 fw-bold">Costi Online Management Terminal</h1>
-            <p class="col-md-8 fs-4">Create & Edit Announcements</p>
-            <a href="/COMT/Announcements/Create" class="btn btn-primary">Create new Announcement</a>
+<main class="container">
+    <div class="row d-flex">
+        <div class="col-12 col-md-7 h-100">
+            <div class="container-fluid bg-2 py-3" id="overview-container">
+            </div>
+        </div>
+        <div class="col-12 col-md-5 h-100">
+            <div class="container-fluid bg-2 py-3">
+                <h3 class="fw-bold mb-2">Actions</h3>
+                <div class="action-button-container">
+                    <div class="action-button" data-bs-toggle="modal" data-bs-target="#new-announcement-modal" onclick="renderDropdown(-1)">
+                        <img th:src="@{/icons/New.svg}" />
+                        <p class="text-center">New</p>
+                    </div>
+                    <div class="action-button" onclick="getData()">
+                        <img th:src="@{/icons/Refresh.svg}" />
+                        <p class="text-center">Refresh</p>
+                    </div>
+                    <div class="action-button" onclick="privateAll()">
+                        <img th:src="@{/icons/Private.svg}" />
+                        <p class="text-center">Disable All</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div th:replace="Components :: flash" class="mt-2"></div>
 
-    <h2 class="fs-2 mb-3">Active Announcements</h2>
-    <table class="table table-bordered table-sm align-middle table-hover table-dark">
-        <thead>
-        <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Title</th>
-            <th scope="col">Body</th>
-            <th scope="col">Date</th>
-            <th scope="col">Enable</th>
-            <th scope="col">Edit</th>
-            <th scope="col">Disable</th>
-            <th scope="col">Delete</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="message : ${enabled}">
-            <td scope="row" th:text="*{message.id}">id</td>
-            <td scope="row" th:text="*{message.title}">Title</td>
-            <td th:text="*{message.body}">body</td>
-            <td th:text="*{message.dateEdited}">date</td>
-            <td>
-                <p th:if="*{message.enable}">✅ Enabled</p>
-                <p th:unless="*{message.enable}">❌ Disabled</p>
-            </td>
-            <td>
-                <a th:href="@{|/COMT/Announcements/${message.id}/edit|}" class="btn btn-secondary btn-sm" role="button" aria-pressed="true">Edit</a>
-            </td>
-            <td>
-                <form th:action="@{|/COMT/Announcements/${message.id}/disable|}" method="post">
-                    <button type="submit" class="btn btn-warning btn-sm">Disable</button>
-                </form>
-            </td>
-            <td>
-                <form th:action="@{|/COMT/Announcements/${message.id}/delete|}" method="post">
-                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="table table-bordered table-sm align-middle table-hover table-dark mt-4" id="error-container">
+            <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Title</th>
+                <th scope="col">Body</th>
+                <th scope="col">Edited</th>
+                <th scope="col">Visibility</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Status</th>
+                <th scope="col">Delete</th>
+            </tr>
+            </thead>
+            <tbody id="table-body">
 
-    <h2 class="fs-2 mb-3">Disabled Announcements</h2>
-    <table class="table table-bordered table-sm align-middle table-hover table-dark">
-        <thead>
-        <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Title</th>
-            <th scope="col">Body</th>
-            <th scope="col">Date</th>
-            <th scope="col">Enable</th>
-            <th scope="col">Edit</th>
-            <th scope="col">Disable</th>
-            <th scope="col">Delete</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="message : ${disabled}">
-            <td scope="row" th:text="*{message.id}">id</td>
-            <td scope="row" th:text="*{message.title}">Title</td>
-            <td th:text="*{message.body}">body</td>
-            <td th:text="*{message.dateEdited}">date</td>
-            <td>
-                <p th:if="*{message.enable}">✅ Enabled</p>
-                <p th:unless="*{message.enable}">❌ Disabled</p>
-            </td>
-            <td>
-                <a th:href="@{|/COMT/Announcements/${message.id}/edit|}" class="btn btn-secondary btn-sm" role="button" aria-pressed="true">Edit</a>
-            </td>
-            <td>
-                <form th:action="@{|/COMT/Announcements/${message.id}/enable|}" method="post">
-                    <button type="submit" class="btn btn-success btn-sm">Enable</button>
-                </form>
-            </td>
-            <td>
-                <form th:action="@{|/COMT/Announcements/${message.id}/delete|}" method="post">
-                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
 </main>
+<div class="modal fade" id="new-announcement-modal" tabindex="-1" aria-labelledby="new-announcement-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-box">
+            <div class="modal-header">
+                <h5 class="modal-title" id="new-announcement-modal-label">Edit or Create New Announcement</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="new-announcement-form">
+                    <div class="mb-3">
+                        <label for="id-select" class="form-label">ID</label>
+                        <select class="form-select" aria-label="id-select" id="id-select"></select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="title-input" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="title-input" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="body-input" class="form-label">Body</label>
+                        <textarea type="text" class="form-control" id="body-input" required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="submitForm()" data-bs-dismiss="modal">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 99" id="toast-container">
+</div>
+
 <div th:replace="Components :: footer"></div>
 <div th:replace="Components :: JS"></div>
-<div th:replace="Components :: scripts"></div>
+<div th:replace="moderator/ModeratorComponents :: toast-scripts"></div>
+<script>
+    getData();
+    //elements
+    let errorContainer = document.getElementById("error-container");
+    let overviewContainer = document.getElementById("overview-container");
+
+    //data
+    let overviewData;
+    let allAnnouncements;
+
+    //Data retrieval
+    function getData(){
+        fetch("/api/management/announcement/all")
+            .then(checkStatus)
+            .then(response => response.json())
+            .then(data => {
+                allAnnouncements = data;
+                renderTable();
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        errorContainer.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">${errorData.message}</p>`;
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        errorContainer.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Connection could not be established</p>`;
+                    });
+            })
+            .finally(() => $("#loading").hide());
+
+        fetch("/api/management/announcement/analytics")
+            .then(checkStatus)
+            .then(response => response.json())
+            .then(data => {
+                overviewData = data;
+                renderOverview();
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        errorContainer.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">${errorData.message}</p>`;
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        errorContainer.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Connection could not be established</p>`;
+                    });
+            });
+    }
+
+    //render functions
+    function renderTable(){
+        let tableContent = ``;
+        for(let announcement of allAnnouncements){
+            let enableToggle = announcement.enable ?`<button onclick="toggleEnable(${announcement.id})" class="btn btn-success btn-sm">Enabled</button>` : `<button onclick="toggleEnable(${announcement.id})" class="btn btn-warning btn-sm">Disabled</button>`;
+            tableContent += `
+            <tr>
+                <td>${announcement.id}</td>
+                <td>${announcement.title}</td>
+                <td>${announcement.body}</td>
+                <td>${announcement.dateEdited}</td>
+                <td>${announcement.enable ? '✅ Visible' : '❌ Invisible'}</td>
+                <td>
+                    <a data-bs-toggle="modal" data-bs-target="#new-announcement-modal" onclick="renderDropdown(${announcement.id})" class="btn btn-secondary btn-sm" role="button" aria-pressed="true">Edit</a>
+                </td>
+                <td>${enableToggle}</td>
+                <td>
+                    <button onclick="deleteAnnouncement(${announcement.id})" class="btn btn-danger btn-sm">Delete</button>
+                </td>
+            </tr>
+            `;
+        }
+        document.querySelector("#table-body").innerHTML = tableContent;
+    }
+    function renderOverview(){
+        overviewContainer.innerHTML = `
+            <h3 class="fw-bold mb-2">Overview</h3>
+            <div id="stats-container">
+                <div>
+                    <p class="fs-1 fw-bold text-center">${overviewData["totalAnnouncements"]}</p>
+                    <p class="text-center">Posts</p>
+                </div>
+                <div>
+                    <p class="fs-1 fw-bold text-center">${overviewData["enabledCount"]}</p>
+                    <p class="text-center">Enabled</p>
+                </div>
+                <div class="d-none d-lg-block">
+                    <p class="fs-1 fw-bold text-center">${overviewData["disabledCount"]}</p>
+                    <p class="text-center">Disabled</p>
+                </div>
+                <div>
+                    <p class="fs-1 fw-bold text-center">${overviewData["averageBodyLength"]}</p>
+                    <p class="text-center">μ Length</p>
+                </div>
+                <div>
+                    <p class="fs-1 fw-bold text-center">${overviewData["oldestAnnouncement"]}</p>
+                    <p class="text-center">Oldest</p>
+                </div>
+                <div class="d-none d-lg-block">
+                    <p class="fs-1 fw-bold text-center">${overviewData["newestAnnouncement"]}</p>
+                    <p class="text-center">Newest</p>
+                </div>
+            </div>
+
+        `;
+    }
+    function renderDropdown(editingId){
+        let dropdownContent = `<option value="-1">Create New Announcement</option>`;
+        if(editingId == -1){
+            dropdownContent = `<option value="-1" selected>Create New Announcement</option>`;
+        }
+
+        for(let announcement of allAnnouncements){
+            if(announcement.id != editingId){
+                dropdownContent += `<option value="${announcement.id}">${announcement.id}: ${announcement.title}</option>`;
+            }else{
+                dropdownContent += `<option value="${announcement.id}" selected>${announcement.id}: ${announcement.title}</option>`;
+            }
+        }
+        document.getElementById("id-select").innerHTML = dropdownContent;
+    }
+
+    //Data Manipulation
+    function deleteAnnouncement(id){
+        let toastId = createToast("Deleting Announcement");
+        postData("/api/management/announcement/delete", id)
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .then(getData)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ Announcement Deleted";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            });
+    }
+
+    function toggleEnable(id){
+        let toastId = createToast("Switching Visibility");
+        let announcement = allAnnouncements.find(announcement => announcement.id === id);
+        announcement.enable = !announcement.enable;
+        postData("/api/management/announcement/save", announcement)
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .then(getData)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ Changes committed";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            });
+    }
+
+    function saveAnnouncement(announcement){
+        let toastId = createToast("Saving Announcement");
+        postData("/api/management/announcement/save", announcement)
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .then(getData)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ Changes committed";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            });
+    }
+
+    function privateAll(){
+        for(let announcement of allAnnouncements){
+            if(announcement.enable) {
+                announcement.enable = false;
+                saveAnnouncement(announcement);
+            }
+        }
+    }
+
+    //Form submission
+    const form = document.getElementById('new-announcement-form');
+
+    function submitForm(){
+        let announcement = {
+            "id":document.getElementById("id-select").value,
+            "title":document.getElementById("title-input").value,
+            "body":document.getElementById("body-input").value,
+            "date": new Date(),
+            "enable":false
+        }
+        saveAnnouncement(announcement);
+    }
+
+</script>
 </body>
 </html>

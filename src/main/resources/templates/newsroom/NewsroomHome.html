@@ -16,12 +16,7 @@
             <!-- Content added here -->
         </div>
     </div>
-    <div class="mt-3">
-        <h3 th:if="${isAnnouncement}">📢Announcements</h3>
-        <div th:each="message : ${announcements}">
-            <div th:replace="Components :: message" class="mt-2"></div>
-        </div>
-    </div>
+    <div th:replace="Components :: announcements" class="container mt-3"></div>
 
     <div class="container mt-4">
         <h2 class="text-center fw-bold border-bottom pb-2">All Posts</h2>
@@ -55,17 +50,17 @@
 
 <div th:replace="Components :: footer"></div>
 <div th:replace="Components :: JS"></div>
-<div th:replace="Components :: scripts"></div>
+<div th:replace="Components :: announcementScript"></div>
 <script>
     // Elements
     const mainContent = document.querySelector("#main-content");
-    const recentContent = document.querySelector("#recent-posts");
     const slideContent = document.querySelector("#slide-container")
+    const recentContent = document.querySelector("#recent-posts");
     const bodyContent = document.querySelector("#top");
     let newsroomContent;
 
     // Fetch requests
-    fetch("/api/v1/Newsroom/post/all")
+    fetch("/api/newsroom/all")
         .then(checkStatus)
         .then(response => response.json())
         .then(data => {
@@ -95,10 +90,17 @@
             renderNews();
             renderRecent(6);
         })
-        .catch(error => {
-            // error handling
-            bodyContent.innerHTML = "<h3 class=\"text-center fw-bold\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>";
-            console.error('Error retrieving data:', error);
+        .catch((response)=>{
+            console.log(response);
+            response.json()  // Parse the JSON error response
+                .then(errorData => {
+                    bodyContent.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class="text-center fw-bold">${errorData.title}</h3><p class="text-center">${errorData.message}</p>`;
+                })
+                .catch(error => {
+                    bodyContent.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class="text-center fw-bold">There was an error receiving data from Costi Online Services</h3><p class="text-center">Error message could not be parsed. ${error}</p>`;
+
+                    console.error("Error parsing error response:", error);
+                });
         })
         .finally(() => $("#loading").hide());
 

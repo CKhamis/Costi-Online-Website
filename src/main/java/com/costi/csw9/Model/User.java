@@ -1,5 +1,6 @@
 package com.costi.csw9.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,12 +10,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 @Getter
 @Setter
@@ -31,7 +31,10 @@ public class User implements UserDetails {
    String firstName;
    @Size(max = 20, message = "Last name can only be 20 characters or less")
    String lastName;
+   @Column(nullable = false, unique = true)
    String email;
+   @NotNull
+   @JsonIgnore
    String password;
 
    private LocalDateTime dateCreated = LocalDateTime.now();
@@ -42,12 +45,6 @@ public class User implements UserDetails {
    private UserRole role;
    private Boolean isLocked = false;
    private Boolean enabled =  false;
-
-   @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-   private List<AccountLog> logs = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<AccountNotification> notifications = new ArrayList<>();
 
     public User(String firstName, String lastName, String email, String password, UserRole role) {
         this.firstName = firstName;
@@ -105,36 +102,12 @@ public class User implements UserDetails {
         return this.getRole().equals(UserRole.OWNER);
     }
 
-    public List<AccountLog> getLogs() {
-        return logs;
-    }
-
-    public void setLogs(List<AccountLog> logs) {
-        this.logs = logs;
-    }
-
     public LocalDateTime getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(LocalDateTime dateCreated) {
-        this.dateCreated = dateCreated;
-    }
-
     public int getProfilePicture() {
         return profilePicture;
-    }
-
-    public void setProfilePicture(int profilePicture) {
-        this.profilePicture = profilePicture;
-    }
-
-    public List<AccountNotification> getNotifications() {
-        return notifications;
-    }
-
-    public void setNotifications(List<AccountNotification> notifications) {
-        this.notifications = notifications;
     }
 
     public String getFormattedDateCreated(){

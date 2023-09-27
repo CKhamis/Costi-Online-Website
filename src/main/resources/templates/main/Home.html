@@ -20,12 +20,7 @@
 </div>
 
 <main>
-    <div class="container mt-3">
-        <h3 th:if="${isAnnouncement}">📢Announcements</h3>
-        <div th:each="message : ${announcements}">
-            <div th:replace="Components :: message" class="mt-2"></div>
-        </div>
-    </div>
+    <div th:replace="Components :: announcements" class="container mt-3"></div>
 
     <!-- Quick Links-->
     <div class="container mt-3">
@@ -57,95 +52,7 @@
 
     <div class="container" id="highlights">
         <h2 class="pb-2 border-bottom">Recent Highlights</h2>
-        <div id="home-slideshow" class="carousel slide mb-2" data-bs-ride="carousel">
-
-            <!-- Indicators/dots -->
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="0" class="active"></button>
-                <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="1"></button>
-                <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="2"></button>
-                <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="3"></button>
-                <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="4"></button>
-                <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="5"></button>
-                <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="6"></button>
-                <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="7"></button>
-                <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="8"></button>
-                <button type="button" data-bs-target="#home-slideshow" data-bs-slide-to="9"></button>
-            </div>
-
-            <!-- The slideshow/carousel -->
-            <div class="carousel-inner">
-                <div class="carousel-item active" th:object="${slide1}">
-                    <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
-                    <div class="carousel-caption newsroom-slide-caption">
-                        <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
-
-                    </div>
-                </div>
-                <div class="carousel-item" th:object="${slide2}">
-                    <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
-                    <div class="carousel-caption newsroom-slide-caption">
-                        <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
-                    </div>
-                </div>
-                <div class="carousel-item" th:object="${slide3}">
-                    <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
-                    <div class="carousel-caption newsroom-slide-caption">
-                        <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
-                    </div>
-                </div>
-                <div class="carousel-item" th:object="${slide4}">
-                    <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
-                    <div class="carousel-caption newsroom-slide-caption">
-                        <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
-                    </div>
-                </div>
-                <div class="carousel-item" th:object="${slide5}">
-                    <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
-                    <div class="carousel-caption newsroom-slide-caption">
-                        <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
-                    </div>
-                </div>
-                <div class="carousel-item" th:object="${slide6}">
-                    <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
-                    <div class="carousel-caption newsroom-slide-caption">
-                        <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
-                    </div>
-                </div>
-                <div class="carousel-item" th:object="${slide7}">
-                    <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
-                    <div class="carousel-caption newsroom-slide-caption">
-                        <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
-                    </div>
-                </div>
-                <div class="carousel-item" th:object="${slide8}">
-                    <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
-                    <div class="carousel-caption newsroom-slide-caption">
-                        <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
-                    </div>
-                </div>
-                <div class="carousel-item" th:object="${slide9}">
-                    <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
-                    <div class="carousel-caption newsroom-slide-caption">
-                        <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
-                    </div>
-                </div>
-                <div class="carousel-item" th:object="${slide10}">
-                    <img th:src="@{*{imagePath}}" th:alt="*{getSubtitle()}" class="slide">
-                    <div class="carousel-caption newsroom-slide-caption">
-                        <a class="text-1" th:href="|/Newsroom/${slide1.getId()}/view|"><h3 th:text="*{getTitle()}" class="fw-bold mb-0">Slide</h3></a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Left and right controls/icons -->
-            <button class="carousel-control-prev" type="button" data-bs-target="#home-slideshow" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon"></span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#home-slideshow" data-bs-slide="next">
-                <span class="carousel-control-next-icon"></span>
-            </button>
-        </div>
+        <div id="slide-content"></div>
         <a href="/Newsroom"><p class="text-1 text-decoration-underline">View more in Costi Newsroom ></p></a>
     </div>
 
@@ -177,8 +84,13 @@
     </div>
 
     <div class="container pb-5" id="new">
-        <h2 class="pb-2 border-bottom">New In Costi Online 7.0</h2>
-        <p class="fs-4">Introducing Costi Labs. Costi Labs is the newest tab on this website that is all about interactable projects I create. For now, there is only one experiment in Costi Labs, <a href="/Labs/LED">Dynamic Lighting</a>. Dynamic Lighting allows visitors of this website to adjust the LED lights in rooms of my house from anywhere you can use Costi Online.</p>
+        <h2 class="pb-2 border-bottom">New In Costi Online 9.0</h2>
+        <p class="fs-4">
+            The "Great Refactoring" update on my website has been a substantial project that started development in early July and has continued until now. Throughout this period, I've made several commits to enhance various aspects of the website. These updates include improving user creation, fixing issues with owner account creation, enhancing the functionality for viewing user accounts, and adding the ability to delete user accounts. I've also worked on profile picture options, made improvements in rendering notifications, and addressed UI issues.
+            <br />
+            <br />
+            This update has required extensive work on both the front-end and back-end of the website, with a primary focus on improving user account management. I've also made updates to features like Newsroom, LED Controller, and COMT functionality.
+        </p>
         <a href="https://github.com/CKhamis/Costi-Online-Website" type="button" class="btn btn-dark btn-sm">See Costi Online on GitHub</a>
     </div>
 
@@ -227,7 +139,7 @@
             <div class="container py-5">
                 <div class="row">
                     <div class="d-none d-md-block col-md-7 ">
-                        <div class="row">
+                        <div class="row" id="wiki-preview-container">
                             <div class="col-4" th:each="page : ${wiki}">
                                 <div th:switch="${page.category}"   class="card border-box">
                                     <div th:case="INSIDE_JOKE"      class="card-header fw-bold" th:text="|&#128518; Inside Joke|">Card title</div>
@@ -260,10 +172,146 @@
 <div th:replace="Components :: timer-box"></div>
 <div th:replace="Components :: toast-box"></div>
 <div th:replace="Components :: JS"></div>
-<div th:replace="Components :: scripts"></div>
+<div th:replace="Components :: axcel-sprite-logic"></div>
+<div th:replace="Components :: announcementScript"></div>
 <script>
     let subtitles = ["Costi's favorite website", "I haven't seen you in a BILLION years!", "Jedi Terence", "Chelsea Stacie Ingrid Marla Darla", "MAAAAARRIOOOOO!", "A project by Costi", "An interdimensional project",
     "'Ello", "📮😳😳😳", "What's puopping", "Death, Dying, Religion", "ur mum", "Free Taiwan 🇹🇼 ", "🥩🇯🇲🥞"]
+
+    // Wiki Preview
+    let wikiPages, newsroomPages;
+
+    let slideContent = document.querySelector("#slide-content");
+
+    refresh();
+    function refresh(){
+        const wikiFetch = fetch("/api/wiki/all");
+        const newsroomFetch = fetch("/api/newsroom/all");
+
+        Promise.all([wikiFetch, newsroomFetch])
+            .then(responses => {
+                const response1 = checkStatus(responses[0]);
+                const response2 = checkStatus(responses[1]);
+
+                return Promise.all([response1, response2]);
+            })
+            .then(data => {
+                let wikiDownload = data[0].json();
+                let newsroomDownload = data[1].json();
+
+                return Promise.all([wikiDownload, newsroomDownload]);
+            })
+            .then(data => {
+                wikiPages = data[0]; // wiki data
+                newsroomPages = data[1]; // newsroom data
+                renderWikiPages();
+                renderSlides(10);
+            })
+            .catch((response)=>{
+                console.log(response);
+                response.json()  // Parse the JSON error response
+                    .then(errorData => {
+                        console.log(errorData);
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                    });
+            });
+    }
+
+    function renderSlides(quantity){
+        let innerHTML = "";
+        if(!newsroomPages){
+            innerHTML = `<img src="/images/default-posts/no-image.jpg" alt="no image" class="newsroom-slide" style="aspect-ratio: 3 / 1"/>`;
+        }else{
+            let indicatorDotHTML = generateIndicatorDots(quantity);
+            let slidesInnerHTML = generateSlidesHTML(quantity);
+
+            innerHTML = `
+                <div id="newsroom-slideshow" class="carousel slide mb-4" data-bs-ride="carousel">
+                    <!-- Indicators/dots -->
+                    ${indicatorDotHTML}
+
+                    <!-- The slideshow/carousel -->
+                    ${slidesInnerHTML}
+
+                    <!-- Left and right controls/icons -->
+                    <button class="carousel-control-prev" type="button" data-bs-target="#newsroom-slideshow" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#newsroom-slideshow" data-bs-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                    </button>
+                </div>
+
+            `;
+        }
+        slideContent.innerHTML = innerHTML;
+        $('#newsroom-slideshow').carousel();
+    }
+
+    function generateIndicatorDots(quantity){
+        let indicatorDotHTML = `
+            <ol class="carousel-indicators">
+                <li data-bs-target="#newsroom-slideshow" data-bs-slide-to="0" class="active"></li>
+        `;
+
+        for(let i = 1; i < quantity && i < newsroomPages.length; i++){
+            indicatorDotHTML += `<li data-bs-target="#newsroom-slideshow" data-bs-slide-to="${i}"></li>`;
+        }
+
+        indicatorDotHTML += `</ol>`;
+        return indicatorDotHTML;
+    }
+    function generateSlidesHTML(quantity){
+        let innerHTML = `
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="${newsroomPages[0].imagePath}" alt="${newsroomPages[0].title}" class="newsroom-slide" style="aspect-ratio: 3 / 1">
+                    <div class="carousel-caption newsroom-slide-caption">
+                        <a class="text-1" href="/Newsroom/${newsroomPages[0].id}/view"><h3 class="fw-bold">${newsroomPages[0].title}</h3></a>
+                        <p class="pb-0">${newsroomPages[0].timeSinceEdited}</p>
+                    </div>
+                </div>
+            `;
+
+        for(let i = 1; i < quantity && i < newsroomPages.length; i++){
+            innerHTML += `
+                <div class="carousel-item">
+                    <img src="${newsroomPages[i].imagePath}" alt="${newsroomPages[i].title}" class="newsroom-slide" style="aspect-ratio: 3 / 1">
+                    <div class="carousel-caption newsroom-slide-caption">
+                        <a class="text-1" href="/Newsroom/${newsroomPages[i].id}/view"><h3 class="fw-bold">${newsroomPages[i].title}</h3></a>
+                        <p class="pb-0">${newsroomPages[i].timeSinceEdited}</p>
+                    </div>
+                </div>
+            `;
+        }
+        innerHTML += `</div>`;
+        return innerHTML;
+    }
+
+    function renderWikiPages(){
+        let wikiContent = ``;
+        wikiPages.sort((a, b) => b.views - a.views);
+        for(let i = 0; i < wikiPages.length && i < 3; i++){
+            let page = wikiPages[i];
+            wikiContent += `
+            <div class="col-4">
+                <div class="card border-box">
+                    <div class="card-header fw-bold">${page.category}</div>
+                    <div class="card-body">
+                        <h5 class="card-title text-truncate">${page.title}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted text-truncate">${page.subtitle}</h6>
+                        <p class="text-muted">Views: ${page.views}</p>
+                        <a href="/Wiki/${page.id}/view" class="card-link">View &gt;</a>
+                    </div>
+                </div>
+            </div>
+            `;
+        }
+        document.querySelector("#wiki-preview-container").innerHTML = wikiContent;
+    }
+
 
     $(document).ready(function(){
         checkGameStarted();

@@ -57,17 +57,19 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-12 col-lg-5 pt-5 px-5 pb-lg-5">
-                    <img class="img-fluid pb-3" th:src="@{/images/About/Costi.jpg}" style="width: 100%"/>
+                    <img class="img-fluid pb-3" th:src="@{/images/About/Costi.webp}" style="width: 100%"/>
                     <h1 class="fw-bold text-uppercase">Constantine Khamis</h1>
                     <p class="fs-4">Student intern</p>
                     <a href="https://www.linkedin.com/in/constantin-khamis/"><img th:src="@{/icons/LinkedIn.svg}" class="img-fluid" style="width:40px;"/></a>
                     <a href="https://github.com/CKhamis"><img th:src="@{/icons/GitHub.svg}" class="img-fluid" style="width:40px; margin: 0 10px 0 10px;" /></a>
-                    <a href="https://www.youtube.com/@costimedia7326/"><img th:src="@{/icons/YouTube.svg}" class="img-fluid" style="width:40px;" /></a>
+                    <a href="https://www.youtube.com/@costimedia/"><img th:src="@{/icons/YouTube.svg}" class="img-fluid" style="width:40px;" /></a>
                 </div>
                 <div class="col-xs-12 col-lg-7 p-5">
                     <h3 class="fw-bold">About Me</h3>
                     <p class="fw-4 fs-4 mt-2">
-                        Hello, I am Costi (pronounced Coasty). I am currently a student in San Jose State University working towards my bachelors degree in computer science since fall 2019. Since I was 8, I have enjoyed learning about new technical advancements in consumer products and research. In my free time I enjoy spending time with friends, working on coding projects, making videos, and playing video-games. I am working as a cybersecurity intern for the City of San jose with over 2 years of experience.
+                        I am Costi, often pronounced as "Coasty." Currently, I am a dedicated student at San Jose State University, diligently pursuing my Bachelor's degree in Computer Science with an anticipated graduation in the spring of 2024. My passion for exploring cutting-edge technological advancements has been a constant since I was eight years old.
+                        <br />
+                        Beyond my academic pursuits, I allocate my free time purposefully. I am enthusiastic about socializing with friends, engaging in coding projects, creating videos, and indulging in video games. Professionally, I have garnered over three years of invaluable experience, currently serving as a cybersecurity intern for the City of San Jose.
                     </p>
                     <h5 class="fw-bold">Skills</h5>
                     <div class="row">
@@ -179,7 +181,7 @@
                         <h5 class="fw-bold">Class Highlights</h5>
                         <div class="row">
                             <div class="col-lg-4 col-sm-6 col-xs-6">
-                                <p>Calculus 3</p>
+                                <p>Server Programming</p>
                             </div>
                             <div class="col-lg-4 col-sm-6 col-xs-6">
                                 <p>Operating Systems</p>
@@ -211,9 +213,20 @@
     <div class="container p-0 mt-5" id="website">
         <div class="container-fluid">
             <h2 class="fw-bold text-center border-bottom mb-4">About Costi Online</h2>
-            <p class="fs-4">Costi Online is a personal project I made to showcase my different projects, test my abilities with front end, back end, hosting, and UX design. Costi Online originally began as a companion website for my self-hosted Minecraft server, but has slowly evolved to cover more topics.
-                The idea of my own personal website is not new. Several predecessors to this website were created over the course of me coding, but none of them were fully developed or ready to be deployed. The development of the first publicly released version of this website took about a month to create and strictly covered the Minecraft server.
-                More features were added gradually, some changes larger than others. This website takes inspiration of my previous work, as well as various other personal websites I have come across.
+            <p class="fs-4">
+                In May 2022, I embarked on the development journey of Costi Online, a personal project conceived with the primary goal of showcasing my Minecraft worlds. Beyond this, it also served as a platform to rigorously test and hone my skills in various domains, including front-end and back-end development, hosting infrastructure, and user experience (UX) design.
+                <br />
+                <br />
+                Originally conceived as a companion website for my self-hosted Minecraft server, Costi Online has undergone a remarkable evolution, expanding its scope to encompass a wider array of topics and functionalities.
+                <br />
+                <br />
+                The genesis of this personal website was not without precedent. Prior attempts at crafting my own digital presence had been made during my coding journey, but none had reached a state of full development or readiness for deployment. It took approximately a month of dedicated effort to bring forth the inaugural publicly released version of Costi Online, which was initially focused exclusively on the Minecraft server.
+                <br />
+                <br />
+                Since then, the website has seen a continuous influx of features and improvements, with some changes being more substantial than others. Notably, the transition from an H2 database to MySQL marked a pivotal point in its development, enhancing its data handling capabilities. Additionally, the incorporation of an API has empowered the website with greater interactivity and flexibility. Furthermore, the entire platform now runs seamlessly on a self-hosted Linux machine, underscoring my commitment to managing every aspect of its infrastructure.
+                <br />
+                <br />
+                Costi Online draws inspiration not only from my prior work but also from various personal websites I've encountered over time. It stands as a testament to my dedication to ongoing self-improvement and my passion for presenting my technical skills and projects to the digital world.
             </p>
             <div class="row">
                 <div class="feature col-sm-12 col-md-6 col-lg-3">
@@ -224,7 +237,7 @@
                     <ul>
                         <li><p>HTML</p></li>
                         <li><p>CSS (using SASS)</p></li>
-                        <li><p>Bootstrap</p></li>
+                        <li><p>Bootstrap 5</p></li>
                     </ul>
                 </div>
                 <div class="feature col-sm-12 col-md-6 col-lg-3">
@@ -258,6 +271,7 @@
                         <li><p>Adobe Premiere Pro</p></li>
                         <li><p>Adobe After Effects</p></li>
                         <li><p>Handbrake (for compression)</p></li>
+                        <li><p>Xn Convert (for compression)</p></li>
                         <li><p>GitHub</p></li>
                     </ul>
                 </div>
@@ -272,6 +286,6 @@
 <div th:replace="Components :: toast-box"></div>
 <script th:replace="Components :: axcel-game"></script>
 
-<div th:replace="Components :: scripts"></div>
+<div th:replace="Components :: axcel-sprite-logic"></div>
 </body>
 </html>

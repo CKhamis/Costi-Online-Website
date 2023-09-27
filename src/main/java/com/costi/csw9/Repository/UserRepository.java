@@ -1,6 +1,7 @@
 package com.costi.csw9.Repository;
 
 import com.costi.csw9.Model.User;
+import com.costi.csw9.Model.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,20 +15,6 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Modifying
-    @Transactional
-    @Query("UPDATE User u SET u.enabled = :enabled WHERE u.id = :id")
-    void enable(@Param("id") Long id, @Param("enabled") boolean enable);
-
-    @Modifying
-    @Transactional
-    @Query("UPDATE User u SET u.isLocked = :isLocked WHERE u.id = :id")
-    void lock(@Param("id") Long id, @Param("isLocked") boolean isLocked);
-
-    @Modifying
-    @Transactional
-    @Query("UPDATE User u SET u.role = 'USER' WHERE u.id = :id")
-    void demote(@Param("id") Long id);
-
+    User findFirstByRole(UserRole role);
     Optional<User> findByEmail(String email);
 }
