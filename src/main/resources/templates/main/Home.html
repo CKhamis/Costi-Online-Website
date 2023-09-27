@@ -222,7 +222,7 @@
     function renderSlides(quantity){
         let innerHTML = "";
         if(!newsroomPages){
-            innerHTML = `<img src="/images/default-posts/no-image.jpg" alt="no image" class="newsroom-slide" style="aspect-ratio: 3 / 1"/>`;
+            innerHTML = `<img src="/images/default-posts/no-image.jpg" alt="no image" class="newsroom-slide"/>`;
         }else{
             let indicatorDotHTML = generateIndicatorDots(quantity);
             let slidesInnerHTML = generateSlidesHTML(quantity);
@@ -267,7 +267,7 @@
         let innerHTML = `
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="${newsroomPages[0].imagePath}" alt="${newsroomPages[0].title}" class="newsroom-slide" style="aspect-ratio: 3 / 1">
+                    <img src="${newsroomPages[0].imagePath}" alt="${newsroomPages[0].title}" class="newsroom-slide">
                     <div class="carousel-caption newsroom-slide-caption">
                         <a class="text-1" href="/Newsroom/${newsroomPages[0].id}/view"><h3 class="fw-bold">${newsroomPages[0].title}</h3></a>
                         <p class="mb-0 text-1">${newsroomPages[0].timeSinceEdited}</p>
@@ -278,7 +278,7 @@
         for(let i = 1; i < quantity && i < newsroomPages.length; i++){
             innerHTML += `
                 <div class="carousel-item">
-                    <img src="${newsroomPages[i].imagePath}" alt="${newsroomPages[i].title}" class="newsroom-slide" style="aspect-ratio: 3 / 1">
+                    <img src="${newsroomPages[i].imagePath}" alt="${newsroomPages[i].title}" class="newsroom-slide">
                     <div class="carousel-caption newsroom-slide-caption">
                         <a class="text-1" href="/Newsroom/${newsroomPages[i].id}/view"><h3 class="fw-bold">${newsroomPages[i].title}</h3></a>
                         <p class="pb-0">${newsroomPages[i].timeSinceEdited}</p>
