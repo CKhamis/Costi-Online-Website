@@ -23,7 +23,7 @@ public class FrontEndController {
     private AccountLogService accountLogService;
     private AccountNotificationService accountNotificationService;
     private PostService postService;
-    private static final String VERSION = "9.0.0";
+    private static final String VERSION = "9.0.1";
 
     @Autowired
     public FrontEndController(UserService userService, WikiService wikiService, AnnouncementService announcementService, AccountLogService accountLogService, AccountNotificationService accountNotificationService, PostService postService) {

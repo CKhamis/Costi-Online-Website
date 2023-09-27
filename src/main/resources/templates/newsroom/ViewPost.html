@@ -131,7 +131,7 @@
         let leftCount = 0, rightCount = 0;
 
         for(let otherPost of allNews){
-            if(post.category === otherPost.category && post.id != otherPost.id){
+            if(post.category === otherPost.category && post.id != otherPost.id && leftCount < 6){
                 leftPanel += `
                     <a href="/Newsroom/${otherPost.id}/view">
                        <img src="${otherPost.imagePath}" style="aspect-ratio: 16 / 9; object-fit:cover;width: 100%;"/>
@@ -142,7 +142,7 @@
                     </a>
                 `;
                 leftCount++;
-            }else if(post.id != otherPost.id){
+            }else if(post.id != otherPost.id && rightCount < 6){
                 rightPanel += `
                     <a href="/Newsroom/${otherPost.id}/view">
                        <img src="${otherPost.imagePath}" style="aspect-ratio: 16 / 9; object-fit:cover;width: 100%;"/>
