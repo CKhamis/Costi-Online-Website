@@ -84,7 +84,7 @@ public class FrontEndController {
     }
 
     @GetMapping("/SignUp")
-    public String getNewAccount(Model model) {
+    public String getNewAccount() {
         return "main/NewAccount";
     }
 
