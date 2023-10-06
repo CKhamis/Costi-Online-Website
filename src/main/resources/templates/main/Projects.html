@@ -60,7 +60,7 @@
     const analyticsContainer = $("#analyticsContainer");
 
     //fetch functions
-    fetch("/api/v1/Projects/all")
+    fetch("/api/Projects/all")
         .then(checkStatus)
         .then(response => response.json())
         .then(data => {
@@ -74,7 +74,7 @@
         })
         .finally(() => $("#loading").hide());
 
-    fetch("/api/v1/Projects/analytics")
+    fetch("/api/Projects/analytics")
         .then(checkStatus)
         .then(response => response.json())
         .then(data => {

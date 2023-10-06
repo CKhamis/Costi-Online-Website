@@ -43,7 +43,7 @@ public class SpecialController {
         JSON responses
      */
 
-    @GetMapping("/api/v1/Media/all")
+    @GetMapping("/api/Media/all")
     public ResponseEntity<List<MediaInfo>> getMedia() {
         return ResponseEntity.ok(mediaProjects);
     }
@@ -100,12 +100,12 @@ public class SpecialController {
         return jsonResponse;
     }
 
-    @GetMapping("/api/v1/Projects/all")
+    @GetMapping("/api/Projects/all")
     public ResponseEntity<List<ProjectInfo>> getProjects() {
         return ResponseEntity.ok(projects);
     }
 
-    @GetMapping("/api/v1/Projects/analytics")
+    @GetMapping("/api/Projects/analytics")
     @ResponseBody
     public Map<String, Object> getProjectAnalytics() {
         // Construct the JSON response
