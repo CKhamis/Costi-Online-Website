@@ -18,7 +18,7 @@ public class FrontEndController {
     private AccountLogService accountLogService;
     private AccountNotificationService accountNotificationService;
     private PostService postService;
-    private static final String VERSION = "9.0.1";
+    private static final String VERSION = "9.0.3";
 
     @Autowired
     public FrontEndController(UserService userService, WikiService wikiService, AnnouncementService announcementService, AccountLogService accountLogService, AccountNotificationService accountNotificationService, PostService postService) {
@@ -172,7 +172,7 @@ public class FrontEndController {
                 model.addAttribute("id", pageId);
                 model.addAttribute("title", "Edit Wiki Page");
 
-                return "wiki/ViewWiki";
+                return "wiki/WikiMaker";
             }
         } catch (Exception e) {
             return "redirect:/Wiki";
