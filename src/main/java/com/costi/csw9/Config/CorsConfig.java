@@ -10,17 +10,12 @@ public class CorsConfig {
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
-            // GET requests accepted from constantinekhamis.com
+
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins("https://costionline.com")
+                        .allowedOrigins("https://costionline.com", "https://constantinekhamis.com")
                         .allowedMethods("*")
-                        .allowedHeaders("*");
-
-                registry.addMapping("/api/**")
-                        .allowedOrigins("https://constantinekhamis.com")
-                        .allowedMethods("GET")
                         .allowedHeaders("*");
             }
         };
