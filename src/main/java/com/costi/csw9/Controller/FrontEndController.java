@@ -2,16 +2,11 @@ package com.costi.csw9.Controller;
 
 import com.costi.csw9.Model.*;
 import com.costi.csw9.Service.*;
-import com.costi.csw9.Util.LogicTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
 import java.security.Principal;
 import java.time.LocalDate;
 
@@ -23,7 +18,7 @@ public class FrontEndController {
     private AccountLogService accountLogService;
     private AccountNotificationService accountNotificationService;
     private PostService postService;
-    private static final String VERSION = "9.0.1";
+    private static final String VERSION = "9.0.3";
 
     @Autowired
     public FrontEndController(UserService userService, WikiService wikiService, AnnouncementService announcementService, AccountLogService accountLogService, AccountNotificationService accountNotificationService, PostService postService) {
@@ -167,24 +162,33 @@ public class FrontEndController {
 
         return "wiki/WikiMaker";
     }
-    @GetMapping("/Wiki/{id}/edit")
-    public String getCreateWiki(Model model, @PathVariable Long id) {
-        model.addAttribute("categories", WikiCategory.values());
-        model.addAttribute("id", id);
-        model.addAttribute("title", "Edit Wiki Page");
+    @GetMapping("/Wiki/{pageId}/edit")
+    public String getCreateWiki(Model model, @PathVariable Long pageId, Principal principal) {
+        User current = getCurrentUser(principal);
+        try {
+            WikiPage wiki = wikiService.loadById(pageId);
+            if(current.isAdmin() || wiki.getAuthor().equals(current)){
+                model.addAttribute("categories", WikiCategory.values());
+                model.addAttribute("id", pageId);
+                model.addAttribute("title", "Edit Wiki Page");
 
-        return "wiki/WikiMaker";
+                return "wiki/WikiMaker";
+            }
+        } catch (Exception e) {
+            return "redirect:/Wiki";
+        }
+        return "redirect:/Wiki";
     }
 
 
-    @RequestMapping("/Wiki/{PageId}/view")
-    public String viewPage(Model model, Principal principal, @PathVariable Long PageId) {
+    @RequestMapping("/Wiki/{pageId}/view")
+    public String viewPage(Model model, Principal principal, @PathVariable Long pageId) {
         User current = getCurrentUser(principal);
         model.addAttribute("isAdmin", current.isAdmin());
-        model.addAttribute("id", PageId);
+        model.addAttribute("id", pageId);
 
         try {
-            WikiPage wiki = wikiService.loadById(PageId);
+            WikiPage wiki = wikiService.loadById(pageId);
             model.addAttribute("showEdit", (current.isAdmin() || wiki.getAuthor().equals(current)));
 
             return "wiki/ViewWiki";
