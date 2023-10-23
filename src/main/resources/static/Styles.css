@@ -47,7 +47,7 @@
 
 /* About */
 #education{
-    background-image: url('/images/webpageImages/City Hall.jpg');
+    background-image: url('/images/webpageImages/SJSU.webp');
     background-position: right;
     background-size: 100%;
     background-attachment: fixed;
@@ -68,12 +68,13 @@
 
 /* Home */
 #projects{
-    background-image: url('/images/webpageImages/CostiOnline.jpg');
+    background-image: url('/images/webpageImages/CKOW.webp');
     background-position: right;
     background-attachment: fixed;
+    background-size: cover;
 }
 #media{
-    background-image: url('/images/Slideshow/SJSUm.jpg');
+    background-image: url('/images/webpageImages/SJSU.webp');
     background-position: center;
     background-attachment: fixed;
     background-size: cover;
