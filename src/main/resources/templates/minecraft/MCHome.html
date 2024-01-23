@@ -5,9 +5,7 @@
 <div th:replace="Components :: JS"></div>
 <div th:replace="minecraft/MinecraftComponents :: nav"></div>
 
-
-<!-- Desktop Carousel -->
-<div id="desktop" class="carousel slide d-none d-md-block" data-bs-ride="carousel">
+<div id="desktop" class="carousel slide" data-bs-ride="carousel">
 
     <!-- Indicators/dots -->
     <div class="carousel-indicators">
@@ -18,14 +16,14 @@
     <!-- The slideshow/carousel -->
     <div class="carousel-inner">
         <div class="carousel-item active">
-            <img th:src="@{/images/Slideshow/Para.jpg}" alt="Paramount Plus" class="d-block" style="width:100%">
+            <img th:src="@{/images/worldPreview/CSW8.jpg}" alt="Paramount Plus" class="d-block slideshow-slide" style="width:100%">
             <div class="carousel-caption">
                 <h3>Why are you even here rn? GET IT</h3>
                 <p>Did I mention it has Big Nate (an original show)?</p>
             </div>
         </div>
         <div class="carousel-item">
-            <img th:src="@{/images/Slideshow/CSWX.jpg}" alt="CSW9" class="d-block" style="width:100%">
+            <img th:src="@{/images/worldPreview/CSW5.jpg}" alt="CSW9" class="d-block slideshow-slide" style="width:100%">
             <div class="carousel-caption">
             </div>
         </div>
@@ -40,42 +38,9 @@
     </button>
 </div>
 
-<!-- Mobile Carousel -->
-<div id="mobile" class="carousel slide d-xs-block d-md-none mt-5" data-bs-ride="carousel">
-
-    <!-- Indicators/dots -->
-    <div class="carousel-indicators">
-        <button type="button" data-bs-target="#mobile" data-bs-slide-to="0" class="active"></button>
-        <button type="button" data-bs-target="#mobile" data-bs-slide-to="1"></button>
-    </div>
-
-    <!-- The slideshow/carousel -->
-    <div class="carousel-inner">
-        <div class="carousel-item">
-            <img th:src="@{/images/MobileSlideshow/Param.jpg}" alt="Paramount Plus" class="d-block" style="width:100%">
-            <div class="carousel-caption">
-                <h3>Why are you even here rn? GET IT</h3>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img th:src="@{/images/MobileSlideshow/CSWXm.jpg}" alt="CSW9" class="d-block" style="width:100%">
-            <div class="carousel-caption">
-            </div>
-        </div>
-    </div>
-
-    <!-- Left and right controls/icons -->
-    <button class="carousel-control-prev" type="button" data-bs-target="#mobile" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#mobile" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-    </button>
-</div>
-
 <div class="container px-4 py-5" id="about">
     <h2 class="pb-2 border-bottom">About Costi Survival World X</h2>
-    <p class="fs-4">Costi Survival World X is the latest collaborative survival world server. This server has a community made governmeent that has its own elections, policies and more. The version used on this server is Minecraft Bedrock edition and has little to no plugins or mods.</p>
+    <p class="fs-4">The Costi Survival World X is the latest collaborative survival world server. This world is a successor to CSW9, which was my second attempt at a Java-based server. We have since switched to Minecraft Bedrock edition for CSWX. This world started in mid to late 2022 and has been used in large waves by its user base. The world contains an in-game government system that is currently very libertarian. There is currently a single city in the world: Constantinople (a tradition started in CSW5) that contains a large number of districts, including the liberal district, Jeremy Biome district, and luxury district. The world currently has approximately 5 regularly playing members, with others that log on more occasionally. Although this world now the longest running Costi Survival World, the amount of hours spent in game is still less than CSW5.</p>
     <p class="fs-4"><a href="/Minecraft/gov#currentGovernment">Learn more ></a>
 </div>
 <div class="container px-4 py-5" id="featured-3">
@@ -114,5 +79,35 @@
 
 <div th:replace="Components :: footer"></div>
 <div th:replace="minecraft/MinecraftComponents :: scripts"></div>
+<script>
+    // Gamestate
+    var isOnline, version, worldName, gameMode, playersOnline, maxPlayers, playerList;
+    // Server state
+    getServerState();
+    function getServerState(){
+        let loading = $("#loading");
+        loading.show();
+
+        // TODO: Do this in backend to abstract details
+        fetch("https://api.mcsrvstat.us/bedrock/3/")
+            .then(checkStatus)
+            .then(response => response.json())
+            .then(data => {
+                isOnline = data.online;
+                if(isOnline){
+                    version = data.version;
+                    worldName = data.map.clean;
+                    gameMode = data.gamemode;
+                    playersOnline = data.players.online;
+                    maxPlayers = data.players.max;
+                    playerList = data.players.list;
+                }
+            })
+            .catch(error => {
+                console.error('Error retrieving data:', error);
+            })
+            .finally(() => loading.hide());
+    }
+</script>
 </body>
 </html>
