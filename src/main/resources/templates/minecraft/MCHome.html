@@ -38,11 +38,15 @@
     </button>
 </div>
 
-<div class="container px-4 py-5" id="about">
+<div class="container px-4 pt-3" id="server-status">
+</div>
+
+<div class="container px-4 py-2" id="about">
     <h2 class="pb-2 border-bottom">About Costi Survival World X</h2>
     <p class="fs-4">The Costi Survival World X is the latest collaborative survival world server. This world is a successor to CSW9, which was my second attempt at a Java-based server. We have since switched to Minecraft Bedrock edition for CSWX. This world started in mid to late 2022 and has been used in large waves by its user base. The world contains an in-game government system that is currently very libertarian. There is currently a single city in the world: Constantinople (a tradition started in CSW5) that contains a large number of districts, including the liberal district, Jeremy Biome district, and luxury district. The world currently has approximately 5 regularly playing members, with others that log on more occasionally. Although this world now the longest running Costi Survival World, the amount of hours spent in game is still less than CSW5.</p>
     <p class="fs-4"><a href="/Minecraft/gov#currentGovernment">Learn more ></a>
 </div>
+
 <div class="container px-4 py-5" id="featured-3">
     <h2 class="pb-2 border-bottom">Server Features</h2>
     <div class="row g-4 row-cols-1 row-cols-lg-5">
@@ -82,14 +86,15 @@
 <script>
     // Gamestate
     var isOnline, version, worldName, gameMode, playersOnline, maxPlayers, playerList;
-    // Server state
+
     getServerState();
+    setInterval(getServerState, 300000);
     function getServerState(){
         let loading = $("#loading");
         loading.show();
 
         // TODO: Do this in backend to abstract details
-        fetch("https://api.mcsrvstat.us/bedrock/3/")
+        fetch("https://api.mcsrvstat.us/bedrock/3/mc.costionline.com")
             .then(checkStatus)
             .then(response => response.json())
             .then(data => {
@@ -102,11 +107,44 @@
                     maxPlayers = data.players.max;
                     playerList = data.players.list;
                 }
+                renderServerStatus();
             })
             .catch(error => {
                 console.error('Error retrieving data:', error);
             })
             .finally(() => loading.hide());
+    }
+
+    function renderServerStatus(){
+        let serverAlert = document.getElementById("server-status");
+        let today = new Date();
+        const hours = today.getHours() % 12;
+        const minutes = today.getMinutes();
+        const formattedMinutes = (minutes < 10) ? "0" + minutes : minutes;
+        if(isOnline){
+            serverAlert.innerHTML = `
+            <div class="alert alert-success" role="alert">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="fw-bold mb-0">Server is Online</h5>
+                        <p style="font-size: 15px;" class="mb-0">Last checked: ${hours + ":" + formattedMinutes}</p>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-0 text-center">${playersOnline} / ${maxPlayers} Players active</h5>
+                    </div>
+                    <div class="spinner-grow text-success" role="status"></div>
+                </div>
+            </div>`;
+        }else {
+            serverAlert.innerHTML = `
+            <div class="alert alert-danger" role="alert">
+                <div class="d-flex justify-content-between">
+                    <h5 class="fw-bold mb-0">Server is Offline</h5>
+                    <p style="font-size: 15px;" class="mb-0">Last checked: ${hours + ":" + formattedMinutes}</p>
+                    <div class="spinner-grow text-danger" role="status"></div>
+                </div>
+            </div>`;
+        }
     }
 </script>
 </body>
