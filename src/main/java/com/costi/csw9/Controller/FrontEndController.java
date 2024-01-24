@@ -14,20 +14,12 @@ import java.time.LocalDate;
 public class FrontEndController {
     private final UserService userService;
     private WikiService wikiService;
-    private AnnouncementService announcementService;
-    private AccountLogService accountLogService;
-    private AccountNotificationService accountNotificationService;
-    private PostService postService;
-    private static final String VERSION = "9.0.3";
+    private static final String VERSION = "9.1.0";
 
     @Autowired
     public FrontEndController(UserService userService, WikiService wikiService, AnnouncementService announcementService, AccountLogService accountLogService, AccountNotificationService accountNotificationService, PostService postService) {
         this.userService = userService;
         this.wikiService = wikiService;
-        this.announcementService = announcementService;
-        this.accountLogService = accountLogService;
-        this.accountNotificationService = accountNotificationService;
-        this.postService = postService;
     }
 
     /**************************
@@ -224,46 +216,6 @@ public class FrontEndController {
     @GetMapping("/Minecraft/gov")
     public String getGovernmentInfo() {
         return "minecraft/YourGovernment";
-    }
-
-    @GetMapping("/Minecraft/vote")
-    public String getVoting() {
-        return "minecraft/VotingCenter";
-    }
-
-    @GetMapping("/Minecraft/vote/VotingBooth")
-    public String getVotingBooth() {
-        return "minecraft/VotingBooth";
-    }
-
-    @GetMapping("/Minecraft/vote/allCitizens")
-    public String getAllCitizens() {
-        return "minecraft/AllCitizens";
-    }
-
-    @GetMapping("/Minecraft/vote/register")
-    public String getRegister() {
-        return "minecraft/Register";
-    }
-
-    @GetMapping("/Minecraft/vote/runForOffice")
-    public String getAddCandidate() {
-        return "minecraft/AddCandidate";
-    }
-
-    @GetMapping("/Minecraft/vote/Polls")
-    public String getPolls() {
-        return "minecraft/Polls";
-    }
-
-    @GetMapping("/Minecraft/vote/BallotInfo")
-    public String getBallotInfo() {
-        return "minecraft/BallotInfo";
-    }
-
-    @GetMapping("/Minecraft/vote/results")
-    public String getResults() {
-        return "minecraft/ElectionResults";
     }
 
     // Axcel
