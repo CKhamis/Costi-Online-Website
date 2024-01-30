@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html xml:th="https://www.thymeleaf.org">
+<head th:replace="Components :: head('COMT Notifications')"></head>
+<body class="bg-1 text-1">
+<div th:replace="moderator/ModeratorComponents :: moderatorNav"></div>
+
+<main class="container mt-3">
+    <div class="row d-flex">
+        <div class="col-12 col-md-7 h-100">
+            <div class="container-fluid bg-2 py-3" id="overview-container">
+            </div>
+        </div>
+        <div class="col-12 col-md-5 h-100">
+            <div class="container-fluid bg-2 py-3">
+                <h3 class="fw-bold mb-2">Actions</h3>
+                <div class="action-button-container">
+                    <div class="action-button" data-bs-toggle="modal" data-bs-target="#new-notification-modal">
+                        <img th:src="@{/icons/New.svg}" />
+                        <p class="text-center">New</p>
+                    </div>
+                    <div class="action-button" onclick="refresh()">
+                        <img th:src="@{/icons/Refresh.svg}" />
+                        <p class="text-center">Refresh</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid" id="error-container">
+
+    </div>
+    <div class="container-fluid bg-2 mt-4 p-0 table-responsive" id="notifications-container">
+        <table class="table table-sm align-middle table-hover table-dark">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">User</th>
+                <th scope="col">Title</th>
+                <th scope="col">Body</th>
+                <th scope="col">Type</th>
+                <th scope="col">Created</th>
+                <th scope="col">Delete</th>
+            </tr>
+            </thead>
+            <tbody id="table-body">
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<div class="modal fade" id="new-notification-modal" tabindex="-1" aria-labelledby="newNotificationLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-box">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newNotificationLabel">Create New Notification</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post">
+                    <div class="form-row row">
+                        <div class="col-12 mb-3">
+                            <label for="title">Title</label>
+                            <input type="text" class="form-control" id="title" placeholder="Title here" required>
+                        </div>
+                    </div>
+                    <div class="form-row row">
+                        <div class="col-md-6 mb-3">
+                            <label for="type">Notification Type</label>
+                            <select id="type"  class="form-control">
+                                <option value="primary">Primary</option>
+                                <option value="secondary">Secondary</option>
+                                <option value="success">Success</option>
+                                <option value="danger">Danger</option>
+                                <option value="warning">Warning</option>
+                                <option value="info">Info</option>
+                                <option value="light">Light</option>
+                                <option value="dark">Dark</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="destination">Recipient</label>
+                            <select id="destination" class="form-control">
+                                <option value="" disabled="disabled">Select a user</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row row">
+                        <div class="col-12 mb-3">
+                            <label for="body">Content Body</label>
+                            <textarea type="text" rows="3" class="form-control" id="body" placeholder="body content" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="submitForm()">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 99" id="toast-container">
+</div>
+
+<div th:replace="Components :: JS"></div>
+<div th:replace="moderator/ModeratorComponents :: toast-scripts"></div>
+<script>
+    // Form Components
+    const title = document.querySelector("#title");
+    const type = document.querySelector("#type");
+    const destination = document.querySelector("#destination");
+    const body = document.querySelector("#body");
+    
+    // Elements
+    const errorContainer = document.querySelector("#notifications-container");
+    const overviewContainer = document.querySelector("#overview-container");
+    const table = document.querySelector("#table-body");
+
+    // Data
+    let fileList;
+
+    // Processing
+    function refresh(){
+        Promise.all([fetch("/api/management/files/all")])
+            .then(responses => {
+                const response1 = checkStatus(responses[0]);
+
+                return Promise.all([response1]);
+            })
+            .then(data => {
+                let files = data[0].json();
+
+                return Promise.all([files]);
+            })
+            .then(data => {
+                fileList = data[0];
+
+                console.log(fileList);
+            })
+            .catch(error => {
+                errorContainer.innerHTML = `<h3 class="text-center fw-bold">There was an error receiving data from Costi Online Services</h3><p class="text-center">${error}</p>`;
+                console.error('Error retrieving data:', error);
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        errorContainer.innerHTML = `<h3 class="text-center fw-bold">${getIcon(errorData.severity)} ${errorData.title}</h3><p class="text-center">${errorData.message}</p>`;
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        errorContainer.innerHTML = `<h3 class="text-center fw-bold">There was an error receiving data from Costi Online Services</h3><p class="text-center">Unable to establish communications with server.</p>`;
+                    });
+            });
+    }
+    refresh();
+
+    /*function saveNotification(notification){
+        let toastId = createToast("Saving Notification");
+        postData("/api/management/notifications/save", notification)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ Notification Created";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .then(refresh);
+    }
+
+    function deleteNotification(id){
+        let toastId = createToast("Deleting Notification");
+        postData("/api/management/notifications/delete", id)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ Notification Deleted";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .then(refresh);
+    }
+
+    function submitForm(){
+        let notification = {
+            "title":title.value,
+            "body":body.value,
+            "destination": destination.value,
+            "notificationType": type.value
+        }
+        saveNotification(notification);
+    }
+
+    // Render functions
+    function renderDropdown(){
+        let content = `<option value="All">Everyone</option>`;
+        for(let user of userList){
+            content += `<option value="${user.id}">${user.firstName} ${user.lastName}</option>`;
+        }
+        destination.innerHTML = content;
+    }
+    function renderTableAndAnalytics(){
+        let numTotal = notificationList.length, bodyLengthSum = 0, numDanger = 0, numInfo = 0, numSuccess = 0, numWarning = 0, numPrimary = 0;
+
+        let tableContent = ``;
+        for(let i = 0; i < notificationList.length; i++){
+            let notification = notificationList[i];
+
+            // Analytics
+            bodyLengthSum += notification.body.length;
+
+            if(notification.notificationType === "danger"){
+                numDanger++;
+            }else if(notification.notificationType === "info"){
+                numInfo++;
+            }else if(notification.notificationType === "success"){
+                numSuccess++;
+            }else if(notification.notificationType === "warning"){
+                numWarning++;
+            }else if(notification.notificationType === "primary"){
+                numPrimary++;
+            }
+
+            // Table
+            let user = userList.find(obj => obj["id"] == notification.destinationId);
+
+            tableContent += `
+            <tr>
+                <td>${notification.id}</td>
+                <td><a class="text-white text-decoration-underline" href="/COMT/Accounts/${notification.destinationId}">${user.firstName} ${user.lastName}</a></td>
+                <td>${notification.title}</td>
+                <td>${notification.body}</td>
+                <td class="text-center">
+                    <span class="badge bg-${notification.notificationType}">${notification.notificationType}</span>
+                </td>
+                <td>${notification.dateCreated}</td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="deleteNotification(${notification.id})">Delete</button>
+                </td>
+            </tr>
+            `;
+        }
+        table.innerHTML = tableContent;
+
+        // Analytics
+        overviewContainer.innerHTML = `
+            <h3 class="fw-bold mb-2">Overview</h3>
+            <div id="stats-container">
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${numTotal}</p>
+                    <p class="text-center">Notifications</p>
+                </div>
+                <div class="d-none d-lg-block">
+                    <p class="fs-1 fw-bold  text-center">${(numTotal > 0) ? Math.round(bodyLengthSum / numTotal) : 0}</p>
+                    <p class="text-center">μ Length</p>
+                </div>
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${numPrimary}</p>
+                    <p class="text-center">Primary</p>
+                </div>
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${numWarning}</p>
+                    <p class="text-center">Warning</p>
+                </div>
+                <div class="d-none d-lg-block">
+                    <p class="fs-1 fw-bold  text-center">${numDanger}</p>
+                    <p class="text-center">Danger</p>
+                </div>
+                <div class="d-none d-lg-block">
+                    <p class="fs-1 fw-bold  text-center">${numInfo}</p>
+                    <p class="text-center">Info</p>
+                </div>
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${numSuccess}</p>
+                    <p class="text-center">Success</p>
+                </div>
+            </div>
+
+        `;
+    }
+    */
+</script>
+</body>
+</html>

@@ -97,6 +97,11 @@ public class FrontEndController {
         return "moderator/AccountTools";
     }
 
+    @GetMapping("/COMT/Attachments")
+    public String getCostiOnlineAttachmentTools() {
+        return "moderator/AttachmentTools";
+    }
+
     @GetMapping("/COMT/Newsroom")
     public String getNewsroomTools(Model model) {
         model.addAttribute("categories", PostCategory.values());

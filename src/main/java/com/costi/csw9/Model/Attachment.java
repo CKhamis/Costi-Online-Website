@@ -1,5 +1,6 @@
 package com.costi.csw9.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
@@ -22,6 +23,7 @@ public class Attachment {
     private LocalDateTime created;
 
     @Lob
+    @JsonIgnore
     private byte[] data;
 
     public Attachment(String filename, String fileType, byte[] data) {

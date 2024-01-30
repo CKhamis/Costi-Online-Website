@@ -462,4 +462,10 @@ public class COMTController {
         User u = userService.loadUserByUsername(username);
         return u;
     }
+
+    @GetMapping("/files/all")
+    public ResponseEntity<List<Attachment>> getAllAttachments(){
+        List<Attachment> allFiles = comtService.findAllAttachments();
+        return ResponseEntity.ok(allFiles);
+    }
 }

@@ -36,6 +36,7 @@ public class COMTService {
     private final WikiRepository wikiRepository;
     private final AccountLogService accountLogService;
     private final AccountLogRepository accountLogRepository;
+    private final AttachmentRepository attachmentRepository;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -604,5 +605,13 @@ public class COMTService {
     }
     public User findUserById(Long id){
         return userRepository.getById(id);
+    }
+
+    /*
+        File Uploads
+     */
+
+    public List<Attachment> findAllAttachments(){
+        return attachmentRepository.findAll();
     }
 }
