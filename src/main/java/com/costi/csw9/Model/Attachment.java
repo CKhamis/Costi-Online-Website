@@ -21,12 +21,13 @@ public class Attachment {
     private String filename;
     private String fileType;
     private LocalDateTime created;
+    private boolean isLocked;
 
     @Lob
     @JsonIgnore
     private byte[] data;
 
-    public Attachment(String filename, String fileType, byte[] data) {
+    public Attachment(String filename, String fileType, byte[] data, boolean isLocked) {
         this.filename = filename;
         this.fileType = fileType;
         this.data = data;

@@ -168,7 +168,7 @@ public class COMTService {
     }
 
     private void databaseSave(Post post, MultipartFile file) throws Exception {
-        Attachment attachment = attachmentService.saveAttachment(file);
+        Attachment attachment = attachmentService.saveAttachment(file, true);
         post.setLastEdited(LocalDateTime.now());
         post.setImagePath(POST_IMAGE_PATH + attachment.getId());
         postRepository.save(post);

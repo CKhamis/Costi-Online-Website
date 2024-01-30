@@ -16,7 +16,7 @@ public class AttachmentServiceImpl implements AttachmentService {
 
 
     @Override
-    public Attachment saveAttachment(MultipartFile file) throws Exception {
+    public Attachment saveAttachment(MultipartFile file, boolean isLocked) throws Exception {
        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
        try {
             if(fileName.contains("..")) {
@@ -25,7 +25,7 @@ public class AttachmentServiceImpl implements AttachmentService {
                 throw  new Exception("Filename is empty:  " + fileName);
             }
 
-            Attachment attachment = new Attachment(fileName, file.getContentType(), file.getBytes());
+            Attachment attachment = new Attachment(fileName, file.getContentType(), file.getBytes(), isLocked);
             return attachmentRepository.save(attachment);
 
        } catch (Exception e) {

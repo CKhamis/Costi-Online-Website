@@ -25,7 +25,7 @@ public class FileController {
 
     @PostMapping("/Upload")
     public FileUploadResponseData uploadFile(@RequestParam("file")MultipartFile file) throws Exception {
-        Attachment attachment = attachmentService.saveAttachment(file);
+        Attachment attachment = attachmentService.saveAttachment(file, false);
         String downloadURL = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/Download/Uploads/")
                 .path(attachment.getId())
