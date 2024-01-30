@@ -240,10 +240,12 @@
             tableContent += `
             <tr>
                 <td>
-                    <img src="/Downloads/Uploads/${file.id}" class="newsroom-slide" style="height:40px">
+                    <img src="/Downloads/Uploads/${file.id}" class="newsroom-slide" style="height:40px" id="${file.filename}">
                 </td>
                 <td>${file.id}</td>
                 <td>${file.filename}</td>
+                <td>${file.created}</td>
+                <td>${file.fileType.includes("image") ? "image" : "no image"}</td>
                 <td>
                     <button type="button" class="btn btn-sm btn-danger" onclick="deleteFile(${file.id})">Delete</button>
                 </td>
