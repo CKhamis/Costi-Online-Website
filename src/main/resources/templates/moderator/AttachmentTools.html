@@ -34,12 +34,11 @@
         <table class="table table-sm align-middle table-hover table-dark">
             <thead>
             <tr>
+                <th scope="col">File</th>
                 <th scope="col">ID</th>
-                <th scope="col">User</th>
-                <th scope="col">Title</th>
-                <th scope="col">Body</th>
-                <th scope="col">Type</th>
+                <th scope="col">File Name</th>
                 <th scope="col">Created</th>
+                <th scope="col">Type</th>
                 <th scope="col">Delete</th>
             </tr>
             </thead>
@@ -137,8 +136,7 @@
             })
             .then(data => {
                 fileList = data[0];
-
-                console.log(fileList);
+                renderTableAndAnalytics();
             })
             .catch(error => {
                 errorContainer.innerHTML = `<h3 class="text-center fw-bold">There was an error receiving data from Costi Online Services</h3><p class="text-center">${error}</p>`;
@@ -217,52 +215,37 @@
         }
         saveNotification(notification);
     }
-
+    */
     // Render functions
-    function renderDropdown(){
-        let content = `<option value="All">Everyone</option>`;
-        for(let user of userList){
-            content += `<option value="${user.id}">${user.firstName} ${user.lastName}</option>`;
-        }
-        destination.innerHTML = content;
-    }
     function renderTableAndAnalytics(){
-        let numTotal = notificationList.length, bodyLengthSum = 0, numDanger = 0, numInfo = 0, numSuccess = 0, numWarning = 0, numPrimary = 0;
+        let numTotal = fileList.length, numImages = 0, numWebp = 0, numJpeg = 0, numOther = 0;
 
         let tableContent = ``;
-        for(let i = 0; i < notificationList.length; i++){
-            let notification = notificationList[i];
+        for(let i = 0; i < fileList.length; i++){
+            let file = fileList[i];
 
             // Analytics
-            bodyLengthSum += notification.body.length;
-
-            if(notification.notificationType === "danger"){
-                numDanger++;
-            }else if(notification.notificationType === "info"){
-                numInfo++;
-            }else if(notification.notificationType === "success"){
-                numSuccess++;
-            }else if(notification.notificationType === "warning"){
-                numWarning++;
-            }else if(notification.notificationType === "primary"){
-                numPrimary++;
+            if(file.fileType.includes("image")){
+                numImages++;
+                if(file.fileType.includes("webp")){
+                    numWebp++;
+                }else if(file.fileType.includes("jpeg")){
+                    numJpeg++;
+                }
+            }else{
+                numOther++;
             }
 
             // Table
-            let user = userList.find(obj => obj["id"] == notification.destinationId);
-
             tableContent += `
             <tr>
-                <td>${notification.id}</td>
-                <td><a class="text-white text-decoration-underline" href="/COMT/Accounts/${notification.destinationId}">${user.firstName} ${user.lastName}</a></td>
-                <td>${notification.title}</td>
-                <td>${notification.body}</td>
-                <td class="text-center">
-                    <span class="badge bg-${notification.notificationType}">${notification.notificationType}</span>
-                </td>
-                <td>${notification.dateCreated}</td>
                 <td>
-                    <button type="button" class="btn btn-sm btn-danger" onclick="deleteNotification(${notification.id})">Delete</button>
+                    <img src="/Downloads/Uploads/${file.id}" class="newsroom-slide" style="height:40px">
+                </td>
+                <td>${file.id}</td>
+                <td>${file.filename}</td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="deleteFile(${file.id})">Delete</button>
                 </td>
             </tr>
             `;
@@ -275,37 +258,29 @@
             <div id="stats-container">
                 <div>
                     <p class="fs-1 fw-bold  text-center">${numTotal}</p>
-                    <p class="text-center">Notifications</p>
+                    <p class="text-center">Uploads</p>
                 </div>
                 <div class="d-none d-lg-block">
-                    <p class="fs-1 fw-bold  text-center">${(numTotal > 0) ? Math.round(bodyLengthSum / numTotal) : 0}</p>
-                    <p class="text-center">μ Length</p>
+                    <p class="fs-1 fw-bold  text-center">${numImages}</p>
+                    <p class="text-center">Images</p>
                 </div>
                 <div>
-                    <p class="fs-1 fw-bold  text-center">${numPrimary}</p>
-                    <p class="text-center">Primary</p>
+                    <p class="fs-1 fw-bold  text-center">${numWebp}</p>
+                    <p class="text-center">Webp</p>
                 </div>
                 <div>
-                    <p class="fs-1 fw-bold  text-center">${numWarning}</p>
-                    <p class="text-center">Warning</p>
+                    <p class="fs-1 fw-bold  text-center">${numJpeg}</p>
+                    <p class="text-center">Jpeg</p>
                 </div>
                 <div class="d-none d-lg-block">
-                    <p class="fs-1 fw-bold  text-center">${numDanger}</p>
-                    <p class="text-center">Danger</p>
-                </div>
-                <div class="d-none d-lg-block">
-                    <p class="fs-1 fw-bold  text-center">${numInfo}</p>
-                    <p class="text-center">Info</p>
-                </div>
-                <div>
-                    <p class="fs-1 fw-bold  text-center">${numSuccess}</p>
-                    <p class="text-center">Success</p>
+                    <p class="fs-1 fw-bold  text-center">${numOther}</p>
+                    <p class="text-center">Other</p>
                 </div>
             </div>
 
         `;
     }
-    */
+
 </script>
 </body>
 </html>
