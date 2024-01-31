@@ -31,6 +31,7 @@ public class Attachment {
         this.filename = filename;
         this.fileType = fileType;
         this.data = data;
+        this.isLocked = isLocked;
         created = LocalDateTime.now();
     }
 }

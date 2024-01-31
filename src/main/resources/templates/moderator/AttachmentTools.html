@@ -67,7 +67,7 @@
 
                     <div class="form-row row">
                         <div class="col-12 mb-3">
-                            <p>Files uploaded to Costi Online will remain on the server until deleted. Make sure it does not contain any personal information. File will not be locked in teh system. Please make sure file is compressed to 100KB or less or slowdowns may occur.</p>
+                            <p>Files uploaded to Costi Online will remain on the server until deleted. Make sure it does not contain any personal information. Please make sure file is compressed to 100KB or less or slowdowns may occur.</p>
                         </div>
                     </div>
                 </div>
@@ -230,7 +230,7 @@
                     <a href="/Downloads/Uploads/${file.id}"><button type="button" class="btn btn-sm btn-primary">Download</button></a>
                 </td>
                 <td>
-                    ${!file.isLocked ? `<button type="button" class="btn btn-sm btn-danger" onclick="deleteFile('${file.id}')">Delete</button>` : `<button type="button" class="btn btn-sm btn-danger disabled" disabled>Locked</button>`}
+                    ${!file.locked ? `<button type="button" class="btn btn-sm btn-danger" onclick="deleteFile('${file.id}')">Delete</button>` : `<button type="button" class="btn btn-sm btn-danger disabled" disabled>Locked</button>`}
                 </td>
             </tr>
             `;
