@@ -127,12 +127,12 @@
             })
             .then(refresh);
     }
-
-    function deleteNotification(id){
-        let toastId = createToast("Deleting Notification");
-        postData("/api/management/notifications/delete", id)
+*/
+    function deleteFile(id){
+        let toastId = createToast("Deleting File");
+        postData("/api/management/files/delete", id)
             .then(() => {
-                document.getElementById(`${toastId}-body`).innerText = "✅ Notification Deleted";
+                document.getElementById(`${toastId}-body`).innerText = "✅ File Deleted";
                 document.getElementById(`${toastId}-loading`).style.color = "green";
             })
             .catch((response) => {
@@ -153,16 +153,7 @@
             .then(refresh);
     }
 
-    function submitForm(){
-        let notification = {
-            "title":title.value,
-            "body":body.value,
-            "destination": destination.value,
-            "notificationType": type.value
-        }
-        saveNotification(notification);
-    }
-    */
+
     // Render functions
     function renderTableAndAnalytics(){
         let numTotal = fileList.length, numImages = 0, numWebp = 0, numJpeg = 0, numOther = 0;
@@ -197,7 +188,7 @@
                     <a href="/Downloads/Uploads/${file.id}"><button type="button" class="btn btn-sm btn-primary">Download</button></a>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-sm btn-danger" onclick="deleteFile(${file.id})">Delete</button>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="deleteFile('${file.id}')">Delete</button>
                 </td>
             </tr>
             `;

@@ -469,7 +469,7 @@ public class COMTController {
         return ResponseEntity.ok(allFiles);
     }
 
-    @PostMapping("files/delete")
+    @PostMapping("/files/delete")
     public ResponseEntity<ResponseMessage> deleteFile(@RequestBody String id) {
         try {
             comtService.deleteAttachment(id);
