@@ -463,10 +463,24 @@ public class COMTController {
         return u;
     }
 
+    /*
+        Files
+     */
+
     @GetMapping("/files/all")
     public ResponseEntity<List<Attachment>> getAllAttachments(){
         List<Attachment> allFiles = comtService.findAllAttachments();
         return ResponseEntity.ok(allFiles);
+    }
+
+    @PostMapping("/files/save")
+    public ResponseEntity<ResponseMessage> saveFile(@RequestParam() MultipartFile file) {
+        try {
+            comtService.saveFile(file, false);
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("File Saved", ResponseMessage.Severity.INFORMATIONAL, "File was saved to Costi Online."));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error Saving File", ResponseMessage.Severity.MEDIUM, e.getMessage()));
+        }
     }
 
     @PostMapping("/files/{id}/delete")

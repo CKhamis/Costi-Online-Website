@@ -624,7 +624,11 @@ public class COMTService {
      */
 
     public List<Attachment> findAllAttachments(){
-        return attachmentRepository.findAll();
+        return attachmentRepository.findAllByOrderByCreatedDesc();
+    }
+
+    public void saveFile(MultipartFile file, boolean isLocked) throws Exception {
+        attachmentService.saveAttachment(file, isLocked);
     }
 
     public void deleteAttachment(String id) throws Exception {

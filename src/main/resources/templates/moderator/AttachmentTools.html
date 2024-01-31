@@ -14,12 +14,12 @@
             <div class="container-fluid bg-2 py-3">
                 <h3 class="fw-bold mb-2">Actions</h3>
                 <div class="action-button-container">
-                    <div class="action-button" data-bs-toggle="modal" data-bs-target="#new-notification-modal">
-                        <img th:src="@{/icons/New.svg}" />
+                    <div class="action-button" data-bs-toggle="modal" data-bs-target="#upload-file-modal">
+                        <img th:src="@{/icons/New.svg}"/>
                         <p class="text-center">New</p>
                     </div>
                     <div class="action-button" onclick="refresh()">
-                        <img th:src="@{/icons/Refresh.svg}" />
+                        <img th:src="@{/icons/Refresh.svg}"/>
                         <p class="text-center">Refresh</p>
                     </div>
                 </div>
@@ -51,9 +51,40 @@
 <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 99" id="toast-container">
 </div>
 
+<div class="modal fade" id="upload-file-modal" tabindex="-1" aria-labelledby="uploadFileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-box">
+            <div class="modal-header">
+                <h5 class="modal-title" id="uploadFileModalLabel">Upload File</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="new-news-form" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="file" class="form-label">Upload File</label>
+                        <input class="form-control" type="file" id="file" name="image">
+                    </div>
+
+                    <div class="form-row row">
+                        <div class="col-12 mb-3">
+                            <p>Files uploaded to Costi Online will remain on the server until deleted. Make sure it does not contain any personal information. File will not be locked in teh system. Please make sure file is compressed to 100KB or less or slowdowns may occur.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="saveFile()">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <div th:replace="Components :: JS"></div>
 <div th:replace="moderator/ModeratorComponents :: toast-scripts"></div>
 <div th:replace="moderator/ModeratorComponents :: date-formatter"></div>
+<div th:replace="moderator/ModeratorComponents :: form-data-script"></div>
+
 <script>
     // Elements
     const errorContainer = document.querySelector("#notifications-container");
@@ -64,7 +95,7 @@
     let fileList;
 
     // Processing
-    function refresh(){
+    function refresh() {
         Promise.all([fetch("/api/management/files/all")])
             .then(responses => {
                 const response1 = checkStatus(responses[0]);
@@ -96,13 +127,22 @@
                     });
             });
     }
+
     refresh();
 
-    /*function saveNotification(notification){
-        let toastId = createToast("Saving Notification");
-        postData("/api/management/notifications/save", notification)
+    function saveFile() {
+        let toastId = createToast("Saving File");
+
+        // Get form element
+        const imageFile = document.getElementById('file').files[0];
+
+        // Construct the FormData object
+        const formData = new FormData();
+        formData.append('file', imageFile);
+
+        postDataWithFile("/api/management/files/save", formData)
             .then(() => {
-                document.getElementById(`${toastId}-body`).innerText = "✅ Notification Created";
+                document.getElementById(`${toastId}-body`).innerText = "✅ Newsroom Post Created";
                 document.getElementById(`${toastId}-loading`).style.color = "green";
             })
             .catch((response) => {
@@ -122,8 +162,7 @@
             })
             .then(refresh);
     }
-*/
-    function deleteFile(id){
+    function deleteFile(id) {
         let toastId = createToast("Deleting File");
         postData(`/api/management/files/${id}/delete`, null)
             .then(() => {
@@ -148,30 +187,30 @@
             .then(refresh);
     }
 
-    function copyId(id){
+    function copyId(id) {
         navigator.clipboard.writeText(id);
         let toastId = createToast("ID Copied");
-        document.getElementById(`${toastId}-body`).innerText = "Use the ID to embed file into HMTL or download";
+        document.getElementById(`${toastId}-body`).innerText = "You can use the id to embed content into HTML pages or download the file";
         document.getElementById(`${toastId}-loading`).style.color = "blue";
     }
 
     // Render functions
-    function renderTableAndAnalytics(){
+    function renderTableAndAnalytics() {
         let numTotal = fileList.length, numImages = 0, numWebp = 0, numJpeg = 0, numOther = 0;
 
         let tableContent = ``;
-        for(let i = 0; i < fileList.length; i++){
+        for (let i = 0; i < fileList.length; i++) {
             let file = fileList[i];
 
             // Analytics
-            if(file.fileType.includes("image")){
+            if (file.fileType.includes("image")) {
                 numImages++;
-                if(file.fileType.includes("webp")){
+                if (file.fileType.includes("webp")) {
                     numWebp++;
-                }else if(file.fileType.includes("jpeg")){
+                } else if (file.fileType.includes("jpeg")) {
                     numJpeg++;
                 }
-            }else{
+            } else {
                 numOther++;
             }
 
@@ -179,11 +218,11 @@
             tableContent += `
             <tr>
                 <td>
-                    <img src="/Downloads/Uploads/${file.id}" class="newsroom-slide" style="height:40px" alt="${file.filename}">
+                    ${file.fileType.includes("image") ? `<img src="/Downloads/Uploads/${file.id}" class="newsroom-slide" style="height:40px" alt="${file.filename}">` : `<img src="/icons/Error.svg" class="newsroom-slide" style="height:40px" alt="File icon">`}
                 </td>
                 <td>${file.filename}</td>
                 <td>${reformatDate(file.created)}</td>
-                <td>${file.fileType.includes("image") ? "image" : "no image"}</td>
+                <td>${file.fileType.includes("image") ? "<span class='badge bg-primary'>Image</span>" : "<span class='badge bg-secondary'>Other</span>"}</td>
                 <td>
                     <button type="button" class="btn btn-sm btn-primary" onclick="copyId('${file.id}')">Copy</button>
                 </td>
