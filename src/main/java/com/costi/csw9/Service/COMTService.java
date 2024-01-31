@@ -180,6 +180,21 @@ public class COMTService {
     }
 
     private void databaseSave(Post post, MultipartFile file) throws Exception {
+        // Check if post already exists
+        if(post.getId() != null){
+            // Post most likely exists. Check for an existing image
+            Post savedPost = postRepository.getById(post.getId());
+            if(savedPost.getImagePath().contains("/Downloads")){
+                // Post already contains an attachment
+                String previousPath = savedPost.getImagePath();
+                if (previousPath.startsWith(POST_PREFIX)) {
+                    // Uploaded image is present, delete it before next is saved regardless of lock
+                    attachmentRepository.deleteById(previousPath.substring(POST_PREFIX.length()));
+                }
+            }
+        }
+
+        // Save image and post
         Attachment attachment = attachmentService.saveAttachment(file, true);
         post.setLastEdited(LocalDateTime.now());
         post.setImagePath(POST_IMAGE_PATH + attachment.getId());
