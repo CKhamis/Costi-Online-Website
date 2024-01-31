@@ -107,6 +107,8 @@
 
 <div th:replace="Components :: JS"></div>
 <div th:replace="moderator/ModeratorComponents :: toast-scripts"></div>
+<div th:replace="moderator/ModeratorComponents :: date-formatter"></div>
+
 <script>
     // Form Components
     const title = document.querySelector("#title");
@@ -264,7 +266,7 @@
                 <td class="text-center">
                     <span class="badge bg-${notification.notificationType}">${notification.notificationType}</span>
                 </td>
-                <td>${notification.dateCreated}</td>
+                <td>${reformatDate(notification.dateCreated)}</td>
                 <td>
                     <button type="button" class="btn btn-sm btn-danger" onclick="deleteNotification(${notification.id})">Delete</button>
                 </td>

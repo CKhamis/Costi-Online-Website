@@ -166,6 +166,22 @@
   }
 </script>
 
+<script th:fragment="date-formatter">
+  function reformatDate(dateString) {
+    let date = new Date(dateString);
+    let day = ("0" + date.getDate()).slice(-2);
+    let month = ("0" + (date.getMonth() + 1)).slice(-2);
+    let year = date.getFullYear().toString().substr(-2);
+    let hours = date.getHours();
+    let minutes = ("0" + date.getMinutes()).slice(-2);
+    let ampm = hours >= 12 ? 'PM' : 'AM';
+
+    hours = hours % 12;
+    hours = hours ? ("0" + hours).slice(-2) : 12; // the hour '0' should be '12'
+
+    return `${month}/${day}/${year} ${hours}:${minutes} ${ampm}`;
+  }
+</script>
 <script th:fragment="toast-scripts">
   function getIcon(severity){
     if(severity === "INFORMATIONAL"){

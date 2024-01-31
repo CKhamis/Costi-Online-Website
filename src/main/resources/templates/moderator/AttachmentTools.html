@@ -53,6 +53,7 @@
 
 <div th:replace="Components :: JS"></div>
 <div th:replace="moderator/ModeratorComponents :: toast-scripts"></div>
+<div th:replace="moderator/ModeratorComponents :: date-formatter"></div>
 <script>
     // Elements
     const errorContainer = document.querySelector("#notifications-container");
@@ -181,7 +182,7 @@
                     <img src="/Downloads/Uploads/${file.id}" class="newsroom-slide" style="height:40px" alt="${file.filename}">
                 </td>
                 <td>${file.filename}</td>
-                <td>${file.created}</td>
+                <td>${reformatDate(file.created)}</td>
                 <td>${file.fileType.includes("image") ? "image" : "no image"}</td>
                 <td>
                     <button type="button" class="btn btn-sm btn-primary" onclick="copyId('${file.id}')">Copy</button>
@@ -190,10 +191,11 @@
                     <a href="/Downloads/Uploads/${file.id}"><button type="button" class="btn btn-sm btn-primary">Download</button></a>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-sm btn-danger" onclick="deleteFile('${file.id}')">Delete</button>
+                    ${!file.isLocked ? `<button type="button" class="btn btn-sm btn-danger" onclick="deleteFile('${file.id}')">Delete</button>` : `<button type="button" class="btn btn-sm btn-danger disabled" disabled>Locked</button>`}
                 </td>
             </tr>
             `;
+
         }
         table.innerHTML = tableContent;
 

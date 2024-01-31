@@ -40,6 +40,8 @@ public class COMTService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    private final String POST_PREFIX = "/Downloads/Uploads/";
+
     /*
         Announcements
      */
@@ -71,8 +73,18 @@ public class COMTService {
 
     public List<Post> findAllPosts(){return postRepository.findAll();}
 
-    public void deletePost(Long id) {
-        postRepository.deleteById(id);
+    public void deletePost(Long id) throws Exception {
+        Optional<Post> newsroomPost = postRepository.findById(id);
+        if(newsroomPost.isPresent()){
+            String path = newsroomPost.get().getImagePath();
+            if (path.startsWith(POST_PREFIX)) {
+                // Uploaded image is present, delete it as well
+                attachmentRepository.deleteById(path.substring(POST_PREFIX.length()));
+            }
+            postRepository.deleteById(id);
+        } else {
+            throw new Exception("Post" + LogicTools.NOT_FOUND_MESSAGE);
+        }
     }
 
     public void savePost(Post post){
