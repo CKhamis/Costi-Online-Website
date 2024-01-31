@@ -39,6 +39,7 @@
                 <th scope="col">File Name</th>
                 <th scope="col">Created</th>
                 <th scope="col">Type</th>
+                <th scope="col">Download</th>
                 <th scope="col">Delete</th>
             </tr>
             </thead>
@@ -47,60 +48,6 @@
         </table>
     </div>
 </main>
-
-<div class="modal fade" id="new-notification-modal" tabindex="-1" aria-labelledby="newNotificationLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content border-box">
-            <div class="modal-header">
-                <h5 class="modal-title" id="newNotificationLabel">Create New Notification</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form method="post">
-                    <div class="form-row row">
-                        <div class="col-12 mb-3">
-                            <label for="title">Title</label>
-                            <input type="text" class="form-control" id="title" placeholder="Title here" required>
-                        </div>
-                    </div>
-                    <div class="form-row row">
-                        <div class="col-md-6 mb-3">
-                            <label for="type">Notification Type</label>
-                            <select id="type"  class="form-control">
-                                <option value="primary">Primary</option>
-                                <option value="secondary">Secondary</option>
-                                <option value="success">Success</option>
-                                <option value="danger">Danger</option>
-                                <option value="warning">Warning</option>
-                                <option value="info">Info</option>
-                                <option value="light">Light</option>
-                                <option value="dark">Dark</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="destination">Recipient</label>
-                            <select id="destination" class="form-control">
-                                <option value="" disabled="disabled">Select a user</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-row row">
-                        <div class="col-12 mb-3">
-                            <label for="body">Content Body</label>
-                            <textarea type="text" rows="3" class="form-control" id="body" placeholder="body content" required></textarea>
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="submitForm()">Save</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 99" id="toast-container">
 </div>
 
@@ -240,12 +187,15 @@
             tableContent += `
             <tr>
                 <td>
-                    <img src="/Downloads/Uploads/${file.id}" class="newsroom-slide" style="height:40px" id="${file.filename}">
+                    <img src="/Downloads/Uploads/${file.id}" class="newsroom-slide" style="height:40px" alt="${file.filename}">
                 </td>
                 <td>${file.id}</td>
                 <td>${file.filename}</td>
                 <td>${file.created}</td>
                 <td>${file.fileType.includes("image") ? "image" : "no image"}</td>
+                <td>
+                    <a href="/Downloads/Uploads/${file.id}"><button type="button" class="btn btn-sm btn-primary">Download</button></a>
+                </td>
                 <td>
                     <button type="button" class="btn btn-sm btn-danger" onclick="deleteFile(${file.id})">Delete</button>
                 </td>

@@ -614,4 +614,19 @@ public class COMTService {
     public List<Attachment> findAllAttachments(){
         return attachmentRepository.findAll();
     }
+
+    public void deleteAttachment(String id) throws Exception {
+        // Check to see if the attachment exists
+        Attachment file = attachmentRepository
+                .findById(id)
+                .orElseThrow(
+                        () -> new Exception("File not found with Id: " + id));
+
+        // Check if file is locked
+        if(file.isLocked()){
+            throw new Exception("File is locked");
+        }
+
+        attachmentRepository.deleteById(id);
+    }
 }

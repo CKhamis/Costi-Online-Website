@@ -468,4 +468,14 @@ public class COMTController {
         List<Attachment> allFiles = comtService.findAllAttachments();
         return ResponseEntity.ok(allFiles);
     }
+
+    @PostMapping("files/delete")
+    public ResponseEntity<ResponseMessage> deleteFile(@RequestBody String id) {
+        try {
+            comtService.deleteAttachment(id);
+            return ResponseEntity.ok(new ResponseMessage("File Deleted", ResponseMessage.Severity.INFORMATIONAL, "File of id " + id + ", is no longer accessible or recoverable."));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Unable to Delete File", ResponseMessage.Severity.LOW, e.getMessage()));
+        }
+    }
 }
