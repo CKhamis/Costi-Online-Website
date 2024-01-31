@@ -35,10 +35,10 @@
             <thead>
             <tr>
                 <th scope="col">File</th>
-                <th scope="col">ID</th>
                 <th scope="col">File Name</th>
                 <th scope="col">Created</th>
                 <th scope="col">Type</th>
+                <th scope="col">ID</th>
                 <th scope="col">Download</th>
                 <th scope="col">Delete</th>
             </tr>
@@ -54,12 +54,6 @@
 <div th:replace="Components :: JS"></div>
 <div th:replace="moderator/ModeratorComponents :: toast-scripts"></div>
 <script>
-    // Form Components
-    const title = document.querySelector("#title");
-    const type = document.querySelector("#type");
-    const destination = document.querySelector("#destination");
-    const body = document.querySelector("#body");
-    
     // Elements
     const errorContainer = document.querySelector("#notifications-container");
     const overviewContainer = document.querySelector("#overview-container");
@@ -130,7 +124,7 @@
 */
     function deleteFile(id){
         let toastId = createToast("Deleting File");
-        postData("/api/management/files/delete", id)
+        postData(`/api/management/files/${id}/delete`, null)
             .then(() => {
                 document.getElementById(`${toastId}-body`).innerText = "✅ File Deleted";
                 document.getElementById(`${toastId}-loading`).style.color = "green";
@@ -153,6 +147,12 @@
             .then(refresh);
     }
 
+    function copyId(id){
+        navigator.clipboard.writeText(id);
+        let toastId = createToast("ID Copied");
+        document.getElementById(`${toastId}-body`).innerText = "Use the ID to embed file into HMTL or download";
+        document.getElementById(`${toastId}-loading`).style.color = "blue";
+    }
 
     // Render functions
     function renderTableAndAnalytics(){
@@ -180,10 +180,12 @@
                 <td>
                     <img src="/Downloads/Uploads/${file.id}" class="newsroom-slide" style="height:40px" alt="${file.filename}">
                 </td>
-                <td>${file.id}</td>
                 <td>${file.filename}</td>
                 <td>${file.created}</td>
                 <td>${file.fileType.includes("image") ? "image" : "no image"}</td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-primary" onclick="copyId('${file.id}')">Copy</button>
+                </td>
                 <td>
                     <a href="/Downloads/Uploads/${file.id}"><button type="button" class="btn btn-sm btn-primary">Download</button></a>
                 </td>

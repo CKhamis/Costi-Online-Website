@@ -469,8 +469,8 @@ public class COMTController {
         return ResponseEntity.ok(allFiles);
     }
 
-    @PostMapping("/files/delete")
-    public ResponseEntity<ResponseMessage> deleteFile(@RequestBody String id) {
+    @PostMapping("/files/{id}/delete")
+    public ResponseEntity<ResponseMessage> deleteFile(@PathVariable String id) {
         try {
             comtService.deleteAttachment(id);
             return ResponseEntity.ok(new ResponseMessage("File Deleted", ResponseMessage.Severity.INFORMATIONAL, "File of id " + id + ", is no longer accessible or recoverable."));
