@@ -125,6 +125,11 @@ public class FrontEndController {
         return "moderator/AnnouncementTools";
     }
 
+    @GetMapping("/COMT/Content")
+    public String getCostiOnlineContentTools() {
+        return "moderator/ContentTools";
+    }
+
     //Main
     @GetMapping("/")
     public String getHome(Model model) {
