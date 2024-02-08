@@ -15,11 +15,11 @@
                 <h3 class="fw-bold mb-2">Actions</h3>
                 <div class="action-button-container">
                     <div class="action-button" data-bs-toggle="modal" data-bs-target="#upload-file-modal">
-                        <img th:src="@{/icons/New.svg}"/>
+                        <img th:src="@{/icons/New.svg}" alt="new"/>
                         <p class="text-center">New</p>
                     </div>
                     <div class="action-button" onclick="refresh()">
-                        <img th:src="@{/icons/Refresh.svg}"/>
+                        <img th:src="@{/icons/Refresh.svg}" alt="refresh"/>
                         <p class="text-center">Refresh</p>
                     </div>
                 </div>
@@ -34,12 +34,12 @@
         <table class="table table-sm align-middle table-hover table-dark">
             <thead>
             <tr>
-                <th scope="col">File</th>
-                <th scope="col">File Name</th>
-                <th scope="col">Created</th>
-                <th scope="col">Type</th>
                 <th scope="col">ID</th>
-                <th scope="col">Download</th>
+                <th scope="col">Label</th>
+                <th scope="col">Last Edited</th>
+                <th scope="col">Preview</th>
+                <th scope="col">Enable</th>
+                <th scope="col">Edit</th>
                 <th scope="col">Delete</th>
             </tr>
             </thead>
@@ -51,8 +51,15 @@
 <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 99" id="toast-container">
 </div>
 
-<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen" id="preview-modal" aria-hidden="true">
-    <div class="modal-header"></div>
+<div class="modal fade modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen" id="preview-modal" aria-hidden="true">
+    <div class="modal-header">
+        <h5 class="modal-title" id="preview-title">Title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Edit</button>
+    </div>
 </div>
 
 
@@ -97,23 +104,23 @@
     const table = document.querySelector("#table-body");
 
     // Data
-    let fileList;
+    let allContent;
 
     // Processing
     function refresh() {
-        Promise.all([fetch("/api/management/files/all")])
+        Promise.all([fetch("/api/management/content/all")])
             .then(responses => {
                 const response1 = checkStatus(responses[0]);
 
                 return Promise.all([response1]);
             })
             .then(data => {
-                let files = data[0].json();
+                let content = data[0].json();
 
-                return Promise.all([files]);
+                return Promise.all([content]);
             })
             .then(data => {
-                fileList = data[0];
+                allContent = data[0];
                 renderTableAndAnalytics();
             })
             .catch(error => {
@@ -135,7 +142,7 @@
 
     refresh();
 
-    function saveFile() {
+    /*function saveFile() {
         let toastId = createToast("Saving File");
 
         // Get form element
@@ -197,45 +204,36 @@
         let toastId = createToast("ID Copied");
         document.getElementById(`${toastId}-body`).innerText = "You can use the id to embed content into HTML pages or download the file";
         document.getElementById(`${toastId}-loading`).style.color = "blue";
-    }
+    }*/
 
     // Render functions
     function renderTableAndAnalytics() {
-        let numTotal = fileList.length, numImages = 0, numWebp = 0, numJpeg = 0, numOther = 0;
+        let numTotal = allContent.length, averageHome = 0, averageWiki = 0, averageProject = 0, averageNews = 0, averageAbout = 0, minecraftHomeAverage = 0;
 
         let tableContent = ``;
-        for (let i = 0; i < fileList.length; i++) {
-            let file = fileList[i];
+        for (let i = 0; i < allContent.length; i++) {
+            let contentGroup = allContent[i];
 
             // Analytics
-            if (file.fileType.includes("image")) {
-                numImages++;
-                if (file.fileType.includes("webp")) {
-                    numWebp++;
-                } else if (file.fileType.includes("jpeg")) {
-                    numJpeg++;
-                }
-            } else {
-                numOther++;
-            }
+
 
             // Table
             tableContent += `
             <tr>
+                <td>${contentGroup.id}</td>
+                <td>${contentGroup.label}</td>
+                <td>${reformatDate(contentGroup.lastEdited)}</td>
                 <td>
-                    ${file.fileType.includes("image") ? `<img src="/Downloads/Uploads/${file.id}" class="newsroom-slide" style="height:40px" alt="${file.filename}">` : `<img src="/icons/Error.svg" class="newsroom-slide" style="height:40px" alt="File icon">`}
-                </td>
-                <td>${file.filename}</td>
-                <td>${reformatDate(file.created)}</td>
-                <td>${file.fileType.includes("image") ? "<span class='badge bg-primary'>Image</span>" : "<span class='badge bg-secondary'>Other</span>"}</td>
-                <td>
-                    <button type="button" class="btn btn-sm btn-primary" onclick="copyId('${file.id}')">Copy</button>
+                    <button type="button" class="btn btn-sm btn-primary" onclick="" data-bs-toggle="modal" data-bs-target="#preview-modal">Preview</button>
                 </td>
                 <td>
-                    <a href="/Downloads/Uploads/${file.id}"><button type="button" class="btn btn-sm btn-primary">Download</button></a>
+                    <button type="button" class="btn btn-sm btn-success" onclick="">Enable</button>
                 </td>
                 <td>
-                    ${!file.locked ? `<button type="button" class="btn btn-sm btn-danger" onclick="deleteFile('${file.id}')">Delete</button>` : `<button type="button" class="btn btn-sm btn-danger disabled" disabled>Locked</button>`}
+                    <button type="button" class="btn btn-sm btn-secondary" onclick="">Edit</button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="">Delete</button>
                 </td>
             </tr>
             `;
@@ -247,24 +245,32 @@
         overviewContainer.innerHTML = `
             <h3 class="fw-bold mb-2">Overview</h3>
             <div id="stats-container">
-                <div>
+            <div>
                     <p class="fs-1 fw-bold  text-center">${numTotal}</p>
+                    <p class="text-center">Groups</p>
+                </div>
+                <div>
+                    <p class="fs-1 fw-bold  text-center">${averageHome}</p>
                     <p class="text-center">Uploads</p>
                 </div>
                 <div class="d-none d-lg-block">
-                    <p class="fs-1 fw-bold  text-center">${numImages}</p>
+                    <p class="fs-1 fw-bold  text-center">${averageWiki}</p>
                     <p class="text-center">Images</p>
                 </div>
                 <div>
-                    <p class="fs-1 fw-bold  text-center">${numWebp}</p>
+                    <p class="fs-1 fw-bold  text-center">${averageProject}</p>
                     <p class="text-center">Webp</p>
                 </div>
                 <div>
-                    <p class="fs-1 fw-bold  text-center">${numJpeg}</p>
+                    <p class="fs-1 fw-bold  text-center">${averageNews}</p>
                     <p class="text-center">Jpeg</p>
                 </div>
                 <div class="d-none d-lg-block">
-                    <p class="fs-1 fw-bold  text-center">${numOther}</p>
+                    <p class="fs-1 fw-bold  text-center">${averageAbout}</p>
+                    <p class="text-center">Other</p>
+                </div>
+                <div class="d-none d-lg-block">
+                    <p class="fs-1 fw-bold  text-center">${minecraftHomeAverage}</p>
                     <p class="text-center">Other</p>
                 </div>
             </div>
