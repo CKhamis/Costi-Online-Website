@@ -37,6 +37,7 @@ public class COMTService {
     private final AccountLogService accountLogService;
     private final AccountLogRepository accountLogRepository;
     private final AttachmentRepository attachmentRepository;
+    private final DynamicContentRepository dynamicContentRepository;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -659,5 +660,35 @@ public class COMTService {
         }
 
         attachmentRepository.deleteById(id);
+    }
+
+    /*
+        Dynamic Content
+     */
+
+    public DynamicContent findDynamicContentById(Long id) throws Exception {
+        Optional<DynamicContent> optionalDynamicContent = dynamicContentRepository.findById(id);
+        if(optionalDynamicContent.isPresent()){
+            return optionalDynamicContent.get();
+        }else{
+            throw new NoSuchElementException("Dynamic Content" + LogicTools.NOT_FOUND_MESSAGE);
+        }
+    }
+
+    public void saveDynamicContent(DynamicContent content){
+        dynamicContentRepository.save(content);
+    }
+
+    public List<DynamicContent> findAllDynamicContent(){
+        return dynamicContentRepository.findAll();
+    }
+
+    public void deleteDynamicContent(Long id){
+        Optional<DynamicContent> optionalDynamicContent = dynamicContentRepository.findById(id);
+        if(optionalDynamicContent.isPresent()){
+            dynamicContentRepository.deleteById(id);
+        }else{
+            throw new NoSuchElementException("Dynamic Content" + LogicTools.NOT_FOUND_MESSAGE);
+        }
     }
 }

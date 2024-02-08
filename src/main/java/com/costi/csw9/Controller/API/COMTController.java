@@ -492,4 +492,34 @@ public class COMTController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Unable to Delete File", ResponseMessage.Severity.LOW, e.getMessage()));
         }
     }
+
+    /*
+        Dynamic Content
+     */
+
+    @GetMapping("/content/all")
+    public ResponseEntity<List<DynamicContent>> getAllDynamicContent(){
+        List<DynamicContent> allContent = comtService.findAllDynamicContent();
+        return ResponseEntity.ok(allContent);
+    }
+
+    @PostMapping("/content/save")
+    public ResponseEntity<ResponseMessage> saveDynamicContent(@RequestBody @Valid DynamicContent content) {
+        try {
+            comtService.saveDynamicContent(content);
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("Dynamic Content Saved", ResponseMessage.Severity.INFORMATIONAL, "Dynamic content was saved to Costi Online."));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Error Saving Content", ResponseMessage.Severity.MEDIUM, e.getMessage()));
+        }
+    }
+
+    @PostMapping("/content/delete")
+    public ResponseEntity<ResponseMessage> deleteDynamicContent(@RequestBody Long id) {
+        try {
+            comtService.deleteDynamicContent(id);
+            return ResponseEntity.ok(new ResponseMessage("Content Deleted", ResponseMessage.Severity.INFORMATIONAL, "Content of id " + id + ", is no longer accessible or recoverable."));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Unable to Delete Content", ResponseMessage.Severity.LOW, e.getMessage()));
+        }
+    }
 }
