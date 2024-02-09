@@ -140,11 +140,11 @@
             })
             .then(refresh);
     }
-    function deleteFile(id) {
-        let toastId = createToast("Deleting File");
-        postData(`/api/management/files/${id}/delete`, null)
+    function deleteContent(id) {
+        let toastId = createToast("Deleting Content Group");
+        postData(`/api/management/content/delete`, id)
             .then(() => {
-                document.getElementById(`${toastId}-body`).innerText = "✅ File Deleted";
+                document.getElementById(`${toastId}-body`).innerText = "✅ Content Deleted";
                 document.getElementById(`${toastId}-loading`).style.color = "green";
             })
             .catch((response) => {
@@ -167,14 +167,19 @@
 
     // Render functions
     function renderTableAndAnalytics() {
-        let numTotal = allContent.length, averageHome = 0, averageWiki = 0, averageProject = 0, averageNews = 0, averageAbout = 0, minecraftHomeAverage = 0;
+        let numTotal = allContent.length, averageHome = 0, minecraftGovAverage = 0, averageProject = 0, averageNews = 0, averageAbout = 0, minecraftHomeAverage = 0;
 
         let tableContent = ``;
         for (let i = 0; i < allContent.length; i++) {
             let contentGroup = allContent[i];
 
             // Analytics
-
+            averageHome += contentGroup.homeContent;
+            minecraftGovAverage += contentGroup.minecraftGovernmentContent;
+            averageProject += contentGroup.projectContent;
+            averageNews += contentGroup.newsroomContent;
+            averageAbout += contentGroup.aboutContent;
+            minecraftHomeAverage += contentGroup.minecraftHomeContent;
 
             // Table
             tableContent += `
@@ -189,10 +194,10 @@
                     <button type="button" class="btn btn-sm btn-success" onclick="">Enable</button>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-sm btn-secondary" onclick="">Edit</button>
+                    <a href="/COMT/Content/${contentGroup.id}/edit"><button type="button" class="btn btn-sm btn-secondary">Edit</button></a>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-sm btn-danger" onclick="">Delete</button>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="deleteContent(${contentGroup.id})">Delete</button>
                 </td>
             </tr>
             `;
@@ -209,28 +214,28 @@
                     <p class="text-center">Groups</p>
                 </div>
                 <div>
-                    <p class="fs-1 fw-bold  text-center">${averageHome}</p>
-                    <p class="text-center">Uploads</p>
-                </div>
-                <div class="d-none d-lg-block">
-                    <p class="fs-1 fw-bold  text-center">${averageWiki}</p>
-                    <p class="text-center">Images</p>
+                    <p class="fs-1 fw-bold  text-center">${Math.round(averageHome.length / numTotal)}</p>
+                    <p class="text-center">μ Home</p>
                 </div>
                 <div>
-                    <p class="fs-1 fw-bold  text-center">${averageProject}</p>
-                    <p class="text-center">Webp</p>
+                    <p class="fs-1 fw-bold  text-center">${Math.round(averageProject.length / numTotal)}</p>
+                    <p class="text-center">μ Project</p>
                 </div>
                 <div>
-                    <p class="fs-1 fw-bold  text-center">${averageNews}</p>
-                    <p class="text-center">Jpeg</p>
+                    <p class="fs-1 fw-bold  text-center">${Math.round(averageNews.length / numTotal)}</p>
+                    <p class="text-center">μ News</p>
                 </div>
                 <div class="d-none d-lg-block">
-                    <p class="fs-1 fw-bold  text-center">${averageAbout}</p>
-                    <p class="text-center">Other</p>
+                    <p class="fs-1 fw-bold  text-center">${Math.round(averageAbout.length / numTotal)}</p>
+                    <p class="text-center">μ About</p>
                 </div>
                 <div class="d-none d-lg-block">
-                    <p class="fs-1 fw-bold  text-center">${minecraftHomeAverage}</p>
-                    <p class="text-center">Other</p>
+                    <p class="fs-1 fw-bold  text-center">${Math.round(minecraftHomeAverage.length / numTotal)}</p>
+                    <p class="text-center">μ MC Home</p>
+                </div>
+                <div class="d-none d-lg-block">
+                    <p class="fs-1 fw-bold  text-center">${Math.round(minecraftGovAverage.length / numTotal)}</p>
+                    <p class="text-center">μ MC Gov</p>
                 </div>
             </div>
 
