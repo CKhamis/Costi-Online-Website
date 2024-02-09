@@ -538,4 +538,14 @@ public class COMTController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Unable to Delete Content", ResponseMessage.Severity.LOW, e.getMessage()));
         }
     }
+
+    @PostMapping("/content/enable")
+    public ResponseEntity<ResponseMessage> enableDynamicContent(@RequestBody Long id) {
+        try {
+            comtService.enableContentById(id);
+            return ResponseEntity.ok(new ResponseMessage("Content Enabled", ResponseMessage.Severity.INFORMATIONAL, "Content of id " + id + ", is now visible on user facing pages"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Unable to Enable Content", ResponseMessage.Severity.LOW, e.getMessage()));
+        }
+    }
 }

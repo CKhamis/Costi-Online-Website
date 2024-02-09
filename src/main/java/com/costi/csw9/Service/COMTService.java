@@ -692,4 +692,9 @@ public class COMTService {
             throw new NoSuchElementException("Dynamic Content" + LogicTools.NOT_FOUND_MESSAGE);
         }
     }
+
+    public void enableContentById(Long id){
+        dynamicContentRepository.disableAll();
+        dynamicContentRepository.enable(id);
+    }
 }

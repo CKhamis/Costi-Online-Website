@@ -165,6 +165,31 @@
             .then(refresh);
     }
 
+    function enableContent(id) {
+        let toastId = createToast("Enabling Content Group");
+        postData(`/api/management/content/enable`, id)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ Content Enabled";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .then(refresh);
+    }
+
     // Render functions
     function renderTableAndAnalytics() {
         let numTotal = allContent.length, averageHome = 0, minecraftGovAverage = 0, averageProject = 0, averageNews = 0, averageAbout = 0, minecraftHomeAverage = 0;
@@ -191,7 +216,7 @@
                     <button type="button" class="btn btn-sm btn-primary" onclick="" data-bs-toggle="modal" data-bs-target="#preview-modal">Preview</button>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-sm btn-success" onclick="">Enable</button>
+                    ${!contentGroup.enabled ? `<button type="button" class="btn btn-sm btn-success" onclick="enableContent(${contentGroup.id})">Enable</button>` : `<button type="button" class="disabled btn btn-sm btn-success" disabled>Enabled</button>` }
                 </td>
                 <td>
                     <a href="/COMT/Content/${contentGroup.id}/edit"><button type="button" class="btn btn-sm btn-secondary">Edit</button></a>
