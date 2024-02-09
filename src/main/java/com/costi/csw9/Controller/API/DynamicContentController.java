@@ -12,7 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/api/content")
 public class DynamicContentController {
-    private DynamicContentService dynamicContentService;
+    private final DynamicContentService dynamicContentService;
+
+    public DynamicContentController(DynamicContentService dynamicContentService){
+        this.dynamicContentService = dynamicContentService;
+    }
 
     @GetMapping("/all")
     public ResponseEntity<?> getDynamicContent() {
