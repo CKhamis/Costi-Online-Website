@@ -114,7 +114,6 @@ public class FrontEndController {
         return "moderator/AccountInfo";
     }
 
-
     @GetMapping("/COMT/Notifications")
     public String getCostiOnlineNotificationSettings() {
         return "moderator/NotificationTools";
@@ -128,6 +127,18 @@ public class FrontEndController {
     @GetMapping("/COMT/Content")
     public String getCostiOnlineContentTools() {
         return "moderator/ContentTools";
+    }
+
+    @GetMapping("/COMT/Content/{id}/edit")
+    public String getCostiOnlineContentEditor(@PathVariable Long id, Model model) {
+        model.addAttribute("id", id);
+        return "moderator/EditContent";
+    }
+
+    @GetMapping("/COMT/Content/new")
+    public String getCostiOnlineContentMaker(Model model) {
+        model.addAttribute("id", null);
+        return "moderator/EditContent";
     }
 
     //Main

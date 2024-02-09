@@ -62,36 +62,6 @@
     </div>
 </div>
 
-
-<div class="modal fade" id="upload-file-modal" tabindex="-1" aria-labelledby="uploadFileModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content border-box">
-            <div class="modal-header">
-                <h5 class="modal-title" id="uploadFileModalLabel">Upload File</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form id="new-news-form" enctype="multipart/form-data">
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="file" class="form-label">Upload File</label>
-                        <input class="form-control" type="file" id="file" name="image">
-                    </div>
-
-                    <div class="form-row row">
-                        <div class="col-12 mb-3">
-                            <p>Files uploaded to Costi Online will remain on the server until deleted. Make sure it does not contain any personal information. Please make sure file is compressed to 100KB or less or slowdowns may occur.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="saveFile()">Save</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 <div th:replace="Components :: JS"></div>
 <div th:replace="moderator/ModeratorComponents :: toast-scripts"></div>
 <div th:replace="moderator/ModeratorComponents :: date-formatter"></div>

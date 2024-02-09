@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xml:th="https://www.thymeleaf.org">
+<head th:replace="Components :: head('COMT Edit Content')"></head>
+<body class="bg-1 text-1">
+<div th:replace="moderator/ModeratorComponents :: moderatorNav"></div>
+
+<main class="container">
+    <div class="container-fluid">
+        <h1 class="pb-2 border-bottom mb-4 fw-bold text-center">Edit Dynamic Content</h1>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-md-6">
+            <div class="p-4 mb-4 bg-2">
+                <form id="edit-news-form" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="file" class="form-label">Upload image (optional)</label>
+                            <input class="form-control" type="file" id="file" name="image" accept="image/webp">
+                        </div>
+
+                        <div class="form-row row">
+                            <div class="col-12 mb-3">
+                                <label for="title">Title</label>
+                                <input type="text" class="form-control" id="title"
+                                       placeholder="Title here" required>
+                            </div>
+                        </div>
+                        <div class="form-row row">
+                            <div class="col-md-8 mb-3">
+                                <label for="sub">Subtitle</label>
+                                <input type="text" class="form-control" id="sub"
+                                       placeholder="subtitle" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="cat">Post Category</label>
+                                <select id="cat"  class="form-control">
+                                    <option value="" disabled="disabled">Select a category</option>
+                                    <option th:each="cat : ${categories}" th:value="${cat.name}" th:text="${cat.name}">Error</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row row">
+                            <div class="col-12 mb-3">
+                                <label for="body">Content Body</label>
+                                <textarea type="text" rows="10" class="form-control" id="body" placeholder="body content" required></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row row">
+                            <div class="col-12 mb-3">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="enabled-input">
+                                    <label class="form-check-label" for="enabled-input">Enabled</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="listed-input">
+                                    <label class="form-check-label" for="listed-input">Public</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="pinned-input">
+                                    <label class="form-check-label" for="pinned-input">Pinned (unused)</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="favorite-input">
+                                    <label class="form-check-label" for="favorite-input">Favorite (unused)</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="featured-input">
+                                    <label class="form-check-label" for="featured-input">Featured (unused)</label>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" th:value="${id}" id="id"/>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="saveNews()">Save</button>
+                    <p class="text-secondary">Note: View count will be reset once edited</p>
+                </form>
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-6">
+            <img id="image" class="newsroom-slide"/>
+            <div class="m-0" id="preview-panel">
+
+            </div>
+        </div>
+    </div>
+</main>
+
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 99" id="toast-container">
+</div>
+
+
+<div th:replace="Components :: JS"></div>
+<div th:replace="moderator/ModeratorComponents :: toast-scripts"></div>
+<div th:replace="moderator/ModeratorComponents :: form-data-script"></div>
+<script>
+    let post;
+
+    // Elements
+    const container = document.querySelector("#preview-panel");
+    const image = document.querySelector("#image");
+    const category = document.querySelector("#cat");
+    const id = document.querySelector("#id").value;
+    let title = document.querySelector("#title");
+    let subtitle = document.querySelector("#sub");
+    let body = document.querySelector("#body");
+
+    let enabledInput = document.querySelector("#enabled-input");
+    let publicInput = document.querySelector("#listed-input");
+    let pinnedInput = document.querySelector("#pinned-input");
+    let favoriteInput = document.querySelector("#favorite-input");
+    let featuredInput = document.querySelector("#featured-input");
+
+    // Live Preview
+    body.addEventListener('input', function (event) {
+        // Retrieve the current value of the text field
+        const inputValue = event.target.value;
+        document.querySelector("#preview-text").innerHTML = inputValue;
+    });
+
+    subtitle.addEventListener('input', function (event) {
+        // Retrieve the current value of the text field
+        const inputValue = event.target.value;
+        document.querySelector("#preview-sub").innerHTML = inputValue;
+    });
+
+    title.addEventListener('input', function (event) {
+        // Retrieve the current value of the text field
+        const inputValue = event.target.value;
+        document.querySelector("#preview-title").innerHTML = inputValue;
+    });
+
+    // fetch
+    fetch("/api/management/newsroom/view/" + id)
+        .then(checkStatus)
+        .then(response => response.json())
+        .then(data => {
+            post = data;
+            displayPreview()
+        })
+        .catch(error => {
+            // error handling
+            console.error('Error retrieving data:', error);
+        });
+
+    // Render
+    function displayPreview(){
+        image.setAttribute('src', post.imagePath);
+        title.value = post.title;
+        subtitle.value = post.subtitle;
+        body.value = post.body;
+        category.value = post.category;
+
+        enabledInput.checked = post.enabled;
+        publicInput.checked = post.public;
+        pinnedInput.checked = post.pinned;
+        favoriteInput.checked = post.favorite;
+        featuredInput.checked = post.featured;
+
+        container.innerHTML = `
+            <h1 class="fw-bold mb-0" id="preview-title">${post.title}</h1>
+            <h4 class="text-muted fw-bold" id="preview-sub">${post.subtitle}</h4>
+
+            <div id="contentBody">
+                <p class="fs-5" id="preview-text">${post.body}</p>
+            </div>
+            `;
+    }
+
+    // Save
+    function saveNews(){
+        let toastId = createToast("Saving Edited Post");
+
+        const formData = new FormData();
+        const imageFile = document.getElementById('file').files[0];
+        formData.append('image', imageFile);
+        formData.append('id', id);
+        formData.append('title', title.value);
+        formData.append('subtitle', subtitle.value);
+        formData.append('category', category.value);
+        formData.append('body', body.value);
+        formData.append('enabled', enabledInput.checked);
+        formData.append('public', publicInput.checked);
+        formData.append('pinned', pinnedInput.checked);
+        formData.append('favorite', favoriteInput.checked);
+        formData.append('featured', featuredInput.checked);
+
+        console.log(formData);
+
+        postDataWithFile("/api/management/newsroom/save", formData)
+            .then(() => {
+                if(imageFile){
+                    document.getElementById(`${toastId}-body`).innerText = "✅ Newsroom Post Edited. Refresh page to see new image";
+                }else{
+                    document.getElementById(`${toastId}-body`).innerText = "✅ Newsroom Post Edited";
+                }
+
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch(err => {
+                console.log(err);
+
+                document.getElementById(`${toastId}-body`).innerText = "❌ Procedure unsuccessful";
+                document.getElementById(`${toastId}-loading`).style.color = "red";
+            });
+    }
+</script>
+</body>
+</html>

@@ -503,6 +503,22 @@ public class COMTController {
         return ResponseEntity.ok(allContent);
     }
 
+    @GetMapping("/content/{id}")
+    public ResponseEntity<?> getDynamicContent(@PathVariable Long id){
+        // Creating new content group
+        if(id == null){
+            return ResponseEntity.ok(new DynamicContent());
+        }
+
+        // Edit existing content group
+        try {
+            DynamicContent content = comtService.findDynamicContentById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(content);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage("Content Not Found", ResponseMessage.Severity.MEDIUM, e.getMessage()));
+        }
+    }
+
     @PostMapping("/content/save")
     public ResponseEntity<ResponseMessage> saveDynamicContent(@RequestBody @Valid DynamicContent content) {
         try {
