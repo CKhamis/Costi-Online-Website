@@ -676,6 +676,7 @@ public class COMTService {
     }
 
     public void saveDynamicContent(DynamicContent content){
+        content.setLastEdited(LocalDateTime.now());
         dynamicContentRepository.save(content);
     }
 

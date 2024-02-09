@@ -15,7 +15,7 @@
                 <h3 class="fw-bold mb-2">Actions</h3>
                 <div class="action-button-container">
                     <div class="action-button" data-bs-toggle="modal" data-bs-target="#upload-file-modal">
-                        <img th:src="@{/icons/New.svg}" alt="new"/>
+                        <img th:src="@{/icons/New.svg}" onclick="newContent()" alt="new"/>
                         <p class="text-center">New</p>
                     </div>
                     <div class="action-button" onclick="refresh()">
@@ -112,19 +112,15 @@
 
     refresh();
 
-    /*function saveFile() {
-        let toastId = createToast("Saving File");
+    function newContent() {
+        let toastId = createToast("Creating New Group");
 
-        // Get form element
-        const imageFile = document.getElementById('file').files[0];
-
-        // Construct the FormData object
-        const formData = new FormData();
-        formData.append('file', imageFile);
-
-        postDataWithFile("/api/management/files/save", formData)
-            .then(() => {
-                document.getElementById(`${toastId}-body`).innerText = "✅ Newsroom Post Created";
+        postData("/api/management/content/save", {id: null, label: "New Group", enabled: false,
+            homeContent: "home", aboutContent: "about", projectContent: "project", newsroomContent: "newsroom", minecraftHomeContent: "mch",
+            minecraftGovernmentContent: "mcg", lastEdited: new Date()
+        })
+                .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ Content Group Created";
                 document.getElementById(`${toastId}-loading`).style.color = "green";
             })
             .catch((response) => {
@@ -168,13 +164,6 @@
             })
             .then(refresh);
     }
-
-    function copyId(id) {
-        navigator.clipboard.writeText(id);
-        let toastId = createToast("ID Copied");
-        document.getElementById(`${toastId}-body`).innerText = "You can use the id to embed content into HTML pages or download the file";
-        document.getElementById(`${toastId}-loading`).style.color = "blue";
-    }*/
 
     // Render functions
     function renderTableAndAnalytics() {

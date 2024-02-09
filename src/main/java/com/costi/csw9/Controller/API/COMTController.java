@@ -520,7 +520,7 @@ public class COMTController {
     }
 
     @PostMapping("/content/save")
-    public ResponseEntity<ResponseMessage> saveDynamicContent(@RequestBody @Valid DynamicContent content) {
+    public ResponseEntity<ResponseMessage> saveDynamicContent(@RequestBody DynamicContent content) {
         try {
             comtService.saveDynamicContent(content);
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("Dynamic Content Saved", ResponseMessage.Severity.INFORMATIONAL, "Dynamic content was saved to Costi Online."));
