@@ -4,85 +4,75 @@
 <body class="bg-1 text-1">
 <div th:replace="moderator/ModeratorComponents :: moderatorNav"></div>
 
-<main class="container">
-    <div class="container-fluid">
-        <h1 class="pb-2 border-bottom mb-4 fw-bold text-center">Edit Dynamic Content</h1>
-    </div>
-    <div class="row">
-        <div class="col-xs-12 col-md-6">
-            <div class="p-4 mb-4 bg-2">
-                <form id="edit-news-form" enctype="multipart/form-data">
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="file" class="form-label">Upload image (optional)</label>
-                            <input class="form-control" type="file" id="file" name="image" accept="image/webp">
-                        </div>
+<main class="container px-0">
+    <h1 class="pb-2 border-bottom mb-4 fw-bold text-center" th:text="${title}"></h1>
+    <form id="content-form" enctype="application/x-www-form-urlencoded">
+        <input type="hidden" th:value="${id}" id="id"/>
+        <div class="row">
 
-                        <div class="form-row row">
-                            <div class="col-12 mb-3">
-                                <label for="title">Title</label>
-                                <input type="text" class="form-control" id="title"
-                                       placeholder="Title here" required>
-                            </div>
-                        </div>
-                        <div class="form-row row">
-                            <div class="col-md-8 mb-3">
-                                <label for="sub">Subtitle</label>
-                                <input type="text" class="form-control" id="sub"
-                                       placeholder="subtitle" required>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="cat">Post Category</label>
-                                <select id="cat"  class="form-control">
-                                    <option value="" disabled="disabled">Select a category</option>
-                                    <option th:each="cat : ${categories}" th:value="${cat.name}" th:text="${cat.name}">Error</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-row row">
-                            <div class="col-12 mb-3">
-                                <label for="body">Content Body</label>
-                                <textarea type="text" rows="10" class="form-control" id="body" placeholder="body content" required></textarea>
-                            </div>
-                        </div>
-                        <div class="form-row row">
-                            <div class="col-12 mb-3">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="enabled-input">
-                                    <label class="form-check-label" for="enabled-input">Enabled</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="listed-input">
-                                    <label class="form-check-label" for="listed-input">Public</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="pinned-input">
-                                    <label class="form-check-label" for="pinned-input">Pinned (unused)</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="favorite-input">
-                                    <label class="form-check-label" for="favorite-input">Favorite (unused)</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="featured-input">
-                                    <label class="form-check-label" for="featured-input">Featured (unused)</label>
-                                </div>
-                            </div>
-                        </div>
-                        <input type="hidden" th:value="${id}" id="id"/>
-                    </div>
-                    <button type="button" class="btn btn-primary" onclick="saveNews()">Save</button>
-                    <p class="text-secondary">Note: View count will be reset once edited</p>
-                </form>
+            <!-- Home Content -->
+            <div class="col-xs-12 col-md-6 bg-2 mb-3 p-4">
+                <label for="home-content">Home Content</label>
+                <textarea type="text" rows="10" class="form-control" id="home-content" placeholder="body content" required></textarea>
+            </div>
+            <div class="d-none d-md-block col-md-6 p-4">
+                <div class="m-0" id="preview-panel-home"></div>
+            </div>
+
+            <!-- Project Content -->
+            <div class="col-xs-12 col-md-6 bg-2 mb-3 p-4">
+                <label for="project-content">Project Content</label>
+                <textarea type="text" rows="10" class="form-control" id="project-content" placeholder="body content" required></textarea>
+            </div>
+            <div class="d-none d-md-block col-md-6 p-4">
+                <div class="m-0" id="preview-panel-project"></div>
+            </div>
+
+            <!-- News Content -->
+            <div class="col-xs-12 col-md-6 bg-2 mb-3 p-4">
+                <label for="news-content">Newsroom Content</label>
+                <textarea type="text" rows="10" class="form-control" id="news-content" placeholder="body content" required></textarea>
+            </div>
+            <div class="d-none d-md-block col-md-6 p-4">
+                <div class="m-0" id="preview-panel-news"></div>
+            </div>
+
+            <!-- Minecraft Home Content -->
+            <div class="col-xs-12 col-md-6 bg-2 mb-3 p-4">
+                <label for="mc-home-content">Minecraft Home Content</label>
+                <textarea type="text" rows="10" class="form-control" id="mc-home-content" placeholder="body content" required></textarea>
+            </div>
+            <div class="d-none d-md-block col-md-6 p-4">
+                <div class="m-0" id="preview-panel-mc-home"></div>
+            </div>
+
+            <!-- Minecraft Gov Content -->
+            <div class="col-xs-12 col-md-6 bg-2 mb-3 p-4">
+                <label for="mc-gov-content">Minecraft Government Content</label>
+                <textarea type="text" rows="10" class="form-control" id="mc-gov-content" placeholder="body content" required></textarea>
+            </div>
+            <div class="d-none d-md-block col-md-6 p-4">
+                <div class="m-0" id="preview-panel-mc-gov"></div>
+            </div>
+
+            <!-- About Content -->
+            <div class="col-xs-12 col-md-6 bg-2 mb-3 p-4">
+                <label for="about-content">About Content</label>
+                <textarea type="text" rows="10" class="form-control" id="about-content" placeholder="body content" required></textarea>
+            </div>
+            <div class="d-none d-md-block col-md-6 p-4">
+                <div class="m-0" id="preview-panel-about"></div>
+            </div>
+
+            <div class="col-xs-12 col-md-6 bg-2 mb-3 p-4">
+                <label for="label">Label</label>
+                <input type="text" class="form-control" id="label" placeholder="Label here" required>
+
+                <button type="button" class="btn btn-primary mt-3" onclick="saveContent()">Save</button>
             </div>
         </div>
-        <div class="d-none d-md-block col-md-6">
-            <img id="image" class="newsroom-slide"/>
-            <div class="m-0" id="preview-panel">
+    </form>
 
-            </div>
-        </div>
-    </div>
 </main>
 
 <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 99" id="toast-container">
@@ -93,44 +83,49 @@
 <div th:replace="moderator/ModeratorComponents :: toast-scripts"></div>
 <div th:replace="moderator/ModeratorComponents :: form-data-script"></div>
 <script>
-    let post;
+    let content;
 
-    // Elements
-    const container = document.querySelector("#preview-panel");
-    const image = document.querySelector("#image");
-    const category = document.querySelector("#cat");
-    const id = document.querySelector("#id").value;
-    let title = document.querySelector("#title");
-    let subtitle = document.querySelector("#sub");
-    let body = document.querySelector("#body");
-
-    let enabledInput = document.querySelector("#enabled-input");
-    let publicInput = document.querySelector("#listed-input");
-    let pinnedInput = document.querySelector("#pinned-input");
-    let favoriteInput = document.querySelector("#favorite-input");
-    let featuredInput = document.querySelector("#featured-input");
+    // Form elements
+    const homeInput = document.querySelector("#home-content");
+    const projectInput = document.querySelector("#project-content");
+    const newsInput = document.querySelector("#news-content");
+    const mcHomeInput = document.querySelector("#mc-home-content");
+    const mcGovInput = document.querySelector("#mc-gov-content");
+    const aboutInput = document.querySelector("#about-content");
 
     // Live Preview
-    body.addEventListener('input', function (event) {
+    homeInput.addEventListener('input', function (event) {
         // Retrieve the current value of the text field
-        const inputValue = event.target.value;
-        document.querySelector("#preview-text").innerHTML = inputValue;
+        document.querySelector("#preview-panel-home").innerHTML = event.target.value;
     });
 
-    subtitle.addEventListener('input', function (event) {
+    projectInput.addEventListener('input', function (event) {
         // Retrieve the current value of the text field
-        const inputValue = event.target.value;
-        document.querySelector("#preview-sub").innerHTML = inputValue;
+        document.querySelector("#preview-panel-project").innerHTML = event.target.value;
     });
 
-    title.addEventListener('input', function (event) {
+    newsInput.addEventListener('input', function (event) {
         // Retrieve the current value of the text field
-        const inputValue = event.target.value;
-        document.querySelector("#preview-title").innerHTML = inputValue;
+        document.querySelector("#preview-panel-news").innerHTML = event.target.value;
+    });
+
+    mcHomeInput.addEventListener('input', function (event) {
+        // Retrieve the current value of the text field
+        document.querySelector("#preview-panel-mc-home").innerHTML = event.target.value;
+    });
+
+    mcGovInput.addEventListener('input', function (event) {
+        // Retrieve the current value of the text field
+        document.querySelector("#preview-panel-mc-gov").innerHTML = event.target.value;
+    });
+
+    aboutInput.addEventListener('input', function (event) {
+        // Retrieve the current value of the text field
+        document.querySelector("#preview-panel-about").innerHTML = event.target.value;
     });
 
     // fetch
-    fetch("/api/management/newsroom/view/" + id)
+    fetch("/api/management/content/" + id)
         .then(checkStatus)
         .then(response => response.json())
         .then(data => {
@@ -167,7 +162,7 @@
     }
 
     // Save
-    function saveNews(){
+    /*function saveNews(){
         let toastId = createToast("Saving Edited Post");
 
         const formData = new FormData();
@@ -202,7 +197,7 @@
                 document.getElementById(`${toastId}-body`).innerText = "❌ Procedure unsuccessful";
                 document.getElementById(`${toastId}-loading`).style.color = "red";
             });
-    }
+    }*/
 </script>
 </body>
 </html>

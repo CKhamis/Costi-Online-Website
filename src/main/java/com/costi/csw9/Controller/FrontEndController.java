@@ -132,12 +132,14 @@ public class FrontEndController {
     @GetMapping("/COMT/Content/{id}/edit")
     public String getCostiOnlineContentEditor(@PathVariable Long id, Model model) {
         model.addAttribute("id", id);
+        model.addAttribute("title", "Edit Dynamic Content Group");
         return "moderator/EditContent";
     }
 
     @GetMapping("/COMT/Content/new")
     public String getCostiOnlineContentMaker(Model model) {
         model.addAttribute("id", null);
+        model.addAttribute("title", "New Dynamic Content Group");
         return "moderator/EditContent";
     }
 
