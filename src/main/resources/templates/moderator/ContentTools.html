@@ -51,16 +51,59 @@
 <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 99" id="toast-container">
 </div>
 
-<div class="modal fade modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen" id="preview-modal" aria-hidden="true">
-    <div class="modal-header">
-        <h5 class="modal-title" id="preview-title">Title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Edit</button>
+<div class="modal fade" id="preview-modal" tabindex="-1" aria-labelledby="preview-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content border-box">
+            <div class="modal-header">
+                <h3 class="modal-title fw-bold" id="preview-modal-label">Preview Content Group</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-pills mb-3" id="preview-tabs" role="tablist" style="background: none;border: none;">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="preview-home-tab" data-bs-toggle="pill" data-bs-target="#preview-home" type="button" role="tab" aria-controls="preview-home" aria-selected="true">Home Content</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="preview-projects-tab" data-bs-toggle="pill" data-bs-target="#preview-projects" type="button" role="tab" aria-controls="preview-projects" aria-selected="false">Projects Content</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="preview-news-tab" data-bs-toggle="pill" data-bs-target="#preview-news" type="button" role="tab" aria-controls="preview-news" aria-selected="false">Newsroom Content</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="preview-mc-home-tab" data-bs-toggle="pill" data-bs-target="#preview-mc-home" type="button" role="tab" aria-controls="preview-mc-home" aria-selected="false" >Minecraft Home Content</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="preview-mc-gov-tab" data-bs-toggle="pill" data-bs-target="#preview-mc-gov" type="button" role="tab" aria-controls="preview-mc-gov" aria-selected="false" >Minecraft Gov Content</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="preview-about-tab" data-bs-toggle="pill" data-bs-target="#preview-about" type="button" role="tab" aria-controls="preview-about" aria-selected="false" >About Content</button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="preview-tabContent">
+                    <div class="tab-pane fade show active" id="preview-home" role="tabpanel" aria-labelledby="preview-home-tab" tabindex="0">
+                        <div class="mb-4" id="fullscreen-preview-home"></div>
+                    </div>
+                    <div class="tab-pane fade" id="preview-projects" role="tabpanel" aria-labelledby="preview-projects-tab" tabindex="0">
+                        <div class="mb-4" id="fullscreen-preview-projects"></div>
+                    </div>
+                    <div class="tab-pane fade" id="preview-news" role="tabpanel" aria-labelledby="preview-news-tab" tabindex="0">
+                        <div class="mb-4" id="fullscreen-preview-news"></div>
+                    </div>
+                    <div class="tab-pane fade" id="preview-mc-home" role="tabpanel" aria-labelledby="preview-mc-home-tab" tabindex="0">
+                        <div class="mb-4" id="fullscreen-preview-mc-home"></div>
+                    </div>
+                    <div class="tab-pane fade" id="preview-mc-gov" role="tabpanel" aria-labelledby="preview-mc-gov-tab" tabindex="0">
+                        <div class="mb-4" id="fullscreen-preview-mc-gov"></div>
+                    </div>
+                    <div class="tab-pane fade" id="preview-about" role="tabpanel" aria-labelledby="preview-about-tab" tabindex="0">
+                        <div class="mb-4" id="fullscreen-preview-about"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
 
 <div th:replace="Components :: JS"></div>
 <div th:replace="moderator/ModeratorComponents :: toast-scripts"></div>
@@ -213,7 +256,7 @@
                 <td>${contentGroup.label}</td>
                 <td>${reformatDate(contentGroup.lastEdited)}</td>
                 <td>
-                    <button type="button" class="btn btn-sm btn-primary" onclick="" data-bs-toggle="modal" data-bs-target="#preview-modal">Preview</button>
+                    <button type="button" class="btn btn-sm btn-primary" onclick="setupPreview(${i})" data-bs-toggle="modal" data-bs-target="#preview-modal">Preview</button>
                 </td>
                 <td>
                     ${!contentGroup.enabled ? `<button type="button" class="btn btn-sm btn-success" onclick="enableContent(${contentGroup.id})">Enable</button>` : `<button type="button" class="disabled btn btn-sm btn-success" disabled>Enabled</button>` }
@@ -265,6 +308,15 @@
             </div>
 
         `;
+    }
+
+    function setupPreview(i){
+        document.querySelector("#fullscreen-preview-home").innerHTML = allContent[i].homeContent;
+        document.querySelector("#fullscreen-preview-projects").innerHTML = allContent[i].projectContent;
+        document.querySelector("#fullscreen-preview-news").innerHTML = allContent[i].newsroomContent;
+        document.querySelector("#fullscreen-preview-mc-home").innerHTML = allContent[i].minecraftHomeContent;
+        document.querySelector("#fullscreen-preview-mc-gov").innerHTML = allContent[i].minecraftGovernmentContent;
+        document.querySelector("#fullscreen-preview-about").innerHTML = allContent[i].aboutContent;
     }
 
 </script>
