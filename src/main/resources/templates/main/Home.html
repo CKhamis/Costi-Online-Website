@@ -21,7 +21,7 @@
 
 <main>
     <div th:replace="Components :: announcements" class="container mt-3"></div>
-
+    <div id="test-home-content"></div>
     <!-- Quick Links-->
     <div class="container mt-3">
         <div th:replace="Components :: flash" class="mt-2"></div>
@@ -184,23 +184,27 @@
     function refresh(){
         const wikiFetch = fetch("/api/wiki/all");
         const newsroomFetch = fetch("/api/newsroom/all");
+        const contentFetch = fetch("/api/content/all");
 
-        Promise.all([wikiFetch, newsroomFetch])
+        Promise.all([wikiFetch, newsroomFetch, contentFetch])
             .then(responses => {
                 const response1 = checkStatus(responses[0]);
                 const response2 = checkStatus(responses[1]);
+                const response3 = checkStatus(responses[2]);
 
-                return Promise.all([response1, response2]);
+                return Promise.all([response1, response2, response3]);
             })
             .then(data => {
                 let wikiDownload = data[0].json();
                 let newsroomDownload = data[1].json();
+                let contentDownload = data[2].json();
 
-                return Promise.all([wikiDownload, newsroomDownload]);
+                return Promise.all([wikiDownload, newsroomDownload, contentDownload]);
             })
             .then(data => {
                 wikiPages = data[0]; // wiki data
                 newsroomPages = data[1]; // newsroom data
+                document.querySelector("#test-home-content").innerHTML = data[2].homeContent; // layout data
                 renderWikiPages();
                 renderSlides(10);
             })
