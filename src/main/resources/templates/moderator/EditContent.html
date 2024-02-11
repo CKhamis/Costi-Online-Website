@@ -5,73 +5,134 @@
 <div th:replace="moderator/ModeratorComponents :: moderatorNav"></div>
 
 <main class="container px-0">
-    <h1 class="pb-2 border-bottom mb-4 fw-bold text-center">Edit Dynamic Content Group</h1>
     <form id="content-form" enctype="application/x-www-form-urlencoded">
-        <input type="hidden" th:value="${id}" id="id"/>
-        <div class="row">
+        <div>
+            <h1 class="my-3 border-bottom fw-bold text-center">Edit Dynamic Content Group</h1>
+        </div>
 
-            <!-- Home Content -->
-            <div class="col-xs-12 col-md-6 bg-2 mb-3 p-4">
-                <label for="home-content">Home Content</label>
-                <textarea type="text" rows="10" class="form-control" id="home-content" placeholder="body content" required></textarea>
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" style="background: none;border: none;">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Home Content</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-projects-tab" data-bs-toggle="pill" data-bs-target="#pills-projects" type="button" role="tab" aria-controls="pills-projects" aria-selected="false">Projects Content</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-news-tab" data-bs-toggle="pill" data-bs-target="#pills-news" type="button" role="tab" aria-controls="pills-news" aria-selected="false">Newsroom Content</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-mc-home-tab" data-bs-toggle="pill" data-bs-target="#pills-mc-home" type="button" role="tab" aria-controls="pills-mc-home" aria-selected="false" >Minecraft Home Content</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-mc-gov-tab" data-bs-toggle="pill" data-bs-target="#pills-mc-gov" type="button" role="tab" aria-controls="pills-mc-gov" aria-selected="false" >Minecraft Gov Content</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-about-tab" data-bs-toggle="pill" data-bs-target="#pills-about" type="button" role="tab" aria-controls="pills-about" aria-selected="false" >About Content</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-review-tab" data-bs-toggle="pill" data-bs-target="#pills-review" type="button" role="tab" aria-controls="pills-review" aria-selected="false" >Review</button>
+            </li>
+        </ul>
+        <div class="tab-content" id="pills-content">
+            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
+                <div class="container-fluid">
+                    <div class="row">
+                        <!-- Home Content -->
+                        <div class="col-xs-12 col-md-6 bg-2 mb-3 p-4">
+                            <label for="home-content">Home Content</label>
+                            <textarea type="text" rows="10" class="form-control" id="home-content" placeholder="body content" required></textarea>
+                        </div>
+                        <div class="d-none d-md-block col-md-6 p-4">
+                            <div class="m-0" id="preview-panel-home"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="d-none d-md-block col-md-6 p-4">
-                <div class="m-0" id="preview-panel-home"></div>
+            <div class="tab-pane fade" id="pills-projects" role="tabpanel" aria-labelledby="pills-projects-tab" tabindex="0">
+                <div class="container-fluid">
+                    <div class="row">
+                        <!-- Project Content -->
+                        <div class="col-xs-12 col-md-6 bg-2 mb-3 p-4">
+                            <label for="project-content">Project Content</label>
+                            <textarea type="text" rows="10" class="form-control" id="project-content" placeholder="body content" required></textarea>
+                        </div>
+                        <div class="d-none d-md-block col-md-6 p-4">
+                            <div class="m-0" id="preview-panel-project"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <div class="tab-pane fade" id="pills-news" role="tabpanel" aria-labelledby="pills-news-tab" tabindex="0">
+                <div class="container-fluid">
+                    <div class="row">
+                        <!-- News Content -->
+                        <div class="col-xs-12 col-md-6 bg-2 mb-3 p-4">
+                            <label for="news-content">Newsroom Content</label>
+                            <textarea type="text" rows="10" class="form-control" id="news-content" placeholder="body content" required></textarea>
+                        </div>
+                        <div class="d-none d-md-block col-md-6 p-4">
+                            <div class="m-0" id="preview-panel-news"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pills-mc-home" role="tabpanel" aria-labelledby="pills-mc-home-tab" tabindex="0">
+                <div class="container-fluid">
+                    <div class="row">
+                        <!-- Minecraft Home Content -->
+                        <div class="col-xs-12 col-md-6 bg-2 mb-3 p-4">
+                            <label for="mc-home-content">Minecraft Home Content</label>
+                            <textarea type="text" rows="10" class="form-control" id="mc-home-content" placeholder="body content" required></textarea>
+                        </div>
+                        <div class="d-none d-md-block col-md-6 p-4">
+                            <div class="m-0" id="preview-panel-mc-home"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pills-mc-gov" role="tabpanel" aria-labelledby="pills-mc-gov-tab" tabindex="0">
+                <div class="container-fluid">
+                    <div class="row">
+                        <!-- Minecraft Gov Content -->
+                        <div class="col-xs-12 col-md-6 bg-2 mb-3 p-4">
+                            <label for="mc-gov-content">Minecraft Government Content</label>
+                            <textarea type="text" rows="10" class="form-control" id="mc-gov-content" placeholder="body content" required></textarea>
+                        </div>
+                        <div class="d-none d-md-block col-md-6 p-4">
+                            <div class="m-0" id="preview-panel-mc-gov"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pills-about" role="tabpanel" aria-labelledby="pills-about-tab" tabindex="0">
+                <div class="container-fluid">
+                    <div class="row">
+                        <!-- About Content -->
+                        <div class="col-xs-12 col-md-6 bg-2 mb-3 p-4">
+                            <label for="about-content">About Content</label>
+                            <textarea type="text" rows="10" class="form-control" id="about-content" placeholder="body content" required></textarea>
+                        </div>
+                        <div class="d-none d-md-block col-md-6 p-4">
+                            <div class="m-0" id="preview-panel-about"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pills-review" role="tabpanel" aria-labelledby="pills-review-tab" tabindex="0">
+                <div class="container-fluid">
+                    <div class="row justify-content-center">
+                        <div class="col-12 bg-2 mb-3 p-4">
+                            <label for="label">Label</label>
+                            <input type="text" class="form-control" id="label" placeholder="Label here" required>
 
-            <!-- Project Content -->
-            <div class="col-xs-12 col-md-6 bg-2 mb-3 p-4">
-                <label for="project-content">Project Content</label>
-                <textarea type="text" rows="10" class="form-control" id="project-content" placeholder="body content" required></textarea>
-            </div>
-            <div class="d-none d-md-block col-md-6 p-4">
-                <div class="m-0" id="preview-panel-project"></div>
-            </div>
-
-            <!-- News Content -->
-            <div class="col-xs-12 col-md-6 bg-2 mb-3 p-4">
-                <label for="news-content">Newsroom Content</label>
-                <textarea type="text" rows="10" class="form-control" id="news-content" placeholder="body content" required></textarea>
-            </div>
-            <div class="d-none d-md-block col-md-6 p-4">
-                <div class="m-0" id="preview-panel-news"></div>
-            </div>
-
-            <!-- Minecraft Home Content -->
-            <div class="col-xs-12 col-md-6 bg-2 mb-3 p-4">
-                <label for="mc-home-content">Minecraft Home Content</label>
-                <textarea type="text" rows="10" class="form-control" id="mc-home-content" placeholder="body content" required></textarea>
-            </div>
-            <div class="d-none d-md-block col-md-6 p-4">
-                <div class="m-0" id="preview-panel-mc-home"></div>
-            </div>
-
-            <!-- Minecraft Gov Content -->
-            <div class="col-xs-12 col-md-6 bg-2 mb-3 p-4">
-                <label for="mc-gov-content">Minecraft Government Content</label>
-                <textarea type="text" rows="10" class="form-control" id="mc-gov-content" placeholder="body content" required></textarea>
-            </div>
-            <div class="d-none d-md-block col-md-6 p-4">
-                <div class="m-0" id="preview-panel-mc-gov"></div>
-            </div>
-
-            <!-- About Content -->
-            <div class="col-xs-12 col-md-6 bg-2 mb-3 p-4">
-                <label for="about-content">About Content</label>
-                <textarea type="text" rows="10" class="form-control" id="about-content" placeholder="body content" required></textarea>
-            </div>
-            <div class="d-none d-md-block col-md-6 p-4">
-                <div class="m-0" id="preview-panel-about"></div>
-            </div>
-
-            <div class="col-xs-12 col-md-6 bg-2 mb-3 p-4">
-                <label for="label">Label</label>
-                <input type="text" class="form-control" id="label" placeholder="Label here" required>
-
-                <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#preview-modal">Preview</button>
-                <button type="button" class="btn btn-primary mt-3" onclick="saveContent()">Save</button>
+                            <div id="action-container" class="mt-3"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+        <input type="hidden" th:value="${id}" id="id"/>
+
     </form>
 </main>
 
@@ -83,43 +144,43 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" style="background: none;border: none;">
+                <ul class="nav nav-pills mb-3" id="preview-tabs" role="tablist" style="background: none;border: none;">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Home Content</button>
+                        <button class="nav-link active" id="preview-home-tab" data-bs-toggle="pill" data-bs-target="#preview-home" type="button" role="tab" aria-controls="preview-home" aria-selected="true">Home Content</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-projects-tab" data-bs-toggle="pill" data-bs-target="#pills-projects" type="button" role="tab" aria-controls="pills-projects" aria-selected="false">Projects Content</button>
+                        <button class="nav-link" id="preview-projects-tab" data-bs-toggle="pill" data-bs-target="#preview-projects" type="button" role="tab" aria-controls="preview-projects" aria-selected="false">Projects Content</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-news-tab" data-bs-toggle="pill" data-bs-target="#pills-news" type="button" role="tab" aria-controls="pills-news" aria-selected="false">Newsroom Content</button>
+                        <button class="nav-link" id="preview-news-tab" data-bs-toggle="pill" data-bs-target="#preview-news" type="button" role="tab" aria-controls="preview-news" aria-selected="false">Newsroom Content</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-mc-home-tab" data-bs-toggle="pill" data-bs-target="#pills-mc-home" type="button" role="tab" aria-controls="pills-mc-home" aria-selected="false" >Minecraft Home Content</button>
+                        <button class="nav-link" id="preview-mc-home-tab" data-bs-toggle="pill" data-bs-target="#preview-mc-home" type="button" role="tab" aria-controls="preview-mc-home" aria-selected="false" >Minecraft Home Content</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-mc-gov-tab" data-bs-toggle="pill" data-bs-target="#pills-mc-gov" type="button" role="tab" aria-controls="pills-mc-gov" aria-selected="false" >Minecraft Gov Content</button>
+                        <button class="nav-link" id="preview-mc-gov-tab" data-bs-toggle="pill" data-bs-target="#preview-mc-gov" type="button" role="tab" aria-controls="preview-mc-gov" aria-selected="false" >Minecraft Gov Content</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-about-tab" data-bs-toggle="pill" data-bs-target="#pills-about" type="button" role="tab" aria-controls="pills-about" aria-selected="false" >About Content</button>
+                        <button class="nav-link" id="preview-about-tab" data-bs-toggle="pill" data-bs-target="#preview-about" type="button" role="tab" aria-controls="preview-about" aria-selected="false" >About Content</button>
                     </li>
                 </ul>
-                <div class="tab-content" id="pills-tabContent">
-                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
+                <div class="tab-content" id="preview-tabContent">
+                    <div class="tab-pane fade show active" id="preview-home" role="tabpanel" aria-labelledby="preview-home-tab" tabindex="0">
                         <div class="mb-4" id="fullscreen-preview-home"></div>
                     </div>
-                    <div class="tab-pane fade" id="pills-projects" role="tabpanel" aria-labelledby="pills-projects-tab" tabindex="0">
+                    <div class="tab-pane fade" id="preview-projects" role="tabpanel" aria-labelledby="preview-projects-tab" tabindex="0">
                         <div class="mb-4" id="fullscreen-preview-projects"></div>
                     </div>
-                    <div class="tab-pane fade" id="pills-news" role="tabpanel" aria-labelledby="pills-news-tab" tabindex="0">
+                    <div class="tab-pane fade" id="preview-news" role="tabpanel" aria-labelledby="preview-news-tab" tabindex="0">
                         <div class="mb-4" id="fullscreen-preview-news"></div>
                     </div>
-                    <div class="tab-pane fade" id="pills-mc-home" role="tabpanel" aria-labelledby="pills-mc-home-tab" tabindex="0">
+                    <div class="tab-pane fade" id="preview-mc-home" role="tabpanel" aria-labelledby="preview-mc-home-tab" tabindex="0">
                         <div class="mb-4" id="fullscreen-preview-mc-home"></div>
                     </div>
-                    <div class="tab-pane fade" id="pills-mc-gov" role="tabpanel" aria-labelledby="pills-mc-gov-tab" tabindex="0">
+                    <div class="tab-pane fade" id="preview-mc-gov" role="tabpanel" aria-labelledby="preview-mc-gov-tab" tabindex="0">
                         <div class="mb-4" id="fullscreen-preview-mc-gov"></div>
                     </div>
-                    <div class="tab-pane fade" id="pills-about" role="tabpanel" aria-labelledby="pills-about-tab" tabindex="0">
+                    <div class="tab-pane fade" id="preview-about" role="tabpanel" aria-labelledby="preview-about-tab" tabindex="0">
                         <div class="mb-4" id="fullscreen-preview-about"></div>
                     </div>
                 </div>
@@ -189,17 +250,20 @@
     });
 
     // fetch
-    fetch("/api/management/content/" + id)
-        .then(checkStatus)
-        .then(response => response.json())
-        .then(data => {
-            content = data;
-            displayPreview();
-        })
-        .catch(error => {
-            // error handling
-            console.error('Error retrieving data:', error);
-        });
+    function refresh(){
+        fetch("/api/management/content/" + id)
+            .then(checkStatus)
+            .then(response => response.json())
+            .then(data => {
+                content = data;
+                displayPreview();
+            })
+            .catch(error => {
+                // error handling
+                console.error('Error retrieving data:', error);
+            });
+    }
+    refresh();
 
     // Render
     function displayPreview(){
@@ -225,6 +289,16 @@
         mcGovInput.value = content.minecraftGovernmentContent;
         aboutInput.value = content.aboutContent;
         document.getElementById("label").value = content.label;
+
+        document.querySelector("#action-container").innerHTML = `${!content.enabled ? `
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#preview-modal">Preview</button>
+            <button type="button" class="btn btn-primary" onclick="saveContent()">Save</button>
+            <button type="button" class="btn btn-success" onclick="enableContent(${content.id})">Enable</button>
+        ` : `
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#preview-modal">Preview</button>
+            <button type="button" class="btn btn-primary" onclick="saveContent()">Save</button>
+            <button type="button" class="disabled btn btn-success" disabled>Enabled</button>
+        ` }`;
     }
 
     // Save
@@ -257,6 +331,31 @@
                 document.getElementById(`${toastId}-loading`).style.color = "red";
             })
             .finally(refresh);
+    }
+
+    function enableContent(id) {
+        let toastId = createToast("Enabling Content Group");
+        postData(`/api/management/content/enable`, id)
+            .then(() => {
+                document.getElementById(`${toastId}-body`).innerText = "✅ Content Enabled";
+                document.getElementById(`${toastId}-loading`).style.color = "green";
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        document.getElementById(`${toastId}-body`).innerText = getIcon(errorData.severity) + errorData.message;
+                        document.getElementById(`${toastId}-title`).innerText = errorData.title;
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                        document.getElementById(`${toastId}-body`).innerText = "Unable to connect to Costi Online Services";
+                        document.getElementById(`${toastId}-title`).innerText = "Error";
+                        document.getElementById(`${toastId}-loading`).style.color = "red";
+                    });
+            })
+            .then(refresh);
     }
 </script>
 </body>
