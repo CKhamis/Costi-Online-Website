@@ -68,12 +68,69 @@
                 <label for="label">Label</label>
                 <input type="text" class="form-control" id="label" placeholder="Label here" required>
 
+                <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#preview-modal">Preview</button>
                 <button type="button" class="btn btn-primary mt-3" onclick="saveContent()">Save</button>
             </div>
         </div>
     </form>
-
 </main>
+
+<div class="modal fade" id="preview-modal" tabindex="-1" aria-labelledby="preview-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content border-box">
+            <div class="modal-header">
+                <h3 class="modal-title fw-bold" id="preview-modal-label">Preview Content Group Edits</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" style="background: none;border: none;">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Home Content</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-projects-tab" data-bs-toggle="pill" data-bs-target="#pills-projects" type="button" role="tab" aria-controls="pills-projects" aria-selected="false">Projects Content</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-news-tab" data-bs-toggle="pill" data-bs-target="#pills-news" type="button" role="tab" aria-controls="pills-news" aria-selected="false">Newsroom Content</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-mc-home-tab" data-bs-toggle="pill" data-bs-target="#pills-mc-home" type="button" role="tab" aria-controls="pills-mc-home" aria-selected="false" >Minecraft Home Content</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-mc-gov-tab" data-bs-toggle="pill" data-bs-target="#pills-mc-gov" type="button" role="tab" aria-controls="pills-mc-gov" aria-selected="false" >Minecraft Gov Content</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-about-tab" data-bs-toggle="pill" data-bs-target="#pills-about" type="button" role="tab" aria-controls="pills-about" aria-selected="false" >About Content</button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
+                        <div class="mb-4" id="fullscreen-preview-home"></div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-projects" role="tabpanel" aria-labelledby="pills-projects-tab" tabindex="0">
+                        <div class="mb-4" id="fullscreen-preview-projects"></div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-news" role="tabpanel" aria-labelledby="pills-news-tab" tabindex="0">
+                        <div class="mb-4" id="fullscreen-preview-news"></div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-mc-home" role="tabpanel" aria-labelledby="pills-mc-home-tab" tabindex="0">
+                        <div class="mb-4" id="fullscreen-preview-mc-home"></div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-mc-gov" role="tabpanel" aria-labelledby="pills-mc-gov-tab" tabindex="0">
+                        <div class="mb-4" id="fullscreen-preview-mc-gov"></div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-about" role="tabpanel" aria-labelledby="pills-about-tab" tabindex="0">
+                        <div class="mb-4" id="fullscreen-preview-about"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="saveContent()" data-bs-dismiss="modal" aria-label="Close">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 99" id="toast-container">
 </div>
@@ -98,31 +155,37 @@
     homeInput.addEventListener('input', function (event) {
         // Retrieve the current value of the text field
         document.querySelector("#preview-panel-home").innerHTML = event.target.value;
+        document.querySelector("#fullscreen-preview-home").innerHTML = event.target.value;
     });
 
     projectInput.addEventListener('input', function (event) {
         // Retrieve the current value of the text field
         document.querySelector("#preview-panel-project").innerHTML = event.target.value;
+        document.querySelector("#fullscreen-preview-project").innerHTML = event.target.value;
     });
 
     newsInput.addEventListener('input', function (event) {
         // Retrieve the current value of the text field
         document.querySelector("#preview-panel-news").innerHTML = event.target.value;
+        document.querySelector("#fullscreen-preview-news").innerHTML = event.target.value;
     });
 
     mcHomeInput.addEventListener('input', function (event) {
         // Retrieve the current value of the text field
         document.querySelector("#preview-panel-mc-home").innerHTML = event.target.value;
+        document.querySelector("#fullscreen-preview-mc-home").innerHTML = event.target.value;
     });
 
     mcGovInput.addEventListener('input', function (event) {
         // Retrieve the current value of the text field
         document.querySelector("#preview-panel-mc-gov").innerHTML = event.target.value;
+        document.querySelector("#fullscreen-preview-mc-gov").innerHTML = event.target.value;
     });
 
     aboutInput.addEventListener('input', function (event) {
         // Retrieve the current value of the text field
         document.querySelector("#preview-panel-about").innerHTML = event.target.value;
+        document.querySelector("#fullscreen-preview-about").innerHTML = event.target.value;
     });
 
     // fetch
@@ -147,6 +210,13 @@
         document.querySelector("#preview-panel-mc-home").innerHTML = content.minecraftHomeContent;
         document.querySelector("#preview-panel-mc-gov").innerHTML = content.minecraftGovernmentContent;
         document.querySelector("#preview-panel-about").innerHTML = content.aboutContent;
+
+        document.querySelector("#fullscreen-preview-home").innerHTML = content.homeContent;
+        document.querySelector("#fullscreen-preview-projects").innerHTML = content.projectContent;
+        document.querySelector("#fullscreen-preview-news").innerHTML = content.newsroomContent;
+        document.querySelector("#fullscreen-preview-mc-home").innerHTML = content.minecraftHomeContent;
+        document.querySelector("#fullscreen-preview-mc-gov").innerHTML = content.minecraftGovernmentContent;
+        document.querySelector("#fullscreen-preview-about").innerHTML = content.aboutContent;
 
         homeInput.value = content.homeContent;
         projectInput.value = content.projectContent;
