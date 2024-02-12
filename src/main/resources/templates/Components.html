@@ -177,7 +177,7 @@
     let quota = 0;
     let timeNow, localTimeChecked;
 
-    $('.sprite').click(function() {
+    $(document).on('click', '.sprite', function() {
         let spriteName = $(this).data('sprite-name');
         let sprite = $(this); // save a reference to the clicked sprite element
         $.post("/games/Axcel/found-sprite", { spriteName: spriteName }, function(response) {

@@ -19,14 +19,14 @@
     </div>
 </div>
 
-<main>
+<div class="container mt-3">
     <div th:replace="Components :: announcements" class="container mt-3"></div>
-    <div id="test-home-content"></div>
+    <div th:replace="Components :: flash" class="mt-2"></div>
+</div>
+
+<main id="api-content">
+    <!--
     <div class="container mt-3">
-        <div th:replace="Components :: flash" class="mt-2"></div>
-    </div>
-    <div class="container mt-3">
-        <!-- Quick Links-->
         <div class="row mt-2" id="quick-links">
             <div class="col col-12 col-lg-4" style="margin-top: 100px; opacity:0;">
                 <div class="border-box text-1 p-4 mb-4">
@@ -58,7 +58,6 @@
         <a href="/Newsroom"><p class="text-1 text-decoration-underline">View more in Costi Newsroom ></p></a>
     </div>
 
-    <!-- Axcel Minigame -->
     <div class="container-fluid overflow-hidden px-0 pt-3" id="axcel-container">
         <img id="axcel-running" src="/images/games/axcel/running.gif" alt="axcel" class="position-relative" style="height: 0; top:0;left:0;"/>
         <img id="axcel-waiting" src="/images/games/axcel/sitting.gif" alt="axcel" class="position-relative mx-auto" style="height: 0; top:0;left:50%;transform:translate(-50%, 0%);"/>
@@ -146,6 +145,7 @@
             </div>
         </div>
     </div>
+    -->
 </main>
 
 <div th:replace="Components :: footer"></div>
@@ -161,8 +161,6 @@
 
     // Wiki Preview
     let wikiPages, newsroomPages;
-
-    let slideContent = document.querySelector("#slide-content");
 
     refresh();
     function refresh(){
@@ -186,7 +184,8 @@
                 return Promise.all([wikiDownload, newsroomDownload, contentDownload]);
             })
             .then(data => {
-                document.querySelector("#test-home-content").innerHTML = data[2].homeContent; // layout data
+                document.querySelector("#api-content").innerHTML = data[2].homeContent; // layout data
+                start();
                 return data;
             })
             .then(data => {
@@ -234,7 +233,7 @@
 
             `;
         }
-        slideContent.innerHTML = innerHTML;
+        document.querySelector("#slide-content").innerHTML = innerHTML;
         $('#newsroom-slideshow').carousel();
     }
 
@@ -300,8 +299,7 @@
         document.querySelector("#wiki-preview-container").innerHTML = wikiContent;
     }
 
-
-    $(document).ready(function(){
+    function start(){
         checkGameStarted();
         $('.changing-text').text(subtitles[Math.floor(Math.random() * subtitles.length)]);
 
@@ -318,7 +316,7 @@
         $("#dialogue-next").click(nextPressed);
         $("#axcel-waiting").click(waitingPressed);
         moveGif();
-    });
+    }
 
     let gameStatus = -1;
     function waitingPressed(){
