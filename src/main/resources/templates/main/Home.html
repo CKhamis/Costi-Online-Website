@@ -22,9 +22,11 @@
 <main>
     <div th:replace="Components :: announcements" class="container mt-3"></div>
     <div id="test-home-content"></div>
-    <!-- Quick Links-->
     <div class="container mt-3">
         <div th:replace="Components :: flash" class="mt-2"></div>
+    </div>
+    <div class="container mt-3">
+        <!-- Quick Links-->
         <div class="row mt-2" id="quick-links">
             <div class="col col-12 col-lg-4" style="margin-top: 100px; opacity:0;">
                 <div class="border-box text-1 p-4 mb-4">
@@ -58,12 +60,9 @@
 
     <!-- Axcel Minigame -->
     <div class="container-fluid overflow-hidden px-0 pt-3" id="axcel-container">
-        <img id="axcel-running" th:src="@{images/games/axcel/running.gif}" alt="axcel" class="position-relative" style="height: 0px; top:0px;left:0px;"/>
-        <img id="axcel-waiting" th:src="@{images/games/axcel/sitting.gif}" alt="axcel" class="position-relative mx-auto" style="height: 0px; top:0px;left:50%;transform:translate(-50%, 0%);"/>
+        <img id="axcel-running" src="/images/games/axcel/running.gif" alt="axcel" class="position-relative" style="height: 0; top:0;left:0;"/>
+        <img id="axcel-waiting" src="/images/games/axcel/sitting.gif" alt="axcel" class="position-relative mx-auto" style="height: 0; top:0;left:50%;transform:translate(-50%, 0%);"/>
     </div>
-
-    <!-- Axcel Dialogue -->
-    <div th:replace="Components :: dialogue-box"></div>
 
     <div class="container" id="about">
         <div class="row">
@@ -113,7 +112,7 @@
                         </div>
 
                         <a href="/Projects" class="btn btn-primary" aria-current="page">See Projects page</a>
-                        <img th:src="@{images/games/axcel/toys/Bear.png}" class="sprite" style="height:40px;" data-sprite-name="bear"/>
+                        <img src="/images/games/axcel/toys/Bear.png" class="sprite" style="height:40px;" data-sprite-name="bear" alt="toy"/>
                     </div>
                 </div>
             </div>
@@ -123,7 +122,7 @@
     <div class="container-fluid p-0 mb-3" id="media">
         <div class="container-fluid">
             <div class="container py-5">
-                <img th:src="@{/icons/CM White.svg}" alt="costi media logo" class="img-fluid mb-2"/>
+                <img src="/icons/CM White.svg" alt="costi media logo" class="img-fluid mb-2"/>
                 <p class="fs-4 text-white">View various video, image, and flyer materials I made. This features projects I created since I was in sixth grade in chronological order.</p>
                 <a href="/Media" class="btn btn-primary" aria-current="page">Visit Costi Media</a>
             </div>
@@ -136,29 +135,13 @@
             <div class="container py-5">
                 <div class="row">
                     <div class="d-none d-md-block col-md-7 ">
-                        <div class="row" id="wiki-preview-container">
-                            <div class="col-4" th:each="page : ${wiki}">
-                                <div th:switch="${page.category}"   class="card border-box">
-                                    <div th:case="INSIDE_JOKE"      class="card-header fw-bold" th:text="|&#128518; Inside Joke|">Card title</div>
-                                    <div th:case="HISTORICAL"       class="card-header fw-bold" th:text="|&#127984; Historical|">Card title</div>
-                                    <div th:case="PEOPLE"         class="card-header fw-bold" th:text="|&#128697; People|">Card title</div>
-                                    <div th:case="PROFESSIONAL"     class="card-header fw-bold" th:text="|&#128084; Professional|">Card title</div>
-                                    <div th:case="*"                class="card-header fw-bold" th:text="|&#10067; Other|">Card title</div>
-                                    <div class="card-body">
-                                        <h5 class="card-title text-truncate" th:text="*{page.title}">Title</h5>
-                                        <h6 class="card-subtitle mb-2 text-muted text-truncate" th:text="*{page.subtitle}">Card subtitle</h6>
-                                        <a th:href="'/Wiki/' + *{page.Id} + '/view'" class="card-link">View ></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <div class="row" id="wiki-preview-container"></div>
                     </div>
                     <div class="col-12 col-md-5">
                         <h2 class="fw-bold text-white">Costipedia</h2>
                         <p class="fs-4 text-white">Costipedia is a Wiki that contains pages relevant to myself & friends.</p>
                         <a href="/Wiki" class="btn btn-primary" aria-current="page">Visit Costipedia</a>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -171,6 +154,7 @@
 <div th:replace="Components :: JS"></div>
 <div th:replace="Components :: axcel-sprite-logic"></div>
 <div th:replace="Components :: announcementScript"></div>
+<div th:replace="Components :: dialogue-box"></div>
 <script>
     let subtitles = ["Costi's favorite website", "I haven't seen you in a BILLION years!", "Croods", "Chelsea Stacie Ingrid Marla Darla", "MAAAAARRIOOOOO!", "A project by Costi", "An interdimensional project",
     "'Ello", "Bro what?", "What's puopping", "Death, Dying, Religion", "ur mum", "Free Taiwan 🇹🇼 "]
@@ -202,9 +186,12 @@
                 return Promise.all([wikiDownload, newsroomDownload, contentDownload]);
             })
             .then(data => {
+                document.querySelector("#test-home-content").innerHTML = data[2].homeContent; // layout data
+                return data;
+            })
+            .then(data => {
                 wikiPages = data[0]; // wiki data
                 newsroomPages = data[1]; // newsroom data
-                document.querySelector("#test-home-content").innerHTML = data[2].homeContent; // layout data
                 renderWikiPages();
                 renderSlides(10);
             })
