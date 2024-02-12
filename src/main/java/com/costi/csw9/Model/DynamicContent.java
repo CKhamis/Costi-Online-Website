@@ -48,6 +48,11 @@ public class DynamicContent {
     @Column(columnDefinition="text")
     @NotNull
     @NotBlank
+    private String wikiContent;
+
+    @Column(columnDefinition="text")
+    @NotNull
+    @NotBlank
     private String newsroomContent;
 
     @Column(columnDefinition="text")

@@ -5,7 +5,7 @@
 <div th:replace="Components :: main-navigation"></div>
 
 <main class="container mt-3" id="body-container">
-    <div class="p-5 mb-4 border-box wikiBannerBg">
+    <div class="p-5 mb-2 border-box wikiBannerBg">
         <div class="container-fluid py-5">
             <h1 class="display-5 fw-bold">Costipedia</h1>
             <p class="col-md-8 fs-4">A community wiki for Costi Online that centralizes important information related to Costi, friends, inside jokes, and more!</p>
@@ -13,6 +13,7 @@
             <a href="/Wiki/Create" th:class="'btn btn-primary '  + (*{loggedIn}? 'd-none' : '')" role="button">Sign in to add a new wiki page</a>
         </div>
     </div>
+    <div class="mb-4" id="api-content"> </div>
 
     <div th:replace="Components :: flash" class="mb-2"></div>
 
@@ -34,26 +35,33 @@
     let wikiContent;
 
     // GET functions
-    fetch("/api/wiki/all")
-        .then(checkStatus)
-        .then(response => response.json())
+    const wikiFetch = fetch("/api/wiki/all");
+    const contentFetch = fetch("/api/content/all");
+
+    Promise.all([wikiFetch, contentFetch])
+        .then(responses => {
+            const response1 = checkStatus(responses[0]);
+            const response2 = checkStatus(responses[1]);
+
+            return Promise.all([response1, response2]);
+        })
+        .then(data => {
+            let response1 = data[0].json();
+            let response2 = data[1].json();
+
+            return Promise.all([response1, response2]);
+        })
         .then(data => {
             // Process the retrieved data
-            wikiContent = data;
+            document.querySelector("#api-content").innerHTML = data[1].homeContent;
+            wikiContent = data[0];
 
             renderCards();
         })
-        .catch((response)=>{
-            console.log(response);
-            response.json()  // Parse the JSON error response
-                .then(errorData => {
-                    bodyContent.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class="text-center fw-bold">${errorData.title}</h3><p class="text-center">${errorData.message}</p>`;
-                })
-                .catch(error => {
-                    bodyContent.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class="text-center fw-bold">There was an error receiving data from Costi Online Services</h3><p class="text-center">Error message could not be parsed.</p>`;
-
-                    console.error("Error parsing error response:", error);
-                });
+        .catch(error => {
+            // error handling
+            bodyContent.innerHTML = "<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>";
+            console.error('Error retrieving data:', error);
         });
 
     // Rendering functions

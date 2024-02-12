@@ -18,6 +18,9 @@
                 <button class="nav-link" id="pills-projects-tab" data-bs-toggle="pill" data-bs-target="#pills-projects" type="button" role="tab" aria-controls="pills-projects" aria-selected="false">Projects Content</button>
             </li>
             <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-wiki-tab" data-bs-toggle="pill" data-bs-target="#pills-wiki" type="button" role="tab" aria-controls="pills-wiki" aria-selected="false">Wiki Content</button>
+            </li>
+            <li class="nav-item" role="presentation">
                 <button class="nav-link" id="pills-news-tab" data-bs-toggle="pill" data-bs-target="#pills-news" type="button" role="tab" aria-controls="pills-news" aria-selected="false">Newsroom Content</button>
             </li>
             <li class="nav-item" role="presentation">
@@ -58,6 +61,20 @@
                         </div>
                         <div class="d-none d-md-block col-md-6 p-4">
                             <div class="m-0" id="preview-panel-project"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pills-wiki" role="tabpanel" aria-labelledby="pills-wiki-tab" tabindex="0">
+                <div class="container-fluid">
+                    <div class="row">
+                        <!-- Wiki Content -->
+                        <div class="col-xs-12 col-md-6 bg-2 mb-3 p-4">
+                            <label for="wiki-content">Project Content</label>
+                            <textarea type="text" rows="10" class="form-control" id="wiki-content" placeholder="body content" required></textarea>
+                        </div>
+                        <div class="d-none d-md-block col-md-6 p-4">
+                            <div class="m-0" id="preview-panel-wiki"></div>
                         </div>
                     </div>
                 </div>
@@ -152,6 +169,9 @@
                         <button class="nav-link" id="preview-projects-tab" data-bs-toggle="pill" data-bs-target="#preview-projects" type="button" role="tab" aria-controls="preview-projects" aria-selected="false">Projects Content</button>
                     </li>
                     <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="preview-wiki-tab" data-bs-toggle="pill" data-bs-target="#preview-wiki" type="button" role="tab" aria-controls="preview-wiki" aria-selected="false">Projects Content</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
                         <button class="nav-link" id="preview-news-tab" data-bs-toggle="pill" data-bs-target="#preview-news" type="button" role="tab" aria-controls="preview-news" aria-selected="false">Newsroom Content</button>
                     </li>
                     <li class="nav-item" role="presentation">
@@ -170,6 +190,9 @@
                     </div>
                     <div class="tab-pane fade" id="preview-projects" role="tabpanel" aria-labelledby="preview-projects-tab" tabindex="0">
                         <div class="mb-4" id="fullscreen-preview-projects"></div>
+                    </div>
+                    <div class="tab-pane fade" id="preview-wiki" role="tabpanel" aria-labelledby="preview-wiki-tab" tabindex="0">
+                        <div class="mb-4" id="fullscreen-preview-wiki"></div>
                     </div>
                     <div class="tab-pane fade" id="preview-news" role="tabpanel" aria-labelledby="preview-news-tab" tabindex="0">
                         <div class="mb-4" id="fullscreen-preview-news"></div>
@@ -207,6 +230,7 @@
     // Form elements
     const homeInput = document.querySelector("#home-content");
     const projectInput = document.querySelector("#project-content");
+    const wikiInput = document.querySelector("#wiki-content");
     const newsInput = document.querySelector("#news-content");
     const mcHomeInput = document.querySelector("#mc-home-content");
     const mcGovInput = document.querySelector("#mc-gov-content");
@@ -223,6 +247,12 @@
         // Retrieve the current value of the text field
         document.querySelector("#preview-panel-project").innerHTML = event.target.value;
         document.querySelector("#fullscreen-preview-project").innerHTML = event.target.value;
+    });
+
+    wikiInput.addEventListener('input', function (event) {
+        // Retrieve the current value of the text field
+        document.querySelector("#preview-panel-wiki").innerHTML = event.target.value;
+        document.querySelector("#fullscreen-preview-wiki").innerHTML = event.target.value;
     });
 
     newsInput.addEventListener('input', function (event) {
@@ -270,6 +300,7 @@
         // previews
         document.querySelector("#preview-panel-home").innerHTML = content.homeContent;
         document.querySelector("#preview-panel-project").innerHTML = content.projectContent;
+        document.querySelector("#preview-panel-wiki").innerHTML = content.wikiContent;
         document.querySelector("#preview-panel-news").innerHTML = content.newsroomContent;
         document.querySelector("#preview-panel-mc-home").innerHTML = content.minecraftHomeContent;
         document.querySelector("#preview-panel-mc-gov").innerHTML = content.minecraftGovernmentContent;
@@ -277,6 +308,7 @@
 
         document.querySelector("#fullscreen-preview-home").innerHTML = content.homeContent;
         document.querySelector("#fullscreen-preview-projects").innerHTML = content.projectContent;
+        document.querySelector("#fullscreen-preview-wiki").innerHTML = content.wikiContent;
         document.querySelector("#fullscreen-preview-news").innerHTML = content.newsroomContent;
         document.querySelector("#fullscreen-preview-mc-home").innerHTML = content.minecraftHomeContent;
         document.querySelector("#fullscreen-preview-mc-gov").innerHTML = content.minecraftGovernmentContent;
@@ -284,6 +316,7 @@
 
         homeInput.value = content.homeContent;
         projectInput.value = content.projectContent;
+        wikiInput.value = content.wikiContent;
         newsInput.value = content.newsroomContent;
         mcHomeInput.value = content.minecraftHomeContent;
         mcGovInput.value = content.minecraftGovernmentContent;
@@ -310,6 +343,7 @@
             label: document.querySelector("#label").value,
             enabled: false,
             homeContent: homeInput.value,
+            wikiContent: wikiInput.value,
             aboutContent: aboutInput.value,
             projectContent: projectInput.value,
             newsroomContent: newsInput.value,

@@ -67,6 +67,9 @@
                         <button class="nav-link" id="preview-projects-tab" data-bs-toggle="pill" data-bs-target="#preview-projects" type="button" role="tab" aria-controls="preview-projects" aria-selected="false">Projects Content</button>
                     </li>
                     <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="preview-wiki-tab" data-bs-toggle="pill" data-bs-target="#preview-wiki" type="button" role="tab" aria-controls="preview-wiki" aria-selected="false">Wiki Content</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
                         <button class="nav-link" id="preview-news-tab" data-bs-toggle="pill" data-bs-target="#preview-news" type="button" role="tab" aria-controls="preview-news" aria-selected="false">Newsroom Content</button>
                     </li>
                     <li class="nav-item" role="presentation">
@@ -85,6 +88,9 @@
                     </div>
                     <div class="tab-pane fade" id="preview-projects" role="tabpanel" aria-labelledby="preview-projects-tab" tabindex="0">
                         <div class="mb-4" id="fullscreen-preview-projects"></div>
+                    </div>
+                    <div class="tab-pane fade" id="preview-wiki" role="tabpanel" aria-labelledby="preview-wiki-tab" tabindex="0">
+                        <div class="mb-4" id="fullscreen-preview-wiki"></div>
                     </div>
                     <div class="tab-pane fade" id="preview-news" role="tabpanel" aria-labelledby="preview-news-tab" tabindex="0">
                         <div class="mb-4" id="fullscreen-preview-news"></div>
@@ -276,7 +282,7 @@
                 </div>
             </div>
         </div>
-    </div>`, aboutContent: "about", projectContent: `<img alt="project banner" th:src="@{/images/webpageImages/History.png}" class="img-fluid w-100" >`, newsroomContent: "newsroom", minecraftHomeContent: "mch",
+    </div>`, wikiContent: `wiki`, aboutContent: "about", projectContent: `<img alt="project banner" th:src="@{/images/webpageImages/History.png}" class="img-fluid w-100" >`, newsroomContent: "newsroom", minecraftHomeContent: "mch",
             minecraftGovernmentContent: "mcg", lastEdited: new Date()
         })
                 .then(() => {
@@ -430,6 +436,7 @@
     function setupPreview(i){
         document.querySelector("#fullscreen-preview-home").innerHTML = allContent[i].homeContent;
         document.querySelector("#fullscreen-preview-projects").innerHTML = allContent[i].projectContent;
+        document.querySelector("#fullscreen-preview-wiki").innerHTML = allContent[i].wikiContent;
         document.querySelector("#fullscreen-preview-news").innerHTML = allContent[i].newsroomContent;
         document.querySelector("#fullscreen-preview-mc-home").innerHTML = allContent[i].minecraftHomeContent;
         document.querySelector("#fullscreen-preview-mc-gov").innerHTML = allContent[i].minecraftGovernmentContent;
