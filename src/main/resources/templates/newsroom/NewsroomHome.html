@@ -17,7 +17,7 @@
         </div>
     </div>
     <div th:replace="Components :: announcements" class="container mt-3"></div>
-
+    <div id="api-content"></div>
     <div class="container mt-4">
         <h2 class="text-center fw-bold border-bottom pb-2">All Posts</h2>
 
@@ -61,49 +61,65 @@
     let newsroomContent;
 
     // Fetch requests
-    fetch("/api/newsroom/all")
-        .then(checkStatus)
-        .then(response => response.json())
-        .then(data => {
-            // Process the retrieved data
-            newsroomContent = data;
+    refresh();
+    function refresh(){
+        const newsFetch = fetch("/api/newsroom/all");
+        const contentFetch = fetch("/api/content/all");
 
-            if(newsroomContent.length == 0){
-                newsroomContent[0] = {
-                    "id":-1,
-                    "title":"No Posts Found",
-                    "lastEdited":"2023-01-01T19:03:46",
-                    "subtitle":"",
-                    "enabled":true,
-                    "category":"NEWS",
-                    "body":"No body content",
-                    "imagePath":"images/default-posts/no-image.jpg",
-                    "views":0,
-                    "dateEdited":"1/1/2023",
-                    "timeSinceEdited":"?",
-                    "timeSinceEditedShort":"?",
-                    "pinned":false,
-                    "featured":false,
-                    "favorite":false}
-            }
+        Promise.all([newsFetch, contentFetch])
+            .then(responses => {
+                const response1 = checkStatus(responses[0]);
+                const response2 = checkStatus(responses[1]);
 
-            renderSlides(10);
-            renderNews();
-            renderRecent(6);
-        })
-        .catch((response)=>{
-            console.log(response);
-            response.json()  // Parse the JSON error response
-                .then(errorData => {
-                    bodyContent.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class="text-center fw-bold">${errorData.title}</h3><p class="text-center">${errorData.message}</p>`;
-                })
-                .catch(error => {
-                    bodyContent.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class="text-center fw-bold">There was an error receiving data from Costi Online Services</h3><p class="text-center">Error message could not be parsed. ${error}</p>`;
+                return Promise.all([response1, response2]);
+            })
+            .then(data => {
+                let response1 = data[0].json();
+                let response2 = data[1].json();
 
-                    console.error("Error parsing error response:", error);
-                });
-        })
-        .finally(() => $("#loading").hide());
+                return Promise.all([response1, response2]);
+            })
+            .then(data => {
+                // Process the retrieved data
+                newsroomContent = data[0];
+                document.querySelector("#api-content").innerHTML = data[1].newsroomContent;
+                if(newsroomContent.length == 0){
+                    newsroomContent[0] = {
+                        "id":-1,
+                        "title":"No Posts Found",
+                        "lastEdited":"2023-01-01T19:03:46",
+                        "subtitle":"",
+                        "enabled":true,
+                        "category":"NEWS",
+                        "body":"No body content",
+                        "imagePath":"images/default-posts/no-image.jpg",
+                        "views":0,
+                        "dateEdited":"1/1/2023",
+                        "timeSinceEdited":"?",
+                        "timeSinceEditedShort":"?",
+                        "pinned":false,
+                        "featured":false,
+                        "favorite":false}
+                }
+
+                renderSlides(10);
+                renderNews();
+                renderRecent(6);
+            })
+            .catch((response)=>{
+                console.log(response);
+                response.json()  // Parse the JSON error response
+                    .then(errorData => {
+                        bodyContent.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class="text-center fw-bold">${errorData.title}</h3><p class="text-center">${errorData.message}</p>`;
+                    })
+                    .catch(error => {
+                        bodyContent.innerHTML = `<img src="/icons/Error.svg" alt="error" width="75" class="mx-auto d-block"><h3 class="text-center fw-bold">There was an error receiving data from Costi Online Services</h3><p class="text-center">Error message could not be parsed. ${error}</p>`;
+
+                        console.error("Error parsing error response:", error);
+                    });
+            })
+            .finally(() => $("#loading").hide());
+    }
 
     //Trigger loading
 
