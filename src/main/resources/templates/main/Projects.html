@@ -39,8 +39,8 @@
         behind
     </div>
     <div class="col-xs-12 col-lg-9 px-0" style="padding-top:20px">
+        <div class="container-fluid" id="api-content"></div>
         <div class="container-fluid" id="main-content">
-            <img th:src="@{/images/webpageImages/History.png}" class="img-fluid w-100" >
             <div id="analyticsContainer" class="container-fluid my-4"></div>
             <h3 id="loading" class="text-center">Connecting to Costi Online Services</h3>
             <img th:src="@{images/games/axcel/toys/Chuck Plush.png}" class="sprite" style="height:40px;" data-sprite-name="chuck"/>
@@ -59,13 +59,30 @@
     const container = $("#main-content");
     const analyticsContainer = $("#analyticsContainer");
 
-    //fetch functions
-    fetch("/api/Projects/all")
-        .then(checkStatus)
-        .then(response => response.json())
+    const projectFetch = fetch("/api/Projects/all");
+    const contentFetch = fetch("/api/content/all");
+    const analysisFetch = fetch("/api/Projects/analytics");
+
+    Promise.all([projectFetch, contentFetch, analysisFetch])
+        .then(responses => {
+            const response1 = checkStatus(responses[0]);
+            const response2 = checkStatus(responses[1]);
+            const response3 = checkStatus(responses[2]);
+
+            return Promise.all([response1, response2, response3]);
+        })
+        .then(data => {
+            let projectsDownload = data[0].json();
+            let contentDownload = data[1].json();
+            let analysisDownload = data[2].json();
+
+            return Promise.all([projectsDownload, contentDownload, analysisDownload]);
+        })
         .then(data => {
             // Process the retrieved data
-            displayProjects(data)
+            document.querySelector("#api-content").innerHTML = data[1].projectContent;
+            displayProjects(data[0]);
+            displayAnalytics(data[2]);
         })
         .catch(error => {
             // error handling
@@ -73,14 +90,6 @@
             console.error('Error retrieving data:', error);
         })
         .finally(() => $("#loading").hide());
-
-    fetch("/api/Projects/analytics")
-        .then(checkStatus)
-        .then(response => response.json())
-        .then(data => {
-            // Process the retrieved data
-            displayAnalytics(data)
-        });
 
     //Render
     function displayProjects(data){
