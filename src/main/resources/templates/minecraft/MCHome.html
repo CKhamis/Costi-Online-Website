@@ -1,12 +1,83 @@
 <!DOCTYPE html>
 <html xml:th="https://www.thymeleaf.org">
-<head th:replace="Components :: head('Home')"></head>
+<head th:replace="Components :: head('Minecraft')"></head>
 <body class="bg-1 text-1">
-<div th:replace="Components :: main-navigation"></div>
+<div th:replace="minecraft/MinecraftComponents :: nav"></div>
 
 <main id="api-content"></main>
-
+<link rel="stylesheet" th:href="@{/MCstyles.css}" />
 <div th:replace="Components :: footer"></div>
 <div th:replace="Components :: JS"></div>
+<script>
+    let isOnline;
+    refresh();
+    setInterval(refresh, 300000);
+    function refresh(){
+        const contentFetch = fetch("/api/content/all");
+        const serverFetch = fetch("https://api.mcsrvstat.us/bedrock/3/mc.costionline.com");
+
+        Promise.all([contentFetch, serverFetch])
+            .then(responses => {
+                const response1 = checkStatus(responses[0]);
+                const response2 = checkStatus(responses[1]);
+
+                return Promise.all([response1, response2]);
+            })
+            .then(data => {
+                let response1 = data[0].json();
+                let response2 = data[1].json();
+
+                return Promise.all([response1, response2]);
+            })
+            .then(data => {
+                document.querySelector("#api-content").innerHTML = data[0].minecraftHomeContent; // layout data
+                isOnline = data.online;
+                return data;
+            })
+            .then(data => {renderServerStatus();})
+            .catch((response)=>{
+                console.log(response);
+                response.json()  // Parse the JSON error response
+                    .then(errorData => {
+                        console.log(errorData);
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                    });
+            });
+    }
+
+    function renderServerStatus(){
+        let serverAlert = document.getElementById("server-status");
+        let today = new Date();
+        const hours = today.getHours() % 12;
+        const minutes = today.getMinutes();
+        const formattedMinutes = (minutes < 10) ? "0" + minutes : minutes;
+        if(isOnline){
+            serverAlert.innerHTML = `
+            <div class="alert alert-success" role="alert">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="fw-bold mb-0">Server is Online</h5>
+                        <p style="font-size: 15px;" class="mb-0">Last checked: ${hours + ":" + formattedMinutes}</p>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-0 text-center">${playersOnline} / ${maxPlayers} Players active</h5>
+                    </div>
+                    <div class="spinner-grow text-success" role="status"></div>
+                </div>
+            </div>`;
+        }else {
+            serverAlert.innerHTML = `
+            <div class="alert alert-danger" role="alert">
+                <div class="d-flex justify-content-between">
+                    <h5 class="fw-bold mb-0">Server is Offline</h5>
+                    <p style="font-size: 15px;" class="mb-0">Last checked: ${hours + ":" + formattedMinutes}</p>
+                    <div class="spinner-grow text-danger" role="status"></div>
+                </div>
+            </div>`;
+        }
+    }
+</script>
 </body>
 </html>
