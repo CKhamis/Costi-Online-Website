@@ -4,7 +4,9 @@
 <body class="bg-1 text-1">
 <div th:replace="minecraft/MinecraftComponents :: nav"></div>
 
-<main id="api-content"></main>
+<main id="api-content">
+    <div th:replace="Components :: await-content"></div>
+</main>
 <link rel="stylesheet" th:href="@{/MCstyles.css}" />
 <div th:replace="Components :: footer"></div>
 <div th:replace="Components :: JS"></div>
