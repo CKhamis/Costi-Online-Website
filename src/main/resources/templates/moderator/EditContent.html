@@ -39,6 +39,9 @@
                 <button class="nav-link" id="pills-ckow-tab" data-bs-toggle="pill" data-bs-target="#pills-ckow" type="button" role="tab" aria-controls="pills-ckow" aria-selected="false" >CKOW Content</button>
             </li>
             <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-tree-tab" data-bs-toggle="pill" data-bs-target="#pills-tree" type="button" role="tab" aria-controls="pills-tree" aria-selected="false" >Tree Content</button>
+            </li>
+            <li class="nav-item" role="presentation">
                 <button class="nav-link" id="pills-review-tab" data-bs-toggle="pill" data-bs-target="#pills-review" type="button" role="tab" aria-controls="pills-review" aria-selected="false" >Review</button>
             </li>
         </ul>
@@ -155,7 +158,7 @@
                     </div>
                 </div>
             </div>
-            <div class="tab-pane fade" id="pills-ckow" role="tabpanel" aria-labelledby="pills-about-tab" tabindex="0">
+            <div class="tab-pane fade" id="pills-ckow" role="tabpanel" aria-labelledby="pills-ckow-tab" tabindex="0">
                 <div class="container-fluid">
                     <div class="row">
                         <!-- Constantine Online Content -->
@@ -165,6 +168,20 @@
                         </div>
                         <div class="d-none d-md-block col-md-6 p-4">
                             <div class="m-0" id="preview-panel-ckow"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pills-tree" role="tabpanel" aria-labelledby="pills-tree-tab" tabindex="0">
+                <div class="container-fluid">
+                    <div class="row">
+                        <!-- Tree Content -->
+                        <div class="col-xs-12 col-md-6 bg-2 mb-3 p-4">
+                            <label for="about-content">Tree Content</label>
+                            <textarea type="text" rows="10" class="form-control" id="tree-content" placeholder="body content" required></textarea>
+                        </div>
+                        <div class="d-none d-md-block col-md-6 p-4">
+                            <div class="m-0" id="preview-panel-tree"></div>
                         </div>
                     </div>
                 </div>
@@ -223,6 +240,9 @@
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="preview-ckow-tab" data-bs-toggle="pill" data-bs-target="#preview-ckow" type="button" role="tab" aria-controls="preview-ckow" aria-selected="false" >CKOW Content</button>
                     </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="preview-tree-tab" data-bs-toggle="pill" data-bs-target="#preview-tree" type="button" role="tab" aria-controls="preview-tree" aria-selected="false" >Tree Content</button>
+                    </li>
                 </ul>
                 <div class="tab-content" id="preview-tabContent">
                     <div class="tab-pane fade show active" id="preview-home" role="tabpanel" aria-labelledby="preview-home-tab" tabindex="0">
@@ -251,6 +271,9 @@
                     </div>
                     <div class="tab-pane fade" id="preview-ckow" role="tabpanel" aria-labelledby="preview-ckow-tab" tabindex="0">
                         <div class="mb-4" id="fullscreen-preview-ckow"></div>
+                    </div>
+                    <div class="tab-pane fade" id="preview-tree" role="tabpanel" aria-labelledby="preview-tree-tab" tabindex="0">
+                        <div class="mb-4" id="fullscreen-preview-tree"></div>
                     </div>
                 </div>
             </div>
@@ -283,6 +306,7 @@
     const aboutInput = document.querySelector("#about-content");
     const axcelInput = document.querySelector("#axcel-content");
     const ckowInput = document.querySelector("#ckow-content");
+    const treeInput = document.querySelector("#tree-content");
 
     // Live Preview
     homeInput.addEventListener('input', function (event) {
@@ -339,6 +363,12 @@
         document.querySelector("#fullscreen-preview-ckow").innerHTML = event.target.value;
     });
 
+    treeInput.addEventListener('input', function (event) {
+        // Retrieve the current value of the text field
+        document.querySelector("#preview-panel-tree").innerHTML = event.target.value;
+        document.querySelector("#fullscreen-preview-tree").innerHTML = event.target.value;
+    });
+
     // fetch
     function refresh(){
         fetch("/api/management/content/" + id)
@@ -367,6 +397,7 @@
         document.querySelector("#preview-panel-about").innerHTML = content.aboutContent;
         document.querySelector("#preview-panel-axcel").innerHTML = content.axcelContent;
         document.querySelector("#preview-panel-ckow").innerHTML = content.professionalContent;
+        document.querySelector("#preview-panel-tree").innerHTML = content.treeContent;
 
         document.querySelector("#fullscreen-preview-home").innerHTML = content.homeContent;
         document.querySelector("#fullscreen-preview-projects").innerHTML = content.projectContent;
@@ -377,6 +408,7 @@
         document.querySelector("#fullscreen-preview-about").innerHTML = content.aboutContent;
         document.querySelector("#fullscreen-preview-axcel").innerHTML = content.axcelContent;
         document.querySelector("#fullscreen-preview-ckow").innerHTML = content.professionalContent;
+        document.querySelector("#fullscreen-preview-tree").innerHTML = content.treeContent;
 
         homeInput.value = content.homeContent;
         projectInput.value = content.projectContent;
@@ -387,6 +419,7 @@
         aboutInput.value = content.aboutContent;
         axcelInput.value = content.axcelContent;
         ckowInput.value = content.professionalContent;
+        treeInput.value = content.treeContent;
 
         document.getElementById("label").value = content.label;
 
@@ -418,6 +451,7 @@
             minecraftGovernmentContent: mcGovInput.value,
             axcelContent: axcelInput.value,
             professionalContent: ckowInput.value,
+            treeContent: treeInput.value,
             lastEdited: new Date()
         };
 

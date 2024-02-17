@@ -11,96 +11,55 @@
     </div>
 </nav>
 
-<main class="container mt-3">
-    <div class="alert alert-primary d-none d-md-block" role="alert">
-        This page was designed for mobile devices. <a href="/">Go back to Costi Online</a>
-    </div>
-
-    <div class="card">
-        <img th:src="@{images/webpageImages/City Hall.jpg}" class="card-img-top" alt="Costi's banner" style="aspect-ratio: 16 / 7; object-fit: cover;">
-        <div class="card-body">
-            <div style="position: absolute; transform: translate(0%, -75%); z-index: 1;">
-                <img th:src="@{images/About/Costi.webp}" class="rounded-3" alt="Costi himself" style="aspect-ratio: 1 / 1; object-fit: cover;width:150px">
-            </div>
-            <h1 class="pt-5 mt-2 fw-bold" id="name">Constantin Khamis</h1>
-            <h5 class="text-secondary" id="subtitle">Student intern at City of San Jose</h5>
-            <p class="card-text" id="description">Hello! I am Constantin, or Costi for short (pronounced Coasty). I am very passionate about technology, cybersecurity, and web development.</p>
-        </div>
-    </div>
-
-    <a href="/" class="class mt-3 d-block"><button type="button" class="btn btn-primary btn-lg w-100">Proceed to Costi Online</button></a>
-
-    <div class="row mt-3" id="quick-links">
-        <div class="col h-100 text-center">
-            <a th:href="@{downloads/costi.vcf}" class="h-100">
-                <div class="border-box h-100 p-2">
-                    <img th:src="@{icons/Contact.svg}" alt="Contact icon" style="aspect-ratio: 1 / 1; object-fit: cover;width:100%">
-                    <p class="m-0 pt-1 fw-bold text-1">Contact</p>
-                </div>
-            </a>
-        </div>
-
-        <div class="col h-100 text-center">
-            <a href="mailto:admin@costionline.com" class="h-100">
-                <div class="border-box h-100 p-2">
-                    <img th:src="@{icons/Email.svg}" alt="Email icon" style="aspect-ratio: 1 / 1; object-fit: cover;width:100%">
-                    <p class="m-0 pt-1 fw-bold text-1">Email</p>
-                </div>
-            </a>
-        </div>
-
-        <div class="col h-100 text-center">
-            <a href="tel:+14084606391" class="h-100">
-                <div class="border-box h-100 p-2">
-                    <img th:src="@{icons/Call.svg}" alt="Call icon" style="aspect-ratio: 1 / 1; object-fit: cover;width:100%">
-                    <p class="m-0 pt-1 fw-bold text-1">Call</p>
-                </div>
-            </a>
-        </div>
-    </div>
-
-    <h2 class="text-center fw-bold border-bottom pb-2 mt-4 mb-3">External Links</h2>
-    <a href="https://www.instagram.com/costikhamis/">
-        <div class="border-box">
-            <img th:src="@{icons/Instagram.svg}" class="float-start p-2" alt="Instagram icon" style="aspect-ratio: 1 / 1; object-fit: cover;width:70px">
-            <div class="float-start p-2">
-                <h3 class="fw-bold text-1 mb-0">Instagram</h3>
-                <p class="text-1 mb-0">@costikhamis</p>
-            </div>
-            <img th:src="@{icons/Arrow.svg}" class="float-end p-2" alt="Arrow icon" style="aspect-ratio: 1 / 1; object-fit: cover;width:70px;transform: rotate(-90deg);">
-            <br  clear="all"/>
-        </div>
-    </a>
-
-    <a href="https://www.youtube.com/@costimedia/" class="d-block mt-3">
-        <div class="border-box">
-            <img th:src="@{icons/YouTube.svg}" class="float-start p-2" alt="YouTube icon" style="aspect-ratio: 1 / 1; object-fit: cover;width:70px">
-            <div class="float-start p-2">
-                <h3 class="fw-bold text-1 mb-0">YouTube</h3>
-                <p class="text-1 mb-0">Costi Media</p>
-            </div>
-            <img th:src="@{icons/Arrow.svg}" class="float-end p-2" alt="Arrow icon" style="aspect-ratio: 1 / 1; object-fit: cover;width:70px;transform: rotate(-90deg);">
-            <br  clear="all"/>
-        </div>
-    </a>
-
-    <a href="https://github.com/CKhamis" class="d-block mt-3">
-        <div class="border-box">
-            <img th:src="@{icons/GitHub.svg}" class="float-start p-2" alt="YouTube icon" style="aspect-ratio: 1 / 1; object-fit: cover;width:70px">
-            <div class="float-start p-2">
-                <h3 class="fw-bold text-1 mb-0">GitHub</h3>
-                <p class="text-1 mb-0">CKhamis</p>
-            </div>
-            <img th:src="@{icons/Arrow.svg}" class="float-end p-2" alt="Arrow icon" style="aspect-ratio: 1 / 1; object-fit: cover;width:70px;transform: rotate(-90deg);">
-            <br  clear="all"/>
-        </div>
-    </a>
+<main id="api-content" class="container-fluid px-4">
+    <div th:replace="Components :: await-content"></div>
 </main>
 
 <div th:replace="Components :: footer"></div>
 <div th:replace="Components :: JS"></div>
 <script>
-    $(document).ready(function(){
+    function checkStatus(response){
+        if(response.ok){
+            return Promise.resolve(response);
+        }else{
+            return Promise.reject(response);
+        }
+    }
+
+    refresh();
+    function refresh(){
+        const contentFetch = fetch("/api/content/all");
+
+        Promise.all([contentFetch])
+            .then(responses => {
+                const response1 = checkStatus(responses[0]);
+
+                return Promise.all([response1]);
+            })
+            .then(data => {
+                let response1 = data[0].json();
+
+                return Promise.all([response1]);
+            })
+            .then(data => {
+                document.querySelector("#api-content").innerHTML = data[0].treeContent; // layout data
+                animate();
+            })
+            .catch((response)=>{
+                console.log(response);
+                response.json()  // Parse the JSON error response
+                    .then(errorData => {
+                        console.log(errorData);
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                    });
+            });
+    }
+
+
+
+    function animate(){
         //Definitions
         let quickLinks = $("#quick-links").children();
         let name = $("#name");
@@ -129,7 +88,7 @@
         $(quickLinks[0]).delay(900).animate({opacity: '1'}, {duration:500});
         $(quickLinks[1]).delay(1000).animate({opacity: '1'}, {duration:500});
         $(quickLinks[2]).delay(1100).animate({opacity: '1'}, {duration:500});
-    });
+    }
 </script>
 </body>
 </html>

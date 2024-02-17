@@ -79,4 +79,9 @@ public class DynamicContent {
     @NotNull
     @NotBlank
     private String professionalContent;
+
+    @Column(columnDefinition="text")
+    @NotNull
+    @NotBlank
+    private String treeContent;
 }

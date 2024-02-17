@@ -87,6 +87,9 @@
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="preview-ckow-tab" data-bs-toggle="pill" data-bs-target="#preview-ckow" type="button" role="tab" aria-controls="preview-ckow" aria-selected="false">CKOW Content</button>
                     </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="preview-tree-tab" data-bs-toggle="pill" data-bs-target="#preview-tree" type="button" role="tab" aria-controls="preview-tree" aria-selected="false">Tree Content</button>
+                    </li>
                 </ul>
                 <div class="tab-content" id="preview-tabContent">
                     <div class="tab-pane fade show active" id="preview-home" role="tabpanel" aria-labelledby="preview-home-tab" tabindex="0">
@@ -116,6 +119,9 @@
                     <div class="tab-pane fade" id="preview-ckow" role="tabpanel" aria-labelledby="preview-ckow-tab" tabindex="0">
                         <div class="mb-4" id="fullscreen-preview-ckow"></div>
                     </div>
+                    <div class="tab-pane fade" id="preview-tree" role="tabpanel" aria-labelledby="preview-tree-tab" tabindex="0">
+                        <div class="mb-4" id="fullscreen-preview-tree"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -127,6 +133,7 @@
 <div th:replace="moderator/ModeratorComponents :: toast-scripts"></div>
 <div th:replace="moderator/ModeratorComponents :: date-formatter"></div>
 <div th:replace="moderator/ModeratorComponents :: form-data-script"></div>
+<div th:replace="moderator/ModeratorComponents :: default-content"></div>
 
 <script>
     // Elements
@@ -176,127 +183,7 @@
     function newContent() {
         let toastId = createToast("Creating New Group");
 
-        postData("/api/management/content/save", {id: null, label: "New Group", enabled: false,
-            homeContent: `<div class="container mt-3">
-        <div class="row mt-2" id="quick-links">
-            <div class="col col-12 col-lg-4" style="margin-top: 100px; opacity:0;">
-                <div class="border-box text-1 p-4 mb-4">
-                    <h4 class="fw-bold">📖View Costipedia</h4>
-                    <p>Costipedia is a wikipedia like feature that is about Costi</p>
-                    <a href="/Wiki" type="button" class="btn btn-primary btn-sm">Explore Costipedia</a>
-                </div>
-            </div>
-            <div class="col col-12 col-lg-4" style="margin-top: 100px; opacity:0;">
-                <div class="border-box text-1 p-4  mb-4">
-                    <h4 class="fw-bold">🖼️Stay Up to Date</h4>
-                    <p>Check out Costi Newsroom, featuring posts I make in real time!</p>
-                    <a href="/Newsroom" type="button" class="btn btn-primary btn-sm">Newsroom</a>
-                </div>
-            </div>
-            <div class="col col-12 col-lg-4" style="margin-top: 100px; opacity:0;">
-                <div class="border-box text-1 p-4 mb-4">
-                    <h4 class="fw-bold">🧪Check Out Previous Projects</h4>
-                    <p>View previous coding-based projects I have made from over a decade ago</p>
-                    <a href="/Projects" type="button" class="btn btn-primary btn-sm">View Projects</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="container" id="highlights">
-        <h2 class="pb-2 border-bottom">Recent Highlights</h2>
-        <div id="slide-content"></div>
-        <a href="/Newsroom"><p class="text-1 text-decoration-underline">View more in Costi Newsroom ></p></a>
-    </div>
-
-    <div class="container-fluid overflow-hidden px-0 pt-3" id="axcel-container">
-        <img id="axcel-running" src="/images/games/axcel/running.gif" alt="axcel" class="position-relative" style="height: 0; top:0;left:0;"/>
-        <img id="axcel-waiting" src="/images/games/axcel/sitting.gif" alt="axcel" class="position-relative mx-auto" style="height: 0; top:0;left:50%;transform:translate(-50%, 0%);"/>
-    </div>
-
-    <div class="container" id="about">
-        <div class="row">
-            <div class="col-md-6 col-xs-12 mb-4">
-                <div class="border-box text-1 p-4">
-                    <h3 class="fw-bold">What is Costi Online?</h3>
-                    <p class="fs-4">Costi Online is a personal website I made to share my coding projects, video projects, wiki, Minecraft server, and more.</p>
-                </div>
-            </div>
-            <div class="col-md-6 col-xs-12 mb-4">
-                <div class="border-box text-1 p-4">
-                    <h3 class="fw-bold">Who am I?</h3>
-                    <p class="fs-4">Hi! I am Costi (pronounced "Coasty"). I am a computer science student at San Jose State University.</p>
-                    <a href="/About#about-me" type="button" class="btn btn-primary btn-sm">About Me</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="container pb-5" id="new">
-        <h2 class="pb-2 border-bottom">New In Costi Online 10.0</h2>
-        <p class="fs-4">
-        </p>
-        <a href="https://github.com/CKhamis/Costi-Online-Website" type="button" class="btn btn-dark btn-sm">See Costi Online on GitHub</a>
-    </div>
-
-    <div class="container-fluid p-0 gradient mb-3" id="projects">
-        <div class="container-fluid">
-            <div class="container py-5">
-                <div class="row">
-                    <div class="col-lg-6 col-md-8 col-xs-12">
-                        <h2 class="fw-bold">Project Showcase</h2>
-                        <p class="text-secondary">Coding projects starting from early 2011</p>
-                        <p class="fs-4">Check out various coding projects I made over time and see how my skills progressed</p>
-                        <h5 class="fw-bold">Project Highlights</h5>
-                        <div class="row">
-                            <div class="col-lg-4 col-sm-6 col-xs-6">
-                                <a href="/Projects#CIPolarium"><p>[IN]GRID Polarium</p></a>
-                            </div>
-                            <div class="col-lg-4 col-sm-6 col-xs-6">
-                                <a href="/Projects#CNGrid"><p>[NEXT]GRID</p></a>
-                            </div>
-                            <div class="col-lg-4 col-sm-6 col-xs-6">
-                                <a href="/Projects#CIPolaris"><p>[IN]GRID Polaris</p></a>
-                            </div>
-                        </div>
-
-                        <a href="/Projects" class="btn btn-primary" aria-current="page">See Projects page</a>
-                        <img src="/images/games/axcel/toys/Bear.png" class="sprite" style="height:40px;" data-sprite-name="bear" alt="toy"/>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="container-fluid p-0 mb-3" id="media">
-        <div class="container-fluid">
-            <div class="container py-5">
-                <img src="/icons/CM White.svg" alt="costi media logo" class="img-fluid mb-2"/>
-                <p class="fs-4 text-white">View various video, image, and flyer materials I made. This features projects I created since I was in sixth grade in chronological order.</p>
-                <a href="/Media" class="btn btn-primary" aria-current="page">Visit Costi Media</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="container-fluid p-0" id="wiki">
-        <div class="container-fluid">
-
-            <div class="container py-5">
-                <div class="row">
-                    <div class="d-none d-md-block col-md-7 ">
-                        <div class="row" id="wiki-preview-container"></div>
-                    </div>
-                    <div class="col-12 col-md-5">
-                        <h2 class="fw-bold text-white">Costipedia</h2>
-                        <p class="fs-4 text-white">Costipedia is a Wiki that contains pages relevant to myself & friends.</p>
-                        <a href="/Wiki" class="btn btn-primary" aria-current="page">Visit Costipedia</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>`, wikiContent: `wiki`, aboutContent: "about", projectContent: `<img alt="project banner" th:src="@{/images/webpageImages/History.png}" class="img-fluid w-100" >`, newsroomContent: "newsroom", minecraftHomeContent: "mch",
-            minecraftGovernmentContent: "mcg", lastEdited: new Date()
-        })
+        postData("/api/management/content/save", defaultContent)
                 .then(() => {
                 document.getElementById(`${toastId}-body`).innerText = "✅ Content Group Created";
                 document.getElementById(`${toastId}-loading`).style.color = "green";
@@ -455,6 +342,7 @@
         document.querySelector("#fullscreen-preview-about").innerHTML = allContent[i].aboutContent;
         document.querySelector("#fullscreen-preview-axcel").innerHTML = allContent[i].axcelContent;
         document.querySelector("#fullscreen-preview-ckow").innerHTML = allContent[i].professionalContent;
+        document.querySelector("#fullscreen-preview-tree").innerHTML = allContent[i].treeContent;
     }
 
 </script>
