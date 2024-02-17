@@ -47,25 +47,27 @@
         const wikiFetch = fetch("/api/wiki/all");
         const newsroomFetch = fetch("/api/newsroom/all");
         const contentFetch = fetch("/api/content/all");
+        const axcelFetch = fetch("/games/Axcel/check-game-status");
 
-        Promise.all([wikiFetch, newsroomFetch, contentFetch])
+        Promise.all([wikiFetch, newsroomFetch, contentFetch, axcelFetch])
             .then(responses => {
                 const response1 = checkStatus(responses[0]);
                 const response2 = checkStatus(responses[1]);
                 const response3 = checkStatus(responses[2]);
+                const response4 = checkStatus(responses[3]);
 
-                return Promise.all([response1, response2, response3]);
+                return Promise.all([response1, response2, response3, response4]);
             })
             .then(data => {
                 let wikiDownload = data[0].json();
                 let newsroomDownload = data[1].json();
                 let contentDownload = data[2].json();
+                let axcelDownload = data[3].json();
 
-                return Promise.all([wikiDownload, newsroomDownload, contentDownload]);
+                return Promise.all([wikiDownload, newsroomDownload, contentDownload, axcelDownload]);
             })
             .then(data => {
                 document.querySelector("#api-content").innerHTML = data[2].homeContent; // layout data
-                start();
                 return data;
             })
             .then(data => {
@@ -73,6 +75,41 @@
                 newsroomPages = data[1]; // newsroom data
                 renderWikiPages();
                 renderSlides(10);
+
+                containerWidth = $('#axcel-container').width();
+                gifWidth = $('#axcel-running').width();
+                leftOffset = containerWidth + gifWidth;
+                return data;
+            })
+            .then(data => {
+                $('.changing-text').text(subtitles[Math.floor(Math.random() * subtitles.length)]);
+
+                $("#axcel-running").click(startDialogue);
+                $("#dialogue-skip").click(skipPressed);
+                $("#dialogue-next").click(nextPressed);
+                $("#axcel-waiting").click(waitingPressed);
+
+                quota = data[3].quota;
+                if (data[3].gameStarted) {
+                    // Update the UI to indicate that the game has already started
+                    showAxcelWaiting();
+                    numFoundSprites = data[3].foundSprites.length;
+                    showTimer();
+                    startTimer(data[3].timeStart);
+                    timeEnd = new Date(Date.parse(data[3].timeEnd));
+                    timeNow = new Date(Date.parse(data[3].timeNow));
+                    timeBegin = new Date(Date.parse(data[3].timeStart));
+                    localTimeChecked = new Date();
+                    $("#toy-counter").text(numFoundSprites + " / " + quota);
+                    updateSpriteVisibility(data[3].foundSprites);
+
+                    showHint(countSpritesOnPage() + " toys left here!");
+                    gameStatus = 0;
+                } else {
+                    // Show Axcel running section
+                    $("#axcel-running").delay(0).animate({height: '80px'}, {duration:500});
+                    moveGif();
+                }
             })
             .catch((response)=>{
                 console.log(response);
@@ -179,25 +216,6 @@
         document.querySelector("#wiki-preview-container").innerHTML = wikiContent;
     }
 
-    function start(){
-        checkGameStarted();
-        $('.changing-text').text(subtitles[Math.floor(Math.random() * subtitles.length)]);
-
-        let quickLinks = $("#quick-links").children();
-        $(quickLinks[0]).delay(0).animate({opacity: '1',
-                                            marginTop: '0px'}, {duration:500})
-        $(quickLinks[1]).delay(400).animate({opacity: '1',
-                                            marginTop: '0px'}, {duration:500})
-        $(quickLinks[2]).delay(800).animate({opacity: '1',
-                                            marginTop: '0px'}, {duration:500})
-
-        $("#axcel-running").click(startDialogue);
-        $("#dialogue-skip").click(skipPressed);
-        $("#dialogue-next").click(nextPressed);
-        $("#axcel-waiting").click(waitingPressed);
-        moveGif();
-    }
-
     let gameStatus = -1;
     function waitingPressed(){
         //elevate gameStatus if everything was found
@@ -212,40 +230,6 @@
     }
 
     let timeEnd, timeBegin;
-
-    function checkGameStarted() {
-        // Send an AJAX request to the server to check if the game has started
-        $.ajax({
-            url: "/games/Axcel/check-game-status",
-            type: "GET",
-            success: function(response) {
-                quota = response.quota;
-                if (response.gameStarted) {
-                    // Update the UI to indicate that the game has already started
-                    showAxcelWaiting();
-                    numFoundSprites = response.foundSprites.length;
-                    showTimer();
-                    startTimer(response.timeStart);
-                    timeEnd = new Date(Date.parse(response.timeEnd));
-                    timeNow = new Date(Date.parse(response.timeNow));
-                    timeBegin = new Date(Date.parse(response.timeStart));
-                    localTimeChecked = new Date();
-                    $("#toy-counter").text(numFoundSprites + " / " + quota);
-                    updateSpriteVisibility(response.foundSprites);
-
-                    showHint(countSpritesOnPage() + " toys left here!");
-                    gameStatus = 0;
-                } else {
-                    // Show Axcel running section
-                    $("#axcel-running").delay(0).animate({height: '80px'}, {duration:500});
-                }
-            },
-            error: function(xhr, status, error) {
-                // Handle any errors that occur during the AJAX request
-                alert("Error checking if game has started: " + error);
-            }
-        });
-    }
 
     function showAxcelWaiting(){
         $("#axcel-waiting").delay(0).animate({height: '80px'}, {duration:500});
@@ -383,7 +367,7 @@
             success: function(response) {
                 if (response.success) {
                     // POST successful
-                    checkGameStarted();
+                    refresh();
                     return response.message;
                 } else {
                     // Display error
@@ -403,12 +387,12 @@
     function moveGif() {
         $('#axcel-container').css('display', 'block');
         leftOffset -= 2; // animation speed
-
+        console.log("rat");
         if (leftOffset < -gifWidth) {
             leftOffset = containerWidth;
         }
 
-        document.querySelector("#axcel-running").css('left', leftOffset);
+        $("#axcel-running").css('left', leftOffset);
         window.requestAnimationFrame(moveGif);
     }
 
