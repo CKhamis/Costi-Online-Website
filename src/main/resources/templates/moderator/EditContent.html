@@ -33,6 +33,12 @@
                 <button class="nav-link" id="pills-about-tab" data-bs-toggle="pill" data-bs-target="#pills-about" type="button" role="tab" aria-controls="pills-about" aria-selected="false" >About Content</button>
             </li>
             <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-axcel-tab" data-bs-toggle="pill" data-bs-target="#pills-axcel" type="button" role="tab" aria-controls="pills-axcel" aria-selected="false" >Axcel Content</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-ckow-tab" data-bs-toggle="pill" data-bs-target="#pills-ckow" type="button" role="tab" aria-controls="pills-ckow" aria-selected="false" >CKOW Content</button>
+            </li>
+            <li class="nav-item" role="presentation">
                 <button class="nav-link" id="pills-review-tab" data-bs-toggle="pill" data-bs-target="#pills-review" type="button" role="tab" aria-controls="pills-review" aria-selected="false" >Review</button>
             </li>
         </ul>
@@ -135,6 +141,34 @@
                     </div>
                 </div>
             </div>
+            <div class="tab-pane fade" id="pills-axcel" role="tabpanel" aria-labelledby="pills-axcel-tab" tabindex="0">
+                <div class="container-fluid">
+                    <div class="row">
+                        <!-- Axcel Content -->
+                        <div class="col-xs-12 col-md-6 bg-2 mb-3 p-4">
+                            <label for="about-content">Axcel Content</label>
+                            <textarea type="text" rows="10" class="form-control" id="axcel-content" placeholder="body content" required></textarea>
+                        </div>
+                        <div class="d-none d-md-block col-md-6 p-4">
+                            <div class="m-0" id="preview-panel-axcel"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pills-ckow" role="tabpanel" aria-labelledby="pills-about-tab" tabindex="0">
+                <div class="container-fluid">
+                    <div class="row">
+                        <!-- Constantine Online Content -->
+                        <div class="col-xs-12 col-md-6 bg-2 mb-3 p-4">
+                            <label for="about-content">Constantine Online Home</label>
+                            <textarea type="text" rows="10" class="form-control" id="ckow-content" placeholder="body content" required></textarea>
+                        </div>
+                        <div class="d-none d-md-block col-md-6 p-4">
+                            <div class="m-0" id="preview-panel-ckow"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="tab-pane fade" id="pills-review" role="tabpanel" aria-labelledby="pills-review-tab" tabindex="0">
                 <div class="container-fluid">
                     <div class="row justify-content-center">
@@ -183,6 +217,12 @@
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="preview-about-tab" data-bs-toggle="pill" data-bs-target="#preview-about" type="button" role="tab" aria-controls="preview-about" aria-selected="false" >About Content</button>
                     </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="preview-axcel-tab" data-bs-toggle="pill" data-bs-target="#preview-axcel" type="button" role="tab" aria-controls="preview-axcel" aria-selected="false" >Axcel Content</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="preview-ckow-tab" data-bs-toggle="pill" data-bs-target="#preview-ckow" type="button" role="tab" aria-controls="preview-ckow" aria-selected="false" >CKOW Content</button>
+                    </li>
                 </ul>
                 <div class="tab-content" id="preview-tabContent">
                     <div class="tab-pane fade show active" id="preview-home" role="tabpanel" aria-labelledby="preview-home-tab" tabindex="0">
@@ -205,6 +245,12 @@
                     </div>
                     <div class="tab-pane fade" id="preview-about" role="tabpanel" aria-labelledby="preview-about-tab" tabindex="0">
                         <div class="mb-4" id="fullscreen-preview-about"></div>
+                    </div>
+                    <div class="tab-pane fade" id="preview-axcel" role="tabpanel" aria-labelledby="preview-axcel-tab" tabindex="0">
+                        <div class="mb-4" id="fullscreen-preview-axcel"></div>
+                    </div>
+                    <div class="tab-pane fade" id="preview-ckow" role="tabpanel" aria-labelledby="preview-ckow-tab" tabindex="0">
+                        <div class="mb-4" id="fullscreen-preview-ckow"></div>
                     </div>
                 </div>
             </div>
@@ -235,6 +281,8 @@
     const mcHomeInput = document.querySelector("#mc-home-content");
     const mcGovInput = document.querySelector("#mc-gov-content");
     const aboutInput = document.querySelector("#about-content");
+    const axcelInput = document.querySelector("#axcel-content");
+    const ckowInput = document.querySelector("#ckow-content");
 
     // Live Preview
     homeInput.addEventListener('input', function (event) {
@@ -279,6 +327,18 @@
         document.querySelector("#fullscreen-preview-about").innerHTML = event.target.value;
     });
 
+    axcelInput.addEventListener('input', function (event) {
+        // Retrieve the current value of the text field
+        document.querySelector("#preview-panel-axcel").innerHTML = event.target.value;
+        document.querySelector("#fullscreen-preview-axcel").innerHTML = event.target.value;
+    });
+
+    ckowInput.addEventListener('input', function (event) {
+        // Retrieve the current value of the text field
+        document.querySelector("#preview-panel-ckow").innerHTML = event.target.value;
+        document.querySelector("#fullscreen-preview-ckow").innerHTML = event.target.value;
+    });
+
     // fetch
     function refresh(){
         fetch("/api/management/content/" + id)
@@ -305,6 +365,8 @@
         document.querySelector("#preview-panel-mc-home").innerHTML = content.minecraftHomeContent;
         document.querySelector("#preview-panel-mc-gov").innerHTML = content.minecraftGovernmentContent;
         document.querySelector("#preview-panel-about").innerHTML = content.aboutContent;
+        document.querySelector("#preview-panel-axcel").innerHTML = content.axcelContent;
+        document.querySelector("#preview-panel-ckow").innerHTML = content.professionalContent;
 
         document.querySelector("#fullscreen-preview-home").innerHTML = content.homeContent;
         document.querySelector("#fullscreen-preview-projects").innerHTML = content.projectContent;
@@ -313,6 +375,8 @@
         document.querySelector("#fullscreen-preview-mc-home").innerHTML = content.minecraftHomeContent;
         document.querySelector("#fullscreen-preview-mc-gov").innerHTML = content.minecraftGovernmentContent;
         document.querySelector("#fullscreen-preview-about").innerHTML = content.aboutContent;
+        document.querySelector("#fullscreen-preview-axcel").innerHTML = content.axcelContent;
+        document.querySelector("#fullscreen-preview-ckow").innerHTML = content.professionalContent;
 
         homeInput.value = content.homeContent;
         projectInput.value = content.projectContent;
@@ -321,6 +385,9 @@
         mcHomeInput.value = content.minecraftHomeContent;
         mcGovInput.value = content.minecraftGovernmentContent;
         aboutInput.value = content.aboutContent;
+        axcelInput.value = content.axcelContent;
+        ckowInput.value = content.professionalContent;
+
         document.getElementById("label").value = content.label;
 
         document.querySelector("#action-container").innerHTML = `${!content.enabled ? `
@@ -349,6 +416,8 @@
             newsroomContent: newsInput.value,
             minecraftHomeContent: mcHomeInput.value,
             minecraftGovernmentContent: mcGovInput.value,
+            axcelContent: axcelInput.value,
+            professionalContent: ckowInput.value,
             lastEdited: new Date()
         };
 

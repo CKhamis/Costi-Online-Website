@@ -79,7 +79,13 @@
                         <button class="nav-link" id="preview-mc-gov-tab" data-bs-toggle="pill" data-bs-target="#preview-mc-gov" type="button" role="tab" aria-controls="preview-mc-gov" aria-selected="false" >Minecraft Gov Content</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="preview-about-tab" data-bs-toggle="pill" data-bs-target="#preview-about" type="button" role="tab" aria-controls="preview-about" aria-selected="false" >About Content</button>
+                        <button class="nav-link" id="preview-about-tab" data-bs-toggle="pill" data-bs-target="#preview-about" type="button" role="tab" aria-controls="preview-about" aria-selected="false">About Content</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="preview-axcel-tab" data-bs-toggle="pill" data-bs-target="#preview-axcel" type="button" role="tab" aria-controls="preview-axcel" aria-selected="false">Axcel Content</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="preview-ckow-tab" data-bs-toggle="pill" data-bs-target="#preview-ckow" type="button" role="tab" aria-controls="preview-ckow" aria-selected="false">CKOW Content</button>
                     </li>
                 </ul>
                 <div class="tab-content" id="preview-tabContent">
@@ -103,6 +109,12 @@
                     </div>
                     <div class="tab-pane fade" id="preview-about" role="tabpanel" aria-labelledby="preview-about-tab" tabindex="0">
                         <div class="mb-4" id="fullscreen-preview-about"></div>
+                    </div>
+                    <div class="tab-pane fade" id="preview-axcel" role="tabpanel" aria-labelledby="preview-axcel-tab" tabindex="0">
+                        <div class="mb-4" id="fullscreen-preview-axcel"></div>
+                    </div>
+                    <div class="tab-pane fade" id="preview-ckow" role="tabpanel" aria-labelledby="preview-ckow-tab" tabindex="0">
+                        <div class="mb-4" id="fullscreen-preview-ckow"></div>
                     </div>
                 </div>
             </div>
@@ -441,6 +453,8 @@
         document.querySelector("#fullscreen-preview-mc-home").innerHTML = allContent[i].minecraftHomeContent;
         document.querySelector("#fullscreen-preview-mc-gov").innerHTML = allContent[i].minecraftGovernmentContent;
         document.querySelector("#fullscreen-preview-about").innerHTML = allContent[i].aboutContent;
+        document.querySelector("#fullscreen-preview-axcel").innerHTML = allContent[i].axcelContent;
+        document.querySelector("#fullscreen-preview-ckow").innerHTML = allContent[i].professionalContent;
     }
 
 </script>

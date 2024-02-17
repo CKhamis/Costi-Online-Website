@@ -3,6 +3,11 @@
 <head th:replace="Components :: head('About Axcel')"></head>
 <body class="bg-1 text-1">
 <div th:replace="Components :: main-navigation"></div>
+
+<main id="api-content">
+    <div th:replace="Components :: await-content"></div>
+</main>
+
 <main class="container-fluid px-4 py-5">
     <div class="container">
         <h2 class="pb-2 border-bottom">About Axcel</h2>
@@ -150,6 +155,37 @@
 
 <div th:replace="Components :: footer"></div>
 <div th:replace="Components :: JS"></div>
-<div th:replace="Components :: axcel-sprite-logic"></div>
+
+<script>
+    refresh();
+    function refresh(){
+        const contentFetch = fetch("/api/content/all");
+
+        Promise.all([contentFetch])
+            .then(responses => {
+                const response1 = checkStatus(responses[0]);
+
+                return Promise.all([response1]);
+            })
+            .then(data => {
+                let response1 = data[0].json();
+
+                return Promise.all([response1]);
+            })
+            .then(data => {
+                document.querySelector("#api-content").innerHTML = data[0].axcelContent; // layout data
+            })
+            .catch((response)=>{
+                console.log(response);
+                response.json()  // Parse the JSON error response
+                    .then(errorData => {
+                        console.log(errorData);
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                    });
+            });
+    }
+</script>
 </body>
 </html>

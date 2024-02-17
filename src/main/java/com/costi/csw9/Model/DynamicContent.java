@@ -69,4 +69,14 @@ public class DynamicContent {
     @NotNull
     @NotBlank
     private String aboutContent;
+
+    @Column(columnDefinition="text")
+    @NotNull
+    @NotBlank
+    private String axcelContent;
+
+    @Column(columnDefinition="text")
+    @NotNull
+    @NotBlank
+    private String professionalContent;
 }
