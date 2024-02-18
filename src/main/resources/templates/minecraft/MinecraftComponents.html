@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <body>
 
 <div th:fragment="nav" class="position-sticky" style="z-index:99; width:100%;top:0;">
@@ -12,7 +11,8 @@
                 <!--<img th:src="@{/icons/Logo.jpg}" alt="" width="30" height="30" class="d-inline-block align-text-top">-->
                 Costi Survival World X
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="true" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="true" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -32,45 +32,5 @@
     </nav>
 </div>
 
-<div th:fragment="worldInfo(version, duration, type, population, status)" class="container p-0">
-    <h4 class="border-bottom fw-bold py-4">General Information</h4>
-    <div class="row g-4 row-cols-1 row-cols-lg-5">
-        <div class="feature col">
-            <div class="feature-icon">
-                <h1>🖥️</h1>
-            </div>
-            <h4>Minecraft Version</h4>
-            <p th:text="${version}">version blah Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-        </div>
-        <div class="feature col">
-            <div class="feature-icon">
-                <h1>⌛</h1>
-            </div>
-            <h4>Server Duration</h4>
-            <p th:text="${duration}">Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-        </div>
-        <div class="feature col">
-            <div class="feature-icon">
-                <h1>🏰</h1>
-            </div>
-            <h4>Government Type</h4>
-            <p th:text="${type}">Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-        </div>
-        <div class="feature col">
-            <div class="feature-icon">
-                <h1>🧩</h1>
-            </div>
-            <h4>Population</h4>
-            <p th:text="${population}">Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-        </div>
-        <div class="feature col">
-            <div class="feature-icon">
-                <h1>🔍</h1>
-            </div>
-            <h4>Current Status</h4>
-            <p th:text="${status}">Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-        </div>
-    </div>
-</div>
 </body>
 </html>

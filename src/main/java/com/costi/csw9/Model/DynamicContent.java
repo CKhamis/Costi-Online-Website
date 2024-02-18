@@ -47,11 +47,9 @@ public class DynamicContent {
 
     @Column(columnDefinition="text")
     @NotNull
-    @NotBlank
     private String wikiContent;
 
     @Column(columnDefinition="text")
-    @NotNull
     @NotBlank
     private String newsroomContent;
 
@@ -60,12 +58,12 @@ public class DynamicContent {
     @NotBlank
     private String minecraftHomeContent;
 
-    @Column(columnDefinition="text")
+    @Column(columnDefinition="mediumtext")
     @NotNull
     @NotBlank
     private String minecraftGovernmentContent;
 
-    @Column(columnDefinition="text")
+    @Column(columnDefinition="mediumtext")
     @NotNull
     @NotBlank
     private String aboutContent;

@@ -864,7 +864,7 @@
                         <p class="fs-4">Costi Survival world 1 was the first mainline world in the series. It had many buildings and government ideas that persisted to its successors. The world was created in Minecraft Pocket Edition by Costi and had an "Old" world type, which meant very limited space was available. Some very notable landmarks in this world were the twin towers, vector's lair, the lab, nether reactor area, and advanced irrigation system.</p>
                         <p class="fs-4">The twin towers were a set of two fairly large stone-brick buildings that were both owned by Costi. These towers had many bridges between them and connected to the advanced irrigation network to have waterfalls on some of the stories. Vector's lair was originally the world's first cave house. Built into a mountain, all players used it for shelter against nocturnal enemies. Later on, everyone moved away to create their own houses. Near the end of the world's lifespan, Costi renovated the interior with white and orange wool and quartz stairs to give a 'modern' appearance. The lab was an underground facility located near the community mines and quarry. It featured a floor that was made of glass to show water and lava flowing underneath from the irrigation system. Finally, the irrigation system was a network of aqueducts all flowing from a single waterfall. This was necessary because at the time, there were no buckets implemented into the game. The water flowed from the waterfall to the community farm, twin towers, and the underground lab.</p>
                         <p class="fs-4">This world lasted quite a long time. Being active for approximately 20 weeks, it is currently the second longest Costi survival world. There were many ideas from this world that was passed along to the next worlds. For example, the first versions of Costi building architecture was invented in this world. Buildings with this architecture are mostly built from stone bricks and glass.</p>
-                        <div th:replace="minecraft/MinecraftComponents :: worldInfo('The version used for this world was mainly Minecraft Pocket Edition etc', 'This world lasted for approximately 20 weeks', 'The government in this server was mainly libertarian; there was no formal government but Costi was able to approve or deny new buildings', 'There were 4 users on this server: Costi, Alex, Georges, and Marc. There was little to no interaction from single-session users.', 'This world is missing. It used to be on an old Android tablet, but it was reset about 2 years later by Costi')"></div>
+                        ${renderWorldInfo('The version used for this world was mainly Minecraft Pocket Edition etc', 'This world lasted for approximately 20 weeks', 'The government in this server was mainly libertarian; there was no formal government but Costi was able to approve or deny new buildings', 'There were 4 users on this server: Costi, Alex, Georges, and Marc. There was little to no interaction from single-session users.', 'This world is missing. It used to be on an old Android tablet, but it was reset about 2 years later by Costi')}
                     </div>
                 </div>
             </div>
@@ -874,7 +874,7 @@
                         <div class="container-fluid p-5">
                             <h3 class="fw-bold">Costi Survival World 2 (2014)</h3>
                             <p class="fs-4">Costi Survival world 2 was a relatively short world compared to the first world. It was hosted on Costi's Xbox 360 system which used Minecraft Xbox 360 Edition (obviously). This brought on many new features, dimensions, and blocks to the world. Costi, Alex, Georges, and Marc all lived in a swamp biome house surrounded by tamed dogs. There is not much information known about this world, as it was not as influential as the others.</p>
-                            <div th:replace="minecraft/MinecraftComponents :: worldInfo('The version of Minecraft used for this world was Minecraft Xbox 360 Edition', 'Estimated duration of about 1 month', 'This server was mainly a commune; there was no formal government and all players acted as one group', 'There were 4 users on this server: Costi, Alex, Georges, and Marc. There was little to no interaction from single-session users.', 'This world is missing. It was on an Xbox 360 system that was forcefully given to Chris and Salem, who then sold it')"></div>
+                            ${renderWorldInfo('The version of Minecraft used for this world was Minecraft Xbox 360 Edition', 'Estimated duration of about 1 month', 'This server was mainly a commune; there was no formal government and all players acted as one group', 'There were 4 users on this server: Costi, Alex, Georges, and Marc. There was little to no interaction from single-session users.', 'This world is missing. It was on an Xbox 360 system that was forcefully given to Chris and Salem, who then sold it')}
                         </div>
                     </div>
                 </div>
@@ -888,7 +888,7 @@
                             <p class="fs-4">Costi Survival world 3 started as a private world for Alex that he created for himself
                                 unbeknownst to anyone else taking interest. Alex was wandering and fell into a ravine. He didn’t know how to get out because he had no wood or tools on him, so he set up base in the ravine. He then started to explore the rest of the world and set up outposts in certain places, like the desert and the plains. Shortly after, Costi wanted to play, and he ended up buying the plains outpost for some dirt and seeds. He would cultivate the land to become a large farm plain and then build more buildings on it. Amal and Christina also joined in building their own homes there as well. The desert outpost became Egypt and Costi’s domain became Constantinople. Constantinople had a large wheat field and a city hall built into a mountain nearby that was never finished or used. Alex still decided to mostly move into the town and set up a store that sold food. Besides that, the town was very small and had little to see or offer.
                                 <br />Later in the life of the World, Alex started to have tension with the rest of the group and declared a nation out of all parts of the world but a small part in the very center of the world that was Constantinople. After some arguments about borders, Alex and Costi agreed on having a sizable circular-ish shaped border of Constantinople that contained only one biome and no open waters. Alex took the entire rest of the world, calling it and its main town Alexandria. He started building near the old ravine a very large and elevated house and a walk-up spiral tower that went almost to the world height limit. In contention, Costi built a large tower that contained a restaurant at the very top to the world limit. The world died when there was a failed attempt to mod the WII U that ended up bricking the system.</p>
-                            <div th:replace="minecraft/MinecraftComponents :: worldInfo('The version used for this world was mainly Minecraft Wii U Edition', 'This world lasted for approximately 8 weeks', 'There was two separate countries. One managed by Costi, and one by Alex. The Costi government was quite restrictive, as buildings could only be built by Costi', 'There were 2 users on this server: Costi & Alex only. There was little to no interaction from single-session users.', 'This world is missing. It used to be on Costi\\'s first Wii U, but it was unfortunately bricked from a failed Homebrew attempt')"></div>
+                            ${renderWorldInfo('The version used for this world was mainly Minecraft Wii U Edition', 'This world lasted for approximately 8 weeks', 'There was two separate countries. One managed by Costi, and one by Alex. The Costi government was quite restrictive, as buildings could only be built by Costi', 'There were 2 users on this server: Costi & Alex only. There was little to no interaction from single-session users.', 'This world is missing. It used to be on Costi\'s first Wii U, but it was unfortunately bricked from a failed Homebrew attempt')}
                         </div>
                     </div>
                 </div>
@@ -902,7 +902,7 @@
                         <p class="fs-4">Costi wanted to develop a modern city in the distance and was in the process of collecting resources to construct the first buildings, when the world became inactive. While it is unknown why the world ended, it may have been due to the fascination with the Minecraft online mini games and the included voice chat.</p>
                         <p class="fs-4"><a href="/downloads/Costi Survival World 4.mcworld" download="CSW4.mcworld">Download World ></a></p>
                         <br />
-                        <div th:replace="minecraft/MinecraftComponents :: worldInfo('The version of Minecraft used for this world was Minecraft Wii U Edition', 'This server had the shortest duration by far. It lasted approximately 1-2 weeks', 'The government in this world was not formed yet due to its lack of development. It was a commune', 'There were 4 users on this server: Costi, Alex, and Georges. There was little to no interaction from single-session users.', 'This world is safely backed up in storage and is available for download now')"></div>
+                        ${renderWorldInfo('The version of Minecraft used for this world was Minecraft Wii U Edition', 'This server had the shortest duration by far. It lasted approximately 1-2 weeks', 'The government in this world was not formed yet due to its lack of development. It was a commune', 'There were 4 users on this server: Costi, Alex, and Georges. There was little to no interaction from single-session users.', 'This world is safely backed up in storage and is available for download now')}
                     </div>
                 </div>
             </div>
@@ -934,7 +934,7 @@
                         <p class="fs-4">Serena  beach started as a small beach town that flourished over time. Alex started it and built structures and then was voted out in favor of Amal. Amal built modern houses inland and built a lighthouse on a small island off the coast. In the next election, the town’s development soon came to a halt, as the new mayor Christina built ugly construction zones left unfinished. This was a problem because they were deemed very ugly. She was pulled out of office and wanted to sell the ugly land for a premium to piggyback off of it. Costi took eminent domain powers and seized the land and gave it to Alex, the then incumbent mayor. The town’s development steadily inclined with Alex but no one really moved in. He was able to make a farm of a variety of goods that were not commonly farmed (little bit of everything) and sold it to Ethan. There were also more houses built and the beach was redesigned for beauty.</p>
                         <p class="fs-4"><a href="/downloads/Costi Survival World 5.mcworld" download="CSW5.mcworld">Download World ></a></p>
                         <br />
-                        <div th:replace="minecraft/MinecraftComponents :: worldInfo('The version of Minecraft used for this world was Minecraft Nintendo Switch Edition, but then was transferred to the bedrock edition later', 'This server had the longest lifespan of any other world by far, totaling to about 60 weeks', 'The government of this server leaned slightly authoritarian, but allowed for elections and Mayors who could remove many restrictions if desired', 'There were approximately 8 frequent players on this world, with about 10 single-session players', 'This world is safely backed up in storage and is available for download now')"></div>
+                        ${renderWorldInfo('The version of Minecraft used for this world was Minecraft Nintendo Switch Edition, but then was transferred to the bedrock edition later', 'This server had the longest lifespan of any other world by far, totaling to about 60 weeks', 'The government of this server leaned slightly authoritarian, but allowed for elections and Mayors who could remove many restrictions if desired', 'There were approximately 8 frequent players on this world, with about 10 single-session players', 'This world is safely backed up in storage and is available for download now')}
                     </div>
                 </div>
             </div>
@@ -947,7 +947,7 @@
                         <p class="fs-4">This world had a very short history. It originally started just like other worlds. There was a starting building that eventually expanded into a small village. This starting village, called America, is pictured above. Later into the life of the server, Costi decided to go somewhere else to create a new planned city. It had a series of roads with a warehouse. One new idea of this server is that the streets were all named. This idea carried on to the next world CSW6. Costi planned for the citizens of the starting village to move into the new city once it had all the necessary infrastructure.</p>
                         <p class="fs-4"><a href="/downloads/Costi Survival World 5.5.mcworld" download="CSW5.5.mcworld">Download World ></a></p>
                         <br />
-                        <div th:replace="minecraft/MinecraftComponents :: worldInfo('The version of Minecraft used for this world was Minecraft Bedrock Edition (client)', 'This server had a very short duration. It lasted approximately 1-2 weeks', 'The government in this world was not formed yet due to its lack of development. It was a commune', 'The server had approximately 4 main players. There was little to no interaction from single-session users.', 'This world is safely backed up in storage and is ready for download')"></div>
+                        ${renderWorldInfo('The version of Minecraft used for this world was Minecraft Bedrock Edition (client)', 'This server had a very short duration. It lasted approximately 1-2 weeks', 'The government in this world was not formed yet due to its lack of development. It was a commune', 'The server had approximately 4 main players. There was little to no interaction from single-session users.', 'This world is safely backed up in storage and is ready for download')}
                     </div>
                 </div>
             </div>
@@ -960,7 +960,7 @@
                             A few weeks after the world started, Costi decided to join. He moved far away to a new city called Tik Tok Town (named after the hit new website TikTok). The global currency was unique and not very well implemented. To mint money, Haydon used gold ingots and used a name tag on them, so it does not stack with regular gold ingots. Costi was cheated out of a deal regarding this new currency and as a result, he vowed to take over the world. The world died around June of the same year when Alex broke off connection with Haydon mostly for reasons not pertaining to the world. </p>
                         <br />
                         <p class="fs-4"><a href="/downloads/Ross' Dystopia.mcworld" download="RDW.mcworld">Download World ></a></p>
-                        <div th:replace="minecraft/MinecraftComponents :: worldInfo('The version used for this world was mainly Minecraft for Nintendo Switch', 'This world lasted for approximately 6 weeks', 'There were three countries, each having its own rules.', 'There were 3 users on this server: Costi, Alex, and Haydon. There no interaction from single-session users.', 'This world is currently pending upload to Costi\\'s PC.')"></div>
+                        ${renderWorldInfo('The version used for this world was mainly Minecraft for Nintendo Switch', 'This world lasted for approximately 6 weeks', 'There were three countries, each having its own rules.', 'There were 3 users on this server: Costi, Alex, and Haydon. There no interaction from single-session users.', 'This world is currently pending upload to Costi\'s PC.')}
                     </div>
                 </div>
             </div>
@@ -985,7 +985,7 @@
                         <p class="fs-4">Despite the large amount of memories on the server, it was remarkably empty on an average day and only lasted for about 6 weeks. This was due to the busy lifestyles that many players had during the time.</p>
                         <p class="fs-4"><a href="/downloads/Costi Survival World 6.mcworld" download="CSW6.mcworld">Download World ></a></p>
                         <br />
-                        <div th:replace="minecraft/MinecraftComponents :: worldInfo('The version of Minecraft used for this world was Minecraft Bedrock Edition', 'This server had an active player time of 6 weeks', 'The government was significantly more authoritarian than world 5. There was only 1 city with Costi as the permanent leader', 'The main players on this world were Brandon, Costi, and Alex. There were about 3+ single session users.', 'This world is safely backed up in storage and is available for download now')"></div>
+                        ${renderWorldInfo('The version of Minecraft used for this world was Minecraft Bedrock Edition', 'This server had an active player time of 6 weeks', 'The government was significantly more authoritarian than world 5. There was only 1 city with Costi as the permanent leader', 'The main players on this world were Brandon, Costi, and Alex. There were about 3+ single session users.', 'This world is safely backed up in storage and is available for download now')}
                     </div>
                 </div>
             </div>
@@ -1006,7 +1006,7 @@
                         <p class="fs-4">Early in the server's lifespan, Brandon decided to build his own city on a neighboring island. He built up a beach-themed resort that had an advanced farm, villager village, and extra houses. Paranoid of the eclectic nature of the city, he was extremely restrictive of visitors and had remarkably strict travel policies that limited travel for all members including the ones he trusted. Growing bored with the world, Brandon quit playing for a period of time and allowed other players to take his items. Costi saved Brandon's most valuable items in a chests underneath the pog path bridge in case he decided to come back. Eventually Brandon did come back, but at that time the server's lifespan was nearing its end.</p>
                         <p class="fs-4"><a href="/downloads/Costi Survival World 7 v2.mcworld" download="CSW7.mcworld">Download World ></a></p>
                         <br />
-                        <div th:replace="minecraft/MinecraftComponents :: worldInfo('This world used Minecraft Bedrock Server software', 'This server had an active player time of 7 weeks over the summer', 'The government in this server near anarchy, only stopping Alex\\'s city hall from development', 'The main players on this world were Brandon, Costi, Nathan, Jeremy, and Alex. There were about 3 single session users.', 'This world is safely backed up in storage.')"></div>
+                        ${renderWorldInfo('This world used Minecraft Bedrock Server software', 'This server had an active player time of 7 weeks over the summer', 'The government in this server near anarchy, only stopping Alex\'s city hall from development', 'The main players on this world were Brandon, Costi, Nathan, Jeremy, and Alex. There were about 3 single session users.', 'This world is safely backed up in storage.')}
                     </div>
                 </div>
             </div>
@@ -1025,7 +1025,7 @@
                         <p class="fs-4">As Mirage Oasis continued developing, Alex and Brandon visited more frequently. Until eventually, they both decided to move back in. They helped Costi continue making new buildings and decorations such as the museum, O'Hare blimp, nether highway, and island. Brandon created a mansion (his second Mirage Oasis house) located between Cole's country and Mirage Oasis. In this new house, Brandon befriended a nether-mite named Debrah. The server ended because many of the frequent players lost motivation. With the withdrawal of its most frequent players, Costi stopped the server.</p>
                         <p class="fs-4"><a href="/downloads/Costi Survival World 8 v3.mcworld" download="CSW8.mcworld">Download World ></a></p>
                         <br />
-                        <div th:replace="minecraft/MinecraftComponents :: worldInfo('The version used for this world was Minecraft Bedrock server', 'This world lasted for approximately 8 weeks', 'There was three separate countries. One managed by Costi, Cole, and by Alex & Brandon. Costi\\'s was the least restrictive.', 'The most frequent players were Costi, Alex, Brandon, Nathan, Jeremy, and Sean.', 'This world is safely backed up in storage and is available for download now')"></div>
+                        ${renderWorldInfo('The version used for this world was Minecraft Bedrock server', 'This world lasted for approximately 8 weeks', 'There was three separate countries. One managed by Costi, Cole, and by Alex & Brandon. Costi\'s was the least restrictive.', 'The most frequent players were Costi, Alex, Brandon, Nathan, Jeremy, and Sean.', 'This world is safely backed up in storage and is available for download now')}
                     </div>
                 </div>
             </div>
@@ -1044,7 +1044,7 @@
                         <p class="fs-4"></p>
                         <p class="fs-4"><a href="/downloads/Costi Survival World 8.5.mcworld" download="CSW8.5.mcworld">Download World ></a></p>
                         <br />
-                        <div th:replace="minecraft/MinecraftComponents :: worldInfo('The version of Minecraft used for this world was Minecraft Bedrock server', 'This server lasted 5 weeks', 'The government in this world was anarchy, citizens lived in two distinct communes', 'The main players in this world were Costi, Alex, Brandon, Cole, and Nathan. Sean would occasionally join', 'This world is safely backed up in storage and is available for download now')"></div>
+                        ${renderWorldInfo('The version of Minecraft used for this world was Minecraft Bedrock server', 'This server lasted 5 weeks', 'The government in this world was anarchy, citizens lived in two distinct communes', 'The main players in this world were Costi, Alex, Brandon, Cole, and Nathan. Sean would occasionally join', 'This world is safely backed up in storage and is available for download now')}
                     </div>
                 </div>
             </div>
@@ -1063,7 +1063,7 @@
                         <p class="fs-4">After a long period of time Costi could not play, activity on the world slowed down significantly. Cole and Nathan would play occasionally and work on their large pig house. Once Costi was able to play again, the three worked together to create a new city on a nearby island named Swinetopia. Costi even begun creating a railway to the developing colony. The server was once again looking bright until Costi created a poll asking if the world should be discontinued in favor of going back to a Costi operated Bedrock based server. The votes in favor were almost unanimous. The reasons for doing so was that most players did not like the sacrifices in performance and world size that came with Java based servers.</p>
                         <p class="fs-4">Downloads coming soon!</p>
                         <br />
-                        <div th:replace="minecraft/MinecraftComponents :: worldInfo('The version used was Minecraft Java Edition 1.19', 'This server lasted 7 weeks', 'The government was mostly libertarian, had little restrictions and rules', 'The main players in this world were Costi, Alex, Sean, Cole, and Nathan', 'This world is backed up by WOC and will be available for download soon')"></div>
+                        ${renderWorldInfo('The version used was Minecraft Java Edition 1.19', 'This server lasted 7 weeks', 'The government was mostly libertarian, had little restrictions and rules', 'The main players in this world were Costi, Alex, Sean, Cole, and Nathan', 'This world is backed up by WOC and will be available for download soon')}
                     </div>
                 </div>
             </div>
@@ -1134,7 +1134,7 @@
         </div>
     </div>
 
-  `; //todo: replace the th:replaces
+  `;
   let axcelHTML = `
 
   <div class="container">
@@ -1518,6 +1518,51 @@
     </a>
 
   `;
+
+  function renderWorldInfo(version, duration, type, population, status){
+    return `
+
+    <h4 class="border-bottom fw-bold py-4">General Information</h4>
+    <div class="row g-4 row-cols-1 row-cols-lg-5">
+        <div class="feature col">
+            <div class="feature-icon">
+                <h1>🖥️</h1>
+            </div>
+            <h4>Minecraft Version</h4>
+            <p>${version}</p>
+        </div>
+        <div class="feature col">
+            <div class="feature-icon">
+                <h1>⌛</h1>
+            </div>
+            <h4>Server Duration</h4>
+            <p>${duration}</p>
+        </div>
+        <div class="feature col">
+            <div class="feature-icon">
+                <h1>🏰</h1>
+            </div>
+            <h4>Government Type</h4>
+            <p>${type}</p>
+        </div>
+        <div class="feature col">
+            <div class="feature-icon">
+                <h1>🧩</h1>
+            </div>
+            <h4>Population</h4>
+            <p>${population}</p>
+        </div>
+        <div class="feature col">
+            <div class="feature-icon">
+                <h1>🔍</h1>
+            </div>
+            <h4>Current Status</h4>
+            <p>${status}</p>
+        </div>
+    </div>
+
+        `;
+  }
 
   let defaultContent = {id: null, label: "New Group", enabled: false, homeContent: homeHTML, wikiContent: wikiHTML, aboutContent: aboutHTML, projectContent: projectHTML, newsroomContent: newsroomHTML, minecraftHomeContent: minecraftHomeHTML, minecraftGovernmentContent: minecraftGovHTML, axcelContent: axcelHTML, professionalContent: professionalHTML, treeContent: treeHTML, lastEdited: new Date()};
 </script>
