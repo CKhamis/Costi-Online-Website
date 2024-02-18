@@ -53,7 +53,7 @@
         })
         .then(data => {
             // Process the retrieved data
-            document.querySelector("#api-content").innerHTML = data[1].homeContent;
+            document.querySelector("#api-content").innerHTML = data[1].wikiContent;
             wikiContent = data[0];
 
             renderCards();
