@@ -14,10 +14,10 @@ import java.time.LocalDate;
 public class FrontEndController {
     private final UserService userService;
     private WikiService wikiService;
-    private static final String VERSION = "9.5.0";
+    private static final String VERSION = "10.0.0";
 
     @Autowired
-    public FrontEndController(UserService userService, WikiService wikiService, AnnouncementService announcementService, AccountLogService accountLogService, AccountNotificationService accountNotificationService, PostService postService) {
+    public FrontEndController(UserService userService, WikiService wikiService) {
         this.userService = userService;
         this.wikiService = wikiService;
     }
