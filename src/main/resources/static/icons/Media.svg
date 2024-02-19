@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
+  <defs>
+    <style>
+      .cls-1 {
+        font-family: CascadiaCodeRoman-Bold, 'Cascadia Code';
+        font-size: 646.07px;
+        font-variation-settings: 'wght' 700;
+        font-weight: 700;
+      }
+
+      .cls-1, .cls-2 {
+        fill: #3c91e6;
+      }
+
+      .cls-2 {
+        stroke-width: 0px;
+      }
+    </style>
+  </defs>
+  <path class="cls-2" d="M943.47,56.53v886.95H56.53V56.53h886.95M999.47.53H.53v998.95h998.95V.53h0Z"/>
+  <path class="cls-2" d="M583.82,468.46l136.54,385.52,135.81-385.52h143.84v531.54h-109.89v-145.3l10.95-250.8-143.47,396.1h-75.2l-143.11-395.74,10.95,250.44v145.3h-109.52V468.46h143.11Z"/>
+  <text class="cls-1" transform="translate(952 705.37) scale(.98 1)"><tspan x="0" y="0">&lt;/&gt;</tspan></text>
+</svg>
