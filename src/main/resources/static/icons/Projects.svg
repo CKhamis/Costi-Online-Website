@@ -4,12 +4,9 @@
     <style>
       .cls-1 {
         fill: #3c91e6;
-        font-family: CascadiaCodeRoman-Bold, 'Cascadia Code';
-        font-size: 646.07px;
-        font-variation-settings: 'wght' 700;
-        font-weight: 700;
+        stroke-width: 0px;
       }
     </style>
   </defs>
-  <text class="cls-1" transform="translate(-68 705.37) scale(.98 1)"><tspan x="0" y="0">&lt;/&gt;</tspan></text>
+  <path class="cls-1" d="M420.83,718.86L0,544.03v-87.41l313.14-126.55v88.06l-212.18,76.65v11.09l321.47,125.9-1.6,87.09ZM336.54,793.55l248.4-587.1h88.14l-248.4,587.1h-88.14ZM687.82,669.93v-88.06l210.58-76v-11.09l-324.36-128.51v-87.74l425.96,178.09v87.41l-312.18,125.9Z"/>
 </svg>

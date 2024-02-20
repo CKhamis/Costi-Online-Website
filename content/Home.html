@@ -1,0 +1,224 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>test</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous"></script>
+</head>
+
+<style></style>
+<body style="background:grey">
+
+
+<style>
+    .quick-link img {
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        position: relative;
+        width: 100%;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-center rounded-3 align-items-end p-4 tiled-COW-background mb-3"
+         style="position: relative;">
+        <h2 class="fw-bold fs-1">Frequently Visited Pages</h2>
+    </div>
+    <div class="row">
+        <div class="col-6 col-md-4 col-lg-2">
+            <a href="https://costionline.com/About">
+                <img src="https://costionline.com/icons/Contact.svg" alt="About" class="p-4 img-fluid"/>
+                <p class="text-center fw-bold text-1 fs-4">About Me</p>
+            </a>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+            <a href="https://costionline.com/Newsroom">
+                <img src="https://costionline.com/icons/Newsroom.svg" alt="Newsroom" class="p-4 img-fluid"/>
+                <p class="text-center fw-bold text-1 fs-4">Newsroom</p>
+            </a>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+            <a href="https://costionline.com/Labs/LED">
+                <img src="https://costionline.com/icons/LED.svg" alt="LED" class="p-4 img-fluid"/>
+                <p class="text-center fw-bold text-1 fs-4">LED Controller</p>
+            </a>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+            <a href="https://costionline.com/Media">
+                <img src="https://costionline.com/icons/Media.svg" alt="Media" class="p-4 img-fluid"/>
+                <p class="text-center fw-bold text-1 fs-4">Media</p>
+            </a>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+            <a href="https://costionline.com/Wiki">
+                <img src="https://costionline.com/icons/Wiki.svg" alt="Wiki" class="p-4 img-fluid"/>
+                <p class="text-center fw-bold text-1 fs-4">Wiki</p>
+            </a>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+            <a href="https://costionline.com/Projects">
+                <img src="https://costionline.com/icons/Projects.svg" alt="Projects" class="p-4 img-fluid"/>
+                <p class="text-center fw-bold text-1 fs-4">Projects</p>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between rounded-3 align-items-end p-4 tiled-COW-background mb-3"
+         style="position: relative;">
+        <img class="position-absolute" style="bottom: 0px; left: 0;"
+             src="https://costionline.com/Downloads/Uploads/83290571-61d3-431d-a593-b9cd4fe40131" alt="bird"/>
+        <div></div>
+        <h2 class="fw-bold fs-1">Recent Trips</h2>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-6 col-lg-4 mt-3">
+            <a href="https://costionline.com/Newsroom/49/view">
+                <img src="https://costionline.com/Downloads/Uploads/9eb9fa88-4e19-479a-8ee0-e42195b1f349"
+                     class="img-fluid d-block rounded-3" loading="lazy"
+                     style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;">
+                <h4 class="fw-bold text-center text-1">Mexico</h4>
+            </a>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mt-3">
+            <a href="https://costionline.com/Newsroom/51/view">
+                <img src="https://costionline.com/Downloads/Uploads/b6561cd6-53c9-4a08-853f-87686b393681"
+                     class="img-fluid d-block rounded-3" loading="lazy"
+                     style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;">
+                <h4 class="fw-bold text-center text-1">Disneyland</h4>
+            </a>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mt-3">
+            <a href="https://costionline.com/Newsroom/50/view">
+                <img src="https://costionline.com/Downloads/Uploads/83e2dadd-3797-4a10-98c4-924b6bf8d6cb"
+                     class="img-fluid d-block rounded-3" loading="lazy"
+                     style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;">
+                <h4 class="fw-bold text-center text-1">San Francisco</h4>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5" id="highlights">
+    <div class="d-flex justify-content-center rounded-3 align-items-end p-4 tiled-COW-background mb-3" style="position: relative;">
+        <h2 class="fw-bold fs-1">Recent Highlights</h2>
+    </div>
+    <div id="slide-content"></div>
+    <a href="/Newsroom">
+        <p class="text-1 text-decoration-underline">View more in Costi Newsroom ></p>
+    </a>
+</div>
+
+<div class="container-fluid overflow-hidden px-0 pt-3" id="axcel-container">
+    <img id="axcel-running" src="/images/games/axcel/running.gif" alt="axcel" class="position-relative"
+         style="height: 0; top:0;left:0;"/>
+    <img id="axcel-waiting" src="/images/games/axcel/sitting.gif" alt="axcel" class="position-relative mx-auto"
+         style="height: 0; top:0;left:50%;transform:translate(-50%, 0%);"/>
+</div>
+
+<div class="container mt-5" id="about">
+    <div class="row">
+        <div class="col-md-6 col-xs-12 mb-4">
+            <div class="border-box text-1 p-4">
+                <h3 class="fw-bold">What is Costi Online?</h3>
+                <p class="fs-4">Costi Online is a personal website I made to share my coding projects, video projects,
+                    wiki, Minecraft server, and more.</p>
+            </div>
+        </div>
+        <div class="col-md-6 col-xs-12 mb-4">
+            <div class="border-box text-1 p-4">
+                <h3 class="fw-bold">Who am I?</h3>
+                <p class="fs-4">Hi! I am Costi (pronounced "Coasty"). I am a computer science student at San Jose State
+                    University.</p>
+                <a href="/About#about-me" type="button" class="btn btn-primary btn-sm">About Me</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between rounded-3 align-items-center p-4 tiled-COW-background mb-3" style="position: relative;">
+        <h2 class="fw-bold fs-1">Fall 2023 Projects</h2>
+        <img style="width:70px" src="https://costionline.com/icons/Projects.svg" alt="Projects icon"/>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-md-6 col-lg-4 mt-3">
+            <a href="https://costionline.com/Projects">
+                <img src="https://costionline.com/images/webpageImages/SongSnap.webp"
+                     class="img-fluid d-block rounded-3" loading="lazy" style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;" alt="song snap">
+                <h5 class="fw-bold text-center text-1">Song Snap</h5>
+            </a>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mt-3">
+            <a href="https://costionline.com/Projects">
+                <img src="https://costionline.com/images/webpageImages/Let%20it%20Fly.webp" class="img-fluid d-block rounded-3" loading="lazy" style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;" alt="let it fly">
+                <h5 class="fw-bold text-center text-1">Let it Fly</h5>
+            </a>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mt-3">
+            <a href="/Projects">
+                <img src="/images/webpageImages/Game.webp" class="img-fluid d-block rounded-3" loading="lazy" style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;" alt="mars: first encounter">
+                <h5 class="fw-bold text-center text-1">Mars: First Encounter</h5>
+            </a>
+        </div>
+    </div>
+
+    <p class="fs-4 mt-4">
+        The fall 2023 was the start of my final year in SJSU for obtaining a degree in computer science. During this semester, I have worked on three group projects. Each of these projects have a substantially different application stack, purpose, and development style. Two of the three projects are open source and available on my GitHub account. Please see the projects page for more information.
+    </p>
+    <a href="/Projects" type="button" class="btn btn-dark btn-sm">Projects</a>
+</div>
+
+<div class="container mt-5" id="new">
+    <div class="d-flex justify-content-between rounded-3 align-items-center p-4 tiled-COW-background mb-3" style="position: relative;">
+        <img style="width:90px" src="https://costionline.com/icons/Logo.svg" alt="Costi Online Logo"/>
+        <div></div>
+        <h2 class="fw-bold fs-1">What's New?</h2>
+    </div>
+    <p class="fs-4">
+        Costi Online is now able to serve <strong>dynamic content</strong>. This allows me to add, remove, or change the
+        content hosted on this site in the home, projects, media, wiki, newsroom, Minecraft, tree, about, and other
+        pages. Although this change may seem mundane, it unlocks powerful tools such as referencing newsroom or wiki
+        posts. I can also create seasonal or event based content on demand. Stay tuned for more changes!
+    </p>
+    <a href="https://github.com/CKhamis/Costi-Online-Website" type="button" class="btn btn-dark btn-sm">See Costi Online on GitHub</a>
+</div>
+
+<div class="container-fluid p-0 mt-5" id="media">
+    <div class="container-fluid">
+        <div class="container py-5">
+            <img src="/icons/CM White.svg" alt="costi media logo" class="img-fluid mb-2"/>
+            <p class="fs-4 text-white">View various video, image, and flyer materials I made. This features projects I
+                created since I was in sixth grade in chronological order.</p>
+            <a href="/Media" class="btn btn-primary" aria-current="page">Visit Costi Media</a>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid p-0 mt-5" id="wiki">
+    <div class="container-fluid">
+
+        <div class="container py-5">
+            <div class="row">
+                <div class="d-none d-md-block col-md-7 ">
+                    <div class="row" id="wiki-preview-container"></div>
+                </div>
+                <div class="col-12 col-md-5">
+                    <h2 class="fw-bold text-white">Costipedia</h2>
+                    <p class="fs-4 text-white">Costipedia is a Wiki that contains pages relevant to myself &
+                        friends.</p>
+                    <a href="/Wiki" class="btn btn-primary" aria-current="page">Visit Costipedia</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
