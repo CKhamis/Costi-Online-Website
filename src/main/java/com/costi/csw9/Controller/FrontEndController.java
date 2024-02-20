@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class FrontEndController {
     private final UserService userService;
     private WikiService wikiService;
-    private static final String VERSION = "10.0.0";
+    private static final String VERSION = "10.0.2";
 
     @Autowired
     public FrontEndController(UserService userService, WikiService wikiService) {
