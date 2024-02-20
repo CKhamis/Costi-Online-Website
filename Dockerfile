@@ -5,5 +5,6 @@ RUN gradle installBootDist
 FROM amazoncorretto:17
 WORKDIR /usr/build
 COPY --from=BUILDER /home/gradle/build/install/csw9-boot .
+WORKDIR /
 EXPOSE 82
 CMD ["./usr/build/bin/csw9"]

@@ -15,11 +15,28 @@
 
 
 <style>
-    .quick-link img {
+    .zoom-in {
         aspect-ratio: 1 / 1;
         object-fit: cover;
         position: relative;
         width: 100%;
+        padding: 1.5rem;
+        transition: padding 0.3s ease;
+    }
+    .zoom-in:hover{
+        padding: .5rem;
+    }
+
+    #quick-links > div:hover{
+        background:rgba(150, 150, 150, .1);
+    }
+
+    .internal-zoom-in{
+        padding: .5rem;
+        transition: padding 0.3s ease;
+    }
+    .internal-zoom-in:hover{
+        padding:0;
     }
 </style>
 
@@ -28,77 +45,41 @@
          style="position: relative;">
         <h2 class="fw-bold fs-1">Frequently Visited Pages</h2>
     </div>
-    <div class="row">
-        <div class="col-6 col-md-4 col-lg-2">
+    <div class="row" id="quick-links">
+        <div class="col-4 col-lg-2">
             <a href="https://costionline.com/About">
-                <img src="https://costionline.com/icons/Contact.svg" alt="About" class="p-4 img-fluid"/>
+                <img src="https://costionline.com/icons/Contact.svg" alt="About" class="img-fluid zoom-in"/>
                 <p class="text-center fw-bold text-1 fs-4">About Me</p>
             </a>
         </div>
-        <div class="col-6 col-md-4 col-lg-2">
+        <div class="col-4 col-lg-2">
             <a href="https://costionline.com/Newsroom">
-                <img src="https://costionline.com/icons/Newsroom.svg" alt="Newsroom" class="p-4 img-fluid"/>
+                <img src="https://costionline.com/icons/Newsroom.svg" alt="Newsroom" class="img-fluid zoom-in"/>
                 <p class="text-center fw-bold text-1 fs-4">Newsroom</p>
             </a>
         </div>
-        <div class="col-6 col-md-4 col-lg-2">
+        <div class="col-4 col-lg-2">
             <a href="https://costionline.com/Labs/LED">
-                <img src="https://costionline.com/icons/LED.svg" alt="LED" class="p-4 img-fluid"/>
+                <img src="https://costionline.com/icons/LED.svg" alt="LED" class="img-fluid zoom-in"/>
                 <p class="text-center fw-bold text-1 fs-4">LED Controller</p>
             </a>
         </div>
-        <div class="col-6 col-md-4 col-lg-2">
+        <div class="col-4 col-lg-2">
             <a href="https://costionline.com/Media">
-                <img src="https://costionline.com/icons/Media.svg" alt="Media" class="p-4 img-fluid"/>
+                <img src="https://costionline.com/icons/Media.svg" alt="Media" class="img-fluid zoom-in"/>
                 <p class="text-center fw-bold text-1 fs-4">Media</p>
             </a>
         </div>
-        <div class="col-6 col-md-4 col-lg-2">
+        <div class="col-4 col-lg-2">
             <a href="https://costionline.com/Wiki">
-                <img src="https://costionline.com/icons/Wiki.svg" alt="Wiki" class="p-4 img-fluid"/>
+                <img src="https://costionline.com/icons/Wiki.svg" alt="Wiki" class="img-fluid zoom-in"/>
                 <p class="text-center fw-bold text-1 fs-4">Wiki</p>
             </a>
         </div>
-        <div class="col-6 col-md-4 col-lg-2">
+        <div class="col-4 col-lg-2">
             <a href="https://costionline.com/Projects">
-                <img src="https://costionline.com/icons/Projects.svg" alt="Projects" class="p-4 img-fluid"/>
+                <img src="https://costionline.com/icons/Projects.svg" alt="Projects" class="img-fluid zoom-in"/>
                 <p class="text-center fw-bold text-1 fs-4">Projects</p>
-            </a>
-        </div>
-    </div>
-</div>
-
-<div class="container mt-5">
-    <div class="d-flex justify-content-between rounded-3 align-items-end p-4 tiled-COW-background mb-3"
-         style="position: relative;">
-        <img class="position-absolute" style="bottom: 0px; left: 0;"
-             src="https://costionline.com/Downloads/Uploads/83290571-61d3-431d-a593-b9cd4fe40131" alt="bird"/>
-        <div></div>
-        <h2 class="fw-bold fs-1">Recent Trips</h2>
-    </div>
-    <div class="row">
-        <div class="col-12 col-md-6 col-lg-4 mt-3">
-            <a href="https://costionline.com/Newsroom/49/view">
-                <img src="https://costionline.com/Downloads/Uploads/9eb9fa88-4e19-479a-8ee0-e42195b1f349"
-                     class="img-fluid d-block rounded-3" loading="lazy"
-                     style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;">
-                <h4 class="fw-bold text-center text-1">Mexico</h4>
-            </a>
-        </div>
-        <div class="col-12 col-md-6 col-lg-4 mt-3">
-            <a href="https://costionline.com/Newsroom/51/view">
-                <img src="https://costionline.com/Downloads/Uploads/b6561cd6-53c9-4a08-853f-87686b393681"
-                     class="img-fluid d-block rounded-3" loading="lazy"
-                     style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;">
-                <h4 class="fw-bold text-center text-1">Disneyland</h4>
-            </a>
-        </div>
-        <div class="col-12 col-md-6 col-lg-4 mt-3">
-            <a href="https://costionline.com/Newsroom/50/view">
-                <img src="https://costionline.com/Downloads/Uploads/83e2dadd-3797-4a10-98c4-924b6bf8d6cb"
-                     class="img-fluid d-block rounded-3" loading="lazy"
-                     style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;">
-                <h4 class="fw-bold text-center text-1">San Francisco</h4>
             </a>
         </div>
     </div>
@@ -142,6 +123,42 @@
 </div>
 
 <div class="container mt-5">
+    <div class="d-flex justify-content-between rounded-3 align-items-end p-4 tiled-COW-background mb-3"
+         style="position: relative;">
+        <img class="position-absolute" style="bottom: 0px; left: 0;"
+             src="https://costionline.com/Downloads/Uploads/83290571-61d3-431d-a593-b9cd4fe40131" alt="bird"/>
+        <div></div>
+        <h2 class="fw-bold fs-1">Recent Trips</h2>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-6 col-lg-4 mt-3">
+            <a href="https://costionline.com/Newsroom/49/view">
+                <img src="https://costionline.com/Downloads/Uploads/9eb9fa88-4e19-479a-8ee0-e42195b1f349"
+                     class="img-fluid d-block rounded-3 internal-zoom-in" loading="lazy"
+                     style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;">
+                <h4 class="fw-bold text-center text-1">Mexico</h4>
+            </a>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mt-3">
+            <a href="https://costionline.com/Newsroom/51/view">
+                <img src="https://costionline.com/Downloads/Uploads/b6561cd6-53c9-4a08-853f-87686b393681"
+                     class="img-fluid d-block rounded-3 internal-zoom-in" loading="lazy"
+                     style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;">
+                <h4 class="fw-bold text-center text-1">Disneyland</h4>
+            </a>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mt-3">
+            <a href="https://costionline.com/Newsroom/50/view">
+                <img src="https://costionline.com/Downloads/Uploads/83e2dadd-3797-4a10-98c4-924b6bf8d6cb"
+                     class="img-fluid d-block rounded-3 internal-zoom-in" loading="lazy"
+                     style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%">
+                <h4 class="fw-bold text-center text-1">San Francisco</h4>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
     <div class="d-flex justify-content-between rounded-3 align-items-center p-4 tiled-COW-background mb-3" style="position: relative;">
         <h2 class="fw-bold fs-1">Fall 2023 Projects</h2>
         <img style="width:70px" src="https://costionline.com/icons/Projects.svg" alt="Projects icon"/>
@@ -150,20 +167,19 @@
     <div class="row">
         <div class="col-12 col-md-6 col-lg-4 mt-3">
             <a href="https://costionline.com/Projects">
-                <img src="https://costionline.com/images/webpageImages/SongSnap.webp"
-                     class="img-fluid d-block rounded-3" loading="lazy" style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;" alt="song snap">
+                <img src="https://costionline.com/images/webpageImages/SongSnap.webp" class="img-fluid d-block rounded-3 internal-zoom-in" loading="lazy" style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;" alt="song snap">
                 <h5 class="fw-bold text-center text-1">Song Snap</h5>
             </a>
         </div>
         <div class="col-12 col-md-6 col-lg-4 mt-3">
             <a href="https://costionline.com/Projects">
-                <img src="https://costionline.com/images/webpageImages/Let%20it%20Fly.webp" class="img-fluid d-block rounded-3" loading="lazy" style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;" alt="let it fly">
+                <img src="https://costionline.com/images/webpageImages/Let%20it%20Fly.webp" class="img-fluid d-block rounded-3 internal-zoom-in" loading="lazy" style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;" alt="let it fly">
                 <h5 class="fw-bold text-center text-1">Let it Fly</h5>
             </a>
         </div>
         <div class="col-12 col-md-6 col-lg-4 mt-3">
             <a href="/Projects">
-                <img src="/images/webpageImages/Game.webp" class="img-fluid d-block rounded-3" loading="lazy" style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;" alt="mars: first encounter">
+                <img src="/images/webpageImages/Game.webp" class="img-fluid d-block rounded-3 internal-zoom-in" loading="lazy" style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;" alt="mars: first encounter">
                 <h5 class="fw-bold text-center text-1">Mars: First Encounter</h5>
             </a>
         </div>
@@ -172,7 +188,38 @@
     <p class="fs-4 mt-4">
         The fall 2023 was the start of my final year in SJSU for obtaining a degree in computer science. During this semester, I have worked on three group projects. Each of these projects have a substantially different application stack, purpose, and development style. Two of the three projects are open source and available on my GitHub account. Please see the projects page for more information.
     </p>
-    <a href="/Projects" type="button" class="btn btn-dark btn-sm">Projects</a>
+    <a href="/Projects" type="button" class="btn btn-dark">Projects</a>
+</div>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between rounded-3 align-items-end p-4 tiled-COW-background mb-3"
+         style="position: relative;">
+        <img class="position-absolute" style="bottom: 0px; left: 0;height:120px"
+             src="https://costionline.com/Downloads/Uploads/237df8fa-7164-462d-9a5b-e953c07a4b34" alt="wesley"/>
+        <div></div>
+        <h2 class="fw-bold fs-1">Dragonboat Races</h2>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-md-6 col-lg-4 mt-3">
+            <a href="https://costionline.com/Newsroom/48/view">
+                <img src="https://costionline.com/Downloads/Uploads/b4a0ddb6-fb25-46f6-95ac-0d6a28cb82d7" class="img-fluid d-block rounded-3 internal-zoom-in" loading="lazy" style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;" alt="college cup">
+                <h5 class="fw-bold text-center text-1">College Cup Race</h5>
+            </a>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mt-3">
+            <a href="https://costionline.com/Newsroom/36/view">
+                <img src="https://costionline.com/Downloads/Uploads/4faa8306-c175-46de-a5ef-0daa6d5d2ed3" class="img-fluid d-block rounded-3 internal-zoom-in" loading="lazy" style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;" alt="long beach">
+                <h5 class="fw-bold text-center text-1">Long Beach Race</h5>
+            </a>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mt-3">
+            <a href="https://costionline.com/Newsroom/19/view">
+                <img src="https://costionline.com/Downloads/Uploads/1a2b079b-4c4e-4b71-a9c7-e5dcd66f315f" class="img-fluid d-block rounded-3 internal-zoom-in" loading="lazy" style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;" alt="Regatta">
+                <h5 class="fw-bold text-center text-1">Regatta Race</h5>
+            </a>
+        </div>
+    </div>
 </div>
 
 <div class="container mt-5" id="new">
