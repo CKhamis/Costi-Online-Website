@@ -13,5 +13,6 @@ services:
     restart: always
     environment:
       MYSQL_DATABASE: costi_online
+      MYSQL_ROOT_PASSWORD: 1234
     ports:
       - "3306:3306"
