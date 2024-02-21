@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Controller
 public class FrontEndController {
     private final UserService userService;
-    private WikiService wikiService;
+    private final WikiService wikiService;
     private static final String VERSION = "10.0.2";
 
     @Autowired
