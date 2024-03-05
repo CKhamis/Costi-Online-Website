@@ -10,7 +10,7 @@ import lombok.Setter;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;

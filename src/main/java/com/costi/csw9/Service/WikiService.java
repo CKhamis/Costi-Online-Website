@@ -10,7 +10,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.stereotype.Service;
 
-import javax.validation.constraints.Null;
+import jakarta.validation.constraints.Null;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;

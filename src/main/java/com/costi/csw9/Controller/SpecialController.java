@@ -3,30 +3,23 @@ package com.costi.csw9.Controller;
 import com.costi.csw9.Model.Ajax.MediaInfo;
 import com.costi.csw9.Model.Ajax.ProjectInfo;
 import com.costi.csw9.Model.Axcel.GameProgress;
-import com.costi.csw9.Model.Post;
-import com.costi.csw9.Model.User;
-import com.costi.csw9.Model.UserRole;
 import com.costi.csw9.Service.PostService;
 import com.costi.csw9.Service.UserService;
 import com.costi.csw9.Util.InfoInitializer;
-import org.apache.tomcat.jni.Local;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.security.Principal;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Controller
 public class SpecialController {
     private static final int requiredFinds = 7;
-    private List<ProjectInfo> projects = InfoInitializer.initializeProjects();
-    private List<MediaInfo> mediaProjects = InfoInitializer.initializeMedia();
+    private final List<ProjectInfo> projects = InfoInitializer.initializeProjects();
+    private final List<MediaInfo> mediaProjects = InfoInitializer.initializeMedia();
 
     /*
         Services
