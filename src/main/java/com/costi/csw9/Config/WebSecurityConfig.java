@@ -13,34 +13,37 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
 @AllArgsConstructor
 @EnableWebSecurity
 @EnableMethodSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig  {
     private final UserService userService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    SecurityFilterChain web(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests()
-                .antMatchers("/Upload", "/COMT/**", "/Wiki/**/delete", "/Wiki/**/enable", "/Wiki/**/disable", "/Accounts/**/unlock", "/Accounts/**/lock").hasAnyAuthority(UserRole.ADMIN.toString(), UserRole.OWNER.toString())
-                .antMatchers("/Account", "/Wiki/Create").authenticated()
-                .anyRequest().permitAll()
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .permitAll()
-                .and()
-                .logout()
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login")
-                .permitAll()
-                .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).ignoringAntMatchers("/games/**");
+                .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers("/Upload", "/COMT/**", "/Wiki/**/delete", "/Wiki/**/enable", "/Wiki/**/disable", "/Accounts/**/unlock", "/Accounts/**/lock").hasAnyAuthority(UserRole.ADMIN.toString(), UserRole.OWNER.toString())
+                        .requestMatchers("/Account", "/Wiki/Create").authenticated()
+                        .anyRequest().permitAll()
+                )
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .permitAll()
+                )
+                .logout(form -> form
+                        .logoutUrl("/login")
+                )
+                .csrf(csrf -> csrf
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).ignoringRequestMatchers("/games/**")
+                );
+        return http.build();
     }
 
     @Override
