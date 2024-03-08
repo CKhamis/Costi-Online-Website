@@ -1,9 +1,11 @@
 plugins {
-	id 'org.springframework.boot' version '2.6.6'
+	id 'org.springframework.boot' version '2.7.18'
 	id 'application'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
 }
+
+//ext['spring-security.version']='5.8.9'
 
 group = 'com.costi'
 version = '10.0.0'
