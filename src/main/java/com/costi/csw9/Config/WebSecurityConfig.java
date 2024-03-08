@@ -11,8 +11,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
@@ -27,9 +29,10 @@ public class WebSecurityConfig  {
 
     @Bean
     SecurityFilterChain web(HttpSecurity http) throws Exception {
+        // "/Wiki/**/delete", "/Wiki/**/enable", "/Wiki/**/disable"
         http
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/Upload", "/COMT/**", "/Wiki/**/delete", "/Wiki/**/enable", "/Wiki/**/disable", "/Accounts/**/unlock", "/Accounts/**/lock").hasAnyAuthority(UserRole.ADMIN.toString(), UserRole.OWNER.toString())
+                        .requestMatchers("/Upload", "/COMT/**", "/Accounts/**").hasAnyAuthority(UserRole.ADMIN.toString(), UserRole.OWNER.toString())
                         .requestMatchers("/Account", "/Wiki/Create").authenticated()
                         .anyRequest().permitAll()
                 )
@@ -46,11 +49,6 @@ public class WebSecurityConfig  {
         return http.build();
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(daoAuthenticationProvider())
-;    }
-
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -60,8 +58,22 @@ public class WebSecurityConfig  {
     }
 
     @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+    public UserDetailsService userDetailsService(BCryptPasswordEncoder bCryptPasswordEncoder) {
+        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+        manager.createUser(User.withUsername("user")
+                .password(bCryptPasswordEncoder.encode("userPass"))
+                .roles("USER")
+                .build());
+        manager.createUser(User.withUsername("admin")
+                .password(bCryptPasswordEncoder.encode("adminPass"))
+                .roles("USER", "ADMIN")
+                .build());
+        return manager;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        return http.getSharedObject(AuthenticationManagerBuilder.class)
+                .build();
     }
 }
