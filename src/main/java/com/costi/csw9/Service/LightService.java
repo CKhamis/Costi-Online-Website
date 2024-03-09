@@ -5,11 +5,6 @@ import com.costi.csw9.Model.Light;
 import com.costi.csw9.Model.LightLog;
 import com.costi.csw9.Repository.LightLogRepository;
 import com.costi.csw9.Repository.LightRepository;
-import com.costi.csw9.Util.LogicTools;
-import org.hibernate.Hibernate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.rmi.ConnectIOException;
@@ -20,16 +15,16 @@ import java.util.Optional;
 
 @Service
 public class LightService {
-    private final LightRepository lightRepository;
+    private final LightRepository lights;
     private final LightLogRepository lightLogRepository;
 
-    public LightService(LightRepository lightRepository, LightLogRepository lightLogRepository) {
-        this.lightRepository = lightRepository;
+    public LightService(LightRepository lights, LightLogRepository lightLogRepository) {
+        this.lights = lights;
         this.lightLogRepository = lightLogRepository;
     }
 
     public List<Light> findAllLights(){
-        return lightRepository.findAllByIsEnabledTrueAndIsPublicTrueOrderByDateAddedDesc();
+        return lights.findAllByIsEnabledTrueAndIsPublicTrueOrderByDateAddedDesc();
     }
 
     public String syncUp(Light light){
@@ -38,7 +33,7 @@ public class LightService {
         light.getLogs().add(log);
 
         lightLogRepository.save(log);
-        lightRepository.save(light);
+        lights.save(light);
 
         return currentStatus;
     }
@@ -50,7 +45,7 @@ public class LightService {
         }
 
         // Check if exists
-        Optional<Light> optionalLight = lightRepository.findById(request.getId());
+        Optional<Light> optionalLight = lights.findById(request.getId());
 
         if(optionalLight.isEmpty()){
             throw new NoSuchElementException("Light could not be found");

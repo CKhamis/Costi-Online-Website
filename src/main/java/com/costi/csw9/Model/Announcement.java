@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
+@org.springframework.data.relational.core.mapping.Table
 public class Announcement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

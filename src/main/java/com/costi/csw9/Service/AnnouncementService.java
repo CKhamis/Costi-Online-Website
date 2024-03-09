@@ -1,28 +1,26 @@
 package com.costi.csw9.Service;
 
 import com.costi.csw9.Model.Announcement;
-import com.costi.csw9.Model.User;
 import com.costi.csw9.Repository.AnnouncementRepository;
 import com.costi.csw9.Util.LogicTools;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
 public class AnnouncementService {
-    private final AnnouncementRepository announcementRepository;
+    private final AnnouncementRepository repository;
 
 
-    public AnnouncementService(AnnouncementRepository announcementRepository) {
-        this.announcementRepository = announcementRepository;
+    public AnnouncementService(AnnouncementRepository repository) {
+        this.repository = repository;
     }
 
     public Announcement findById(Long id) throws Exception{
-        Optional<Announcement> optionalAnnouncement = announcementRepository.findById(id);
+        Optional<Announcement> optionalAnnouncement = repository.findById(id);
         if(optionalAnnouncement.isPresent()){
             Announcement announcement = optionalAnnouncement.get();
             if(announcement.isEnable()){
@@ -36,6 +34,6 @@ public class AnnouncementService {
     }
 
     public List<Announcement> findAllAnnouncements(){
-        return announcementRepository.findByEnable(true);
+        return repository.findByEnable(true);
     }
 }

@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="Account_Logs")
+@org.springframework.data.relational.core.mapping.Table(name="Account_Logs")
 public class AccountLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

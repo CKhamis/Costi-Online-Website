@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @NoArgsConstructor
+@org.springframework.data.relational.core.mapping.Table
 public class Attachment {
 
     @Id

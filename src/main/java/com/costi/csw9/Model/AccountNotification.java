@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 @Entity
-@Table(name="Account_notifications")
+@org.springframework.data.relational.core.mapping.Table(name="Account_notifications")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

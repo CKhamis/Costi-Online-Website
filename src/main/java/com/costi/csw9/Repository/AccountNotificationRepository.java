@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
 public interface AccountNotificationRepository extends JpaRepository<AccountNotification, Long> {
     List<AccountNotification> findByUser(User user);
     void deleteByUser(User user);

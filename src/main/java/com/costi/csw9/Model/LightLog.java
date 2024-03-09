@@ -14,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 @EqualsAndHashCode
 @Entity
 @NoArgsConstructor
+@org.springframework.data.relational.core.mapping.Table
 public class LightLog {
     @Id
     @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)

@@ -16,6 +16,7 @@ import java.time.temporal.ChronoUnit;
 @EqualsAndHashCode
 @Entity
 @NoArgsConstructor
+@org.springframework.data.relational.core.mapping.Table
 public class Post {
 
     @Id

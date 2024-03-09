@@ -28,14 +28,14 @@ public class COMTService {
     private final AnnouncementRepository announcementRepository;
     private final PostRepository postRepository;
     private final AttachmentService attachmentService;
-    private final AccountNotificationRepository accountNotificationRepository;
+    private final AccountNotificationRepository accountNotifications;
     private final UserRepository userRepository;
     private final LightRepository lightRepository;
     private final LightLogRepository lightLogRepository;
     private final LightService lightService;
     private final WikiRepository wikiRepository;
     private final AccountLogService accountLogService;
-    private final AccountLogRepository accountLogRepository;
+    private final AccountLogRepository accountLogs;
     private final AttachmentRepository attachmentRepository;
     private final DynamicContentRepository dynamicContentRepository;
 
@@ -207,7 +207,7 @@ public class COMTService {
      */
 
     public List<AccountNotification> findAllNotifications(){
-        return accountNotificationRepository.findAll();
+        return accountNotifications.findAll();
     }
 
     public List<AccountNotification> findAllNotificationsByUser(Long id){
@@ -217,7 +217,7 @@ public class COMTService {
 
         Optional<User> optionalUser = userRepository.findById(id);
         if(optionalUser.isPresent()){
-            return accountNotificationRepository.findByUser(optionalUser.get());
+            return accountNotifications.findByUser(optionalUser.get());
         }else{
             throw new IllegalArgumentException("There are no logs in Costi Online with the given id");
         }
@@ -230,7 +230,7 @@ public class COMTService {
                 // Convert to notification
                 AccountNotification accountNotification = new AccountNotification(notification, user);
                 // Save
-                accountNotificationRepository.save(accountNotification);
+                accountNotifications.save(accountNotification);
             }
         }else{
             // Find associated user
@@ -240,7 +240,7 @@ public class COMTService {
                 // Convert to notification
                 AccountNotification accountNotification = new AccountNotification(notification, optionalUser.get());
                 // Save
-                accountNotificationRepository.save(accountNotification);
+                accountNotifications.save(accountNotification);
             }else{
                 throw new Exception("User" + LogicTools.NOT_FOUND_MESSAGE);
             }
@@ -248,7 +248,7 @@ public class COMTService {
     }
 
     public void deleteNotification(Long id) {
-        accountNotificationRepository.deleteById(id);
+        accountNotifications.deleteById(id);
     }
 
     /*
@@ -431,7 +431,7 @@ public class COMTService {
         Account Logs
      */
 
-    public List<AccountLog> findAllAccountLogs(){return accountLogRepository.findAll();}
+    public List<AccountLog> findAllAccountLogs(){return accountLogs.findAll();}
 
     public List<AccountLog> findAllAccountLogsByUser(Long id){
         if(id == null){
@@ -440,21 +440,21 @@ public class COMTService {
 
         Optional<User> optionalUser = userRepository.findById(id);
         if(optionalUser.isPresent()){
-            return accountLogRepository.findByUser(optionalUser.get());
+            return accountLogs.findByUser(optionalUser.get());
         }else{
             throw new IllegalArgumentException("There are no logs in Costi Online with the given id");
         }
     }
 
     public void deleteAccountLog(Long id){
-        accountLogRepository.deleteById(id);
+        accountLogs.deleteById(id);
     }
 
     public void saveAccountLog(ModeratorAccountLogRequest request){
         // Check if new log or editing log
         if(request.getId() != null){
             // Check if the id exists
-            Optional<AccountLog> optionalAccountLog = accountLogRepository.findById(request.getId());
+            Optional<AccountLog> optionalAccountLog = accountLogs.findById(request.getId());
             if(optionalAccountLog.isPresent()){
                 // Account log exists, edit it
                 AccountLog log = optionalAccountLog.get();
@@ -471,7 +471,7 @@ public class COMTService {
                     log.setBody(request.getBody());
 
                     // Save
-                    accountLogRepository.save(log);
+                    accountLogs.save(log);
                 }else{
                     // Account log does not exist
                     throw new IllegalArgumentException("There are no logs in Costi Online with the given id");
@@ -494,7 +494,7 @@ public class COMTService {
             if(optionalUser.isPresent()){
                 // ALl fields present
                 AccountLog log = new AccountLog(request.getTitle(), request.getBody(), optionalUser.get());
-                accountLogRepository.save(log);
+                accountLogs.save(log);
             }else{
                 // User is incorrect
                 throw new IllegalArgumentException("There are no users in Costi Online with the given id");
@@ -541,10 +541,10 @@ public class COMTService {
                 }
 
                 // Delete any logs that are owned by account
-                accountLogRepository.deleteByUser(user);
+                accountLogs.deleteByUser(user);
 
                 // Delete any notifications that are owned by account
-                accountNotificationRepository.deleteByUser(user);
+                accountNotifications.deleteByUser(user);
 
                 // Ready to delete
                 userRepository.deleteById(id);
@@ -586,7 +586,7 @@ public class COMTService {
 
                 // Create log
                 AccountLog editLog = new AccountLog("Edited by Moderator", "A moderator has modified this account.", user);
-                accountLogRepository.save(editLog);
+                accountLogs.save(editLog);
 
                 // Save user
                 userRepository.save(user);
@@ -628,7 +628,7 @@ public class COMTService {
 
             // Create welcoming message
             AccountNotification welcome = new AccountNotification("Welcome!", "<p>Welcome to your Costi Network ID!</p>", "success", savedUser);
-            accountNotificationRepository.save(welcome);
+            accountNotifications.save(welcome);
         }
     }
     public User findUserById(Long id){

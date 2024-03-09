@@ -9,7 +9,6 @@ import com.costi.csw9.Repository.WikiRepository;
 import com.costi.csw9.Util.LogicTools;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,15 +21,15 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class UserService implements UserDetailsService {
-    private final UserRepository userRepository;
+    private final UserRepository users;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AccountLogService accountLogService;
-    private final AccountNotificationRepository accountNotificationRepository;
+    private final AccountNotificationRepository accountNotifications;
     private final WikiRepository wikiRepository;
-    private final AccountLogRepository accountLogRepository;
+    private final AccountLogRepository accountLogs;
 
     public User loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<User> optionalUser = userRepository.findByEmail(email);
+        Optional<User> optionalUser = users.findByEmail(email);
         if(optionalUser.isPresent()){
             return optionalUser.get();
         }else{
@@ -56,7 +55,7 @@ public class UserService implements UserDetailsService {
                 throw new IllegalArgumentException("Password field cannot be blank for creating new users");
             }
 
-            if(userRepository.findAll().size() == 0){
+            if(users.findAll().size() == 0){
                 // No users present. Genesis user will now be upgraded to owner role
                 newUser.setRole(UserRole.OWNER);
             }else{
@@ -64,7 +63,7 @@ public class UserService implements UserDetailsService {
                 newUser.setRole(UserRole.USER);
             }
 
-            User savedUser = userRepository.save(newUser);
+            User savedUser = users.save(newUser);
 
             //Add to log
             AccountLog log = new AccountLog("Account Created", "User was created and activated", savedUser);
@@ -72,12 +71,12 @@ public class UserService implements UserDetailsService {
 
             //Add welcome message
             AccountNotification welcome = new AccountNotification("Welcome!", "<p>Welcome to your Costi Network ID!</p>", "primary", savedUser);
-            accountNotificationRepository.save(welcome);
+            accountNotifications.save(welcome);
 
             return "New " + newUser.getRole().name() + " created";
         }else{
             // Edit existing user account
-            Optional<User> optionalUser = userRepository.findById(request.getId());
+            Optional<User> optionalUser = users.findById(request.getId());
             if(optionalUser.isPresent()){
                 // Transfer values to the present user
                 User presentUser = optionalUser.get();
@@ -91,7 +90,7 @@ public class UserService implements UserDetailsService {
                     presentUser.setPassword(encodedPass);
                 }
 
-                User savedUser = userRepository.save(presentUser);
+                User savedUser = users.save(presentUser);
 
                 //Add to log
                 AccountLog log = new AccountLog("Account details updated", presentUser.toString(), savedUser);
@@ -110,7 +109,7 @@ public class UserService implements UserDetailsService {
         // Check if the id is valid
         if(id != null){
             // Check if the id exists
-            Optional<User> optionalUser = userRepository.findById(id);
+            Optional<User> optionalUser = users.findById(id);
             if(optionalUser.isPresent()){
                 // User exists
                 User user = optionalUser.get();
@@ -124,7 +123,7 @@ public class UserService implements UserDetailsService {
                 if(!wikiPages.isEmpty()){
                     // Re-assign them to owner
                     // Find owner
-                    User costi = userRepository.findFirstByRole(UserRole.OWNER);
+                    User costi = users.findFirstByRole(UserRole.OWNER);
                     for(WikiPage page : wikiPages){
                         // Go through each one and transfer ownership
                         page.setAuthor(costi);
@@ -134,13 +133,13 @@ public class UserService implements UserDetailsService {
                 }
 
                 // Delete any logs that are owned by account
-                accountLogRepository.deleteByUser(user);
+                accountLogs.deleteByUser(user);
 
                 // Delete any notifications that are owned by account
-                accountNotificationRepository.deleteByUser(user);
+                accountNotifications.deleteByUser(user);
 
                 // Ready to delete
-                userRepository.deleteById(id);
+                users.deleteById(id);
 
                 return;
             }

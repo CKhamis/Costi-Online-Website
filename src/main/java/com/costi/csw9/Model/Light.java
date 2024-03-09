@@ -24,6 +24,7 @@ import java.util.List;
 @EqualsAndHashCode
 @Entity
 @NoArgsConstructor
+@org.springframework.data.relational.core.mapping.Table
 public class Light {
 
     @Id
