@@ -1,19 +1,14 @@
 package com.costi.csw9.Repository;
 
 import com.costi.csw9.Model.User;
-import com.costi.csw9.Model.WikiCategory;
 import com.costi.csw9.Model.WikiPage;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
-import java.util.Optional;
 
 @Repository
+@EnableJpaRepositories
 public interface WikiRepository extends JpaRepository<WikiPage, Long> {
     List<WikiPage> findByAuthor_Id(Long id);
     List<WikiPage> findByCategory(String category);

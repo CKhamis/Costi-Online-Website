@@ -6,10 +6,12 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
 @Entity
 @Data
+@org.springframework.data.relational.core.mapping.Table
 @NoArgsConstructor
 public class Attachment {
 

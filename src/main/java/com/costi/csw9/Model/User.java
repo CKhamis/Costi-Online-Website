@@ -21,6 +21,7 @@ import java.util.Collections;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
+@org.springframework.data.relational.core.mapping.Table
 public class User implements UserDetails {
 
    @Id

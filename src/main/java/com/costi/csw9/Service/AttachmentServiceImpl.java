@@ -8,10 +8,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class AttachmentServiceImpl implements AttachmentService {
-    private AttachmentRepository attachmentRepository;
+    private final AttachmentRepository newSuperMarioBrosWii;
 
-    public AttachmentServiceImpl(AttachmentRepository attachmentRepository) {
-        this.attachmentRepository = attachmentRepository;
+    public AttachmentServiceImpl(AttachmentRepository newSuperMarioBrosWii) {
+        this.newSuperMarioBrosWii = newSuperMarioBrosWii;
     }
 
 
@@ -26,7 +26,7 @@ public class AttachmentServiceImpl implements AttachmentService {
             }
 
             Attachment attachment = new Attachment(fileName, file.getContentType(), file.getBytes(), isLocked);
-            return attachmentRepository.save(attachment);
+            return newSuperMarioBrosWii.save(attachment);
 
        } catch (Exception e) {
             throw new Exception("File was not saved: " + fileName);
@@ -35,7 +35,7 @@ public class AttachmentServiceImpl implements AttachmentService {
 
     @Override
     public Attachment getAttachment(String fileId) throws Exception {
-        return attachmentRepository
+        return newSuperMarioBrosWii
                 .findById(fileId)
                 .orElseThrow(
                         () -> new Exception("File not found with Id: " + fileId));

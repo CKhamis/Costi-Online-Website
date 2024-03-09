@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
+@org.springframework.data.relational.core.mapping.Table
 public class WikiPage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

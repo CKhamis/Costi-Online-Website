@@ -15,6 +15,7 @@ import java.time.temporal.ChronoUnit;
 @Setter
 @EqualsAndHashCode
 @Entity
+@org.springframework.data.relational.core.mapping.Table
 @NoArgsConstructor
 public class DynamicContent {
 

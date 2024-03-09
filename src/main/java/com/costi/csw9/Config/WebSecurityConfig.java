@@ -16,6 +16,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.RememberMeServices;
+import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
@@ -28,7 +30,7 @@ public class WebSecurityConfig  {
 
 
     @Bean
-    SecurityFilterChain web(HttpSecurity http) throws Exception {
+    SecurityFilterChain web(HttpSecurity http, RememberMeServices rememberMeServices) throws Exception {
         // "/Wiki/**/delete", "/Wiki/**/enable", "/Wiki/**/disable"
         http
                 .authorizeHttpRequests((authorize) -> authorize
@@ -39,6 +41,9 @@ public class WebSecurityConfig  {
                 .formLogin(form -> form
                         .loginPage("/login")
                         .permitAll()
+                )
+                .rememberMe((remember) -> remember
+                        .rememberMeServices(rememberMeServices)
                 )
                 .logout(form -> form
                         .logoutUrl("/login")
@@ -75,5 +80,10 @@ public class WebSecurityConfig  {
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class)
                 .build();
+    }
+
+    @Bean
+    RememberMeServices rememberMeServices(UserDetailsService userDetailsService) {
+        return new TokenBasedRememberMeServices("Costi", userDetailsService);
     }
 }

@@ -6,7 +6,11 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import jakarta.transaction.Transactional;
-
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.stereotype.Repository;
+@EnableJpaRepositories
+@Repository
 public interface DynamicContentRepository extends JpaRepository<DynamicContent, Long> {
     DynamicContent findTopByEnabledOrderByLastEditedDesc(boolean enabled);
 

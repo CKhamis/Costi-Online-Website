@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 @Setter
 @EqualsAndHashCode
 @Entity
+@org.springframework.data.relational.core.mapping.Table
 @NoArgsConstructor
 public class LightLog {
     @Id
