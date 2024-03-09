@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface LightLogRepository extends JpaRepository<LightLog, Long> {
+public interface LightLogRepository {
     List<LightLog> findAllByLightOrderByDateCreatedDesc(Light light);
+
+    void save(LightLog log);
 }

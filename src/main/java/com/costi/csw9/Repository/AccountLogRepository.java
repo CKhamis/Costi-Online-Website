@@ -2,10 +2,21 @@ package com.costi.csw9.Repository;
 
 import com.costi.csw9.Model.AccountLog;
 import com.costi.csw9.Model.User;
-import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.List;
+import org.springframework.stereotype.Repository;
 
-public interface AccountLogRepository extends JpaRepository<AccountLog, Long> {
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface AccountLogRepository {
     List<AccountLog> findByUser(User user);
     void deleteByUser(User user);
+
+    void save(AccountLog log);
+
+    List<AccountLog> findAll();
+
+    void deleteById(Long id);
+
+    Optional<AccountLog> findById(Long id);
 }

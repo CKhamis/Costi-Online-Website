@@ -8,6 +8,7 @@ import com.costi.csw9.Repository.UserRepository;
 import com.costi.csw9.Repository.WikiRepository;
 import com.costi.csw9.Util.LogicTools;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,7 +21,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -28,6 +28,15 @@ public class UserService implements UserDetailsService {
     private final AccountNotificationRepository accountNotificationRepository;
     private final WikiRepository wikiRepository;
     private final AccountLogRepository accountLogRepository;
+
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, AccountLogService accountLogService, AccountNotificationRepository accountNotificationRepository, WikiRepository wikiRepository, AccountLogRepository accountLogRepository) {
+        this.userRepository = userRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.accountLogService = accountLogService;
+        this.accountNotificationRepository = accountNotificationRepository;
+        this.wikiRepository = wikiRepository;
+        this.accountLogRepository = accountLogRepository;
+    }
 
     public User loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<User> optionalUser = userRepository.findByEmail(email);

@@ -95,7 +95,7 @@ public class COMTService {
         }
         Optional<Post> optionalPost = postRepository.findById(post.getId());
 
-        if (!optionalPost.isPresent()) {
+        if (optionalPost.isEmpty()) {
             post.setImagePath("/images/default-posts/" + post.getCategory() + ".jpg");
             postRepository.save(post);
         } else {

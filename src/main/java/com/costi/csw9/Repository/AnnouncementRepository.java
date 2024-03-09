@@ -9,9 +9,18 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface AnnouncementRepository extends JpaRepository<Announcement, Long> {
+public interface AnnouncementRepository{
 
     List<Announcement> findByEnable(boolean enable);
+
+    List<Announcement> findAll();
+
+    Optional<Announcement> findById(Long id);
+
+    void save(Announcement announcement);
+
+    void deleteById(Long id);
 }

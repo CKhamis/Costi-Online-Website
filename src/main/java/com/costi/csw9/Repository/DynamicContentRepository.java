@@ -6,8 +6,13 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Repository;
 
-public interface DynamicContentRepository extends JpaRepository<DynamicContent, Long> {
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface DynamicContentRepository {
     DynamicContent findTopByEnabledOrderByLastEditedDesc(boolean enabled);
 
     @Modifying
@@ -19,4 +24,12 @@ public interface DynamicContentRepository extends JpaRepository<DynamicContent, 
     @Transactional
     @Query("UPDATE DynamicContent e SET e.enabled = true WHERE e.id = :id")
     void enable(Long id);
+
+    Optional<DynamicContent> findById(Long id);
+
+    void save(DynamicContent content);
+
+    List<DynamicContent> findAll();
+
+    void deleteById(Long id);
 }

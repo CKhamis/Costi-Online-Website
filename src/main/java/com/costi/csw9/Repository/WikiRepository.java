@@ -14,9 +14,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface WikiRepository extends JpaRepository<WikiPage, Long> {
+public interface WikiRepository {
     List<WikiPage> findByAuthor_Id(Long id);
     List<WikiPage> findByCategory(String category);
     List<WikiPage> findByEnabled(boolean enabled);
     List<WikiPage> findByAuthor(User user);
+
+    WikiPage save(WikiPage page);
+
+    List<WikiPage> findAll();
+
+    void deleteById(Long id);
+
+    Optional<WikiPage> findById(Long id);
 }
