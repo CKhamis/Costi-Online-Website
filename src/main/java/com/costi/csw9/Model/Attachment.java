@@ -25,6 +25,7 @@ public class Attachment {
 
     @Lob
     @JsonIgnore
+    @Column(columnDefinition = "longblob")
     private byte[] data;
 
     public Attachment(String filename, String fileType, byte[] data, boolean isLocked) {
