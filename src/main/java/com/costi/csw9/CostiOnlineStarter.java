@@ -8,7 +8,12 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
+@ComponentScan("com.costi.csw9.Config")
+@ComponentScan("com.costi.csw9.Controller")
+@ComponentScan("com.costi.csw9.Controller.API")
+@ComponentScan("com.costi.csw9.Model")
 @ComponentScan("com.costi.csw9.Repository")
+@ComponentScan("com.costi.csw9.Service")
 public class CostiOnlineStarter {
 
 	public static void main(String[] args) {
