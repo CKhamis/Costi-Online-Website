@@ -24,7 +24,7 @@ import java.util.Collections;
 public class User implements UserDetails {
 
    @Id
-   @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
+   @SequenceGenerator(name = "user_sequence")
    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "user_sequence")
    private Long id;
    @Size(max = 20, message = "First name can only be 20 characters or less")
