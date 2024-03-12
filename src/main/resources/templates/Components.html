@@ -24,7 +24,7 @@
 
 <div th:fragment="main-navigation" class="position-sticky" style="z-index:99; width:100%;top:0;opacity:95%">
     <nav th:fragment="topNav" class="navbar navbar-expand-lg navbar-dark nav">
-        <script th:replace="Components :: network-util"></script>
+        <script th:replace="~{Components :: network-util}"></script>
         <div class="container-fluid">
             <a class="navbar-brand" href="/">
                 <img th:src="@{/icons/Logo.svg}" alt="costi online logo" width="30" height="30" class="d-inline-block align-text-top">

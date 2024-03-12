@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xml:th="https://www.thymeleaf.org">
-<head th:replace="Components :: head('Log In')"></head>
+<head th:replace="~{Components :: head('Log In')}"></head>
 <body class="bg-2 text-1">
-<div th:replace="Components :: main-navigation"></div>
+<div th:replace="~{Components :: main-navigation}"></div>
 <main class="container px-4 py-5">
     <div class="row">
         <div class="d-none d-md-block col-md-1 col-lg-2 col-xl-4">
@@ -38,6 +38,6 @@
     </div>
 </main>
 
-<div th:replace="Components :: JS"></div>
+<div th:replace="~{Components :: JS}"></div>
 </body>
 </html>
