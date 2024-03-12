@@ -8,8 +8,8 @@ import com.costi.csw9.Repository.UserRepository;
 import com.costi.csw9.Repository.WikiRepository;
 import com.costi.csw9.Util.LogicTools;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,11 +23,15 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AccountLogService accountLogService;
     private final AccountNotificationRepository accountNotificationRepository;
     private final WikiRepository wikiRepository;
     private final AccountLogRepository accountLogRepository;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
 
     public User loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<User> optionalUser = userRepository.findByEmail(email);
@@ -50,7 +54,7 @@ public class UserService implements UserDetailsService {
             newUser.setProfilePicture(request.getProfilePicture());
 
             if(request.getPassword() != null && !request.getPassword().isBlank()){
-                String encodedPass = bCryptPasswordEncoder.encode(request.getPassword());
+                String encodedPass = bCryptPasswordEncoder().encode(request.getPassword());
                 newUser.setPassword(encodedPass);
             }else{
                 throw new IllegalArgumentException("Password field cannot be blank for creating new users");
@@ -87,7 +91,7 @@ public class UserService implements UserDetailsService {
                 presentUser.setProfilePicture(request.getProfilePicture());
 
                 if(request.getPassword() != null && !request.getPassword().isBlank()){
-                    String encodedPass = bCryptPasswordEncoder.encode(request.getPassword());
+                    String encodedPass = bCryptPasswordEncoder().encode(request.getPassword());
                     presentUser.setPassword(encodedPass);
                 }
 
