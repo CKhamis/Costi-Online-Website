@@ -28,7 +28,7 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 @Configuration
 //@EnableWebSecurity
 @EnableMethodSecurity
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @AllArgsConstructor
 public class WebSecurityConfig  {
     private final AuthenticationProvider authenticationProvider;
@@ -49,7 +49,7 @@ public class WebSecurityConfig  {
                         .permitAll()
                 )
                 .logout(form -> form
-                        .logoutUrl("/login")
+                        .logoutUrl("/logout")
                 )
                 .csrf(csrf -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).ignoringRequestMatchers("/games/**")
