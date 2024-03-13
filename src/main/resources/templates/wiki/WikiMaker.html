@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html xml:th="https://www.thymeleaf.org">
-<head th:replace="Components :: head('Make New Wiki')"></head>
+<head th:replace="~{Components :: head('Make New Wiki')}"></head>
 <body class="bg-1 text-1">
-<div th:replace="Components :: main-navigation"></div>
+<div th:replace="~{Components :: main-navigation}"></div>
 
 <main class="container mt-5" id="error-container">
     <div class="container-fluid">
         <h1 class="pb-2 border-bottom mb-4 fw-bold text-center" th:text="${title}">Create a Wiki Page</h1>
     </div>
 
-    <div th:replace="Components :: flash" class="mb-2"></div>
+    <div th:replace="~{Components :: flash}" class="mb-2"></div>
 
     <div class="row">
         <div class="pt-2 col-xs-12 col-md-6">
@@ -69,8 +69,8 @@
     </div>
 </main>
 
-<div th:replace="Components :: JS"></div>
-<div th:replace="Components :: footer"></div>
+<div th:replace="~{Components :: JS}"></div>
+<div th:replace="~{Components :: footer}"></div>
 <script>
     // Data
     let page;

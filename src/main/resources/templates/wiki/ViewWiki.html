@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xml:th="https://www.thymeleaf.org">
-<head th:replace="Components :: head('View Wiki')"></head>
+<head th:replace="~{Components :: head('View Wiki')}"></head>
 <body class="bg-1 text-1">
-<div th:replace="Components :: main-navigation"></div>
+<div th:replace="~{Components :: main-navigation}"></div>
 
 <main class="container mt-5" id="body-content">
     <input id="id-selector" type="hidden" th:value="${id}"/>
@@ -75,8 +75,8 @@
     </div>
 </main>
 
-<div th:replace="Components :: footer"></div>
-<div th:replace="Components :: JS"></div>
+<div th:replace="~{Components :: footer}"></div>
+<div th:replace="~{Components :: JS}"></div>
 <script>
     // Elements
     let wikiView = document.querySelector("#wiki-content");

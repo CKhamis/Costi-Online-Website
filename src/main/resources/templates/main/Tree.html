@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xml:th="https://www.thymeleaf.org">
-<head th:replace="Components :: head('Welcome')"></head>
+<head th:replace="~{Components :: head('Welcome')}"></head>
 <body class="bg-1 text-1">
 <nav class="navbar navbar-expand-lg navbar-dark nav p-0">
     <div class="container-fluid d-flex justify-content-center">
@@ -12,11 +12,11 @@
 </nav>
 
 <main id="api-content" class="container-fluid px-4">
-    <div th:replace="Components :: await-content"></div>
+    <div th:replace="~{Components :: await-content}"></div>
 </main>
 
-<div th:replace="Components :: footer"></div>
-<div th:replace="Components :: JS"></div>
+<div th:replace="~{Components :: footer}"></div>
+<div th:replace="~{Components :: JS}"></div>
 <script>
     function checkStatus(response){
         if(response.ok){

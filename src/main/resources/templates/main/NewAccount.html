@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xml:th="https://www.thymeleaf.org">
-<head th:replace="Components :: head('Create Account')"></head>
+<head th:replace="~{Components :: head('Create Account')}"></head>
 <body class="bg-2 text-1">
-<div th:replace="Components :: main-navigation"></div>
+<div th:replace="~{Components :: main-navigation}"></div>
 
 <div class="container-fluid row px-4 py-5" id="about">
     <div class="container-fluid">
@@ -20,7 +20,7 @@
         </div>
     </div>
     <div class="col-lg-7 col-md-5 col-xs-12">
-        <div th:replace="Components :: flash" class="mt-2"></div>
+        <div th:replace="~{Components :: flash}" class="mt-2"></div>
         <div class="p-5 mb-4 border-box">
             <form action="/api/user/new" method="post" enctype="application/x-www-form-urlencoded">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
@@ -71,7 +71,7 @@
         </div>
     </div>
 </div>
-<div th:replace="Components :: JS"></div>
-<div th:replace="Components :: footer"></div>
+<div th:replace="~{Components :: JS}"></div>
+<div th:replace="~{Components :: footer}"></div>
 </body>
 </html>

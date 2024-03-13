@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html xml:th="https://www.thymeleaf.org">
-<head th:replace="Components :: head('Minecraft')"></head>
+<head th:replace="~{Components :: head('Minecraft')}"></head>
 <body class="bg-1 text-1">
-<div th:replace="minecraft/MinecraftComponents :: nav"></div>
+<div th:replace="~{minecraft/MinecraftComponents :: nav}"></div>
 
 <main id="api-content">
-    <div th:replace="Components :: await-content"></div>
+    <div th:replace="~{Components :: await-content}"></div>
 </main>
 <link rel="stylesheet" th:href="@{/MCstyles.css}" />
-<div th:replace="Components :: footer"></div>
-<div th:replace="Components :: JS"></div>
+<div th:replace="~{Components :: footer}"></div>
+<div th:replace="~{Components :: JS}"></div>
 <script>
     let isOnline;
     refresh();

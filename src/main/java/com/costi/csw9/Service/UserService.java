@@ -35,7 +35,6 @@ public class UserService implements UserDetailsService {
 
     public User loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<User> optionalUser = userRepository.findByEmail(email);
-        System.out.println(optionalUser.isPresent());
         if(optionalUser.isPresent()){
             return optionalUser.get();
         }else{

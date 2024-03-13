@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xml:th="https://www.thymeleaf.org">
-<head th:replace="Components :: head('About')"></head>
+<head th:replace="~{Components :: head('About')}"></head>
 <body class="bg-1 text-1">
-<div th:replace="Components :: main-navigation"></div>
+<div th:replace="~{Components :: main-navigation}"></div>
 
 <div class="p-0 m-0 overflow-hidden">
     <div class="container-fluid p-0 overflow-hidden bg-black" style="height:400px">
@@ -19,15 +19,15 @@
 </div>
 
 <main id="api-content">
-    <div th:replace="Components :: await-content"></div>
+    <div th:replace="~{Components :: await-content}"></div>
 </main>
 
-<div th:replace="Components :: JS"></div>
-<div th:replace="Components :: footer"></div>
-<div th:replace="Components :: timer-box"></div>
-<div th:replace="Components :: toast-box"></div>
-<script th:replace="Components :: axcel-game"></script>
-<div th:replace="Components :: axcel-sprite-logic"></div>
+<div th:replace="~{Components :: JS}"></div>
+<div th:replace="~{Components :: footer}"></div>
+<div th:replace="~{Components :: timer-box}"></div>
+<div th:replace="~{Components :: toast-box}"></div>
+<script th:replace="~{Components :: axcel-game}"></script>
+<div th:replace="~{Components :: axcel-sprite-logic}"></div>
 
 <script>
     refresh();

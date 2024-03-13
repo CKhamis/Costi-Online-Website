@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xml:th="https://www.thymeleaf.org">
-<head th:replace="Components :: head('COMT Announcements')"></head>
+<head th:replace="~{Components :: head('COMT Announcements')}"></head>
 <body class="bg-1 text-1">
-<div th:replace="moderator/ModeratorComponents :: moderatorNav"></div>
+<div th:replace="~{moderator/ModeratorComponents :: moderatorNav}"></div>
 <main class="container">
     <div class="row d-flex">
         <div class="col-12 col-md-7 h-100">
@@ -84,9 +84,9 @@
 <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 99" id="toast-container">
 </div>
 
-<div th:replace="Components :: footer"></div>
-<div th:replace="Components :: JS"></div>
-<div th:replace="moderator/ModeratorComponents :: toast-scripts"></div>
+<div th:replace="~{Components :: footer}"></div>
+<div th:replace="~{Components :: JS}"></div>
+<div th:replace="~{moderator/ModeratorComponents :: toast-scripts}"></div>
 <script>
     getData();
     //elements

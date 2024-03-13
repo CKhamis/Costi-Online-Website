@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xml:th="https://www.thymeleaf.org">
-<head th:replace="Components :: head('Home')"></head>
+<head th:replace="~{Components :: head('Home')}"></head>
 <body class="bg-1 text-1">
-<div th:replace="Components :: main-navigation"></div>
+<div th:replace="~{Components :: main-navigation}"></div>
 <div class="p-0 m-0 overflow-hidden">
     <div class="container-fluid p-0 overflow-hidden bg-black" style="height:600px">
         <div class="position-absolute px-5" style="z-index:1;height:600px; width:100%">
@@ -20,21 +20,21 @@
 </div>
 
 <div class="container mt-3">
-    <div th:replace="Components :: announcements" class="container mt-3"></div>
-    <div th:replace="Components :: flash" class="mt-2"></div>
+    <div th:replace="~{Components :: announcements}" class="container mt-3"></div>
+    <div th:replace="~{Components :: flash}" class="mt-2"></div>
 </div>
 
 <main id="api-content">
-    <div th:replace="Components :: await-content"></div>
+    <div th:replace="~{Components :: await-content}"></div>
 </main>
 
-<div th:replace="Components :: footer"></div>
-<div th:replace="Components :: timer-box"></div>
-<div th:replace="Components :: toast-box"></div>
-<div th:replace="Components :: JS"></div>
-<div th:replace="Components :: axcel-sprite-logic"></div>
-<div th:replace="Components :: announcementScript"></div>
-<div th:replace="Components :: dialogue-box"></div>
+<div th:replace="~{Components :: footer}"></div>
+<div th:replace="~{Components :: timer-box}"></div>
+<div th:replace="~{Components :: toast-box}"></div>
+<div th:replace="~{Components :: JS}"></div>
+<div th:replace="~{Components :: axcel-sprite-logic}"></div>
+<div th:replace="~{Components :: announcementScript}"></div>
+<div th:replace="~{Components :: dialogue-box}"></div>
 <script>
     let subtitles = ["Costi's favorite website", "I haven't seen you in a BILLION years!", "Croods", "Chelsea Stacie Ingrid Marla Darla", "MAAAAARRIOOOOO!", "A project by Costi", "An interdimensional project",
     "'Ello", "Bro what?", "What's puopping", "Death, Dying, Religion", "ur mum", "Free Taiwan 🇹🇼 "]
