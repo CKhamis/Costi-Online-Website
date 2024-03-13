@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
-
+import org.springframework.data.relational.core.mapping.Table;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -24,6 +24,7 @@ import java.util.List;
 @EqualsAndHashCode
 @Entity
 @NoArgsConstructor
+@Table(name = "light")
 public class Light {
 
     @Id

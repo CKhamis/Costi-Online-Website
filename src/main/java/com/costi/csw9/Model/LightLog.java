@@ -4,7 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
+import org.springframework.data.relational.core.mapping.Table;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -14,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 @EqualsAndHashCode
 @Entity
 @NoArgsConstructor
+@Table(name = "light_log")
 public class LightLog {
     @Id
     @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)

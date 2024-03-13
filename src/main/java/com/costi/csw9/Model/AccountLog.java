@@ -2,7 +2,7 @@ package com.costi.csw9.Model;
 
 import com.costi.csw9.Model.DTO.ModeratorAccountLogResponse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import org.springframework.data.relational.core.mapping.Table;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 

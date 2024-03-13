@@ -8,7 +8,7 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
+import org.springframework.data.relational.core.mapping.Table;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -21,10 +21,11 @@ import java.util.Collections;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
+@Table(name = "user")
 public class User implements UserDetails {
 
    @Id
-   @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
+   @SequenceGenerator(name = "user_sequence")
    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "user_sequence")
    private Long id;
    @Size(max = 20, message = "First name can only be 20 characters or less")
