@@ -235,390 +235,542 @@
 <script th:fragment="default-content">
   let homeHTML = `
 
-  <div class="container mt-3">
-        <div class="row mt-2" id="quick-links">
-            <div class="col col-12 col-lg-4">
-                <div class="border-box text-1 p-4 mb-4">
-                    <h4 class="fw-bold">📖View Costipedia</h4>
-                    <p>Costipedia is a wikipedia like feature that is about Costi</p>
-                    <a href="/Wiki" type="button" class="btn btn-primary btn-sm">Explore Costipedia</a>
-                </div>
+  <style>
+    .zoom-in {
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        position: relative;
+        width: 100%;
+        padding: 1.5rem;
+        transition: padding 0.3s ease;
+    }
+    .zoom-in:hover{
+        padding: .5rem;
+    }
+
+    #quick-links > div:hover{
+        background:rgba(150, 150, 150, .1);
+    }
+
+    .internal-zoom-in{
+        padding: .5rem;
+        transition: padding 0.3s ease;
+    }
+    .internal-zoom-in:hover{
+        padding:0;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-center rounded-3 align-items-end p-4 tiled-COW-background mb-3"
+         style="position: relative;">
+        <h2 class="fw-bold fs-1">Frequently Visited Pages</h2>
+    </div>
+    <div class="row" id="quick-links">
+        <div class="col-4 col-lg-2">
+            <a href="https://costionline.com/About">
+                <img src="https://costionline.com/icons/Contact.svg" alt="About" class="img-fluid zoom-in"/>
+                <p class="text-center fw-bold text-1 fs-4">About Me</p>
+            </a>
+        </div>
+        <div class="col-4 col-lg-2">
+            <a href="https://costionline.com/Newsroom">
+                <img src="https://costionline.com/icons/Newsroom.svg" alt="Newsroom" class="img-fluid zoom-in"/>
+                <p class="text-center fw-bold text-1 fs-4">Newsroom</p>
+            </a>
+        </div>
+        <div class="col-4 col-lg-2">
+            <a href="https://costionline.com/Labs/LED">
+                <img src="https://costionline.com/icons/LED.svg" alt="LED" class="img-fluid zoom-in"/>
+                <p class="text-center fw-bold text-1 fs-4">LED Controller</p>
+            </a>
+        </div>
+        <div class="col-4 col-lg-2">
+            <a href="https://costionline.com/Media">
+                <img src="https://costionline.com/icons/Media.svg" alt="Media" class="img-fluid zoom-in"/>
+                <p class="text-center fw-bold text-1 fs-4">Media</p>
+            </a>
+        </div>
+        <div class="col-4 col-lg-2">
+            <a href="https://costionline.com/Wiki">
+                <img src="https://costionline.com/icons/Wiki.svg" alt="Wiki" class="img-fluid zoom-in"/>
+                <p class="text-center fw-bold text-1 fs-4">Wiki</p>
+            </a>
+        </div>
+        <div class="col-4 col-lg-2">
+            <a href="https://costionline.com/Projects">
+                <img src="https://costionline.com/icons/Projects.svg" alt="Projects" class="img-fluid zoom-in"/>
+                <p class="text-center fw-bold text-1 fs-4">Projects</p>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5" id="highlights">
+    <div class="d-flex justify-content-center rounded-3 align-items-end p-4 tiled-COW-background mb-3" style="position: relative;">
+        <h2 class="fw-bold fs-1">Recent Highlights</h2>
+    </div>
+    <div id="slide-content"></div>
+    <a href="/Newsroom">
+        <p class="text-1 text-decoration-underline">View more in Costi Newsroom ></p>
+    </a>
+</div>
+
+<div class="container-fluid overflow-hidden px-0 pt-3" id="axcel-container">
+    <img id="axcel-running" src="/images/games/axcel/running.gif" alt="axcel" class="position-relative"
+         style="height: 0; top:0;left:0;"/>
+    <img id="axcel-waiting" src="/images/games/axcel/sitting.gif" alt="axcel" class="position-relative mx-auto"
+         style="height: 0; top:0;left:50%;transform:translate(-50%, 0%);"/>
+</div>
+
+<div class="container mt-5" id="about">
+    <div class="row">
+        <div class="col-md-6 col-xs-12 mb-4">
+            <div class="border-box text-1 p-4">
+                <h3 class="fw-bold">What is Costi Online?</h3>
+                <p class="fs-4">Costi Online is a personal website I made to share my coding projects, video projects,
+                    wiki, Minecraft server, and more.
+                </p>
+                <img src="/images/games/axcel/toys/Bear.png" class="sprite" style="height:40px;" data-sprite-name="bear" alt="toy"/>
             </div>
-            <div class="col col-12 col-lg-4">
-                <div class="border-box text-1 p-4  mb-4">
-                    <h4 class="fw-bold">🖼️Stay Up to Date</h4>
-                    <p>Check out Costi Newsroom, featuring posts I make in real time!</p>
-                    <a href="/Newsroom" type="button" class="btn btn-primary btn-sm">Newsroom</a>
-                </div>
+        </div>
+        <div class="col-md-6 col-xs-12 mb-4">
+            <div class="border-box text-1 p-4">
+                <h3 class="fw-bold">Who am I?</h3>
+                <p class="fs-4">Hi! I am Costi (pronounced "Coasty"). I am a computer science student at San Jose State
+                    University.</p>
+                <a href="/About#about-me" type="button" class="btn btn-primary btn-sm">About Me</a>
             </div>
-            <div class="col col-12 col-lg-4">
-                <div class="border-box text-1 p-4 mb-4">
-                    <h4 class="fw-bold">🧪Check Out Previous Projects</h4>
-                    <p>View previous coding-based projects I have made from over a decade ago</p>
-                    <a href="/Projects" type="button" class="btn btn-primary btn-sm">View Projects</a>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between rounded-3 align-items-end p-4 tiled-COW-background mb-3"
+         style="position: relative;">
+        <img class="position-absolute" style="bottom: 0px; left: 0;"
+             src="https://costionline.com/Downloads/Uploads/83290571-61d3-431d-a593-b9cd4fe40131" alt="bird"/>
+        <div></div>
+        <h2 class="fw-bold fs-1">Recent Trips</h2>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-6 col-lg-4 mt-3">
+            <a href="https://costionline.com/Newsroom/49/view">
+                <img src="https://costionline.com/Downloads/Uploads/9eb9fa88-4e19-479a-8ee0-e42195b1f349"
+                     class="img-fluid d-block rounded-3 internal-zoom-in" loading="lazy"
+                     style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;">
+                <h4 class="fw-bold text-center text-1">Mexico</h4>
+            </a>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mt-3">
+            <a href="https://costionline.com/Newsroom/51/view">
+                <img src="https://costionline.com/Downloads/Uploads/b6561cd6-53c9-4a08-853f-87686b393681"
+                     class="img-fluid d-block rounded-3 internal-zoom-in" loading="lazy"
+                     style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;">
+                <h4 class="fw-bold text-center text-1">Disneyland</h4>
+            </a>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mt-3">
+            <a href="https://costionline.com/Newsroom/50/view">
+                <img src="https://costionline.com/Downloads/Uploads/83e2dadd-3797-4a10-98c4-924b6bf8d6cb"
+                     class="img-fluid d-block rounded-3 internal-zoom-in" loading="lazy"
+                     style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%">
+                <h4 class="fw-bold text-center text-1">San Francisco</h4>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between rounded-3 align-items-center p-4 tiled-COW-background mb-3" style="position: relative;">
+        <h2 class="fw-bold fs-1">Fall 2023 Projects</h2>
+        <img style="width:70px" src="https://costionline.com/icons/Projects.svg" alt="Projects icon"/>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-md-6 col-lg-4 mt-3">
+            <a href="https://costionline.com/Projects">
+                <img src="https://costionline.com/images/webpageImages/SongSnap.webp" class="img-fluid d-block rounded-3 internal-zoom-in" loading="lazy" style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;" alt="song snap">
+                <h5 class="fw-bold text-center text-1">Song Snap</h5>
+            </a>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mt-3">
+            <a href="https://costionline.com/Projects">
+                <img src="https://costionline.com/images/webpageImages/Let%20it%20Fly.webp" class="img-fluid d-block rounded-3 internal-zoom-in" loading="lazy" style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;" alt="let it fly">
+                <h5 class="fw-bold text-center text-1">Let it Fly</h5>
+            </a>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mt-3">
+            <a href="/Projects">
+                <img src="/images/webpageImages/Game.webp" class="img-fluid d-block rounded-3 internal-zoom-in" loading="lazy" style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;" alt="mars: first encounter">
+                <h5 class="fw-bold text-center text-1">Mars: First Encounter</h5>
+            </a>
+        </div>
+    </div>
+
+    <p class="fs-4 mt-4">
+        The fall 2023 was the start of my final year in SJSU for obtaining a degree in computer science. During this semester, I have worked on three group projects. Each of these projects have a substantially different application stack, purpose, and development style. Two of the three projects are open source and available on my GitHub account. Please see the projects page for more information.
+    </p>
+    <a href="/Projects" type="button" class="btn btn-dark">Projects</a>
+</div>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between rounded-3 align-items-end p-4 tiled-COW-background mb-3"
+         style="position: relative;">
+        <img class="position-absolute" style="bottom: 0px; left: 0;height:120px"
+             src="https://costionline.com/Downloads/Uploads/237df8fa-7164-462d-9a5b-e953c07a4b34" alt="wesley"/>
+        <div></div>
+        <h2 class="fw-bold fs-1">Dragonboat Races</h2>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-md-6 col-lg-4 mt-3">
+            <a href="https://costionline.com/Newsroom/48/view">
+                <img src="https://costionline.com/Downloads/Uploads/b4a0ddb6-fb25-46f6-95ac-0d6a28cb82d7" class="img-fluid d-block rounded-3 internal-zoom-in" loading="lazy" style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;" alt="college cup">
+                <h5 class="fw-bold text-center text-1">College Cup Race</h5>
+            </a>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mt-3">
+            <a href="https://costionline.com/Newsroom/36/view">
+                <img src="https://costionline.com/Downloads/Uploads/4faa8306-c175-46de-a5ef-0daa6d5d2ed3" class="img-fluid d-block rounded-3 internal-zoom-in" loading="lazy" style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;" alt="long beach">
+                <h5 class="fw-bold text-center text-1">Long Beach Race</h5>
+            </a>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mt-3">
+            <a href="https://costionline.com/Newsroom/19/view">
+                <img src="https://costionline.com/Downloads/Uploads/1a2b079b-4c4e-4b71-a9c7-e5dcd66f315f" class="img-fluid d-block rounded-3 internal-zoom-in" loading="lazy" style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;" alt="Regatta">
+                <h5 class="fw-bold text-center text-1">Regatta Race</h5>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5" id="new">
+    <div class="d-flex justify-content-between rounded-3 align-items-center p-4 tiled-COW-background mb-3" style="position: relative;">
+        <img style="width:90px" src="https://costionline.com/icons/Logo.svg" alt="Costi Online Logo"/>
+        <div></div>
+        <h2 class="fw-bold fs-1">What's New?</h2>
+    </div>
+    <p class="fs-4">
+        Costi Online is now able to serve <strong>dynamic content</strong>. This allows me to add, remove, or change the
+        content hosted on this site in the home, projects, media, wiki, newsroom, Minecraft, tree, about, and other
+        pages. Although this change may seem mundane, it unlocks powerful tools such as referencing newsroom or wiki
+        posts. I can also create seasonal or event based content on demand. Stay tuned for more changes!
+    </p>
+    <a href="https://github.com/CKhamis/Costi-Online-Website" type="button" class="btn btn-dark btn-sm">See Costi Online on GitHub</a>
+</div>
+
+<div class="container-fluid p-0 mt-5" id="media">
+    <div class="container-fluid">
+        <div class="container py-5">
+            <img src="/icons/CM White.svg" alt="costi media logo" class="img-fluid mb-2"/>
+            <p class="fs-4 text-white">View various video, image, and flyer materials I made. This features projects I
+                created since I was in sixth grade in chronological order.</p>
+            <a href="/Media" class="btn btn-primary" aria-current="page">Visit Costi Media</a>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid p-0 mt-5" id="wiki">
+    <div class="container-fluid">
+
+        <div class="container py-5">
+            <div class="row">
+                <div class="d-none d-md-block col-md-7 ">
+                    <div class="row" id="wiki-preview-container"></div>
+                </div>
+                <div class="col-12 col-md-5">
+                    <h2 class="fw-bold text-white">Costipedia</h2>
+                    <p class="fs-4 text-white">Costipedia is a Wiki that contains pages relevant to myself &
+                        friends.</p>
+                    <a href="/Wiki" class="btn btn-primary" aria-current="page">Visit Costipedia</a>
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="container" id="highlights">
-        <h2 class="pb-2 border-bottom">Recent Highlights</h2>
-        <div id="slide-content"></div>
-        <a href="/Newsroom"><p class="text-1 text-decoration-underline">View more in Costi Newsroom ></p></a>
-    </div>
-
-    <div class="container-fluid overflow-hidden px-0 pt-3" id="axcel-container">
-        <img id="axcel-running" src="/images/games/axcel/running.gif" alt="axcel" class="position-relative" style="height: 0; top:0;left:0;"/>
-        <img id="axcel-waiting" src="/images/games/axcel/sitting.gif" alt="axcel" class="position-relative mx-auto" style="height: 0; top:0;left:50%;transform:translate(-50%, 0%);"/>
-    </div>
-
-    <div class="container" id="about">
-        <div class="row">
-            <div class="col-md-6 col-xs-12 mb-4">
-                <div class="border-box text-1 p-4">
-                    <h3 class="fw-bold">What is Costi Online?</h3>
-                    <p class="fs-4">Costi Online is a personal website I made to share my coding projects, video projects, wiki, Minecraft server, and more.</p>
-                </div>
-            </div>
-            <div class="col-md-6 col-xs-12 mb-4">
-                <div class="border-box text-1 p-4">
-                    <h3 class="fw-bold">Who am I?</h3>
-                    <p class="fs-4">Hi! I am Costi (pronounced "Coasty"). I am a computer science student at San Jose State University.</p>
-                    <a href="/About#about-me" type="button" class="btn btn-primary btn-sm">About Me</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="container pb-5" id="new">
-        <h2 class="pb-2 border-bottom">New In Costi Online 10.0</h2>
-        <p class="fs-4">
-        Costi Online is now able to serve <strong>dynamic content</strong>. This allows me to add, remove, or change the content hosted on this site in the home, projects, media, wiki, newsroom, Minecraft, tree, about, and other pages. Although this change may seem mundane, it unlocks powerful tools such as referencing newsroom or wiki posts. I can also create seasonal or event based content on demand. Stay tuned for more changes!
-        </p>
-        <a href="https://github.com/CKhamis/Costi-Online-Website" type="button" class="btn btn-dark btn-sm">See Costi Online on GitHub</a>
-    </div>
-
-    <div class="container-fluid p-0 gradient mb-3" id="projects">
-        <div class="container-fluid">
-            <div class="container py-5">
-                <div class="row">
-                    <div class="col-lg-6 col-md-8 col-xs-12">
-                        <h2 class="fw-bold">Project Showcase</h2>
-                        <p class="text-secondary">Coding projects starting from early 2011</p>
-                        <p class="fs-4">Check out various coding projects I made over time and see how my skills progressed</p>
-                        <h5 class="fw-bold">Project Highlights</h5>
-                        <div class="row">
-                            <div class="col-lg-4 col-sm-6 col-xs-6">
-                                <a href="/Projects#CIPolarium"><p>[IN]GRID Polarium</p></a>
-                            </div>
-                            <div class="col-lg-4 col-sm-6 col-xs-6">
-                                <a href="/Projects#CNGrid"><p>[NEXT]GRID</p></a>
-                            </div>
-                            <div class="col-lg-4 col-sm-6 col-xs-6">
-                                <a href="/Projects#CIPolaris"><p>[IN]GRID Polaris</p></a>
-                            </div>
-                        </div>
-
-                        <a href="/Projects" class="btn btn-primary" aria-current="page">See Projects page</a>
-                        <img src="/images/games/axcel/toys/Bear.png" class="sprite" style="height:40px;" data-sprite-name="bear" alt="toy"/>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="container-fluid p-0 mb-3" id="media">
-        <div class="container-fluid">
-            <div class="container py-5">
-                <img src="/icons/CM White.svg" alt="costi media logo" class="img-fluid mb-2"/>
-                <p class="fs-4 text-white">View various video, image, and flyer materials I made. This features projects I created since I was in sixth grade in chronological order.</p>
-                <a href="/Media" class="btn btn-primary" aria-current="page">Visit Costi Media</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="container-fluid p-0" id="wiki">
-        <div class="container-fluid">
-
-            <div class="container py-5">
-                <div class="row">
-                    <div class="d-none d-md-block col-md-7 ">
-                        <div class="row" id="wiki-preview-container"></div>
-                    </div>
-                    <div class="col-12 col-md-5">
-                        <h2 class="fw-bold text-white">Costipedia</h2>
-                        <p class="fs-4 text-white">Costipedia is a Wiki that contains pages relevant to myself & friends.</p>
-                        <a href="/Wiki" class="btn btn-primary" aria-current="page">Visit Costipedia</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+</div>
 
   `;
   let wikiHTML = `<br style="opacity: 0" />`;
   let aboutHTML = `
 
-  <div class="container py-5" id="contents">
-        <h2 class="text-center fw-bold">Page Contents</h2>
-        <p class="text-center pb-2 border-bottom">Chose a part of this page to jump to, or continue scrolling to see everything</p>
+  <style>
+    .zoom-in {
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        position: relative;
+        width: 100%;
+        padding: 1.5rem;
+        transition: padding 0.3s ease;
+    }
+    .zoom-in:hover{
+        padding: .5rem;
+    }
 
-        <div class="container">
-            <div class="row">
-                <div class="col-3 mb-4">
-                    <a href="#about-me" class="m-0 p-0">
-                        <img src="/icons/Constantine Logo v5.svg" class="img-fluid logo-list" alt="My logo">
-                        <h5 class="fw-bold text-center text-1">About Me</h5>
-                    </a>
-                </div>
-                <div class="col-3 mb-4">
-                    <a href="#career-history" class="m-0 p-0">
-                        <img src="/icons/Work.svg" class="img-fluid logo-list" alt="Work">
-                        <h5 class="fw-bold text-center text-1">Career</h5>
-                    </a>
-                </div>
-                <div class="col-3 mb-4">
-                    <a href="#education" class="m-0 p-0">
-                        <img src="/icons/Education.svg" class="img-fluid logo-list" alt="Education">
-                        <h5 class="fw-bold text-center text-1">Education</h5>
-                    </a>
-                </div>
-                <div class="col-3 mb-4">
-                    <a href="#website" class="m-0 p-0">
-                        <img src="/icons/Logo.svg" class="img-fluid logo-list" alt="website">
-                        <h5 class="fw-bold text-center text-1">Website</h5>
-                    </a>
-                </div>
-            </div>
+    #quick-links > div:hover{
+        background:rgba(150, 150, 150, .1);
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-center rounded-3 align-items-end p-4 tiled-COW-background mb-3"
+         style="position: relative;">
+        <h2 class="fw-bold fs-1">Page Contents</h2>
+    </div>
+    <div class="row" id="quick-links">
+        <div class="col-4 col-lg-2">
+            <a href="#about-me">
+                <img src="/icons/Contact.svg" alt="About" class="img-fluid zoom-in"/>
+                <p class="text-center fw-bold text-1 fs-4">About Me</p>
+            </a>
+        </div>
+        <div class="col-4 col-lg-2">
+            <a href="#career">
+                <img src="/icons/Work.svg" alt="Career" class="img-fluid zoom-in"/>
+                <p class="text-center fw-bold text-1 fs-4">Career</p>
+            </a>
+        </div>
+        <div class="col-4 col-lg-2">
+            <a href="#education">
+                <img src="/icons/Education.svg" alt="Education" class="img-fluid zoom-in"/>
+                <p class="text-center fw-bold text-1 fs-4">Education</p>
+            </a>
+        </div>
+        <div class="col-4 col-lg-2">
+            <a href="#website">
+                <img src="/icons/Logo.svg" alt="Costi online" class="img-fluid zoom-in"/>
+                <p class="text-center fw-bold text-1 fs-4">Costi Online</p>
+            </a>
         </div>
     </div>
+</div>
 
-    <div class="container-fluid bg-2" id="about-me">
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12 col-lg-5 pt-5 px-5 pb-lg-5">
-                    <img class="img-fluid pb-3" src="/images/About/Costi.webp" style="width: 100%"/>
-                    <h1 class="fw-bold text-uppercase">Constantine Khamis</h1>
-                    <p class="fs-4">Student intern</p>
-                    <a href="https://www.linkedin.com/in/constantin-khamis/"><img src="/icons/LinkedIn.svg" class="img-fluid" style="width:40px;"/></a>
-                    <a href="https://github.com/CKhamis"><img src="/icons/GitHub.svg" class="img-fluid" style="width:40px; margin: 0 10px 0 10px;" /></a>
-                    <a href="https://www.youtube.com/@costimedia/"><img src="/icons/YouTube.svg" class="img-fluid" style="width:40px;" /></a>
-                </div>
-                <div class="col-xs-12 col-lg-7 p-5">
-                    <h3 class="fw-bold">About Me</h3>
-                    <p class="fw-4 fs-4 mt-2">
-                        I am Costi, often pronounced as "Coasty." Currently, I am a dedicated student at San Jose State University, diligently pursuing my Bachelor's degree in Computer Science with an anticipated graduation in the spring of 2024. My passion for exploring cutting-edge technological advancements has been a constant since I was eight years old.
-                        <br />
-                        Beyond my academic pursuits, I allocate my free time purposefully. I am enthusiastic about socializing with friends, engaging in coding projects, creating videos, and indulging in video games. Professionally, I have garnered over three years of invaluable experience, currently serving as a cybersecurity intern for the City of San Jose.
-                    </p>
-                    <h5 class="fw-bold">Skills</h5>
-                    <div class="row">
-                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                            <p class="mb-0 mb-md-3">HTML & CSS</p>
-                        </div>
-                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                            <p class="mb-0 mb-md-3">JavaScript & D3.js</p>
-                        </div>
-                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                            <p class="mb-0 mb-md-3">Bootstrap 5</p>
-                        </div>
-                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                            <p class="mb-0 mb-md-3">Networking</p>
-                        </div>
-                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                            <p class="mb-0 mb-md-3">Java</p>
-                        </div>
-                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                            <p class="mb-0 mb-md-3">Python</p>
-                        </div>
-                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                            <p class="mb-0 mb-md-3">Java Spring</p>
-                        </div>
-                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                            <p class="mb-0 mb-md-3">Java Hibernate</p>
-                        </div>
-                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                            <p class="mb-0 mb-md-3">Adobe Illustrator</p>
-                        </div>
-                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                            <p class="mb-0 mb-md-3">Adobe Premiere Pro</p>
-                        </div>
-                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                            <p class="mb-0 mb-md-3">Adobe Xd</p>
-                        </div>
-                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                            <p class="mb-0 mb-md-3">Adobe After Effects</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="container mt-5" id="career-history">
-        <h2 class="fw-bold text-center border-bottom mb-4">Career History</h2>
+<div class="container-fluid bg-2 mt-5" id="about-me">
+    <div class="container">
         <div class="row">
-            <div class="col-12 col-md-6 col-lg-4 mb-5">
-                <div class="card border-box">
-                    <img src="/images/About/SanJose.jpg" class="card-img-top" alt="San Jose">
-                    <div class="card-body px-5 blue-v-gradient">
-                        <h5 class="card-title fw-bold fs-4">City of San Jose</h5>
-                        <p class="text-secondary">Cyber-security Intern | Since Jan 2020</p>
-                        <p class="card-text fs-5">
-                            Initially starting as a video producer for San Jose's 311 advertising campaign, I am currently working with the city's internal cyber security team. I handled the rollout of MFA to thousands of employees, completed hundreds of tickets, and work regularly with VIPs such as city councilmembers.
-                        </p>
-                    </div>
-                </div>
+            <div class="col-xs-12 col-lg-5 pt-5 px-5 pb-lg-5">
+                <img class="img-fluid pb-3" src="/images/About/Costi.webp" style="width: 100%"/>
+                <h1 class="fw-bold text-uppercase">Constantine Khamis</h1>
+                <p class="fs-4">Student intern</p>
+                <a href="https://www.linkedin.com/in/constantin-khamis/"><img src="/icons/LinkedIn.svg" class="img-fluid" style="width:40px;"/></a>
+                <a href="https://github.com/CKhamis"><img src="/icons/GitHub.svg" class="img-fluid" style="width:40px; margin: 0 10px 0 10px;"/></a>
+                <a href="https://www.youtube.com/@costimedia/"><img src="/icons/YouTube.svg" class="img-fluid" style="width:40px;"/></a>
             </div>
-            <div class="col-12 col-md-6 col-lg-4 mb-5">
-                <div class="card border-box">
-                    <img src="/images/About/HomeDepot.jpg" class="card-img-top" alt="Home Depot">
-                    <div class="card-body px-5 blue-v-gradient">
-                        <h5 class="card-title fw-bold fs-4">The Home Depot</h5>
-                        <p class="text-secondary">Order Picker | Nov 2020 - May 2021</p>
-                        <p class="card-text fs-5">
-                            As an order picker, I helped hundreds of customers a month with online orders. I also quickly developed a large knowledge base of where our thousands of products are placed within my branch and assisted customers with finding what they need.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4 mb-5">
-                <div class="card border-box">
-                    <img src="/images/About/FiveGuys.jpg" class="card-img-top" alt="Five Guys">
-                    <div class="card-body px-5 blue-v-gradient">
-                        <h5 class="card-title fw-bold fs-4">Five Guys</h5>
-                        <p class="text-secondary">Senior Crew Member | Mar 2019 - Apr 2021</p>
-                        <p class="card-text fs-5">
-                            Over the course of my 2+ years experience at Five Guys, I have learned every position available and did them well. This includes back prep, grill, register, fries, expo, quality control, restocking, dressing, and many miscellaneous tasks. I have also helped train a large portion of staff.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4 mb-5">
-                <div class="card border-box">
-                    <img src="/images/About/TM.jpg" class="card-img-top" alt="TM">
-                    <div class="card-body px-5 blue-v-gradient">
-                        <h5 class="card-title fw-bold fs-4">ThreatMetrix</h5>
-                        <p class="text-secondary">Student Intern | 2015</p>
-                        <p class="card-text fs-5">
-                            As an intern at ThreatMetrix, I was exposed to the process of hiring individuals at startups, office work culture, and get a general feel for working downtown. I was tasked with making a coding project that utilized D3.js, a JavaScript framework.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <div class="container-fluid p-0 gradient" id="education">
-        <div class="container-fluid">
-            <div class="container py-5">
+            <div class="col-xs-12 col-lg-7 p-5">
+                <h3 class="fw-bold">About Me</h3>
+                <p class="fw-4 fs-4 mt-2">
+                    I am Costi, often pronounced as "Coasty." Currently, I am a dedicated student at San Jose State University, diligently pursuing my Bachelor's degree in Computer Science with an anticipated graduation in the spring of 2024. My passion for exploring cutting-edge technological advancements has been a constant since I was eight years old.
+                    <br/>
+                    Beyond my academic pursuits, I allocate my free time purposefully. I am enthusiastic about socializing with friends, engaging in coding projects, creating videos, and indulging in video games. Professionally, I have garnered over three years of invaluable experience, currently serving as a cybersecurity intern for the City of San Jose.
+                </p>
+                <h5 class="fw-bold">Skills</h5>
                 <div class="row">
-                    <div class="col-lg-6 col-md-8 col-xs-12">
-                        <h2 class="fw-bold">Education</h2>
-                        <p class="text-secondary">Graduating in Spring 2024</p>
-                        <p class="fs-4">I am currently computer science student at San Jose State University. I am working on completing my upper division classes and finishing my bachelor's degree.</p>
-                        <h5 class="fw-bold">Class Highlights</h5>
-                        <div class="row">
-                            <div class="col-lg-4 col-sm-6 col-xs-6">
-                                <p>Server Programming</p>
-                            </div>
-                            <div class="col-lg-4 col-sm-6 col-xs-6">
-                                <p>Operating Systems</p>
-                            </div>
-                            <div class="col-lg-4 col-sm-6 col-xs-6">
-                                <p>CPU Architecture</p>
-                            </div>
-                            <div class="col-lg-4 col-sm-6 col-xs-6">
-                                <p>OO Programming</p>
-                            </div>
-                            <div class="col-lg-4 col-sm-6 col-xs-6">
-                                <p>Advanced Python</p>
-                            </div>
-                            <div class="col-lg-4 col-sm-6 col-xs-6">
-                                <p>Programming Paradigms</p>
-                            </div>
-                            <div class="col-lg-4 col-sm-6 col-xs-6">
-                                <p>Data & Algorithms</p>
-                            </div>
-                        </div>
-                        <img src="images/games/axcel/toys/Terence Plush.png" class="sprite" style="height:40px;" data-sprite-name="terence"/>
-                        <a href="https://github.com/CKhamis" class="btn btn-info" aria-current="page">See Github page</a>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                        <p class="mb-0 mb-md-3">HTML & CSS</p>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                        <p class="mb-0 mb-md-3">JavaScript & D3.js</p>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                        <p class="mb-0 mb-md-3">Bootstrap 5</p>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                        <p class="mb-0 mb-md-3">Networking</p>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                        <p class="mb-0 mb-md-3">Java</p>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                        <p class="mb-0 mb-md-3">Python</p>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                        <p class="mb-0 mb-md-3">Java Spring</p>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                        <p class="mb-0 mb-md-3">Java Hibernate</p>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                        <p class="mb-0 mb-md-3">Adobe Illustrator</p>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                        <p class="mb-0 mb-md-3">Adobe Premiere Pro</p>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                        <p class="mb-0 mb-md-3">Adobe Xd</p>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                        <p class="mb-0 mb-md-3">Adobe After Effects</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="container p-0 mt-5" id="website">
-        <div class="container-fluid">
-            <h2 class="fw-bold text-center border-bottom mb-4">About Costi Online</h2>
-            <p class="fs-4">
-                In May 2022, I embarked on the development journey of Costi Online, a personal project conceived with the primary goal of showcasing my Minecraft worlds. Beyond this, it also served as a platform to rigorously test and hone my skills in various domains, including front-end and back-end development, hosting infrastructure, and user experience (UX) design.
-                <br />
-                <br />
-                Originally conceived as a companion website for my self-hosted Minecraft server, Costi Online has undergone a remarkable evolution, expanding its scope to encompass a wider array of topics and functionalities.
-                <br />
-                <br />
-                The genesis of this personal website was not without precedent. Prior attempts at crafting my own digital presence had been made during my coding journey, but none had reached a state of full development or readiness for deployment. It took approximately a month of dedicated effort to bring forth the inaugural publicly released version of Costi Online, which was initially focused exclusively on the Minecraft server.
-                <br />
-                <br />
-                Since then, the website has seen a continuous influx of features and improvements, with some changes being more substantial than others. Notably, the transition from an H2 database to MySQL marked a pivotal point in its development, enhancing its data handling capabilities. Additionally, the incorporation of an API has empowered the website with greater interactivity and flexibility. Furthermore, the entire platform now runs seamlessly on a self-hosted Linux machine, underscoring my commitment to managing every aspect of its infrastructure.
-                <br />
-                <br />
-                Costi Online draws inspiration not only from my prior work but also from various personal websites I've encountered over time. It stands as a testament to my dedication to ongoing self-improvement and my passion for presenting my technical skills and projects to the digital world.
-            </p>
+<div class="container mt-5" id="career-history">
+    <h2 class="fw-bold text-center border-bottom mb-4">Career History</h2>
+    <div class="row">
+        <div class="col-12 col-md-6 col-lg-4 mb-5">
+            <div class="card border-box">
+                <img src="/images/About/SanJose.jpg" class="card-img-top" alt="San Jose">
+                <div class="card-body px-5 blue-v-gradient">
+                    <h5 class="card-title fw-bold fs-4">City of San Jose</h5>
+                    <p class="text-secondary">Cyber-security Intern | Since Jan 2020</p>
+                    <p class="card-text fs-5">
+                        Initially starting as a video producer for San Jose's 311 advertising campaign, I am currently working with the city's internal cyber security team. I handled the rollout of MFA to thousands of employees, completed hundreds of tickets, and work regularly with VIPs such as city councilmembers.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mb-5">
+            <div class="card border-box">
+                <img src="/images/About/HomeDepot.jpg" class="card-img-top" alt="Home Depot">
+                <div class="card-body px-5 blue-v-gradient">
+                    <h5 class="card-title fw-bold fs-4">The Home Depot</h5>
+                    <p class="text-secondary">Order Picker | Nov 2020 - May 2021</p>
+                    <p class="card-text fs-5">
+                        As an order picker, I helped hundreds of customers a month with online orders. I also quickly developed a large knowledge base of where our thousands of products are placed within my branch and assisted customers with finding what they need.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mb-5">
+            <div class="card border-box">
+                <img src="/images/About/FiveGuys.jpg" class="card-img-top" alt="Five Guys">
+                <div class="card-body px-5 blue-v-gradient">
+                    <h5 class="card-title fw-bold fs-4">Five Guys</h5>
+                    <p class="text-secondary">Senior Crew Member | Mar 2019 - Apr 2021</p>
+                    <p class="card-text fs-5">
+                        Over the course of my 2+ years experience at Five Guys, I have learned every position available and did them well. This includes back prep, grill, register, fries, expo, quality control, restocking, dressing, and many miscellaneous tasks. I have also helped train a large portion of staff.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mb-5">
+            <div class="card border-box">
+                <img src="/images/About/TM.jpg" class="card-img-top" alt="TM">
+                <div class="card-body px-5 blue-v-gradient">
+                    <h5 class="card-title fw-bold fs-4">ThreatMetrix</h5>
+                    <p class="text-secondary">Student Intern | 2015</p>
+                    <p class="card-text fs-5">
+                        As an intern at ThreatMetrix, I was exposed to the process of hiring individuals at startups, office work culture, and get a general feel for working downtown. I was tasked with making a coding project that utilized D3.js, a JavaScript framework.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="container-fluid p-0 gradient" id="education">
+    <div class="container-fluid">
+        <div class="container py-5">
             <div class="row">
-                <div class="feature col-sm-12 col-md-6 col-lg-3">
-                    <div class="feature-icon">
-                        <h1>💻</h1>
+                <div class="col-lg-6 col-md-8 col-xs-12">
+                    <h2 class="fw-bold">Education</h2>
+                    <p class="text-secondary">Graduating in Spring 2024</p>
+                    <p class="fs-4">I am currently computer science student at San Jose State University. I am working on completing my upper division classes and finishing my bachelor's degree.</p>
+                    <h5 class="fw-bold">Class Highlights</h5>
+                    <div class="row">
+                        <div class="col-lg-4 col-sm-6 col-xs-6">
+                            <p>Server Programming</p>
+                        </div>
+                        <div class="col-lg-4 col-sm-6 col-xs-6">
+                            <p>Operating Systems</p>
+                        </div>
+                        <div class="col-lg-4 col-sm-6 col-xs-6">
+                            <p>CPU Architecture</p>
+                        </div>
+                        <div class="col-lg-4 col-sm-6 col-xs-6">
+                            <p>OO Programming</p>
+                        </div>
+                        <div class="col-lg-4 col-sm-6 col-xs-6">
+                            <p>Advanced Python</p>
+                        </div>
+                        <div class="col-lg-4 col-sm-6 col-xs-6">
+                            <p>Programming Paradigms</p>
+                        </div>
+                        <div class="col-lg-4 col-sm-6 col-xs-6">
+                            <p>Data & Algorithms</p>
+                        </div>
                     </div>
-                    <h4>Front End</h4>
-                    <ul>
-                        <li><p>HTML</p></li>
-                        <li><p>CSS (using SASS)</p></li>
-                        <li><p>Bootstrap 5</p></li>
-                    </ul>
-                </div>
-                <div class="feature col-sm-12 col-md-6 col-lg-3">
-                    <div class="feature-icon">
-                        <h1>🗃️</h1>
-                    </div>
-                    <h4>Back End</h4>
-                    <ul>
-                        <li><p>Java Spring</p></li>
-                        <li><p>Java Spring Security</p></li>
-                        <li><p>Java Hibernate</p></li>
-                        <li><p>MySQL Database</p></li>
-                    </ul>
-                </div>
-                <div class="feature col-sm-12 col-md-6 col-lg-3">
-                    <div class="feature-icon">
-                        <h1>🎨</h1>
-                    </div>
-                    <h4>Design Work</h4>
-                    <ul>
-                        <li><p>Adobe Illustrator</p></li>
-                        <li><p>Adobe Xd</p></li>
-                    </ul>
-                </div>
-                <div class="feature col-sm-12 col-md-6 col-lg-3">
-                    <div class="feature-icon">
-                        <h1>📽️</h1>
-                    </div>
-                    <h4>Other</h4>
-                    <ul>
-                        <li><p>Adobe Premiere Pro</p></li>
-                        <li><p>Adobe After Effects</p></li>
-                        <li><p>Handbrake (for compression)</p></li>
-                        <li><p>Xn Convert (for compression)</p></li>
-                        <li><p>GitHub</p></li>
-                    </ul>
+                    <img src="images/games/axcel/toys/Terence Plush.png" class="sprite" style="height:40px;" data-sprite-name="terence"/>
+                    <a href="https://github.com/CKhamis" class="btn btn-info" aria-current="page">See Github page</a>
                 </div>
             </div>
         </div>
     </div>
-    <img src="images/games/axcel/toys/Garbage.png" class="sprite" style="height:40px;" data-sprite-name="garbage"/>
+</div>
+
+<div class="container p-0 mt-5" id="website">
+    <div class="container-fluid">
+        <h2 class="fw-bold text-center border-bottom mb-4">About Costi Online</h2>
+        <p class="fs-4">
+            In May 2022, I embarked on the development journey of Costi Online, a personal project conceived with the primary goal of showcasing my Minecraft worlds. Beyond this, it also served as a platform to rigorously test and hone my skills in various domains, including front-end and back-end development, hosting infrastructure, and user experience (UX) design.
+            <br/>
+            <br/>
+            Originally conceived as a companion website for my self-hosted Minecraft server, Costi Online has undergone a remarkable evolution, expanding its scope to encompass a wider array of topics and functionalities.
+            <br/>
+            <br/>
+            The genesis of this personal website was not without precedent. Prior attempts at crafting my own digital presence had been made during my coding journey, but none had reached a state of full development or readiness for deployment. It took approximately a month of dedicated effort to bring forth the inaugural publicly released version of Costi Online, which was initially focused exclusively on the Minecraft server.
+            <br/>
+            <br/>
+            Since then, the website has seen a continuous influx of features and improvements, with some changes being more substantial than others. Notably, the transition from an H2 database to MySQL marked a pivotal point in its development, enhancing its data handling capabilities. Additionally, the incorporation of an API has empowered the website with greater interactivity and flexibility. Furthermore, the entire platform now runs seamlessly on a self-hosted Linux machine, underscoring my commitment to managing every aspect of its infrastructure.
+            <br/>
+            <br/>
+            Costi Online draws inspiration not only from my prior work but also from various personal websites I've encountered over time. It stands as a testament to my dedication to ongoing self-improvement and my passion for presenting my technical skills and projects to the digital world.
+        </p>
+        <div class="row">
+            <div class="feature col-sm-12 col-md-6 col-lg-3">
+                <div class="feature-icon">
+                    <h1>💻</h1>
+                </div>
+                <h4>Front End</h4>
+                <ul>
+                    <li><p>HTML</p></li>
+                    <li><p>CSS (using SASS)</p></li>
+                    <li><p>Bootstrap 5</p></li>
+                </ul>
+            </div>
+            <div class="feature col-sm-12 col-md-6 col-lg-3">
+                <div class="feature-icon">
+                    <h1>🗃️</h1>
+                </div>
+                <h4>Back End</h4>
+                <ul>
+                    <li><p>Java Spring</p></li>
+                    <li><p>Java Spring Security</p></li>
+                    <li><p>Java Hibernate</p></li>
+                    <li><p>MySQL Database</p></li>
+                </ul>
+            </div>
+            <div class="feature col-sm-12 col-md-6 col-lg-3">
+                <div class="feature-icon">
+                    <h1>🎨</h1>
+                </div>
+                <h4>Design Work</h4>
+                <ul>
+                    <li><p>Adobe Illustrator</p></li>
+                    <li><p>Adobe Xd</p></li>
+                </ul>
+            </div>
+            <div class="feature col-sm-12 col-md-6 col-lg-3">
+                <div class="feature-icon">
+                    <h1>📽️</h1>
+                </div>
+                <h4>Other</h4>
+                <ul>
+                    <li><p>Adobe Premiere Pro</p></li>
+                    <li><p>Adobe After Effects</p></li>
+                    <li><p>Handbrake (for compression)</p></li>
+                    <li><p>Xn Convert (for compression)</p></li>
+                    <li><p>GitHub</p></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<img src="images/games/axcel/toys/Garbage.png" class="sprite" style="height:40px;" data-sprite-name="garbage"/>
 
   `;
   let projectHTML = `<img alt="project banner" src="/images/webpageImages/History.png" class="img-fluid w-100" >`;
@@ -1565,7 +1717,7 @@
         `;
   }
 
-  let defaultContent = {id: null, label: "10.0.0 Default", enabled: false, homeContent: homeHTML, wikiContent: wikiHTML, aboutContent: aboutHTML, projectContent: projectHTML, newsroomContent: newsroomHTML, minecraftHomeContent: minecraftHomeHTML, minecraftGovernmentContent: minecraftGovHTML, axcelContent: axcelHTML, professionalContent: professionalHTML, treeContent: treeHTML, lastEdited: new Date()};
+  let defaultContent = {id: null, label: "11.0.0 Default", enabled: false, homeContent: homeHTML, wikiContent: wikiHTML, aboutContent: aboutHTML, projectContent: projectHTML, newsroomContent: newsroomHTML, minecraftHomeContent: minecraftHomeHTML, minecraftGovernmentContent: minecraftGovHTML, axcelContent: axcelHTML, professionalContent: professionalHTML, treeContent: treeHTML, lastEdited: new Date()};
 </script>
 </body>
 </html>
