@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class WebSpyResponse {
-    boolean isBlocked;
+    boolean is_blocked;
     String message;
+    String expire;
 }

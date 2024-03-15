@@ -8,22 +8,25 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RequestReport {
+    // Authentication
+    String key;
+
     // Client info
     String ip;
-    String clientHost;
-    String clientPort;
-    String clientUser;
-    String clientLocale;
+    String client_host;
+    String client_port;
+    String client_user;
+    String client_locale;
 
     // Session info
     String session;
     String cookies;
 
     // Request info
-    String requestURI;
-    String requestURL;
-    String requestMethod;
-    String requestHeader;
-    String requestProtocol;
-    String requestScheme;
+    String request_uri;
+    String request_url;
+    String request_method;
+    String request_header;
+    String request_protocol;
+    String request_scheme;
 }

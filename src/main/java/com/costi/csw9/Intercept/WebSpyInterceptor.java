@@ -1,6 +1,5 @@
 package com.costi.csw9.Intercept;
 
-import com.costi.csw9.Model.DTO.LightRequest;
 import com.costi.csw9.Model.DTO.RequestReport;
 import com.costi.csw9.Model.DTO.WebSpyResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class WebSpyInterceptor implements HandlerInterceptor {
@@ -20,6 +18,7 @@ public class WebSpyInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // Generate the request report
         RequestReport report = new RequestReport(
+                "NewSuperMarioBros",
                 // todo: check if this is all correct
                 request.getRemoteAddr(),
                 request.getRemoteHost(),
@@ -37,7 +36,7 @@ public class WebSpyInterceptor implements HandlerInterceptor {
         );
 
         RestTemplate restTemplate = new RestTemplate();
-        String url = "http://localhost:8080";
+        String url = "http://127.0.0.1:8080/report";
 
         try {
             HttpHeaders headers = new HttpHeaders();
@@ -47,7 +46,7 @@ public class WebSpyInterceptor implements HandlerInterceptor {
 
             ResponseEntity<WebSpyResponse> webSpyResponse = restTemplate.postForEntity(url, webSpyReport, WebSpyResponse.class);
 
-            if(Objects.requireNonNull(webSpyResponse.getBody()).isBlocked()){
+            if(Objects.requireNonNull(webSpyResponse.getBody()).is_blocked()){
                 response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, webSpyResponse.getBody().getMessage());
                 return false;
             }else{

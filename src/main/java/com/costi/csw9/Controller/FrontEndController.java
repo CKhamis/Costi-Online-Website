@@ -138,7 +138,7 @@ public class FrontEndController {
 
     //Main
     @GetMapping("/")
-    public String getHome(Model model, HttpServletRequest request) {
+    public String getHome(Model model) {
         model.addAttribute("version", VERSION);
         return "main/Home";
     }
