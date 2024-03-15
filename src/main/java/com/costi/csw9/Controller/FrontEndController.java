@@ -2,6 +2,7 @@ package com.costi.csw9.Controller;
 
 import com.costi.csw9.Model.*;
 import com.costi.csw9.Service.*;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -137,7 +138,7 @@ public class FrontEndController {
 
     //Main
     @GetMapping("/")
-    public String getHome(Model model) {
+    public String getHome(Model model, HttpServletRequest request) {
         model.addAttribute("version", VERSION);
         return "main/Home";
     }
