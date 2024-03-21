@@ -2,6 +2,7 @@ package com.costi.csw9.Intercept;
 
 import com.costi.csw9.Model.DTO.RequestReport;
 import com.costi.csw9.Model.DTO.WebSpyResponse;
+import com.fasterxml.jackson.core.io.BigIntegerParser;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpEntity;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import java.math.BigInteger;
 import java.util.Objects;
 
 public class WebSpyInterceptor implements HandlerInterceptor {
@@ -18,7 +20,7 @@ public class WebSpyInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // Generate the request report
         RequestReport report = new RequestReport(
-                "NewSuperMarioBros",
+                new BigInteger("9651652042925625257"),
                 // todo: check if this is all correct
                 request.getRemoteAddr(),
                 request.getRemoteHost(),

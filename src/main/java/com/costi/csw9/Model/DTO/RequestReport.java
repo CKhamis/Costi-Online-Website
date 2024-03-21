@@ -4,12 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigInteger;
+
 @AllArgsConstructor
 @Getter
 @Setter
 public class RequestReport {
     // Authentication
-    String key;
+    BigInteger domain_id;
 
     // Client info
     String ip;
