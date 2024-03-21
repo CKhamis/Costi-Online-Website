@@ -2,7 +2,6 @@ package com.costi.csw9.Intercept;
 
 import com.costi.csw9.Model.DTO.RequestReport;
 import com.costi.csw9.Model.DTO.WebSpyResponse;
-import com.fasterxml.jackson.core.io.BigIntegerParser;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpEntity;
@@ -14,8 +13,11 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.math.BigInteger;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class WebSpyInterceptor implements HandlerInterceptor {
+    public static AtomicBoolean spying = new AtomicBoolean(false);
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // Generate the request report
@@ -50,12 +52,15 @@ public class WebSpyInterceptor implements HandlerInterceptor {
 
             if(Objects.requireNonNull(webSpyResponse.getBody()).is_blocked()){
                 response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, webSpyResponse.getBody().getMessage());
+                spying.set(true);
                 return false;
             }else{
+                spying.set(true);
                 return true;
             }
         } catch (Exception e) {
             e.printStackTrace();
+            spying.set(false);
             return true;
         }
     }

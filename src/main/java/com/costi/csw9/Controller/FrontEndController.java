@@ -2,7 +2,6 @@ package com.costi.csw9.Controller;
 
 import com.costi.csw9.Model.*;
 import com.costi.csw9.Service.*;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
+
+import static com.costi.csw9.Intercept.WebSpyInterceptor.spying;
 
 @Controller
 public class FrontEndController {
@@ -60,6 +61,7 @@ public class FrontEndController {
         // User is logged in or out
         model.addAttribute("loggedIn", principal != null);
         model.addAttribute("theme", chooseTheme());
+        model.addAttribute("webSpy", spying.get());
     }
 
     /*******************
