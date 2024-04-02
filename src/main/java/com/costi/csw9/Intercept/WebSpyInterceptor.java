@@ -22,8 +22,7 @@ public class WebSpyInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // Generate the request report
         RequestReport report = new RequestReport(
-                new BigInteger("9651652042925625257"),
-                // todo: check if this is all correct
+                "test.com/",
                 request.getRemoteAddr(),
                 request.getRemoteHost(),
                 String.valueOf(request.getRemotePort()),

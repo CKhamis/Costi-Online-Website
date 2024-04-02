@@ -10,8 +10,8 @@ import java.math.BigInteger;
 @Getter
 @Setter
 public class RequestReport {
-    // Authentication
-    BigInteger domain_id;
+    // Identification
+    String domain_id;
 
     // Client info
     String ip;
