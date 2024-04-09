@@ -22,7 +22,7 @@ public class WebSpyInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // Generate the request report
         RequestReport report = new RequestReport(
-                "test.com/",
+                "costionline.com",
                 request.getRemoteAddr(),
                 request.getRemoteHost(),
                 String.valueOf(request.getRemotePort()),
@@ -35,7 +35,8 @@ public class WebSpyInterceptor implements HandlerInterceptor {
                 request.getMethod(),
                 request.getHeader("Accept"),
                 request.getProtocol(),
-                request.getScheme()
+                request.getScheme(),
+                request.getHeader("User-Agent")
         );
 
         RestTemplate restTemplate = new RestTemplate();
