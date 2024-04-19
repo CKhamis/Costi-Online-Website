@@ -7,6 +7,8 @@ services:
       - "82:80"
     depends_on:
       - db
+    environment:
+      - WEBSPY_URL=http://127.0.0.1:1984/report
   db:
     image: mysql:latest
     command: --default-authentication-plugin=mysql_native_password

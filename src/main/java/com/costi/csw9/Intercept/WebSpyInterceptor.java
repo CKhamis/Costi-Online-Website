@@ -40,27 +40,32 @@ public class WebSpyInterceptor implements HandlerInterceptor {
         );
 
         RestTemplate restTemplate = new RestTemplate();
-        String url = "http://127.0.0.1:8080/report";
+        String url = System.getenv("WEBSPY_URL");
 
-        try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
+        if(url != null){
+            try {
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_JSON);
 
-            HttpEntity<RequestReport> webSpyReport = new HttpEntity<>(report, headers);
+                HttpEntity<RequestReport> webSpyReport = new HttpEntity<>(report, headers);
 
-            ResponseEntity<WebSpyResponse> webSpyResponse = restTemplate.postForEntity(url, webSpyReport, WebSpyResponse.class);
+                ResponseEntity<WebSpyResponse> webSpyResponse = restTemplate.postForEntity(url, webSpyReport, WebSpyResponse.class);
 
-            if(Objects.requireNonNull(webSpyResponse.getBody()).is_blocked()){
-                response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, webSpyResponse.getBody().getMessage());
-                spying.set(true);
-                return false;
-            }else{
-                spying.set(true);
+                if(Objects.requireNonNull(webSpyResponse.getBody()).is_blocked()){
+                    response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, webSpyResponse.getBody().getMessage());
+                    spying.set(true);
+                    return false;
+                }else{
+                    spying.set(true);
+                    return true;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                spying.set(false);
                 return true;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            spying.set(false);
+        }else{
+            // Env var not set up
             return true;
         }
     }
