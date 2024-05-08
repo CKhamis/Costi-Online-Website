@@ -15,7 +15,6 @@ public class RequestReport {
 
     // Client info
     String ip;
-    String client_host;
     String client_port;
     String client_user;
     String client_locale;
