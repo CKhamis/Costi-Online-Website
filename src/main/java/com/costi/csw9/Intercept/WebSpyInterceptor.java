@@ -23,8 +23,8 @@ public class WebSpyInterceptor implements HandlerInterceptor {
         // Generate the request report
         RequestReport report = new RequestReport(
                 "costionline.com",
-                request.getRemoteAddr(),
-                request.getRemoteHost(),
+                request.getHeader("X-Forwarded-For"),
+                request.getHeader("X-Forwarded-For"),
                 String.valueOf(request.getRemotePort()),
                 request.getRemoteUser(),
                 request.getLocale().toString(),
@@ -38,6 +38,8 @@ public class WebSpyInterceptor implements HandlerInterceptor {
                 request.getScheme(),
                 request.getHeader("User-Agent")
         );
+
+        System.out.print(request.getHeader("X-Forwarded-For") + "\t" + request.getRemoteAddr() + "\t" + request.getLocalAddr());
 
         RestTemplate restTemplate = new RestTemplate();
         String url = System.getenv("WEBSPY_URL");

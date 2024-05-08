@@ -27,7 +27,7 @@ public class FileController {
     public FileUploadResponseData uploadFile(@RequestParam("file")MultipartFile file) throws Exception {
         Attachment attachment = attachmentService.saveAttachment(file, false);
         String downloadURL = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/Download/Uploads/")
+                .path(POST_IMAGE_PATH)
                 .path(attachment.getId())
                 .toUriString();
         return new FileUploadResponseData(attachment.getFilename(), downloadURL, file.getContentType(), file.getSize());
