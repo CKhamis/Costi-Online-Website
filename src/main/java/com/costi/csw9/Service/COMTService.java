@@ -100,6 +100,7 @@ public class COMTService {
             postRepository.save(post);
         } else {
             //Post already Exists
+            post.setViews(optionalPost.get().getViews());
             post.setImagePath(optionalPost.get().getImagePath());
             postRepository.save(post);
         }
@@ -113,6 +114,7 @@ public class COMTService {
 
                 // The original post exists. User just wants to change the text
                 post.setImagePath(originalPost.getImagePath());
+                post.setViews(originalPost.getViews());
                 post.setLastEdited(LocalDateTime.now());
                 postRepository.save(post);
             } catch (Exception e){
@@ -185,6 +187,7 @@ public class COMTService {
         if(post.getId() != null){
             // Post most likely exists. Check for an existing image
             Post savedPost = postRepository.getById(post.getId());
+            post.setViews(savedPost.getViews());
             if(savedPost.getImagePath().contains("/Downloads")){
                 // Post already contains an attachment
                 String previousPath = savedPost.getImagePath();
