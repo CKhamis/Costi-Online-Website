@@ -100,18 +100,8 @@ a:hover{
     color: #F7EDE2;
 }
 
-.bg-1{
-    background-color: #212529;
-}
-
 .text-1{
     color: #e9ecef;
-}
-
-.border-box{
-    background-color: #212529;
-    border: 1px solid #fff;
-    border-radius: .25rem;
 }
 
 .nav{
