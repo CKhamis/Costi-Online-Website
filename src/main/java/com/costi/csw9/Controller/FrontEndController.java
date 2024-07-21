@@ -247,9 +247,15 @@ public class FrontEndController {
     public String getLabs() {
         return "labs/Home";
     }
+
     @GetMapping("/Labs/LED")
     public String getLED() {
         return "labs/LED";
+    }
+
+    @GetMapping("/Labs/Checkboxes")
+    public String getCostiOnlineCheckboxes() {
+        return "labs/Checkbox";
     }
 
     // Newsroom
