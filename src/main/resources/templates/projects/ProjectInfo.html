@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xml:th="https://www.thymeleaf.org">
+<head th:replace="~{Components :: head('Project Info')}"></head>
+<div th:replace="~{Components :: main-navigation}"></div>
+
+<body class="bg-1 text-1">
+<input type="hidden" th:value="${id}" id="projectId"/>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-4 p-2 position-lg-fixed">
+            <div class="border-box h-lg-100 d-flex flex-lg-column flex-row align-items-lg-center align-items-start">
+                <a href="/Projects">< Back to all projects</a>
+                <div class="flex-lg-grow-0">
+                    <img src="/icons/Logo.svg" class="img-fluid" width="200" />
+                    <h1 class="text-center fw-bold">Project Name</h1>
+                    <p class="text-secondary text-center">Project era</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8 p-2 offset-lg-4">
+            <div class="border-box mb-2 p-3 d-flex flex-row align-items-center justify-content-evenly">
+                <h4>Screenshots</h4>
+                <div class="d-flex flex-row overflow-x-auto mb-3" id="screenshot-container"></div>
+            </div>
+            <div class="border-box mb-2 p-3 d-flex flex-row align-items-center justify-content-evenly">
+                <p>test</p>
+                <p>test</p>
+                <p>test</p>
+                <p>test</p>
+                <p>test</p>
+            </div>
+            <div class="border-box mb-2 p-3 d-flex flex-row align-items-center justify-content-evenly">
+                <h4>Description</h4>
+                <div id="description-container"></div>
+            </div>
+            <div class="border-box mb-2 p-3 d-flex flex-row align-items-center justify-content-evenly">
+                <h4>Related Projects</h4>
+                <div class="d-flex flex-row overflow-x-auto mb-3" id="related-container"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{Components :: JS}"></div>
+<script>
+    let selectedProjectId = document.querySelector("#projectId");
+</script>
+</body>
+</html>

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 import static com.costi.csw9.Intercept.WebSpyInterceptor.spying;
 
@@ -147,7 +148,13 @@ public class FrontEndController {
 
     @GetMapping("/Projects")
     public String getProjects() {
-        return "main/Projects";
+        return "projects/Projects";
+    }
+
+    @GetMapping("/Projects/{id}")
+    public String getProjectInfo(@PathVariable Long id, Model model) {
+        model.addAttribute("id", id);
+        return "projects/ProjectInfo";
     }
 
     @GetMapping("/login")
