@@ -7,10 +7,10 @@
 <input type="hidden" th:value="${id}" id="projectId"/>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-4 p-2 position-fixed d-none d-lg-block">
+        <div class="col-lg-4 p-2">
             <div class="border-box h-lg-100 d-flex flex-column p-3">
                 <a href="/Projects" class="mb-3">< Back to all projects</a>
-                <div class="flex-lg-grow-1 align-items-center d-flex flex-column">
+                <div class="flex-lg-grow-1 align-items-center d-flex flex-column mt-5">
                     <img src="/icons/Logo.svg" class="img-fluid" width="200" />
                     <h1 class="text-center fw-bold mt-3">Project Name</h1>
                     <p class="text-secondary text-center">Project era</p>
@@ -22,8 +22,14 @@
                 </div>
             </div>
         </div>
-
-        <div class="col-lg-8 p-2 offset-lg-4">
+        <div class="col-lg-8 p-2">
+            <div class="border-box mb-2 p-3 d-flex flex-row align-items-center justify-content-evenly">
+                <p>test</p>
+                <p>test</p>
+                <p>test</p>
+                <p>test</p>
+                <p>test</p>
+            </div>
             <div class="border-box mb-2 p-3">
                 <h4>Screenshots</h4>
                 <div class="d-flex flex-row overflow-auto mb-3" id="screenshot-container">
@@ -36,20 +42,22 @@
                     <img src="/icons/Logo.svg" class="newsroom-slide mx-2" height="200" />
                 </div>
             </div>
-            <div class="border-box mb-2 p-3 d-flex flex-row align-items-center justify-content-evenly">
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-            </div>
             <div class="border-box mb-2 p-3">
                 <h4>Description</h4>
                 <div id="description-container"></div>
             </div>
             <div class="border-box mb-2 p-3">
-                <h4>Related Projects</h4>
-                <div class="d-flex flex-row overflow-x-auto mb-3" id="related-container"></div>
+                <h4 class="mb-2">Related Projects</h4>
+                <div class="d-flex flex-row overflow-auto mb-3" id="related-container">
+
+                    <a class="mx-2 mb-0 text-decoration-none" href="/interpersonal/member/view/${member.id}">
+                        <div class="d-flex justify-content-center px-3 d-flex flex-column" style="width: 7rem">
+                            <img class="square-image" alt="profile image" src="/icons/Logo.svg">
+                            <h5 class="text-center fw-bold text-nowrap text-truncate mt-1 mb-0">test</h5>
+                        </div>
+                    </a>
+
+                </div>
             </div>
         </div>
     </div>
