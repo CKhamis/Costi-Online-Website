@@ -16,53 +16,35 @@
                     <p class="text-secondary text-center">Project era</p>
                 </div>
                 <div class="d-flex flex-row justify-content-center align-items-center my-3">
-                    <button type="button" class="btn btn-info">Visit GitHub</button>
+                    <a type="button" class="btn btn-info" id="github-button">Visit GitHub</a>
                 </div>
                 <div class="mt-5 d-flex align-items-center justify-content-center gap-2" id="topic-container"></div>
-                <div class="mt-5 d-flex flex-row align-items-center justify-content-evenly">
-                    <p>1/1/2002</p>
-                    <p>1/1/2002</p>
-                    <p>1/1/2002</p>
-                </div>
+                <div class="mt-5 d-flex flex-row align-items-center justify-content-evenly" id="time-container"></div>
             </div>
         </div>
         <div class="col-lg-8 p-2">
-            <div class="border-box mb-2 p-3 d-flex flex-row align-items-center justify-content-evenly" id="stats-container">
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-            </div>
+            <div class="border-box mb-2 p-3 d-flex flex-row align-items-center justify-content-evenly" id="stats-container"></div>
             <div class="border-box mb-2 p-3">
                 <h4>Screenshots</h4>
-                <div class="d-flex flex-row overflow-auto mb-3" id="screenshot-container">
-
-                    <img src="/icons/Logo.svg" class="newsroom-slide mx-2" height="200" />
-                    <img src="/icons/Logo.svg" class="newsroom-slide mx-2" height="200" />
-                    <img src="/icons/Logo.svg" class="newsroom-slide mx-2" height="200" />
-                    <img src="/icons/Logo.svg" class="newsroom-slide mx-2" height="200" />
-                    <img src="/icons/Logo.svg" class="newsroom-slide mx-2" height="200" />
-                    <img src="/icons/Logo.svg" class="newsroom-slide mx-2" height="200" />
-                </div>
+                <div class="d-flex flex-row overflow-auto mb-3" id="screenshot-container"></div>
             </div>
             <div class="border-box mb-2 p-3">
-                <h4>Description</h4>
+<!--                <h4>Description</h4>-->
                 <div id="description-container"></div>
             </div>
-            <div class="border-box mb-2 p-3">
-                <h4 class="mb-3">Related Projects</h4>
-                <div class="d-flex flex-row overflow-auto mb-3" id="related-container">
+<!--            <div class="border-box mb-2 p-3">-->
+<!--                <h4 class="mb-3">Related Projects</h4>-->
+<!--                <div class="d-flex flex-row overflow-auto mb-3" id="related-container">-->
 
-                    <a class="mx-2 mb-0 text-decoration-none" href="/interpersonal/member/view/${member.id}">
-                        <div class="d-flex justify-content-center px-3 d-flex flex-column" style="width: 7rem">
-                            <img class="square-image" alt="profile image" src="/icons/Logo.svg">
-                            <h5 class="text-center fw-bold text-nowrap text-truncate mt-1 mb-0">test</h5>
-                        </div>
-                    </a>
+<!--                    <a class="mx-2 mb-0 text-decoration-none" href="/interpersonal/member/view/${member.id}">-->
+<!--                        <div class="d-flex justify-content-center px-3 d-flex flex-column" style="width: 7rem">-->
+<!--                            <img class="square-image" alt="profile image" src="/icons/Logo.svg">-->
+<!--                            <h5 class="text-center fw-bold text-nowrap text-truncate mt-1 mb-0">test</h5>-->
+<!--                        </div>-->
+<!--                    </a>-->
 
-                </div>
-            </div>
+<!--                </div>-->
+<!--            </div>-->
         </div>
     </div>
 </div>
@@ -72,18 +54,14 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="viewImage">View Image</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
             </div>
             <div class="modal-body" id="image-modal-body"></div>
         </div>
     </div>
 </div>
 
-
-
 <div th:replace="~{Components :: JS}"></div>
+<div th:replace="~{components/Formatting :: timestamp-formatting}"></div>
 <script>
     let selectedProjectName = document.querySelector("#projectName").value;
     let projectInfo;
@@ -118,19 +96,20 @@
             });
     }
 
-    function renderBody(){
+    function renderBody() {
         document.querySelector("#project-name").textContent = projectInfo.name;
         document.querySelector("#description-container").innerHTML = projectInfo.readmeContentHTML;
+        document.querySelector("#github-button").href  = projectInfo.url;
 
         let topicContent = "";
         projectInfo.topics.forEach((topic) => {
-            topicContent += `<span class="badge fs-4 rounded-pill bg-info" style="display: inline-block;">${topic}</span>`;
+            topicContent += `<span class="badge fs-5 rounded-pill bg-info" style="display: inline-block;">${topic}</span>`;
         });
         document.querySelector("#topic-container").innerHTML = topicContent;
 
         let imageContent = "";
         projectInfo.imageLinks.forEach((image) => {
-            imageContent += `<img src="${image}" role="button" class="mx-2" height="200" onclick="selectImage('${image}')" data-toggle="modal" data-target="#image-modal"/>`;
+            imageContent += `<img src="${image}" role="button" class="mx-2 mb-2" height="300" onclick="selectImage('${image}')" data-bs-toggle="modal" data-bs-target="#image-modal" />`;
         });
         document.querySelector("#screenshot-container").innerHTML = imageContent;
 
@@ -153,11 +132,17 @@
             </div>
         `;
 
-
+        document.querySelector("#time-container").innerHTML = `
+            <div>
+                <p class="text-center fs-5 fw-bold mv-1">Created</p>
+                <p class="text-center fs-4">${formatTimestamp(projectInfo.created)}</p>
+            </div>
+        `;
     }
 
-    function selectImage(imageUrl){
-        document.querySelector("#image-modal-body").innerHTML = `<img src="${imageUrl}" alt="project screenshot" style="width:100%" />`;
+    function selectImage(imageUrl) {
+        document.querySelector("#image-modal-body").innerHTML = `
+        <a href="${imageUrl}"><img src="${imageUrl}" alt="project screenshot" style="width:100%" /></a>`;
     }
 </script>
 </body>
