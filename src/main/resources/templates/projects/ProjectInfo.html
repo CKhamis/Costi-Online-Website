@@ -7,22 +7,21 @@
 <input type="hidden" th:value="${name}" id="projectName"/>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-4 p-2">
+        <div class="col-lg-4 col-xl-3 p-2">
             <div class="border-box h-lg-100 d-flex flex-column p-3">
                 <a href="/Projects" class="mb-3">< Back to all projects</a>
                 <div class="flex-lg-grow-1 align-items-center d-flex flex-column mt-5">
-                    <img src="/icons/Logo.svg" class="img-fluid" width="200" />
+                    <img src="/icons/Logo.svg" alt="project logo" class="img-fluid" width="200" id="logo" />
                     <h1 class="text-center fw-bold mt-3" id="project-name">Project Name</h1>
-                    <p class="text-secondary text-center">Project era</p>
                 </div>
-                <div class="d-flex flex-row justify-content-center align-items-center my-3">
-                    <a type="button" class="btn btn-info" id="github-button">Visit GitHub</a>
+                <div class="d-flex flex-row justify-content-center align-items-center mt-4">
+                    <a type="button" class="btn btn-primary btn-lg" id="github-button">Visit GitHub</a>
                 </div>
-                <div class="mt-5 d-flex align-items-center justify-content-center gap-2" id="topic-container"></div>
+                <div class="mt-4 d-flex align-items-center justify-content-center gap-2" id="topic-container"></div>
                 <div class="mt-5 d-flex flex-row align-items-center justify-content-evenly" id="time-container"></div>
             </div>
         </div>
-        <div class="col-lg-8 p-2">
+        <div class="col-lg-8 col-xl-9 p-2">
             <div class="border-box mb-2 p-3 d-flex flex-row align-items-center justify-content-evenly" id="stats-container"></div>
             <div class="border-box mb-2 p-3">
                 <h4>Screenshots</h4>
@@ -48,6 +47,7 @@
         </div>
     </div>
 </div>
+<div th:replace="~{Components :: footer}"></div>
 
 <div class="modal fade" id="image-modal" tabindex="-1" aria-labelledby="viewImage" aria-hidden="true">
     <div class="modal-dialog">
@@ -97,8 +97,23 @@
     }
 
     function renderBody() {
+        const img = document.querySelector("#logo");
+        if(projectInfo.logo.length > 0){
+            img.style.display = "block";
+            img.src = projectInfo.logo;
+        }else{
+            img.style.display = "none";
+        }
+
         document.querySelector("#project-name").textContent = projectInfo.name;
-        document.querySelector("#description-container").innerHTML = projectInfo.readmeContentHTML;
+
+        if(projectInfo.readmeContentHTML.length > 0){
+            document.querySelector("#description-container").innerHTML = projectInfo.readmeContentHTML;
+        }else if(projectInfo.description.length > 0){
+            document.querySelector("#description-container").innerHTML = `<h4>Description</h4><p>${projectInfo.description}</p>`;
+        }else{
+            document.querySelector("#description-container").innerHTML = `<p class="text-center">No Description provided.</p>`;
+        }
         document.querySelector("#github-button").href  = projectInfo.url;
 
         let topicContent = "";

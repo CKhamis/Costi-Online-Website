@@ -88,6 +88,7 @@ public class Projects {
                         newProject.setReadmeContentHTML(HTML_RENDERER.render(rm));
                     }
 
+                    newProject.setLogo(fetchLogo(client, repo.getString("name")));
                     newProject.setImageLinks(fetchScreenshots(client, repo.getString("name")));
                     newProject.setCommits(fetchCommitCount(client, repo.getString("name")));
                     projectList.put(newProject.getName(), newProject);
@@ -155,6 +156,25 @@ public class Projects {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private static String fetchLogo(OkHttpClient client, String repoName) {
+        String mainUrl = String.format("https://raw.githubusercontent.com/%s/%s/master/Logo.svg", USERNAME, repoName);
+
+        Request readmeRequest = new Request.Builder()
+                .url(mainUrl)
+                .build();
+
+        try (Response readmeResponse = client.newCall(readmeRequest).execute()) {
+            if (readmeResponse.isSuccessful() && readmeResponse.body() != null) {
+                return mainUrl;
+            } else {
+                return "";
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     private static int fetchCommitCount(OkHttpClient client, String repoName) {

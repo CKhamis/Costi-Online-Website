@@ -20,6 +20,7 @@ public class ProjectInfo {
 
     // value
     private String name;
+    private String logo;
     private String description;
     private String readmeContent;
     private String readmeContentHTML;
