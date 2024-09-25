@@ -15,23 +15,22 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 public class ProjectInfo {
-    private String url; // hard coded key
-    private Color color; // hard coded color
-    private LocalDate lastUpdated; //transient value
+    // key
+    private String url;
 
-    // from API
-    private String logo;
-    private String name;//
-    private String description;//
-    private String readmeContent;//
-    private ArrayList<String> imageLinks;//
-    private ArrayList<String> topics;//
-    private LocalDateTime created;//
-    private LocalDateTime updated;//
+    // value
+    private String name;
+    private String description;
+    private String readmeContent;
+    private String readmeContentHTML;
+    private ArrayList<String> imageLinks;
+    private ArrayList<String> topics;
+    private LocalDateTime created;
+    private LocalDateTime updated;
 
     private int commits;
-    private int watching;//
-    private int forks;//
-    private int issues;//
+    private int watching;
+    private int forks;
+    private int issues;
 
 }

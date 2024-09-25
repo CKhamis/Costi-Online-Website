@@ -11,6 +11,9 @@ import org.json.JSONObject;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.vladsch.flexmark.html.HtmlRenderer;
+import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.util.ast.Node;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -22,12 +25,15 @@ import java.util.HashMap;
 public class Projects {
     private static final String TOKEN = System.getenv("GHUB_TOKEN");
     private static final String USERNAME = "CKhamis";
+    private static final Parser MARKDOWN_PARSER = Parser.builder().build();
+    private static final HtmlRenderer HTML_RENDERER = HtmlRenderer.builder().build();
 
     public static HashMap<String, ProjectInfo> projectList = new HashMap<>();
     public static GitHubProfileInfo profileInfo;
 
     @Scheduled(cron = "0 0 6,18 * * ?")
     public static void refreshProjects() {
+        System.out.println("Refreshing projects");
         updateCache();
     }
 
@@ -57,9 +63,15 @@ public class Projects {
                     newProject.setForks(repo.getInt("forks"));
                     newProject.setWatching(repo.getInt("watchers"));
                     newProject.setIssues(repo.getInt("open_issues"));
-                    newProject.setDescription(repo.getString("description"));
+                    try{
+                        newProject.setDescription(repo.getString("description"));
+                    }catch (Exception e){
+                        newProject.setDescription("no description");
+                    }
+
                     newProject.setUrl(repo.getString("html_url"));
 
+                    // convert json array into java array
                     JSONArray topics = repo.getJSONArray("topics");
                     ArrayList<String> topicList = new ArrayList<>();
                     for(int l = 0; l < topics.length(); l++){
@@ -67,7 +79,15 @@ public class Projects {
                     }
                     newProject.setTopics(topicList);
 
-                    newProject.setReadmeContent(fetchReadmeContents(client, repo.getString("name")));
+                    // Get readme file
+                    String readmeRaw = fetchReadmeContents(client, repo.getString("name"));
+                    newProject.setReadmeContent(readmeRaw);
+                    newProject.setReadmeContentHTML("");
+                    if(readmeRaw != null){
+                        Node rm = MARKDOWN_PARSER.parse(readmeRaw);
+                        newProject.setReadmeContentHTML(HTML_RENDERER.render(rm));
+                    }
+
                     newProject.setImageLinks(fetchScreenshots(client, repo.getString("name")));
                     newProject.setCommits(fetchCommitCount(client, repo.getString("name")));
                     projectList.put(newProject.getName(), newProject);
@@ -81,7 +101,6 @@ public class Projects {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-        System.out.println(projectList.size());
     }
 
     private static ArrayList<String> fetchScreenshots(OkHttpClient client, String repoName) {
@@ -158,6 +177,6 @@ public class Projects {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return 0; // Return 0 if the fetch fails
+        return 0;
     }
 }
