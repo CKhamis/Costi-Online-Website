@@ -1,91 +1,32 @@
 package com.costi.csw9.Model.Ajax;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.awt.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+
+@Getter
+@Setter
+@AllArgsConstructor
 public class ProjectInfo {
-    private String imagePath, subtitle, description, era, title, id, type;
-    private boolean discontinued;
-    private String[] repositoryLinks;
+    private String url; // hard coded key
+    private Color color; // hard coded color
+    private LocalDate lastUpdated; //transient value
 
-    public ProjectInfo(String era, String type, String id, String imagePath, String title, boolean discontinued, String subtitle, String description, String[] repositoryLinks) {
-        this.imagePath = imagePath;
-        this.subtitle = subtitle;
-        this.description = description;
-        this.era = era;
-        this.title = title;
-        this.id = id;
-        this.repositoryLinks = repositoryLinks;
-        this.type = type;
-        this.discontinued = discontinued;
-    }
+    // from API
+    private String logo;
+    private String name;
+    private String description;
+    private ArrayList<String> imageLinks;
+    private ArrayList<String> keywords;
+    private LocalDate created;
+    private LocalDate updated;
 
-    public String getType() {
-        return type;
-    }
+    private int commits;
+    private int watching;
+    private int forks;
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public boolean isDiscontinued() {
-        return discontinued;
-    }
-
-    public void setDiscontinued(boolean discontinued) {
-        this.discontinued = discontinued;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
-
-    public String getSubtitle() {
-        return subtitle;
-    }
-
-    public void setSubtitle(String subtitle) {
-        this.subtitle = subtitle;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String[] getRepositoryLinks() {
-        return repositoryLinks;
-    }
-
-    public void setRepositoryLinks(String[] repositoryLinks) {
-        this.repositoryLinks = repositoryLinks;
-    }
-
-    public String getEra() {
-        return era;
-    }
-
-    public void setEra(String era) {
-        this.era = era;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
 }
