@@ -151,9 +151,9 @@ public class FrontEndController {
         return "projects/Projects";
     }
 
-    @GetMapping("/Projects/{id}")
-    public String getProjectInfo(@PathVariable Long id, Model model) {
-        model.addAttribute("id", id);
+    @GetMapping("/Projects/{name}")
+    public String getProjectInfo(@PathVariable String name, Model model) {
+        model.addAttribute("name", name);
         return "projects/ProjectInfo";
     }
 

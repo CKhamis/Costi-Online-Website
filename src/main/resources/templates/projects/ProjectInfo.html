@@ -4,7 +4,7 @@
 <div th:replace="~{Components :: main-navigation}"></div>
 
 <body class="bg-1 text-1">
-<input type="hidden" th:value="${id}" id="projectId"/>
+<input type="hidden" th:value="${name}" id="projectName"/>
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-4 p-2">
@@ -12,19 +12,13 @@
                 <a href="/Projects" class="mb-3">< Back to all projects</a>
                 <div class="flex-lg-grow-1 align-items-center d-flex flex-column mt-5">
                     <img src="/icons/Logo.svg" class="img-fluid" width="200" />
-                    <h1 class="text-center fw-bold mt-3">Project Name</h1>
+                    <h1 class="text-center fw-bold mt-3" id="project-name">Project Name</h1>
                     <p class="text-secondary text-center">Project era</p>
                 </div>
                 <div class="d-flex flex-row justify-content-center align-items-center my-3">
                     <button type="button" class="btn btn-info">Visit GitHub</button>
                 </div>
-                <div class="mt-5 d-flex align-items-center justify-content-center gap-2">
-                    <span class="badge rounded-pill bg-info" id="" style="display: inline-block;">Java</span>
-                    <span class="badge rounded-pill bg-info" id="" style="display: inline-block;">Java</span>
-                    <span class="badge rounded-pill bg-info" id="" style="display: inline-block;">Java</span>
-                    <span class="badge rounded-pill bg-info" id="" style="display: inline-block;">Java</span>
-                    <span class="badge rounded-pill bg-info" id="" style="display: inline-block;">Java</span>
-                </div>
+                <div class="mt-5 d-flex align-items-center justify-content-center gap-2" id="topic-container"></div>
                 <div class="mt-5 d-flex flex-row align-items-center justify-content-evenly">
                     <p>1/1/2002</p>
                     <p>1/1/2002</p>
@@ -33,7 +27,7 @@
             </div>
         </div>
         <div class="col-lg-8 p-2">
-            <div class="border-box mb-2 p-3 d-flex flex-row align-items-center justify-content-evenly">
+            <div class="border-box mb-2 p-3 d-flex flex-row align-items-center justify-content-evenly" id="stats-container">
                 <p>test</p>
                 <p>test</p>
                 <p>test</p>
@@ -43,7 +37,7 @@
             <div class="border-box mb-2 p-3">
                 <h4>Screenshots</h4>
                 <div class="d-flex flex-row overflow-auto mb-3" id="screenshot-container">
-                    <img src="/icons/Logo.svg" class="newsroom-slide mx-2" height="200" />
+
                     <img src="/icons/Logo.svg" class="newsroom-slide mx-2" height="200" />
                     <img src="/icons/Logo.svg" class="newsroom-slide mx-2" height="200" />
                     <img src="/icons/Logo.svg" class="newsroom-slide mx-2" height="200" />
@@ -75,7 +69,74 @@
 
 <div th:replace="~{Components :: JS}"></div>
 <script>
-    let selectedProjectId = document.querySelector("#projectId");
+    let selectedProjectName = document.querySelector("#projectName").value;
+    let projectInfo;
+    refresh();
+    function refresh(){
+        const contentFetch = fetch("/api/project/view/" + selectedProjectName);
+
+        Promise.all([contentFetch])
+            .then(responses => {
+                const response1 = checkStatus(responses[0]);
+
+                return Promise.all([response1]);
+            })
+            .then(data => {
+                let response1 = data[0].json();
+
+                return Promise.all([response1]);
+            })
+            .then(data => {
+                projectInfo = data[0];
+                renderBody();
+            })
+            .catch((response)=>{
+                console.log(response);
+                response.json()  // Parse the JSON error response
+                    .then(errorData => {
+                        console.log(errorData);
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                    });
+            });
+    }
+
+    function renderBody(){
+        document.querySelector("#project-name").textContent = projectInfo.name;
+        document.querySelector("#description-container").innerHTML = projectInfo.readmeContentHTML;
+
+        let topicContent = "";
+        projectInfo.topics.forEach((topic) => {
+            topicContent += `<span class="badge fs-4 rounded-pill bg-info" style="display: inline-block;">${topic}</span>`;
+        });
+        document.querySelector("#topic-container").innerHTML = topicContent;
+
+        let imageContent = "";
+        projectInfo.imageLinks.forEach((image) => {
+            imageContent += `<img src="${image}" class="newsroom-slide mx-2" height="200" />`;
+        });
+        document.querySelector("#screenshot-container").innerHTML = imageContent;
+
+        document.querySelector("#stats-container").innerHTML = `
+            <div>
+                <p class="text-center fs-5 fw-bold">Commits</p>
+                <p class="text-center fs-3">${projectInfo.commits}</p>
+            </div>
+            <div>
+                <p class="text-center fs-5 fw-bold">Watching</p>
+                <p class="text-center fs-3">${projectInfo.watching}</p>
+            </div>
+            <div>
+                <p class="text-center fs-5 fw-bold">Forks</p>
+                <p class="text-center fs-3">${projectInfo.forks}</p>
+            </div>
+            <div>
+                <p class="text-center fs-5 fw-bold">Issues</p>
+                <p class="text-center fs-3">${projectInfo.issues}</p>
+            </div>
+        `;
+    }
 </script>
 </body>
 </html>
