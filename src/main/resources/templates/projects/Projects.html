@@ -4,36 +4,6 @@
 <div th:replace="~{Components :: main-navigation}"></div>
 
 <body class="bg-1 text-1">
-<!--<div class="container-fluid row px-0 mx-0 d-none d-lg-block">-->
-<!--    <div class="col-lg-3 bg-1 px-5 position-fixed" style="height:100vh;padding-top:20px">-->
-<!--        <h2 class="fs-2">Development Eras</h2>-->
-<!--        <ul class="flex-column">-->
-<!--            <li class="nav-item">-->
-<!--                <h4 class="fs-4"><a class="nav-link" href="#interdimensional">Interdimensional Era (current)</a></h4>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <h4 class="fs-4"><a class="nav-link" href="#pseudo-industrial">Pseudo-Industrial Era (17-19)</a></h4>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <h4 class="fs-4"><a class="nav-link" href="#highschool">High School Era (14-17)</a></h4>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <h4 class="fs-4"><a class="nav-link" href="#childhood">Childhood Era (14-)</a></h4>-->
-<!--            </li>-->
-<!--        </ul>-->
-
-<!--        <div class="fw-bold d-inline">-->
-<!--            <h4 class="fw-bold d-inline lh-lg">Medium:-->
-<!--                <span class="badge rounded-pill bg-info" id="disable-java">Java</span>-->
-<!--                <span class="badge rounded-pill bg-dark enable-toggle" id="enable-java">Java</span>-->
-<!--                <span class="badge rounded-pill bg-info" id="disable-python">Python</span>-->
-<!--                <span class="badge rounded-pill bg-dark enable-toggle" id="enable-python">Python</span>-->
-<!--                <span class="badge rounded-pill bg-info" id="disable-web">HTML/CSS/JS</span>-->
-<!--                <span class="badge rounded-pill bg-dark enable-toggle" id="enable-web">HTML/CSS/JS</span>-->
-<!--            </h4>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
 <div class="container-fluid row px-0 mx-0" id="all-content">
     <div class="container" id="api-content"></div>
     <img th:src="@{images/games/axcel/toys/Chuck Plush.png}" class="sprite" style="height:40px;" data-sprite-name="chuck"/>
@@ -55,29 +25,17 @@
 
     refresh();
     function refresh(){
-        const projectFetch = fetch("/api/project/all");
-        const contentFetch = fetch("/api/content/all");
-
-        Promise.all([contentFetch, projectFetch])
-            .then(responses => {
-                const response1 = checkStatus(responses[0]);
-                //const response2 = checkStatus(responses[1]);
-
-                return Promise.all([response1]);
-            })
-            .then(data => {
-                let response1 = data[0].json();
-                //let response2 = data[1].json();
-
-                return Promise.all([response1]);
-            })
-            .then(data => {
-                projectList = data[0];
+        fetch("/api/project/all")
+            .then(response => checkStatus(response))
+            .then(data => data.json())
+            .then(projects => {
+                console.log(projects);
+                projectList = projects;
                 renderProjects();
             })
-            .catch((response)=>{
+            .catch((response) => {
                 console.log(response);
-                response.json()  // Parse the JSON error response
+                response.json()
                     .then(errorData => {
                         console.log(errorData);
                     })
