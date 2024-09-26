@@ -4,205 +4,101 @@
 <div th:replace="~{Components :: main-navigation}"></div>
 
 <body class="bg-1 text-1">
-<div class="container-fluid row px-0 mx-0 d-none d-lg-block">
-    <div class="col-lg-3 bg-1 px-5 position-fixed" style="height:100vh;padding-top:20px">
-        <h2 class="fs-2">Development Eras</h2>
-        <ul class="flex-column">
-            <li class="nav-item">
-                <h4 class="fs-4"><a class="nav-link" href="#interdimensional">Interdimensional Era (current)</a></h4>
-            </li>
-            <li class="nav-item">
-                <h4 class="fs-4"><a class="nav-link" href="#pseudo-industrial">Pseudo-Industrial Era (17-19)</a></h4>
-            </li>
-            <li class="nav-item">
-                <h4 class="fs-4"><a class="nav-link" href="#highschool">High School Era (14-17)</a></h4>
-            </li>
-            <li class="nav-item">
-                <h4 class="fs-4"><a class="nav-link" href="#childhood">Childhood Era (14-)</a></h4>
-            </li>
-        </ul>
+<!--<div class="container-fluid row px-0 mx-0 d-none d-lg-block">-->
+<!--    <div class="col-lg-3 bg-1 px-5 position-fixed" style="height:100vh;padding-top:20px">-->
+<!--        <h2 class="fs-2">Development Eras</h2>-->
+<!--        <ul class="flex-column">-->
+<!--            <li class="nav-item">-->
+<!--                <h4 class="fs-4"><a class="nav-link" href="#interdimensional">Interdimensional Era (current)</a></h4>-->
+<!--            </li>-->
+<!--            <li class="nav-item">-->
+<!--                <h4 class="fs-4"><a class="nav-link" href="#pseudo-industrial">Pseudo-Industrial Era (17-19)</a></h4>-->
+<!--            </li>-->
+<!--            <li class="nav-item">-->
+<!--                <h4 class="fs-4"><a class="nav-link" href="#highschool">High School Era (14-17)</a></h4>-->
+<!--            </li>-->
+<!--            <li class="nav-item">-->
+<!--                <h4 class="fs-4"><a class="nav-link" href="#childhood">Childhood Era (14-)</a></h4>-->
+<!--            </li>-->
+<!--        </ul>-->
 
-        <div class="fw-bold d-inline">
-            <h4 class="fw-bold d-inline lh-lg">Medium:
-                <span class="badge rounded-pill bg-info" id="disable-java">Java</span>
-                <span class="badge rounded-pill bg-dark enable-toggle" id="enable-java">Java</span>
-                <span class="badge rounded-pill bg-info" id="disable-python">Python</span>
-                <span class="badge rounded-pill bg-dark enable-toggle" id="enable-python">Python</span>
-                <span class="badge rounded-pill bg-info" id="disable-web">HTML/CSS/JS</span>
-                <span class="badge rounded-pill bg-dark enable-toggle" id="enable-web">HTML/CSS/JS</span>
-            </h4>
-        </div>
+<!--        <div class="fw-bold d-inline">-->
+<!--            <h4 class="fw-bold d-inline lh-lg">Medium:-->
+<!--                <span class="badge rounded-pill bg-info" id="disable-java">Java</span>-->
+<!--                <span class="badge rounded-pill bg-dark enable-toggle" id="enable-java">Java</span>-->
+<!--                <span class="badge rounded-pill bg-info" id="disable-python">Python</span>-->
+<!--                <span class="badge rounded-pill bg-dark enable-toggle" id="enable-python">Python</span>-->
+<!--                <span class="badge rounded-pill bg-info" id="disable-web">HTML/CSS/JS</span>-->
+<!--                <span class="badge rounded-pill bg-dark enable-toggle" id="enable-web">HTML/CSS/JS</span>-->
+<!--            </h4>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<div class="container-fluid row px-0 mx-0" id="all-content">
+    <div class="container" id="api-content"></div>
+    <img th:src="@{images/games/axcel/toys/Chuck Plush.png}" class="sprite" style="height:40px;" data-sprite-name="chuck"/>
+    <div class="container" id="all-projects-container">
+        <h3 id="loading" class="text-center">Connecting to Costi Online Services</h3>
     </div>
+    <img src="images/games/axcel/toys/Bone.png" class="sprite" style="height: 40px;" data-sprite-name="bone">
+    <div th:replace="~{Components :: footer}"></div>
 </div>
-<div class="container-fluid row px-0 mx-0">
-    <div class="col-lg-3 d-none d-lg-block">
-        behind
-    </div>
-    <div class="col-xs-12 col-lg-9 px-0" style="padding-top:20px">
-        <div class="container-fluid" id="api-content"></div>
-        <div class="container-fluid" id="main-content">
-            <div id="analyticsContainer" class="container-fluid my-4"></div>
-            <h3 id="loading" class="text-center">Connecting to Costi Online Services</h3>
-            <img th:src="@{images/games/axcel/toys/Chuck Plush.png}" class="sprite" style="height:40px;" data-sprite-name="chuck"/>
-        </div>
-        <img src="images/games/axcel/toys/Bone.png" class="sprite" style="height: 40px;" data-sprite-name="bone">
-        <div th:replace="~{Components :: footer}"></div>
-    </div>
-</div>
+
+
 <div th:replace="~{Components :: JS}"></div>
 <div th:replace="~{Components :: axcel-sprite-logic}"></div>
 <div th:replace="~{Components :: timer-box}"></div>
 <div th:replace="~{Components :: toast-box}"></div>
 <script th:replace="~{Components :: axcel-game}"></script>
 <script>
-    // Select parent element
-    const container = $("#main-content");
-    const analyticsContainer = $("#analyticsContainer");
+    let content, projectList;
 
-    const projectFetch = fetch("/api/Projects/all");
-    const contentFetch = fetch("/api/content/all");
-    const analysisFetch = fetch("/api/Projects/analytics");
+    refresh();
+    function refresh(){
+        const projectFetch = fetch("/api/project/all");
+        const contentFetch = fetch("/api/content/all");
 
-    Promise.all([projectFetch, contentFetch, analysisFetch])
-        .then(responses => {
-            const response1 = checkStatus(responses[0]);
-            const response2 = checkStatus(responses[1]);
-            const response3 = checkStatus(responses[2]);
+        Promise.all([contentFetch, projectFetch])
+            .then(responses => {
+                const response1 = checkStatus(responses[0]);
+                //const response2 = checkStatus(responses[1]);
 
-            return Promise.all([response1, response2, response3]);
-        })
-        .then(data => {
-            let projectsDownload = data[0].json();
-            let contentDownload = data[1].json();
-            let analysisDownload = data[2].json();
+                return Promise.all([response1]);
+            })
+            .then(data => {
+                let response1 = data[0].json();
+                //let response2 = data[1].json();
 
-            return Promise.all([projectsDownload, contentDownload, analysisDownload]);
-        })
-        .then(data => {
-            // Process the retrieved data
-            document.querySelector("#api-content").innerHTML = data[1].projectContent;
-            displayProjects(data[0]);
-            displayAnalytics(data[2]);
-        })
-        .catch(error => {
-            // error handling
-            container.append($("<h3 class=\"text-center\">There was an error receiving data from Costi Online Services</h3><p class=\"text-center\">Please check the console for further information</p>"));
-            console.error('Error retrieving data:', error);
-        })
-        .finally(() => $("#loading").hide());
+                return Promise.all([response1]);
+            })
+            .then(data => {
+                projectList = data[0];
+                renderProjects();
+            })
+            .catch((response)=>{
+                console.log(response);
+                response.json()  // Parse the JSON error response
+                    .then(errorData => {
+                        console.log(errorData);
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                    });
+            });
+    }
 
-    //Render
-    function displayProjects(data){
-        let currentEra = ``;
-        let insertHTML = data.map(project => {
-            const links = project.repositoryLinks.map((link, index) => `<a href="${link}" class="btn btn-primary mb-3" style="margin-right:10px;">Repository ${index + 1}</a>`).join('');
-            let divider = ``;
-            let badge = ``;
-            if(!project.discontinued){
-                badge = `<span class="badge rounded-pill bg-success">Active</span>`
-            }
+    function renderProjects(){
+        let projectListHTML = ``;
 
-            if(currentEra !== project.era){
-                divider = `<h3 id="${project.era}" class="fs-3 text-center fw-bold">${project.era.toUpperCase()} ERA</h3>`;
-                currentEra = project.era;
-            }
-            return `
-            ${divider}
-            <div class="card border-box my-5 ${project.type}" id="${project.id}">
-                <img src="${project.imagePath}" class="card-img-top" alt="${project.title}">
-                <div class="card-body px-lg-5 px-4 blue-v-gradient">
-                    <h5 class="card-title fw-bold fs-4">${project.title} ${badge}</h5>
-                    <p class="text-secondary">${project.subtitle}</p>
-                    <p class="card-text fs-5">${project.description}</p>
-                    ${links}
-                </div>
-            </div>
+        projectList.forEach((project) => {
+            projectListHTML += `
+                <p>${project.name}</p>
             `;
         });
-        container.append(insertHTML);
+
+        document.querySelector("#all-projects-container").innerHTML = projectListHTML;
     }
 
-    function displayAnalytics(data){
-        let htmlContent = `
-            <div class="row">
-                <div class="col">
-                    <p class="text-center">Total Projects</p>
-                    <p class="fs-2 fw-bold text-center">${data.totalProjects}</p>
-                </div>
-                <div class="col d-md-block d-none">
-                    <p class="text-center">Total Active</p>
-                    <p class="fs-2 fw-bold text-center">${data.active}</p>
-                </div>
-                <div class="col">
-                    <p class="text-center">Total Repositories</p>
-                    <p class="fs-2 fw-bold text-center">${data.repos}</p>
-                </div>
-                <div class="col">
-                    <p class="text-center">Web Projects</p>
-                    <p class="fs-2 fw-bold text-center">${data.web}</p>
-                </div>
-                <div class="col">
-                    <p class="text-center">Java Projects</p>
-                    <p class="fs-2 fw-bold text-center">${data.java}</p>
-                </div>
-            </div>
-        `;
-
-        analyticsContainer.append(htmlContent);
-    }
-
-    $(document).ready(function(){
-        $(".enable-toggle").css("display", "none");
-
-
-        $("#disable-java").click(function(){
-            $("#disable-java").css("display", "none");
-            $("#enable-java").css("display", "inline-block");
-
-            $(".java").css("display", "none");
-
-        });
-
-        $("#enable-java").click(function(){
-            $("#enable-java").css("display", "none");
-            $("#disable-java").css("display", "inline-block");
-
-            $(".java").css("display", "block");
-
-        });
-
-        $("#enable-python").click(function(){
-            $("#enable-python").css("display", "none");
-            $("#disable-python").css("display", "inline-block");
-
-            $(".python").css("display", "block");
-
-        });
-
-        $("#disable-python").click(function(){
-            $("#disable-python").css("display", "none");
-            $("#enable-python").css("display", "inline-block");
-
-            $(".python").css("display", "none");
-
-        });
-
-        $("#disable-web").click(function(){
-            $("#disable-web").css("display", "none");
-            $("#enable-web").css("display", "inline-block");
-
-            $(".web").css("display", "none");
-
-        });
-
-        $("#enable-web").click(function(){
-            $("#enable-web").css("display", "none");
-            $("#disable-web").css("display", "inline-block");
-
-            $(".web").css("display", "block");
-
-        });
-    });
 </script>
 </body>
 </html>
