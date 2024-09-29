@@ -31,9 +31,27 @@
             .then(response => checkStatus(response))
             .then(data => data.json())
             .then(projects => {
-                console.log(projects);
                 projectList = projects;
                 renderProjects();
+            })
+            .then(() => {
+                fetch("/api/content/all")
+                    .then(response => checkStatus(response))
+                    .then(data => data.json())
+                    .then(projects => {
+                        content = projects.projectContent;
+                        document.querySelector("#api-content").innerHTML = content;
+                    })
+                    .catch((response) => {
+                        console.log(response);
+                        response.json()
+                            .then(errorData => {
+                                console.log(errorData);
+                            })
+                            .catch(error => {
+                                console.error("Error parsing error response:", error);
+                            });
+                    });
             })
             .catch((response) => {
                 console.log(response);
