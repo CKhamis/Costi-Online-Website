@@ -4,16 +4,15 @@
 <div th:replace="~{Components :: main-navigation}"></div>
 
 <body class="bg-1 text-1">
-<div class="container-fluid row px-0 mx-0" id="all-content">
-    <div class="container" id="api-content"></div>
-    <img th:src="@{images/games/axcel/toys/Chuck Plush.png}" class="sprite" style="height:40px;" data-sprite-name="chuck"/>
-    <div class="container" id="all-projects-container">
+<div class="container-fluid" id="api-content">
+    <div class="container">
         <h3 id="loading" class="text-center">Connecting to Costi Online Services</h3>
     </div>
-    <img src="images/games/axcel/toys/Bone.png" class="sprite" style="height: 40px;" data-sprite-name="bone">
-    <div th:replace="~{Components :: footer}"></div>
 </div>
+<div th:replace="~{Components :: footer}"></div>
 
+<img th:src="@{images/games/axcel/toys/Chuck Plush.png}" class="sprite" style="height:40px;" data-sprite-name="chuck"/>
+<img src="images/games/axcel/toys/Bone.png" class="sprite" style="height: 40px;" data-sprite-name="bone">
 
 <div th:replace="~{Components :: JS}"></div>
 <div th:replace="~{Components :: axcel-sprite-logic}"></div>
@@ -27,20 +26,20 @@
 
     refresh();
     function refresh(){
-        fetch("/api/project/all")
+        fetch("/api/content/all")
             .then(response => checkStatus(response))
             .then(data => data.json())
             .then(projects => {
-                projectList = projects;
-                renderProjects();
+                content = projects.projectContent;
+                document.querySelector("#api-content").innerHTML = content;
             })
             .then(() => {
-                fetch("/api/content/all")
+                fetch("/api/project/all")
                     .then(response => checkStatus(response))
                     .then(data => data.json())
                     .then(projects => {
-                        content = projects.projectContent;
-                        document.querySelector("#api-content").innerHTML = content;
+                        projectList = projects;
+                        renderProjects();
                     })
                     .catch((response) => {
                         console.log(response);

@@ -37,72 +37,90 @@ public class Projects {
         updateCache();
     }
 
-    private static void updateCache(){
+    private static void updateCache() {
         OkHttpClient client = new OkHttpClient();
+        String baseUrl = String.format("https://api.github.com/users/%s/repos", USERNAME);
 
-        String url = String.format("https://api.github.com/users/%s/repos", USERNAME);
+        int page = 1; // Start with the first page
+        boolean hasNextPage = true;
 
-        Request request = new Request.Builder()
-                .url(url)
-                .addHeader("Authorization", "token " + TOKEN)
-                .addHeader("Accept", "application/vnd.github.v3+json")
-                .build();
+        while (hasNextPage) {
+            // Append the page number to the URL to fetch repositories in pages
+            String url = baseUrl + "?page=" + page + "&per_page=100"; // Fetch up to 100 repos per page
 
-        try (Response response = client.newCall(request).execute()) {
-            if (response.isSuccessful() && response.body() != null) {
-                String responseBody = response.body().string();
-                JSONArray reposArray = new JSONArray(responseBody);
+            Request request = new Request.Builder()
+                    .url(url)
+                    .addHeader("Authorization", "token " + TOKEN)
+                    .addHeader("Accept", "application/vnd.github.v3+json")
+                    .build();
 
-                // Loop through the array and collect repository names
-                for (int i = 0; i < reposArray.length(); i++) {
-                    JSONObject repo = reposArray.getJSONObject(i);
-                    ProjectInfo newProject = new ProjectInfo();
-                    newProject.setUpdated(LocalDateTime.now());
-                    newProject.setName(repo.getString("name"));
-                    newProject.setCreated(parseDate(repo.getString("created_at")));
-                    newProject.setForks(repo.getInt("forks"));
-                    newProject.setWatching(repo.getInt("watchers"));
-                    newProject.setIssues(repo.getInt("open_issues"));
-                    try{
-                        newProject.setDescription(repo.getString("description"));
-                    }catch (Exception e){
-                        newProject.setDescription("no description");
+            try (Response response = client.newCall(request).execute()) {
+                if (response.isSuccessful() && response.body() != null) {
+                    String responseBody = response.body().string();
+                    JSONArray reposArray = new JSONArray(responseBody);
+
+                    // Loop through the array and collect repository names
+                    for (int i = 0; i < reposArray.length(); i++) {
+                        JSONObject repo = reposArray.getJSONObject(i);
+                        ProjectInfo newProject = new ProjectInfo();
+                        newProject.setUpdated(LocalDateTime.now());
+                        newProject.setName(repo.getString("name"));
+                        newProject.setCreated(parseDate(repo.getString("created_at")));
+                        newProject.setForks(repo.getInt("forks"));
+                        newProject.setWatching(repo.getInt("watchers"));
+                        newProject.setIssues(repo.getInt("open_issues"));
+
+                        try {
+                            newProject.setDescription(repo.getString("description"));
+                        } catch (Exception e) {
+                            newProject.setDescription("no description");
+                        }
+
+                        newProject.setUrl(repo.getString("html_url"));
+
+                        // Convert JSON array into Java array
+                        JSONArray topics = repo.getJSONArray("topics");
+                        ArrayList<String> topicList = new ArrayList<>();
+                        for (int l = 0; l < topics.length(); l++) {
+                            topicList.add(topics.getString(l));
+                        }
+                        newProject.setTopics(topicList);
+
+                        // Get README file
+                        String readmeRaw = fetchReadmeContents(client, repo.getString("name"));
+                        newProject.setReadmeContent(readmeRaw);
+                        newProject.setReadmeContentHTML("");
+                        if (readmeRaw != null) {
+                            Node rm = MARKDOWN_PARSER.parse(readmeRaw);
+                            newProject.setReadmeContentHTML(HTML_RENDERER.render(rm));
+                        }
+
+                        newProject.setLogo(fetchLogo(client, repo.getString("name")));
+                        newProject.setImageLinks(fetchScreenshots(client, repo.getString("name")));
+                        newProject.setCommits(fetchCommitCount(client, repo.getString("name")));
+
+                        // Add the project to the project list
+                        projectList.put(newProject.getName(), newProject);
                     }
 
-                    newProject.setUrl(repo.getString("html_url"));
-
-                    // convert json array into java array
-                    JSONArray topics = repo.getJSONArray("topics");
-                    ArrayList<String> topicList = new ArrayList<>();
-                    for(int l = 0; l < topics.length(); l++){
-                        topicList.add(topics.getString(l));
+                    // Check if there's another page of results
+                    String linkHeader = response.header("Link");
+                    if (linkHeader != null && linkHeader.contains("rel=\"next\"")) {
+                        page++; // Go to the next page
+                    } else {
+                        hasNextPage = false; // No more pages, exit the loop
                     }
-                    newProject.setTopics(topicList);
-
-                    // Get readme file
-                    String readmeRaw = fetchReadmeContents(client, repo.getString("name"));
-                    newProject.setReadmeContent(readmeRaw);
-                    newProject.setReadmeContentHTML("");
-                    if(readmeRaw != null){
-                        Node rm = MARKDOWN_PARSER.parse(readmeRaw);
-                        newProject.setReadmeContentHTML(HTML_RENDERER.render(rm));
-                    }
-
-                    newProject.setLogo(fetchLogo(client, repo.getString("name")));
-                    newProject.setImageLinks(fetchScreenshots(client, repo.getString("name")));
-                    newProject.setCommits(fetchCommitCount(client, repo.getString("name")));
-                    projectList.put(newProject.getName(), newProject);
+                } else {
+                    System.out.println("Failed to fetch repositories. Response code: " + response.code());
+                    hasNextPage = false; // Exit the loop if there's an error
                 }
-
-            } else {
-                System.out.println("Failed to fetch repositories. Response code: " + response.code());
+            } catch (IOException e) {
+                e.printStackTrace();
+                hasNextPage = false; // Exit the loop in case of an exception
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
         }
     }
+
 
     private static ArrayList<String> fetchScreenshots(OkHttpClient client, String repoName) {
         ArrayList<String> screenshots = new ArrayList<>();
