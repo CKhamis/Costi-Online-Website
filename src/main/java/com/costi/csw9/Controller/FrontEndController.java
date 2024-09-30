@@ -17,7 +17,7 @@ import static com.costi.csw9.Intercept.WebSpyInterceptor.spying;
 public class FrontEndController {
     private final UserService userService;
     private final WikiService wikiService;
-    private static final String VERSION = "11.2.0";
+    private static final String VERSION = "11.8.0";
 
     @Autowired
     public FrontEndController(UserService userService, WikiService wikiService) {

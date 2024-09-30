@@ -9,6 +9,7 @@
         <div class="position-absolute px-5" style="z-index:1;height:400px; width:100%">
             <div class="container-fluid" style="padding-top:130px;">
                 <img th:src="@{icons/Constantine Logo.svg}" class="img-fluid mb-2 banner-logo"/>
+                <img th:src="@{images/games/axcel/toys/Terence Plush.png}" class="sprite" style="height:40px;" data-sprite-name="terence"/>
             </div>
         </div>
         <video class="banner-video" autoplay preload="true" loop="loop" muted>
@@ -21,7 +22,7 @@
 <main id="api-content">
     <div th:replace="~{Components :: await-content}"></div>
 </main>
-
+<img th:src="@{images/games/axcel/toys/Garbage.png}" class="sprite" style="height:40px;" data-sprite-name="garbage"/>
 <div th:replace="~{Components :: JS}"></div>
 <div th:replace="~{Components :: footer}"></div>
 <div th:replace="~{Components :: timer-box}"></div>
