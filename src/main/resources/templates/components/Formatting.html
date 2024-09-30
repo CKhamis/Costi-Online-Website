@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<script th:fragment="date-formatting">
+    function formatDate(inputDate) {
+        const date = new Date(inputDate);
+
+        const month = String(date.getMonth() + 1).padStart(2, '0')
+        const day = String(date.getDate()).padStart(2, '0');
+        const year = date.getFullYear();
+
+        return `${month}/${day}/${year}`;
+    }
+</script>
+<script th:fragment="timestamp-formatting">
+    function formatTimestamp(dateString) {
+        let date = new Date(dateString);
+        let day = ("0" + date.getDate()).slice(-2);
+        let month = ("0" + (date.getMonth() + 1)).slice(-2);
+        let year = date.getFullYear().toString().substr(-2);
+        let hours = date.getHours();
+        let minutes = ("0" + date.getMinutes()).slice(-2);
+        let ampm = hours >= 12 ? 'PM' : 'AM';
+
+        hours = hours % 12;
+        hours = hours ? ("0" + hours).slice(-2) : 12;
+
+        return `${month}/${day}/${year} ${hours}:${minutes} ${ampm}`;
+    }
+</script>
+<script th:fragment="time-formatting">
+    function formatTimeOnly(dateString) {
+        let date = new Date(dateString);
+        let hours = date.getHours();
+        let minutes = ("0" + date.getMinutes()).slice(-2);
+        let ampm = hours >= 12 ? 'PM' : 'AM';
+
+        hours = hours % 12;
+        hours = hours ? ("0" + hours).slice(-2) : 12;
+
+        return `${hours}:${minutes} ${ampm}`;
+    }
+</script>
+<script th:fragment="time-interval">
+    function timeSince(date) {
+        const now = new Date();
+        const pastDate = new Date(date);
+        const seconds = Math.floor((now - pastDate) / 1000);
+
+        const intervals = {
+            year: 31536000,
+            month: 2592000,
+            day: 86400,
+            hour: 3600,
+            minute: 60,
+            second: 1
+        };
+
+        for (let key in intervals) {
+            const interval = Math.floor(seconds / intervals[key]);
+            if (interval >= 1) {
+                return interval === 1 ? `${interval} ${key} ago` : `${interval} ${key}s ago`;
+            }
+        }
+
+        return "Just now";
+    }
+</script>

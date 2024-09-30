@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xml:th="https://www.thymeleaf.org">
+<head th:replace="~{Components :: head('Projects')}"></head>
+<div th:replace="~{Components :: main-navigation}"></div>
+
+<body class="bg-1 text-1">
+<img src="images/games/axcel/toys/Bone.png" class="sprite" style="height: 40px;" data-sprite-name="bone">
+<div class="container-fluid" id="api-content">
+    <div class="container">
+        <h3 id="loading" class="text-center">Connecting to Costi Online Services</h3>
+    </div>
+</div>
+<img th:src="@{images/games/axcel/toys/Chuck Plush.png}" class="sprite" style="height:40px;" data-sprite-name="chuck"/>
+
+<div th:replace="~{Components :: footer}"></div>
+
+<div th:replace="~{Components :: JS}"></div>
+<div th:replace="~{Components :: axcel-sprite-logic}"></div>
+<div th:replace="~{Components :: timer-box}"></div>
+<div th:replace="~{Components :: toast-box}"></div>
+<script th:replace="~{Components :: axcel-game}"></script>
+<div th:replace="~{components/Formatting :: timestamp-formatting}"></div>
+
+<script>
+    let content, projectList;
+
+    refresh();
+    function refresh(){
+        fetch("/api/content/all")
+            .then(response => checkStatus(response))
+            .then(data => data.json())
+            .then(projects => {
+                content = projects.projectContent;
+                document.querySelector("#api-content").innerHTML = content;
+            })
+            .then(() => {
+                fetch("/api/project/all")
+                    .then(response => checkStatus(response))
+                    .then(data => data.json())
+                    .then(projects => {
+                        projectList = projects;
+                        renderProjects();
+                    })
+                    .catch((response) => {
+                        console.log(response);
+                        response.json()
+                            .then(errorData => {
+                                console.log(errorData);
+                            })
+                            .catch(error => {
+                                console.error("Error parsing error response:", error);
+                            });
+                    });
+            })
+            .catch((response) => {
+                console.log(response);
+                response.json()
+                    .then(errorData => {
+                        console.log(errorData);
+                    })
+                    .catch(error => {
+                        console.error("Error parsing error response:", error);
+                    });
+            });
+    }
+
+    function renderProjects(){
+        let projectListHTML = ``;
+        let webProjectListHTML = ``;
+        let desktopProjectListHTML = ``;
+
+        // sort project list
+        projectList.sort((a, b) => new Date(b.created) - new Date(a.created));
+
+        projectList.forEach((project) => {
+
+            let logoAndTitle = `<h5 class="card-title fw-bold">${project.name}</h5>`;
+            if(project.logo.length > 0){
+                logoAndTitle = `
+                    <div class="bg-1 rounded-3" style="position: absolute; transform: translate(0%, -75%); z-index: 1;">
+                        <img src="${project.logo}" class="p-1" alt="Project Logo" style="aspect-ratio: 1 / 1; object-fit: cover; width: 90px; opacity: 1;">
+                    </div>
+                    <h5 class="card-title mt-4 fw-bold">${project.name}</h5>
+                `;
+            }
+
+            let banner = '';
+            if(project.imageLinks.length > 0){
+                banner = `<img src="${project.imageLinks[0]}" class="card-img-top" alt="banner image" style="aspect-ratio: 2 / 1; object-fit: cover">`;
+            }
+
+            let card = `
+                    <div class="col-12 col-md-4 col-lg-3 mb-4">
+                        <div class="card m-2 h-100">
+                            ${banner}
+                            <div class="card-body pb-0">
+                                ${logoAndTitle}
+                                <p class="card-text">${project.description}</p>
+                            </div>
+                            <div class="flex-shrink-0 p-3">
+                                <div class="d-flex flex-row justify-content-between align-items-end">
+                                    <div>
+                                        <p class="fw-bold mb-1">Created</p>
+                                        <p class="mb-0">${formatTimestamp(project.created)}</p>
+                                    </div>
+                                    <a href="/Projects/${project.name}" class="btn btn-primary float-end">Learn More</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+            projectListHTML += card;
+
+            if(project.topics.includes("website")){
+                webProjectListHTML += card;
+            }
+
+            if(project.topics.includes("desktop")){
+                desktopProjectListHTML += card;
+            }
+        });
+
+        document.querySelector("#all").innerHTML = `
+            <div class="row">
+                ${projectListHTML}
+            </div>
+        `;
+
+        document.querySelector("#web").innerHTML = `
+            <div class="row">
+                ${webProjectListHTML}
+            </div>
+        `;
+
+        document.querySelector("#desktop").innerHTML = `
+            <div class="row">
+                ${desktopProjectListHTML}
+            </div>
+        `;
+    }
+
+</script>
+</body>
+</html>

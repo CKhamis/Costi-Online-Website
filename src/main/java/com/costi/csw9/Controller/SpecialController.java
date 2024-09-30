@@ -1,7 +1,6 @@
 package com.costi.csw9.Controller;
 
 import com.costi.csw9.Model.Ajax.MediaInfo;
-import com.costi.csw9.Model.Ajax.ProjectInfo;
 import com.costi.csw9.Model.Axcel.GameProgress;
 import com.costi.csw9.Service.PostService;
 import com.costi.csw9.Service.UserService;
@@ -18,19 +17,7 @@ import java.util.*;
 @Controller
 public class SpecialController {
     private static final int requiredFinds = 7;
-    private final List<ProjectInfo> projects = InfoInitializer.initializeProjects();
     private final List<MediaInfo> mediaProjects = InfoInitializer.initializeMedia();
-
-    /*
-        Services
-     */
-    private PostService postService;
-    private UserService userService;
-
-    public SpecialController(PostService postService, UserService userService){
-        this.postService = postService;
-        this.userService = userService;
-    }
 
     /*
         JSON responses
@@ -89,50 +76,6 @@ public class SpecialController {
         jsonResponse.put("animationCount", numAnimation);
         jsonResponse.put("eraCount", numEras);
         jsonResponse.put("youtubeCount", numYoutube);
-
-        return jsonResponse;
-    }
-
-    @GetMapping("/api/Projects/all")
-    public ResponseEntity<List<ProjectInfo>> getProjects() {
-        return ResponseEntity.ok(projects);
-    }
-
-    @GetMapping("/api/Projects/analytics")
-    @ResponseBody
-    public Map<String, Object> getProjectAnalytics() {
-        // Construct the JSON response
-        Map<String, Object> jsonResponse = new HashMap<>();
-        jsonResponse.put("totalProjects", projects.size());
-
-        int numActive = 0, numDiscontinued = 0, numJava = 0, numPython = 0, numOther = 0, numWeb = 0, numRepos = 0;
-        for(ProjectInfo project : projects){
-            if(project.isDiscontinued()){
-                numDiscontinued++;
-            }else{
-                numActive++;
-            }
-
-            if(project.getType().equals("java")){
-                numJava++;
-            }else if(project.getType().equals("web")){
-                numWeb++;
-            }else if(project.getType().equals("python")){
-                numPython++;
-            }else{
-                numOther++;
-            }
-
-            numRepos += project.getRepositoryLinks().length;
-        }
-
-        jsonResponse.put("active", numActive);
-        jsonResponse.put("discontinued", numDiscontinued);
-        jsonResponse.put("java", numJava);
-        jsonResponse.put("python", numPython);
-        jsonResponse.put("other", numOther);
-        jsonResponse.put("web", numWeb);
-        jsonResponse.put("repos", numRepos);
 
         return jsonResponse;
     }
