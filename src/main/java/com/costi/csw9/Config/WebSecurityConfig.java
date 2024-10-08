@@ -35,6 +35,8 @@ public class WebSecurityConfig  {
                         .permitAll()
                 )
                 .logout(form -> form
+                        .invalidateHttpSession(true)
+                        .deleteCookies("COSID")
                         .logoutUrl("/logout")
                 )
                 .csrf(csrf -> csrf
