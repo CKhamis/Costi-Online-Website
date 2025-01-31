@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'com.costi'
-version = '11.2.0'
+version = '11.2.1'
 sourceCompatibility = '17'
 
 repositories {
@@ -24,6 +24,7 @@ dependencies {
 	implementation 'jakarta.persistence:jakarta.persistence-api'
 	implementation 'org.hibernate.orm:hibernate-community-dialects:6.4.4.Final'
 	implementation 'com.mysql:mysql-connector-j'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

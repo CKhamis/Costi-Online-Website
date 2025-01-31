@@ -34,7 +34,9 @@ public class Projects {
     @Scheduled(cron = "0 0 6,18 * * ?")
     public static void refreshProjects() {
         System.out.println("Refreshing projects");
-        updateCache();
+        if(TOKEN != null) {
+            updateCache();
+        }
     }
 
     private static void updateCache() {
