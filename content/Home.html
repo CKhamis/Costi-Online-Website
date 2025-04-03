@@ -40,12 +40,54 @@
     }
 </style>
 
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>test</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous"></script>
+</head>
+
+<style></style>
+<body style="background:grey">
+
+
+<style>
+    .zoom-in {
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        position: relative;
+        width: 100%;
+        padding: 1.5rem;
+        transition: padding 0.3s ease;
+    }
+    .zoom-in:hover{
+        padding: .5rem;
+    }
+
+    #quick-links > div:hover{
+        background:rgba(150, 150, 150, .1);
+    }
+
+    .internal-zoom-in{
+        padding: .5rem;
+        transition: padding 0.3s ease;
+    }
+    .internal-zoom-in:hover{
+        padding:0;
+    }
+</style>
+
 <div class="container mt-5">
     <div class="d-flex justify-content-center rounded-3 align-items-end p-4 tiled-COW-background mb-3"
          style="position: relative;">
         <h2 class="fw-bold fs-1">Frequently Visited Pages</h2>
     </div>
-    <div class="row" id="quick-links">
+    <div class="row mb-5" id="quick-links">
         <div class="col-4 col-lg-2">
             <a href="https://costionline.com/About">
                 <img src="https://costionline.com/icons/Contact.svg" alt="About" class="img-fluid zoom-in"/>
@@ -80,6 +122,43 @@
             <a href="https://costionline.com/Projects">
                 <img src="https://costionline.com/icons/Projects.svg" alt="Projects" class="img-fluid zoom-in"/>
                 <p class="text-center fw-bold text-1 fs-4">Projects</p>
+            </a>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center rounded-3 align-items-end p-4 tiled-COW-background mb-3"
+         style="position: relative;">
+        <h2 class="fw-bold fs-1">Costi Online Services</h2>
+    </div>
+    <div class="row">
+        <div class="col-4 col-lg-2">
+            <a href="https://costionline.com/">
+                <img src="https://costionline.com/icons/Logo.svg" alt="Costi Online" class="img-fluid zoom-in"/>
+                <p class="text-center fw-bold text-1 fs-4">Costi Online</p>
+            </a>
+        </div>
+        <div class="col-4 col-lg-2">
+            <a href="https://costionline.com/Minecraft">
+                <img src="https://costionline.com/icons/Logo.svg" alt="Costi Minecraft" class="img-fluid zoom-in"/>
+                <p class="text-center fw-bold text-1 fs-4">Minecarft Server</p>
+            </a>
+        </div>
+        <div class="col-4 col-lg-2">
+            <a href="https://eventstar.costionline.com">
+                <img src="https://eventstar.costionline.com/icons/Logo.svg" alt="EventStar logo" class="img-fluid zoom-in"/>
+                <p class="text-center fw-bold text-1 fs-4">EventStar</p>
+            </a>
+        </div>
+        <div class="col-4 col-lg-2">
+            <a href="https://constantinekhamis.com">
+                <img src="https://raw.githubusercontent.com/CKhamis/Constantine-Online-Website/master/Logo.svg" alt="Portfolio" class="img-fluid zoom-in"/>
+                <p class="text-center fw-bold text-1 fs-4">Portfolio</p>
+            </a>
+        </div>
+        <div class="col-4 col-lg-2">
+            <a href="https://nc.costionline.com/">
+                <img src="https://nc.costionline.com/core/img/logo/logo.svg" alt="LED" class="img-fluid zoom-in"/>
+                <p class="text-center fw-bold text-1 fs-4">NextCloud</p>
             </a>
         </div>
     </div>
@@ -134,11 +213,27 @@
     </div>
     <div class="row">
         <div class="col-12 col-md-6 col-lg-4 mt-3">
+            <a href="https://costionline.com/Newsroom/72/view">
+                <img src="https://costionline.com/Downloads/Uploads/9eaf93d4-7ac6-4685-9e74-e79e1f367f26"
+                     class="img-fluid d-block rounded-3 internal-zoom-in" loading="lazy"
+                     style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;">
+                <h4 class="fw-bold text-center text-1">Japan</h4>
+            </a>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mt-3">
+            <a href="https://costionline.com/Newsroom/61/view">
+                <img src="https://costionline.com/Downloads/Uploads/6834d5bd-8965-4ef2-9771-01dde69b57e1"
+                     class="img-fluid d-block rounded-3 internal-zoom-in" loading="lazy"
+                     style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;">
+                <h4 class="fw-bold text-center text-1">Florida</h4>
+            </a>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mt-3">
             <a href="https://costionline.com/Newsroom/49/view">
                 <img src="https://costionline.com/Downloads/Uploads/9eb9fa88-4e19-479a-8ee0-e42195b1f349"
                      class="img-fluid d-block rounded-3 internal-zoom-in" loading="lazy"
                      style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;">
-                <h4 class="fw-bold text-center text-1">Mexico</h4>
+                <h4 class="fw-bold text-center text-1">Mexico 2024</h4>
             </a>
         </div>
         <div class="col-12 col-md-6 col-lg-4 mt-3">
@@ -146,7 +241,7 @@
                 <img src="https://costionline.com/Downloads/Uploads/b6561cd6-53c9-4a08-853f-87686b393681"
                      class="img-fluid d-block rounded-3 internal-zoom-in" loading="lazy"
                      style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;">
-                <h4 class="fw-bold text-center text-1">Disneyland</h4>
+                <h4 class="fw-bold text-center text-1">Disneyland 2024</h4>
             </a>
         </div>
         <div class="col-12 col-md-6 col-lg-4 mt-3">
@@ -154,7 +249,7 @@
                 <img src="https://costionline.com/Downloads/Uploads/83e2dadd-3797-4a10-98c4-924b6bf8d6cb"
                      class="img-fluid d-block rounded-3 internal-zoom-in" loading="lazy"
                      style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%">
-                <h4 class="fw-bold text-center text-1">San Francisco</h4>
+                <h4 class="fw-bold text-center text-1">San Francisco 2024</h4>
             </a>
         </div>
     </div>
@@ -204,21 +299,33 @@
 
     <div class="row">
         <div class="col-12 col-md-6 col-lg-4 mt-3">
+            <a href="https://costionline.com/Newsroom/69/view">
+                <img src="https://costionline.com/Downloads/Uploads/005c130e-8dc2-4bf1-a9a4-da725139c37a" class="img-fluid d-block rounded-3 internal-zoom-in" loading="lazy" style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;" alt="college cup">
+                <h5 class="fw-bold text-center text-1">Long Beach 2024</h5>
+            </a>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mt-3">
+            <a href="https://costionline.com/Newsroom/63/view">
+                <img src="https://costionline.com/Downloads/Uploads/a5f59b0d-8f89-43f2-b16d-66deabe0c2bb" class="img-fluid d-block rounded-3 internal-zoom-in" loading="lazy" style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;" alt="college cup">
+                <h5 class="fw-bold text-center text-1">Baby Long Beach 2024</h5>
+            </a>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mt-3">
             <a href="https://costionline.com/Newsroom/48/view">
                 <img src="https://costionline.com/Downloads/Uploads/b4a0ddb6-fb25-46f6-95ac-0d6a28cb82d7" class="img-fluid d-block rounded-3 internal-zoom-in" loading="lazy" style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;" alt="college cup">
-                <h5 class="fw-bold text-center text-1">College Cup Race</h5>
+                <h5 class="fw-bold text-center text-1">College Cup Race 2023</h5>
             </a>
         </div>
         <div class="col-12 col-md-6 col-lg-4 mt-3">
             <a href="https://costionline.com/Newsroom/36/view">
                 <img src="https://costionline.com/Downloads/Uploads/4faa8306-c175-46de-a5ef-0daa6d5d2ed3" class="img-fluid d-block rounded-3 internal-zoom-in" loading="lazy" style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;" alt="long beach">
-                <h5 class="fw-bold text-center text-1">Long Beach Race</h5>
+                <h5 class="fw-bold text-center text-1">Long Beach Race 2023</h5>
             </a>
         </div>
         <div class="col-12 col-md-6 col-lg-4 mt-3">
             <a href="https://costionline.com/Newsroom/19/view">
                 <img src="https://costionline.com/Downloads/Uploads/1a2b079b-4c4e-4b71-a9c7-e5dcd66f315f" class="img-fluid d-block rounded-3 internal-zoom-in" loading="lazy" style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;" alt="Regatta">
-                <h5 class="fw-bold text-center text-1">Regatta Race</h5>
+                <h5 class="fw-bold text-center text-1">Regatta Race 2023</h5>
             </a>
         </div>
     </div>
@@ -231,7 +338,7 @@
         <h2 class="fw-bold fs-1">What's New?</h2>
     </div>
     <p class="fs-4">
-        Costi Online is now able to serve <strong>dynamic content</strong>. This allows me to add, remove, or change the
+        Costi Online 11 is now able to serve <strong>dynamic content</strong>. This allows me to add, remove, or change the
         content hosted on this site in the home, projects, media, wiki, newsroom, Minecraft, tree, about, and other
         pages. Although this change may seem mundane, it unlocks powerful tools such as referencing newsroom or wiki
         posts. I can also create seasonal or event based content on demand. Stay tuned for more changes!
@@ -268,6 +375,10 @@
         </div>
     </div>
 </div>
+
+</body>
+</html>
+
 
 </body>
 </html>

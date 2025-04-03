@@ -19,23 +19,23 @@ public class WebSpyInterceptor implements HandlerInterceptor {
     public static AtomicBoolean spying = new AtomicBoolean(false);
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         // Generate the request report
         RequestReport report = new RequestReport(
                 "costionline.com",
                 request.getHeader("X-Forwarded-For"),
-                String.valueOf(request.getRemotePort()),
-                request.getRemoteUser(),
-                request.getLocale().toString(),
-                request.getSession().getId(),
-                request.getHeader("Cookie"),
-                request.getRequestURI(),
-                request.getRequestURL().toString(),
-                request.getMethod(),
-                request.getHeader("Accept"),
-                request.getProtocol(),
-                request.getScheme(),
-                request.getHeader("User-Agent")
+                ""+request.getRemotePort(),
+                ""+request.getRemoteUser(),
+                ""+request.getLocale().toString(),
+                ""+request.getSession().getId(),
+                ""+request.getHeader("Cookie"),
+                ""+request.getRequestURI(),
+                ""+request.getRequestURL().toString(),
+                ""+request.getMethod(),
+                ""+request.getHeader("Accept"),
+                ""+request.getProtocol(),
+                ""+request.getScheme(),
+                ""+request.getHeader("User-Agent")
         );
 
         RestTemplate restTemplate = new RestTemplate();
