@@ -3,14 +3,23 @@ package com.costi.csw9.Model;
 import com.costi.csw9.Model.DTO.LightRequest;
 import com.costi.csw9.Model.DTO.ModeratorLightRequest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.http.*;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.data.relational.core.mapping.Table;
 import jakarta.persistence.*;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -18,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -181,25 +191,38 @@ public class Light {
     @Transient
     @JsonIgnore
     public String sendLightRequest() {
-        RestTemplate restTemplate = new RestTemplate();
-        String url = "http://" + address;
+        String urlString = "http://" + address;
+        LightRequest lightRequest = this.getRequest();
 
         try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
+            URL url = new URL(urlString);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-            LightRequest lightRequest = this.getRequest();
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
 
-            HttpEntity<LightRequest> request = new HttpEntity<>(lightRequest, headers);
+            String json = new ObjectMapper().writeValueAsString(lightRequest);
+            byte[] out = json.getBytes(StandardCharsets.UTF_8);
 
-            ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
+            conn.setFixedLengthStreamingMode(out.length);
+            conn.connect();
+
+            try (OutputStream os = conn.getOutputStream()) {
+                os.write(out);
+            }
+
+            String response = new BufferedReader(new InputStreamReader(conn.getInputStream()))
+                    .lines().collect(Collectors.joining("\n"));
+
             lastConnected = LocalDateTime.now();
             status = "Active";
-            return "Connection Successful: " + response.getBody(); // Return the response body
+            return "Connection Successful: " + response;
         } catch (Exception e) {
             e.printStackTrace();
             status = "Error";
             return "Error sending light request: " + e.getMessage();
         }
     }
+
 }
