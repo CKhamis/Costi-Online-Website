@@ -9,9 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.http.*;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.data.relational.core.mapping.Table;
 import jakarta.persistence.*;
 
 import java.io.BufferedReader;

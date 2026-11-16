@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.relational.core.mapping.Table;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
